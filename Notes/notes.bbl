@@ -1,3 +1,39 @@
-\begin{thebibliography}{}
+\begin{thebibliography}{1}
+
+\bibitem{de_Groote_1995}
+{\sc de~Groote, P.}
+\newblock A simple calculus of exception handling.
+\newblock In {\em Lecture Notes in Computer Science}. Springer Berlin
+  Heidelberg, 1995, pp.~201--215.
+
+\bibitem{Echenim_2019}
+{\sc Echenim, M., and Peltier, N.}
+\newblock Combining induction and saturation-based theorem proving.
+\newblock {\em Journal of Automated Reasoning 64}, 2 (mar 2019), 253--294.
+
+\bibitem{Griffin_1990}
+{\sc Griffin, T.~G.}
+\newblock A formulae-as-type notion of control.
+\newblock In {\em Proceedings of the 17th {ACM} {SIGPLAN}-{SIGACT} symposium on
+  Principles of programming languages - {POPL} {\textquotesingle}90\/} (1990),
+  {ACM} Press.
+
+\bibitem{hajdu2021automating}
+{\sc Hajdu, M.}
+\newblock Automating inductive reasoning with recursive functions, 2021.
+
+\bibitem{10.1007/978-3-030-53518-6_8}
+{\sc Hajd{\'u}, M., Hozzov{\'a}, P., Kov{\'a}cs, L., Schoisswohl, J., and
+  Voronkov, A.}
+\newblock Induction with generalization in superposition reasoning.
+\newblock In {\em Intelligent Computer Mathematics\/} (Cham, 2020),
+  C.~Benzm{\"u}ller and B.~Miller, Eds., Springer International Publishing,
+  pp.~123--137.
+
+\bibitem{Kov_cs_2013}
+{\sc Kov{\'{a}}cs, L., and Voronkov, A.}
+\newblock First-order theorem proving and vampire.
+\newblock In {\em Computer Aided Verification}. Springer Berlin Heidelberg,
+  2013, pp.~1--35.
 
 \end{thebibliography}

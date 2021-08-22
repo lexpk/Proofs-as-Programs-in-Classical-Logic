@@ -2,20 +2,151 @@
 
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{ wasysym }
+\usepackage{ stmaryrd }
+\usepackage{ mathpartir }
+\usepackage{xcolor}
 
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{corollary}[theorem]{Corollary}
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\newcommand{\llb}{\llbracket}
+\newcommand{\rrb}{\rrbracket}
+\newcommand{\blue}[1]{{\color{blue}#1}}
+\newcommand{\var}{\text{var}}
 
 
 \author{Alexander Pluska}
 \title{Proofs as Programs in Classical Logic\\Notes}
 
 \begin{document}
-	
+
 \maketitle
+
+\section{Proof translation for saturation-based theorem proving with induction}
+
+Most modern theorem provers for first order logic utilize resolution and saturation based techniques. The standard intuitionistic proofs-as-programs correspondence fails as even the very method itself crucially depends on double negation elimination. As a first step we work out a way to convert proofs of $\forall\exists$-proofs based on the calculus presented in~\cite{Echenim_2019} into programs. An advantage of the calculus as presented in~\cite{Echenim_2019} is that it can (at least in theory) handle general induction for inductive datatype. Many advances have recently been made for incorporating induction in existing theorem provers~\cite{hajdu2021automating}\cite{10.1007/978-3-030-53518-6_8} however all of the calculi fail to support induction in the general case, in particular sentences involving existential quantifiers and requiring induction depth greater than $1$ are problematic.
+
+The approach in~\cite{Echenim_2019} seems promising as, despite being able to handle general induction, there is no explosion in the number of clauses due to a clever use of so-called \textit{constrained clauses}, special symbols $\textbf{T}_\alpha^\prec$ for induction and a special activation mechanism for potential inductive invariants, although how it performs in practice is yet to be seen.
+
+Program translation for classical proofs has been outlined in~\cite{Griffin_1990}. Based on this~\cite{de_Groote_1995} and~\cite{Barbanera_1996} have been developed. Our a approach is a combination of both. At the moment it is quite crude and is mostly based on the exception method from~\cite{de_Groote_1995}. We aim to later translate this to the CPS approach presented in the same paper to better see how it relates to the normal proofs-as-program correspondence known from intuitionistic logic.
+
+
+
+\subsection{The Calculus}
+
+As explained above our calculus is based on~\cite{Echenim_2019}. We take the core rules, which are not mentioned in~\cite{Echenim_2019}, from~\cite{Kov_cs_2013}.
+
+The first five inferences are standard in resolution based theorem proving. We assume some simplification ordering $\succeq^*$.\\
+\textbf{Resolution.}
+$$\inferrule{{A}\vee C_1\\{\neg B}\vee C_2}{(C_1\vee C_2)\theta}$$
+where $\theta$ is a mgu of $A$ and $\neg B$.\\
+\textbf{Factoring.}
+$$\inferrule{{A}\vee{\neg B}\vee C}{(A\vee C)\theta}$$
+where theta is a mgu of $A$ and $B$.\\
+\textbf{Superposition.}
+$$\inferrule{{l=r}\vee C_1\\{L[s]}\vee C_2}{(L[r]\vee C_1\vee C_2)\theta}\:
+\inferrule{{l=r}\vee C_1\\ {t[s]=t'}\vee C_2}{(t[r]=t'\vee C_1\vee C_2)\theta}\:
+\inferrule{{l=r}\vee C_1\\{t[s]\neq t'}\vee C_2}{(t[r]\neq t'\vee C_1\vee C_2)\theta}$$
+where $\theta$ is a mgu of $l$ and $s$, $s$ is not a variable, $r\theta\not\succeq^* l\theta$, $L[s]$ is not an equality literal, and $t'\theta\succeq^* t[s]\theta$.\\
+\textbf{Equality Resolution.}
+$$\inferrule{{s\neq t}\vee C}{C\theta}$$
+where $\theta$ is a mgu of $s$ and $t$.\\
+\textbf{Equality Factoring.}
+$$\inferrule{{s=t}\vee{s'=t'}\vee C}{(s=t\vee t=t'\vee C)\theta}$$
+where $\theta$ is an mgu of $s$ and $s'$, $t\theta\not\succeq^* s\theta$, and $t'\theta\succeq^* t\theta$.
+
+In addition to regular clauses and inference rules we introduce c-clauses and special rules for them, i.e. (all of this will be made more precise later)
+\begin{definition}
+	A \textit{constrained clause} (c-clause) is an expression of  the form $\llb C\:|\:\mathcal X \rrb$, where
+	\begin{itemize}
+		\item C is a clause,
+		\item $\mathcal{X}$ is a conjunction of the form $\bigwedge_{i=1}^ n f_i(\mathbf{u_i})\simeq v_i\wedge\bigwedge_{i=1}^m \mathbf{T}_{\alpha_i}^\prec(z_i,\textbf{w}_i)$, where $n, m\geq 0$ and $\forall i\in\{1\dots n\}, f_i$ are uninterpreted function symbols (possibly nullary).
+	\end{itemize}
+\end{definition}
+The semantics of $\llb C\:|\:\mathcal X \rrb$ is more or less ``if all constraints in $\mathcal X$ hold, then $C$ holds" and of $\mathbf{T}_{\alpha_i}^\prec(z,\mathbf{w})$ ``for all $z'\prec z$ $\alpha(z', \mathbf{w})$ holds" where $\prec$ is the standard wfo of an inductive type.
+
+All of the above inference rules extend naturally to constrained clauses, i.e. if $\tiny{\inferrule{H_1,\dots,H_n}{C\theta}}$ is an inference rule for regular clauses, then $$\inferrule{\llb H_1\:|\:\mathcal X_1\rrb,\dots,\llb H_1\:|\:\mathcal X_1\rrb}{\llb C\:|\:\mathcal X_1\wedge\dots\wedge\mathcal X_n\rrb\theta}$$ is the corresponding inference rule for c-clauses.
+
+Furthermore we have some special rules for c-clauses:\\
+\textbf{Constraint Factorization.}
+$$\inferrule{\llb C\:|\:l_1\wedge l_2\wedge \mathcal{X}\rrb}{\llb C\:|\:l_1\wedge \mathcal{X}\rrb\theta}$$where $\theta$ is an mgu of $l_1$ and $l_2$.\\
+\textbf{Abstraction.}
+$$\inferrule{\llb C[f(\mathbf{t})]_p\:|\:\mathcal{X}\rrb}{\llb C[x]_p\:|\:f(\mathbf{t})\simeq x\wedge\mathcal{X}\rrb}$$ where $f$ is a uninterpreted function symbol, $x$ is a fresh variable.\\
+\textbf{Instantiation.}
+$$\inferrule{C\:|\:\mathcal{X}\wedge t\simeq s\rrb}{\llb C\:|\:\mathcal{X}\rrb\theta}$$
+where $\theta$ is a mgu of $t$ and $s$.
+
+In addition there are some rules that generate candidates for an inductive invariant in~\cite{Echenim_2019}. We will leave those out for now an choose our variant ``magically" by hand. For every formula $\alpha[z,\textbf{w}]$ we than have axiom $$\Gamma_\mathbf{T_\alpha^\prec}:= \llb z' \not\prec z\vee \alpha(z', \mathbf{w})\:|\:\mathbf{T}_\alpha^\prec(z,\mathbf{w})\rrb$$ and $\prec $ is axiomatized by $$\Gamma_\prec^s:=\llb x_i\prec s(x_1,\dots, x_n)\:|\:\top\rrb\indent \Gamma_\prec:=\llb x\not\prec y\vee y\not\prec z\vee x\prec z\:|\:\top\rrb$$for every n-ary inductive constructor $s$, $i\in\{1\dots n\}$.
+
+Finally we have additional rules for inductive types. Since we are (for now) not interested in how to generate inductive invariants it is possible to present just one combination rule for Domain Decomposition and Induction.\\
+\textbf{Induction.}
+$$\inferrule{\llb C_1\:|\:\beta_1(t_1)\wedge \mathcal{X}_1\rrb\dots\llb C_n\:|\:\beta_n(t_n)\wedge \mathcal{X}_n\rrb}{\llb C_1\vee\dots\vee C_n\vee \alpha(x,\mathbf{w}_1)\:|\:\mathcal{X}_1\setminus\{\mathbf{T}_{\alpha}^\prec(t_1,\mathbf w_1)\}\wedge\dots\wedge\mathcal{X}_n\setminus\{\mathbf{T}_{\alpha}^\prec(t_n,\mathbf w_n)\}\wedge\beta_1(x)\rrb\theta}$$where $\theta$ is the most general idempotent substitution such that $\beta_j\theta\subseteq\beta_1\theta$ for $n\in\{2\dots n\}$ and a mgu for $\mathbf{w}_1,\dots,\mathbf{w}_n$, the variables occurring in $t_1,\dots,t_n$ do not occur in $C_i,\beta_i,\mathbf{w}_i$ or $\mathcal{X}_i$. $\{t_1\dots t_n\}$ is \textit{covering}, i.e. the whole type can be constructed using $\{t_1\dots t_n\}$, for instance for $nat$ both $\{z, s(x)\}$ and $\{z, s(z), s(s(x))\}$ are covering and $x$ is some fresh variable.
+
+Note that setting $\alpha=\bot$ and $\mathbf{w_i}=\emptyset$ we obtain the regular Domain Decomposition Rule from~\cite{Echenim_2019}.
+
+\subsection{Examples and Translations}
+
+For now we will consider two minimal examples. The first on doesn't use induction. There are two constant symbols $a, b$ and a binary proposition variable $p(-, -)$. The only axiom is $\forall x\:p(x,a)\vee p(x, b)$. We seek to prove $\forall x\exists y p(x, y)$. It is immediately clear that unless the axiom has computational content, our extracted program cannot yield a value. On the other hand we will see that we can still create a well-typed program. And if the axiom contains computational content it will indeed yield a result.
+
+
+
+
+\begin{example}\hfill
+	\begin{align}
+		& p(x_1,a)\vee p(x_1, b) & \text{Axiom}\\
+		& \llb \neg p(x_2, y_2) | x\simeq x_2\rrb & \text{negated Hypothesis}\\
+		& \llb p(x_1, b) | x\simeq x_1\rrb & res.\:(1) (2) [x_1/x_2, a/y_2]\\
+		& \llb \square | x\simeq x_1\rrb & res.\:(3) (2) [x_1/x_2, b/y_2]\\
+		& \square &\text{Instantiation }(4)
+	\end{align}
+\end{example}
+
+Now for our computational translation we introduce a special exception terms $e_\alpha(t_1,\dots,t_n)$ and $\overline e_\alpha(t_1,\dots,t_n)$ for every atom $\alpha[t_1,\dots,t_n]$ with $n$ term-variables, which intuitively indicate that $\alpha[t_1,\dots,t_n]$ is not false. They are usually introduced in the manner of the last derivation of definition 3.4 in~\cite{de_Groote_1995}. If one were to assign types we would have $e_\alpha(t_1.\dots,t_n) : (\alpha(t_1,\dots,t_n)\to\bot)\to\bot$ and $\overline e_\alpha(t_1.\dots,t_n) : ((\alpha(t_1,\dots,t_n)\to\bot)\to\bot)\to\bot$. However as we have the (classical) identification, we can simplify $\overline e_\alpha(t_1.\dots,t_n) : \alpha(t_1,\dots,t_n)\to\bot$. Having this in mind both $e_\alpha(t_1.\dots,t_n) \overline e_\alpha(t_1.\dots,t_n) : \bot$ and $\overline e_\alpha(t_1.\dots,t_n) e_\alpha(t_1.\dots,t_n) : \bot$ make ``type-sense" in the exception sense of~\cite{de_Groote_1995}. We will use this in our program. Let us now translate the above proof. Note that the terms for axioms are given. For clarity we will use braces for function application. For convenience we will write $\alpha_i$ for the $i$-the generated term.
+\setcounter{equation}{0}
+\begin{example}\hfill
+	\begin{align}
+		& \alpha_1 & (p(x_1,a)\to\bot)\to(p(x_1, b)\to\bot)\to\bot\\
+		& \overline e_p(x_2, y_2) & p(x_2, y_2)\to\bot\\
+		& \lambda t. \mathbf{let}\:v : \neg p(x_1, a)&(p(x_1, b)\to\bot)\to\bot\\
+		& \phantom{\lambda t.}\mathbf{in}\:\alpha_1(v, t) &\\
+		& \phantom{\lambda t.}\mathbf{handle}\:v(w)\Rightarrow \overline e_p(x_1, a)(w)\indent [= \alpha_2[x_1/x_2, a/y_2](w)]\hspace*{-4cm}\nonumber&\\
+		& \mathbf{let}\:v : \neg p(x_1, b)\:&\bot\\
+		& \mathbf{in}\:\alpha_3(v) &\nonumber\\
+		& \mathbf{handle}\:v(w)\Rightarrow \overline e_p(x_1, b)(w)\indent[= \alpha_2[x_1/x_2, b/y_2](w)]\hspace*{-4cm}\nonumber&\\
+		& \lambda x_1.\alpha_4 &\forall x\bot
+	\end{align}
+\end{example}
+
+Now to retrieve a value we just need to handle the final exception, i.e.
+$$\lambda x_1.\alpha_4\:\mathbf{handle}\: \overline{e}_p(x_2, y_2)(w)\Rightarrow y_2$$
+Of course this will not yield an actual value unless $\alpha$ yields.\\
+We will now consider a minimal inductive example.\pagebreak
+
+Consider the inductive type $nat$ with constructors $z : nat$ and $s: nat \to nat$ and some predicate $p(x, y)\subseteq nat^2$. We are going to prove $\forall x\exists y\: p(x,y)$ from $p(z, z)$ and $\forall n,m:nat(p(n, m)\Rightarrow p(s(n), s(s(m))))$.
+
+
+
+\begin{example}\hfill
+	\begin{align}
+		& p(z, z) & \text{Axiom}\\
+		& \neg p(n_2, m_2)\vee p(s(n_2), s(s(m_2)))& \text{Axiom}\\
+		& \llb \neg p(n_3, m_3) | x\simeq n_3\rrb & \text{negated Hypothesis}\\
+		& \llb \square | x\simeq z\rrb & res.\:(1) (3) [z/n_3, z/m_3]\\
+		& \llb \neg p(n_2, m_2) | x\simeq s(n_2)\rrb &res. (2) (3) [s(n_2)/n_3], s(s(m_2))/m_3]\\
+		& \text{Activate $\alpha := p(a, b)[a, b]$}&\text{Trigger  (4)}\\
+		& \llb n_7\not\prec n_7'\vee p(n_7, m_7) | \mathbf{T}_\alpha^\prec(n_7', m_7)\rrb& \Gamma_{\mathbf{T}_\alpha^\prec}\\
+		& \llb n_7\not\prec n_7'| x\simeq s(n_7)\wedge \mathbf{T}_\alpha^\prec(n_7', m_7)\rrb & res. (5) (7) [n_7/n_2, m_7/ m_2] \\
+		& \llb n_7\prec s(n_7)|\top\rrb &\Gamma_\prec^s\\
+		& \llb \square | x\simeq s(n_7)\wedge\mathbf{T}_\alpha^\prec(s(n_7), m_7)\rrb&res. (8)(9)[s(n_7)/n_7']\\
+		& \llb \square | x\simeq n_{10}\rrb &\text{Induction }(4)(9)\\
+		& \square &\text{Instantiation }(10)
+	\end{align}
+\end{example}
+
 
 \bibliographystyle{acm}
 \bibliography{references}
