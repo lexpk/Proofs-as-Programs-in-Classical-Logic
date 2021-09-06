@@ -88,9 +88,13 @@ $$\inferrule{\llb C_1\:|\:\beta_1(t_1)\wedge \mathcal{X}_1\rrb\dots\llb C_n\:|\:
 
 Note that setting $\alpha=\bot$ and $\mathbf{w_i}=\emptyset$ we obtain the regular Domain Decomposition Rule from~\cite{Echenim_2019}.
 
+\subsection{Type system}
+
+Since we want to apply our method to first-order resolution proofs we will require a dependant type system. For this purpose we shall use the practical type system of agda as described in~\cite{agda}.
+
 \subsection{Examples and Translations}
 
-For now we will consider two minimal examples. The first on doesn't use induction. There are two constant symbols $a, b$ and a binary proposition variable $p(-, -)$. The only axiom is $\forall x\:p(x,a)\vee p(x, b)$. We seek to prove $\forall x\exists y p(x, y)$. It is immediately clear that unless the axiom has computational content, our extracted program cannot yield a value. On the other hand we will see that we can still create a well-typed program. And if the axiom contains computational content it will indeed yield a result.
+For now we will consider two minimal examples. The first doesn't use induction. There are two constant symbols $a, b$ and a binary proposition variable $p(-, -)$. The only axiom is $\forall x\:p(x,a)\vee p(x, b)$. We seek to prove $\forall x\exists y p(x, y)$. It is immediately clear that unless the axiom has computational content, our extracted program cannot yield a value. On the other hand we will see that we can still create a well-typed program. And if the axiom contains computational content it will indeed yield a result.
 
 
 
@@ -112,18 +116,18 @@ Now for our computational translation we introduce a special exception terms $e_
 		& \alpha_1 & (p(x_1,a)\to\bot)\to(p(x_1, b)\to\bot)\to\bot\\
 		& \overline e_p(x_2, y_2) & p(x_2, y_2)\to\bot\\
 		& \lambda t. \mathbf{let}\:v : \neg p(x_1, a)&(p(x_1, b)\to\bot)\to\bot\\
-		& \phantom{\lambda t.}\mathbf{in}\:\alpha_1(v, t) &\\
+		& \phantom{\lambda t.}\mathbf{in}\:\alpha_1(v, t) &\nonumber\\
 		& \phantom{\lambda t.}\mathbf{handle}\:v(w)\Rightarrow \overline e_p(x_1, a)(w)\indent [= \alpha_2[x_1/x_2, a/y_2](w)]\hspace*{-4cm}\nonumber&\\
 		& \mathbf{let}\:v : \neg p(x_1, b)\:&\bot\\
 		& \mathbf{in}\:\alpha_3(v) &\nonumber\\
 		& \mathbf{handle}\:v(w)\Rightarrow \overline e_p(x_1, b)(w)\indent[= \alpha_2[x_1/x_2, b/y_2](w)]\hspace*{-4cm}\nonumber&\\
-		& \lambda x_1.\alpha_4 &\forall x\bot
+		& \lambda x_1.\alpha_4 &(x : X) \to \bot
 	\end{align}
 \end{example}
 
 Now to retrieve a value we just need to handle the final exception, i.e.
 $$\lambda x_1.\alpha_4\:\mathbf{handle}\: \overline{e}_p(x_2, y_2)(w)\Rightarrow y_2$$
-Of course this will not yield an actual value unless $\alpha$ yields.\\
+Of course this will not yield an actual value unless $\alpha_1$ yields.\\
 We will now consider a minimal inductive example.\pagebreak
 
 Consider the inductive type $nat$ with constructors $z : nat$ and $s: nat \to nat$ and some predicate $p(x, y)\subseteq nat^2$. We are going to prove $\forall x\exists y\: p(x,y)$ from $p(z, z)$ and $\forall n,m:nat(p(n, m)\Rightarrow p(s(n), s(s(m))))$.

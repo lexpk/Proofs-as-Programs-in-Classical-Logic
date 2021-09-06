@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.7) (preloaded format=pdflatex 2020.10.5)  23 AUG 2021 01:38
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.7) (preloaded format=pdflatex 2020.10.5)  6 SEP 2021 02:14
 entering extended mode
 **./notes.tex
 (notes.tex
@@ -235,7 +235,7 @@ Overfull \hbox (13.39249pt too wide) detected at line 87
  []
 
 [3]
-Overfull \hbox (3.13745pt too wide) in paragraph at lines 108--110
+Overfull \hbox (3.13745pt too wide) in paragraph at lines 112--114
 \OT1/cmr/m/n/10 this in mind both $\OML/cmm/m/it/10 e[]\OT1/cmr/m/n/10 (\OML/cm
 m/m/it/10 t[]: [] ; t[]\OT1/cmr/m/n/10 )[][](\OML/cmm/m/it/10 t[]: [] ; t[]\OT1
 /cmr/m/n/10 ) : \OMS/cmsy/m/n/10 ?$ \OT1/cmr/m/n/10 and $[][](\OML/cmm/m/it/10 
@@ -243,22 +243,22 @@ t[]: [] ; t[]\OT1/cmr/m/n/10 )\OML/cmm/m/it/10 e[]\OT1/cmr/m/n/10 (\OML/cmm/m/i
 t/10 t[]: [] ; t[]\OT1/cmr/m/n/10 ) :
  []
 
-[4] (notes.bbl
+[4] [5] (notes.bbl
 Underfull \hbox (badness 1127) in paragraph at lines 26--32
 []\OT1/cmr/m/sc/10 Hajd[]u, M., Hoz-zov[]a, P., Kov[]acs, L., Schoiss-wohl, J.,
  and
  []
 
-) [5] (notes.aux)
+) [6] (notes.aux)
 
 LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 3325 strings out of 480236
- 42641 string characters out of 2881034
- 323146 words of memory out of 3000000
- 19852 multiletter control sequences out of 15000+200000
+ 3326 strings out of 480236
+ 42647 string characters out of 2881034
+ 324149 words of memory out of 3000000
+ 19853 multiletter control sequences out of 15000+200000
  549243 words of font info for 83 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  59i,13n,66p,1223b,219s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -287,9 +287,9 @@ ata/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb><E:/Users/A
 lex/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msam10.pf
 b><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/hoekwater/stm
 ary10.pfb>
-Output written on notes.pdf (5 pages, 239034 bytes).
+Output written on notes.pdf (6 pages, 241615 bytes).
 PDF statistics:
- 108 PDF objects out of 1000 (max. 8388607)
+ 111 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
