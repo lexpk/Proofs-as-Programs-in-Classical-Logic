@@ -5,6 +5,10 @@
 \usepackage{ stmaryrd }
 \usepackage{ mathpartir }
 \usepackage{xcolor}
+\usepackage{bussproofs}
+
+
+
 
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{corollary}[theorem]{Corollary}
@@ -128,11 +132,9 @@ Now for our computational translation we introduce a special exception terms $e_
 Now to retrieve a value we just need to handle the final exception, i.e.
 $$\lambda x_1.\alpha_4\:\mathbf{handle}\: \overline{e}_p(x_2, y_2)(w)\Rightarrow y_2$$
 Of course this will not yield an actual value unless $\alpha_1$ yields.\\
-We will now consider a minimal inductive example.\pagebreak
+We will now consider a minimal inductive example.
 
 Consider the inductive type $nat$ with constructors $z : nat$ and $s: nat \to nat$ and some predicate $p(x, y)\subseteq nat^2$. We are going to prove $\forall x\exists y\: p(x,y)$ from $p(z, z)$ and $\forall n,m:nat(p(n, m)\Rightarrow p(s(n), s(s(m))))$.
-
-
 
 \begin{example}\hfill
 	\begin{align}
@@ -150,8 +152,95 @@ Consider the inductive type $nat$ with constructors $z : nat$ and $s: nat \to na
 		& \square &\text{Instantiation }(10)
 	\end{align}
 \end{example}
+\pagebreak
+\subsection{Intuitionistic Example}
+
+For simplicity we will use a single sort (0-level type).\\
+Function symbols: $f(-)$\\
+Predicate symbols: $P(-), Q(-, -)$\\
+Axioms: $\forall x P(x)$, $\forall x\exists y x=f(y)$, $\forall x(P(x)\supset Q(f(x), x))$\\
+To Show: $\forall x \exists y Q(x, y)$\\
+
+\noindent Below is a ND-style proof and translation based on the calculus and correspondence presented in~\cite{pfenning2000constructive}.\\
+
+\small{
+\AxiomC{}
+\RightLabel{\scriptsize Axiom}
+\UnaryInfC{$\vdash\forall x\exists y f(y)=x$}
+\RightLabel{\scriptsize $\forall E$}
+\UnaryInfC{$\vdash\exists y f(y)=x$}
+\AxiomC{}
+\RightLabel{\scriptsize Axiom}
+\UnaryInfC{$\vdash \forall x(P(x)\supset Q(f(x), x))$}
+\RightLabel{\scriptsize $\forall E$}
+\UnaryInfC{$\vdash P(y)\supset Q(f(y), y)$}
+\AxiomC{}
+\RightLabel{\scriptsize Axiom}
+\UnaryInfC{$\vdash\forall x P(x)$}
+\RightLabel{\scriptsize $\forall E$}
+\UnaryInfC{$\vdash P(y)$}
+\RightLabel{\scriptsize $\supset\hspace{-2pt}E$}
+\BinaryInfC{$\vdash Q(f(y), y)$}
+\AxiomC{}
+\RightLabel{\scriptsize u}
+\UnaryInfC{[$\vdash f(y) = x$]}
+\RightLabel{\scriptsize subst}
+\BinaryInfC{$\vdash Q(x, y)$}
+\RightLabel{\scriptsize $\supset\hspace{-2pt}I^u$}
+\UnaryInfC{$f(y)=x\vdash Q(x, y)$}
+\RightLabel{\scriptsize$\exists I$}
+\UnaryInfC{$f(y)=x\vdash \exists y Q(x, y)$}
+\RightLabel{\scriptsize $\exists E$}
+\BinaryInfC{$\vdash \exists Q(x, y)$}
+\RightLabel{\scriptsize $\forall I$}
+\UnaryInfC{$\vdash\forall x \exists yQ(x, y)$}
+
+\hspace*{-1cm}
+\DisplayProof
+}
+\vspace{3cm}
+\small{
+	\AxiomC{}
+	\RightLabel{\scriptsize Axiom}
+	\UnaryInfC{$\vdash \alpha : \Pi_x\Sigma_y f(y)=x$}
+	\RightLabel{\scriptsize $\forall E$}
+	\UnaryInfC{$\vdash \alpha(x): \Sigma_y f(y)=x$}
+	\AxiomC{}
+	\RightLabel{\scriptsize Axiom}
+	\UnaryInfC{$\vdash \beta : \Pi_x(P(x)\supset Q(f(x), x))$}
+	\RightLabel{\scriptsize $\forall E$}
+	\UnaryInfC{$\vdash \beta(y) : P(y)\supset Q(f(y), y)$}
+	\AxiomC{}
+	\RightLabel{\scriptsize Axiom}
+	\UnaryInfC{$\vdash\Gamma\Pi_x P(x)$}
+	\RightLabel{\scriptsize $\forall E$}
+	\UnaryInfC{$\vdash\gamma(y) : P(y)$}
+	\RightLabel{\scriptsize $\supset\hspace{-2pt}E$}
+	\BinaryInfC{$\vdash \beta(y)(\gamma(y)) : Q(f(y), y)$}
+	\AxiomC{}
+	\RightLabel{\scriptsize u}
+	\UnaryInfC{[$\vdash\delta : f(y) = x$]}
+	\RightLabel{\scriptsize subst}
+	\BinaryInfC{$\vdash \beta(y)(\gamma(y))_\delta : Q(x, y)$}
+	\RightLabel{\scriptsize $\supset\hspace{-2pt}I^u$}
+	\UnaryInfC{$\delta : f(y)=x\vdash\beta(y)(\gamma(y))_\delta : Q(x, y)$}
+	\RightLabel{\scriptsize$\exists I$}
+	\UnaryInfC{$\delta : f(y)=x\vdash \langle y, \beta(y)(\gamma(y))_\delta\rangle :\Sigma_y Q(x, y)$}
+	\RightLabel{\scriptsize $\exists E$}
+	\BinaryInfC{$\vdash \textbf{let }\langle y, \delta\rangle = \alpha(x)\textbf{ in }\langle y,\beta(y)(\gamma(y)\delta)\rangle: \Sigma_y Q(x, y)$}
+	\RightLabel{\scriptsize $\forall I$}
+	\UnaryInfC{$\lambda x.\textbf{let }\langle y, \delta\rangle = \alpha(x)\textbf{ in }\langle y,\beta(y)(\gamma(y))_\delta\rangle:\Pi_x \Sigma_y Q(x, y)$}
+	
+	\hspace*{-1cm}
+	\DisplayProof
+}
+\hfill
+\\\\\hspace{2cm}We can reduce the last term to $\lambda x.\langle \alpha(x)_1, \beta(\alpha(x)_1)(\gamma(\alpha(x)_1)_{\alpha(x)_2}\rangle$.
+
+\noindent Finally replacing the proof terms by units we obtain $\lambda x.\langle \alpha(x)_1, ()\rangle : \Pi_x\Sigma_y \top$ from which we may further extract $\lambda x. \alpha(x)_1$.
 
 
+\pagebreak
 \bibliographystyle{acm}
 \bibliography{references}
 
