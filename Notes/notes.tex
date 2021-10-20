@@ -30,6 +30,27 @@
 
 \maketitle
 
+\section{Type theory}
+
+As we are interested in a proof-as-programs correspondence for first order logic our underlying type theory has to be of dependant nature, meaning that types can and will depend on terms.
+
+One interesting aspect of choosing a type theory is how to handle equality. There are many different ways to do this but for our purposes the relatively simple model in agda~\cite{agda} is sufficient (?). Namely the only equality inherent to the type theory is definitional equality, i.e. equality induced by equivalence under $\beta$-reductions and $\eta$-equivalences whereas propositional equality is itself an inductive type (or rather inductive schema) with a single constructor $$\text{refl}_x : x =_A x$$ (the type is parametrized by a type $A$ and $x:A$), i.e. for all types $A$ and $x:A$ we have the rule
+\begin{center}
+\AxiomC{}
+\RightLabel{\scriptsize $=$-intro}
+\UnaryInfC{$\text{refl}_x : x =_A x$}
+\DisplayProof
+\end{center}
+Many of the expected properties of equality hold. For instance we can derive the term
+\begin{align*}
+	\text{subst} &: \Pi_{A}\Pi_{x, y:A}\Pi_{P:A\to Type}\Pi_{e : x=_Ay}\Pi_{p:P x}P y\\
+	\text{subst} &\: A\:x\:y\:P\: \text{refl}_x\: px = px 
+\end{align*}
+by pattern matching, i.e. matching refl the type checker can unify $x$ and $y$.
+
+However there are some issues with this handling of equality. For example it is impossible to define quotient structures: Let's say we prove prime decomposition for PIDs and want to apply it to some ring. Then the ring will be most likely defined as a setoid-like structure with the equality being a more coarse relation on the set of terms and in particular not equal to the equality above. Our proof-as-programs translation will have to take this into account.
+
+
 \section{Proof translation for saturation-based theorem proving with induction}
 
 Most modern theorem provers for first order logic utilize resolution and saturation based techniques. The standard intuitionistic proofs-as-programs correspondence fails as even the very method itself crucially depends on double negation elimination. As a first step we work out a way to convert proofs of $\forall\exists$-proofs based on the calculus presented in~\cite{Echenim_2019} into programs. An advantage of the calculus as presented in~\cite{Echenim_2019} is that it can (at least in theory) handle general induction for inductive datatype. Many advances have recently been made for incorporating induction in existing theorem provers~\cite{hajdu2021automating}\cite{10.1007/978-3-030-53518-6_8} however all of the calculi fail to support induction in the general case, in particular sentences involving existential quantifiers and requiring induction depth greater than $1$ are problematic.
@@ -212,7 +233,7 @@ To Show: $\forall x \exists y Q(x, y)$\\
 	\UnaryInfC{$\vdash \beta(y) : P(y)\supset Q(f(y), y)$}
 	\AxiomC{}
 	\RightLabel{\scriptsize Axiom}
-	\UnaryInfC{$\vdash\Gamma\Pi_x P(x)$}
+	\UnaryInfC{$\vdash\gamma : \Pi_x P(x)$}
 	\RightLabel{\scriptsize $\forall E$}
 	\UnaryInfC{$\vdash\gamma(y) : P(y)$}
 	\RightLabel{\scriptsize $\supset\hspace{-2pt}E$}
@@ -221,21 +242,21 @@ To Show: $\forall x \exists y Q(x, y)$\\
 	\RightLabel{\scriptsize u}
 	\UnaryInfC{[$\vdash\delta : f(y) = x$]}
 	\RightLabel{\scriptsize subst}
-	\BinaryInfC{$\vdash \beta(y)(\gamma(y))_\delta : Q(x, y)$}
+	\BinaryInfC{$\vdash \text{subst}(f(y),x,\Pi_tQ(t, y),\delta,\beta(y)(\gamma(y)) : Q(x, y)$}
 	\RightLabel{\scriptsize $\supset\hspace{-2pt}I^u$}
-	\UnaryInfC{$\delta : f(y)=x\vdash\beta(y)(\gamma(y))_\delta : Q(x, y)$}
+	\UnaryInfC{$\delta : f(y)=x\vdash\text{subst}(f(y),x,\Pi_tQ(t, y),\delta,\beta(y)(\gamma(y)) : Q(x, y)$}
 	\RightLabel{\scriptsize$\exists I$}
-	\UnaryInfC{$\delta : f(y)=x\vdash \langle y, \beta(y)(\gamma(y))_\delta\rangle :\Sigma_y Q(x, y)$}
+	\UnaryInfC{$\delta : f(y)=x\vdash \langle y, \text{subst}(f(y),x,\Pi_tQ(t, y),\delta,\beta(y)(\gamma(y))\rangle :\Sigma_y Q(x, y)$}
 	\RightLabel{\scriptsize $\exists E$}
-	\BinaryInfC{$\vdash \textbf{let }\langle y, \delta\rangle = \alpha(x)\textbf{ in }\langle y,\beta(y)(\gamma(y)\delta)\rangle: \Sigma_y Q(x, y)$}
+	\BinaryInfC{$\vdash \textbf{let }\langle y, \delta\rangle = \alpha(x)\textbf{ in }\langle y,\text{subst}(f(y),x,\Pi_tQ(t, y),\delta,\beta(y)(\gamma(y))\rangle: \Sigma_y Q(x, y)$}
 	\RightLabel{\scriptsize $\forall I$}
-	\UnaryInfC{$\lambda x.\textbf{let }\langle y, \delta\rangle = \alpha(x)\textbf{ in }\langle y,\beta(y)(\gamma(y))_\delta\rangle:\Pi_x \Sigma_y Q(x, y)$}
+	\UnaryInfC{$\lambda x.\textbf{let }\langle y, \delta\rangle = \alpha(x)\textbf{ in }\langle y,\text{subst}(f(y),x,\Pi_tQ(t, y),\delta,\beta(y)(\gamma(y))\rangle:\Pi_x \Sigma_y Q(x, y)$}
 	
 	\hspace*{-1cm}
 	\DisplayProof
 }
 \hfill
-\\\\\hspace{2cm}We can reduce the last term to $\lambda x.\langle \alpha(x)_1, \beta(\alpha(x)_1)(\gamma(\alpha(x)_1)_{\alpha(x)_2}\rangle$.
+\\\\\hspace{2cm}We can reduce the last term to $\lambda x.\langle \alpha(x)_1, \text{subst}(f(\alpha(x)_1),x,\Pi_tQ(t, \alpha(x)_1),\alpha(x)_2,\beta(\alpha(x)_1)(\gamma(\alpha(x)_1))\rangle$.
 
 \noindent Finally replacing the proof terms by units we obtain $\lambda x.\langle \alpha(x)_1, ()\rangle : \Pi_x\Sigma_y \top$ from which we may further extract $\lambda x. \alpha(x)_1$.
 
