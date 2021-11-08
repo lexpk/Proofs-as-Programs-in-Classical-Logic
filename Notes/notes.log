@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.7) (preloaded format=pdflatex 2020.10.5)  20 OCT 2021 13:36
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.7) (preloaded format=pdflatex 2020.10.5)  8 NOV 2021 03:22
 entering extended mode
 **./notes.tex
 (notes.tex
@@ -269,8 +269,18 @@ Overfull \hbox (13.39249pt too wide) detected at line 112
 []
  []
 
+
+Overfull \hbox (62.39815pt too wide) detected at line 149
+[]
+ []
+
 [4]
-Overfull \hbox (3.13745pt too wide) in paragraph at lines 137--139
+Overfull \hbox (118.31255pt too wide) detected at line 179
+[]
+ []
+
+[5] [6]
+Overfull \hbox (3.13745pt too wide) in paragraph at lines 198--200
 \OT1/cmr/m/n/10 this in mind both $\OML/cmm/m/it/10 e[]\OT1/cmr/m/n/10 (\OML/cm
 m/m/it/10 t[]: [] ; t[]\OT1/cmr/m/n/10 )[][](\OML/cmm/m/it/10 t[]: [] ; t[]\OT1
 /cmr/m/n/10 ) : \OMS/cmsy/m/n/10 ?$ \OT1/cmr/m/n/10 and $[][](\OML/cmm/m/it/10 
@@ -278,13 +288,13 @@ t[]: [] ; t[]\OT1/cmr/m/n/10 )\OML/cmm/m/it/10 e[]\OT1/cmr/m/n/10 (\OML/cmm/m/i
 t/10 t[]: [] ; t[]\OT1/cmr/m/n/10 ) :
  []
 
-[5] [6]
-Underfull \hbox (badness 10000) in paragraph at lines 179--184
+[7] [8]
+Underfull \hbox (badness 10000) in paragraph at lines 240--245
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 185--186
+Underfull \hbox (badness 10000) in paragraph at lines 246--247
 
  []
 
@@ -297,27 +307,27 @@ Underfull \hbox (badness 10000) in paragraph at lines 185--186
 \myCenter3=\dimen173
 \myScoreEnd3=\dimen174
 
-Overfull \hbox (67.98991pt too wide) in paragraph at lines 219--254
+Overfull \hbox (67.98991pt too wide) in paragraph at lines 280--315
 []|  []
  []
 
 
-Overfull \hbox (125.52507pt too wide) in paragraph at lines 255--260
+Overfull \hbox (125.52507pt too wide) in paragraph at lines 316--321
 []|  []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 255--260
+Underfull \hbox (badness 10000) in paragraph at lines 316--321
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 255--260
+Underfull \hbox (badness 10000) in paragraph at lines 316--321
 
  []
 
 
-Overfull \hbox (63.13255pt too wide) in paragraph at lines 255--260
+Overfull \hbox (63.13255pt too wide) in paragraph at lines 316--321
 \OT1/cmr/m/n/9 We can re-duce the last term to $\OML/cmm/m/it/9 x:\OMS/cmsy/m/
 n/9 h\OML/cmm/m/it/9 \OT1/cmr/m/n/9 (\OML/cmm/m/it/9 x\OT1/cmr/m/n/9 )[]\OML/c
 mm/m/it/9 ; []\OT1/cmr/m/n/9 (\OML/cmm/m/it/9 f\OT1/cmr/m/n/9 (\OML/cmm/m/it/9 
@@ -330,7 +340,7 @@ mr/m/n/9 (\OML/cmm/m/it/9 \OT1/cmr/m/n/9 (\OML/cmm/m/it/9 x\OT1/cmr/m/n/9 )[])
 )\OMS/cmsy/m/n/9 i$\OT1/cmr/m/n/9 . 
  []
 
-[7] (notes.bbl) [8] (notes.aux)
+[9] (notes.bbl) [10] (notes.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -338,7 +348,7 @@ LaTeX Warning: There were undefined references.
 Here is how much of TeX's memory you used:
  3523 strings out of 480236
  45020 string characters out of 2881034
- 333894 words of memory out of 3000000
+ 342896 words of memory out of 3000000
  20037 multiletter control sequences out of 15000+200000
  552175 words of font info for 94 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -372,12 +382,13 @@ y5.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts
 /cm/cmsy7.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/a
 msfonts/cm/cmsy9.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/p
 ublic/amsfonts/cm/cmti10.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts
-/type1/public/amsfonts/cm/cmti9.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTe
-X/fonts/type1/public/amsfonts/symbols/msam10.pfb><E:/Users/Alex/AppData/Local/P
-rograms/MiKTeX/fonts/type1/public/hoekwater/stmary10.pfb>
-Output written on notes.pdf (8 pages, 332188 bytes).
+/type1/public/amsfonts/cm/cmti7.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTe
+X/fonts/type1/public/amsfonts/cm/cmti9.pfb><E:/Users/Alex/AppData/Local/Program
+s/MiKTeX/fonts/type1/public/amsfonts/symbols/msam10.pfb><E:/Users/Alex/AppData/
+Local/Programs/MiKTeX/fonts/type1/public/hoekwater/stmary10.pfb>
+Output written on notes.pdf (10 pages, 350523 bytes).
 PDF statistics:
- 147 PDF objects out of 1000 (max. 8388607)
+ 157 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

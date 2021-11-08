@@ -119,6 +119,67 @@ Since we want to apply our method to first-order resolution proofs we will requi
 
 \subsection{Examples and Translations}
 
+\begin{example}\hfill
+	\begin{align*}
+		1. &\forall x_0 : \text{Nat}(z + x_0 = x_0) & \text{Axiom}\\
+		2.&\forall x_0x_1: \text{Nat}(s(x_0 + x_1) = s(x_0) + x_1) & \text{Axiom}\\
+		3.&\neg\forall x_0 : \text{Nat}\exists x_1:\text{Nat}(x_1 + z = x_0) & \text{negated claim}\\
+		4.&(\forall x_0:\text{Nat}\exists x_1:\text{Nat}, x_1 + z = x_0)\vee(\forall x_0:\text{Nat},z\neq x_0 + z)\vee&\\
+		&\exists x_0:\text{Nat}(\forall x_1:\text{Nat}, x_1 + z\neq s(x_0)\wedge \exists x_1:\text{Nat}, x_1+z=x_0)&\text{Induction axiom (ENNF)}\\
+		5.&\exists x_0: \text{Nat}\forall x_1: \text{Nat}(x_1 + z \neq x_0) & \text{ENNF transformation 3}\\
+		6.&\forall x_1: \text{Nat}(x_1 + z \neq sk_0) & \text{skolemization 5}\\
+		7.&(\forall x_0:\text{Nat}, sk_1(x_0) + z = x_0)\vee(\forall x_0:\text{Nat},z\neq x_0 + z)\vee&\\
+		&(\forall x_1:\text{Nat}, x_1 + z\neq s(sk_2)\wedge sk_3+z=sk_2)&\text{skolemization 4}\\
+		8.&x_1 + z\neq sk_0&\text{cnf 6}\\
+		9.&sk_1(x_0) + z = x_0\vee z\neq x_1 + z\vee sk_2 = sk_3 + z&\text{cnf 7}\\
+		10.&sk_1(x_0) + z = x_0\vee z\neq x_1 + z\vee x_2 + z\neq s(sk_2)&\text{cnf 7}\\
+		11.&s(x_0 + x_1) = s(x_0) + x_1&\text{cnf 2}\\
+		12.&z + x_0 = x_0&\text{cnf 1}\\
+		13.&sk_1(x_0) + z = x_0\vee z\neq z\vee sk_2 = sk_3 + z&\text{superposition 9, 12}\\
+		14.&sk_1(x_0) + z = x_0\vee sk_2 = sk_3 + z&\text{trivial inequality removal 13}\\
+		15.&sk_1(x_0) + z = x_0\vee z\neq x_1 + z\vee s(x_3 + z)\neq s(sk_2)&\text{supserposition 10, 11}\\
+		16.&sk_0\neq x_0\vee sk_2 = sk_3 + z&\text{superposition 8, 14}\\
+		17.&sk_2 = sk_3 + z&\text{equality resolution 16}\\
+		18.&sk_1(x_0) + z = x_0\vee z\neq x_1 + z\vee s(sk_2)\neq s(sk_2)&\text{superposition 15, 17}\\
+		19.&sk_1(x_0) + z = x_0\vee z\neq x_1 + z&\text{trivial inequality removal 18}\\
+		20.&sk_1(x_0) + z = x_0\vee z\neq z&\text{superposition 12, 19}\\
+		21.&sk_1(x_0) + z = x_0&\text{trivial inequality removal 20}\\
+		22.&sk_0 \neq x_0&\text{superoisition 21, 8}\\
+		23.&\bot&\text{equality resolution 22}
+	\end{align*}
+\end{example}
+
+\begin{example}\hfill
+	\begin{align*}
+		1. &\vdash \lambda f. f(\lambda x.\text{id}_{x}): \text{Cont }\Pi_{x_0 : \text{Nat}}(z + x_0 = x_0) & \text{Axiom}\\
+		2.&\vdash \lambda f. f(\lambda x_0x_1.\text{id}_{s(x_0 + x_1)}): \text{Cont }\Pi_{x_0:\text{Nat}}\Pi_{x_1: \text{Nat}}(s(x_0 + x_1) = s(x_0) + x_1) & \text{Axiom}\\
+		3.&\vdash f: (\Pi_{x_0 : \text{Nat}}\Sigma_{x_1:\text{Nat}}x_1 + z = x_0)\to\bot & \text{negated claim}\\
+		4.&\vdash \lambda f.:\text{Cont }(\Pi_{x_0 : \text{Nat}}\Sigma_{x_1:\text{Nat}}x_1 + z = x_0)\vee(\Pi_{x_0 : \text{Nat}}z\neq x_0 + z)\vee&\\
+		&\Sigma_{x_0:\text{Nat}}(\Pi_{x_1:\text{Nat}}x_1 + z\neq s(x_0)\wedge \Sigma_{x_1:\text{Nat}} x_1+z=x_0)&\text{Induction axiom (ENNF)}\\
+		5.&\exists x_0: \text{Nat}\forall x_1: \text{Nat}(x_1 + z \neq x_0) & \text{ENNF transformation 3}\\
+		6.&\forall x_1: \text{Nat}(x_1 + z \neq sk_0) & \text{skolemization 5}\\
+		7.&(\forall x_0:\text{Nat}, sk_1(x_0) + z = x_0)\vee(\forall x_0:\text{Nat},z\neq x_0 + z)\vee&\\
+		&(\forall x_1:\text{Nat}, x_1 + z\neq s(sk_2)\wedge sk_3+z=sk_2)&\text{skolemization 4}\\
+		8.&x_1 + z\neq sk_0&\text{cnf 6}\\
+		9.&sk_1(x_0) + z = x_0\vee z\neq x_1 + z\vee sk_2 = sk_3 + z&\text{cnf 7}\\
+		10.&sk_1(x_0) + z = x_0\vee z\neq x_1 + z\vee x_2 + z\neq s(sk_2)&\text{cnf 7}\\
+		11.&s(x_0 + x_1) = s(x_0) + x_1&\text{cnf 2}\\
+		12.&z + x_0 = x_0&\text{cnf 1}\\
+		13.&sk_1(x_0) + z = x_0\vee z\neq z\vee sk_2 = sk_3 + z&\text{superposition 9, 12}\\
+		14.&sk_1(x_0) + z = x_0\vee sk_2 = sk_3 + z&\text{trivial inequality removal 13}\\
+		15.&sk_1(x_0) + z = x_0\vee z\neq x_1 + z\vee s(x_3 + z)\neq s(sk_2)&\text{supserposition 10, 11}\\
+		16.&sk_0\neq x_0\vee sk_2 = sk_3 + z&\text{superposition 8, 14}\\
+		17.&sk_2 = sk_3 + z&\text{equality resolution 16}\\
+		18.&sk_1(x_0) + z = x_0\vee z\neq x_1 + z\vee s(sk_2)\neq s(sk_2)&\text{superposition 15, 17}\\
+		19.&sk_1(x_0) + z = x_0\vee z\neq x_1 + z&\text{trivial inequality removal 18}\\
+		20.&sk_1(x_0) + z = x_0\vee z\neq z&\text{superposition 12, 19}\\
+		21.&sk_1(x_0) + z = x_0&\text{trivial inequality removal 20}\\
+		22.&sk_0 \neq x_0&\text{superoisition 21, 8}\\
+		23.&\bot&\text{equality resolution 22}
+	\end{align*}
+\end{example}
+
+
 For now we will consider two minimal examples. The first doesn't use induction. There are two constant symbols $a, b$ and a binary proposition variable $p(-, -)$. The only axiom is $\forall x\:p(x,a)\vee p(x, b)$. We seek to prove $\forall x\exists y p(x, y)$. It is immediately clear that unless the axiom has computational content, our extracted program cannot yield a value. On the other hand we will see that we can still create a well-typed program. And if the axiom contains computational content it will indeed yield a result.
 
 
@@ -259,6 +320,8 @@ To Show: $\forall x \exists y Q(x, y)$\\
 \\\\\hspace{2cm}We can reduce the last term to $\lambda x.\langle \alpha(x)_1, \text{subst}(f(\alpha(x)_1),x,\Pi_tQ(t, \alpha(x)_1),\alpha(x)_2,\beta(\alpha(x)_1)(\gamma(\alpha(x)_1))\rangle$.
 
 \noindent Finally replacing the proof terms by units we obtain $\lambda x.\langle \alpha(x)_1, ()\rangle : \Pi_x\Sigma_y \top$ from which we may further extract $\lambda x. \alpha(x)_1$.
+
+
 
 
 \pagebreak
