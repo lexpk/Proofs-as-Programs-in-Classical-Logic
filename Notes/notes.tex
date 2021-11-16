@@ -30,6 +30,33 @@
 
 \maketitle
 
+\section{Plan}
+
+Goal:
+\begin{itemize}
+	\item Extract program from resolution proofs of $\forall\exists$-sentences over inductive datatypes.
+\end{itemize}
+
+\noindent Steps:
+
+\begin{itemize}
+	\item Give extensions of G\"odel's System \textbf{T} and HAS + EM$_1$ + SK$_1$ to arbitrary inductive datatypes (possibly GADTs) and prove (or rather check) properties, i.e. strong normalization, cut-elimination, uniqueness of normal forms.
+	\item Adapt the results of~\cite{aschieri2014interactive} to exhibit realizers in $\mathcal{F} + \Phi$ for cut-free proofs in the extended version of HAS + EM$_1$ + SK$_1$ of formulas $\forall x\exists y Pxy$ where $P$ is a predicate in the extended version of \textbf{T}.
+	\item Adapt the iterative learning from~\cite{aschieri2014interactive} to extract $\lambda$-terms from realizers.
+	\item Give a proof translation from resolution proofs to cut-free sequent calculus proofs (already done?).
+\end{itemize}
+
+\noindent Questions:
+\begin{itemize}
+	\item When does the translated proof require more than EM$_1$?
+	\item Using the methods in~\cite{aschieri2014interactive} the extracted term will be in simple $\lambda$-calculus. Is is possible to obtain a term in $\mathcal{F}$? (Talk with Federico Aschieri)
+	\item Can the predicates be defined in $\mathcal{F}$ instead of $\mathcal{T}$? (probably yes)
+	\item What happens if we add non-inductive theories?
+	
+\end{itemize}
+
+\pagebreak
+
 \section{Type theory}
 
 As we are interested in a proof-as-programs correspondence for first order logic our underlying type theory has to be of dependant nature, meaning that types can and will depend on terms.

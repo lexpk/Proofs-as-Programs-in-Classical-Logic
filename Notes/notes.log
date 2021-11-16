@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.7) (preloaded format=pdflatex 2020.10.5)  8 NOV 2021 03:22
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.7) (preloaded format=pdflatex 2020.10.5)  16 NOV 2021 05:54
 entering extended mode
 **./notes.tex
 (notes.tex
@@ -244,43 +244,43 @@ LaTeX Font Info:    Trying to load font information for U+stmry on input line 3
 1.
 
 (E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/latex/stmaryrd\ustmry.fd)
+[1
+
+{C:/Users/Alex/AppData/Local/MiKTeX/pdftex/config/pdftex.map}]
 \myBox1=\box60
 \myScoreStart1=\dimen166
 \myCenter1=\dimen167
 \myScoreEnd1=\dimen168
+ [2]
 
-[1
-
-{C:/Users/Alex/AppData/Local/MiKTeX/pdftex/config/pdftex.map}]
-
-LaTeX Warning: Citation `Barbanera_1996' on page 2 undefined on input line 60.
+LaTeX Warning: Citation `Barbanera_1996' on page 3 undefined on input line 87.
 
 
-Overfull \hbox (6.83261pt too wide) detected at line 78
+Overfull \hbox (6.83261pt too wide) detected at line 105
 [] [] []
  []
 
-[2]
-
-LaTeX Font Warning: Command \tiny invalid in math mode on input line 97.
-
 [3]
-Overfull \hbox (13.39249pt too wide) detected at line 112
-[]
- []
+
+LaTeX Font Warning: Command \tiny invalid in math mode on input line 124.
 
 
-Overfull \hbox (62.39815pt too wide) detected at line 149
+Overfull \hbox (13.39249pt too wide) detected at line 139
 []
  []
 
 [4]
-Overfull \hbox (118.31255pt too wide) detected at line 179
+Overfull \hbox (62.39815pt too wide) detected at line 176
 []
  []
 
-[5] [6]
-Overfull \hbox (3.13745pt too wide) in paragraph at lines 198--200
+[5]
+Overfull \hbox (118.31255pt too wide) detected at line 206
+[]
+ []
+
+[6] [7]
+Overfull \hbox (3.13745pt too wide) in paragraph at lines 225--227
 \OT1/cmr/m/n/10 this in mind both $\OML/cmm/m/it/10 e[]\OT1/cmr/m/n/10 (\OML/cm
 m/m/it/10 t[]: [] ; t[]\OT1/cmr/m/n/10 )[][](\OML/cmm/m/it/10 t[]: [] ; t[]\OT1
 /cmr/m/n/10 ) : \OMS/cmsy/m/n/10 ?$ \OT1/cmr/m/n/10 and $[][](\OML/cmm/m/it/10 
@@ -288,13 +288,13 @@ t[]: [] ; t[]\OT1/cmr/m/n/10 )\OML/cmm/m/it/10 e[]\OT1/cmr/m/n/10 (\OML/cmm/m/i
 t/10 t[]: [] ; t[]\OT1/cmr/m/n/10 ) :
  []
 
-[7] [8]
-Underfull \hbox (badness 10000) in paragraph at lines 240--245
+[8] [9]
+Underfull \hbox (badness 10000) in paragraph at lines 267--272
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 246--247
+Underfull \hbox (badness 10000) in paragraph at lines 273--274
 
  []
 
@@ -307,27 +307,27 @@ Underfull \hbox (badness 10000) in paragraph at lines 246--247
 \myCenter3=\dimen173
 \myScoreEnd3=\dimen174
 
-Overfull \hbox (67.98991pt too wide) in paragraph at lines 280--315
+Overfull \hbox (67.98991pt too wide) in paragraph at lines 307--342
 []|  []
  []
 
 
-Overfull \hbox (125.52507pt too wide) in paragraph at lines 316--321
+Overfull \hbox (125.52507pt too wide) in paragraph at lines 343--348
 []|  []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 316--321
+Underfull \hbox (badness 10000) in paragraph at lines 343--348
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 316--321
+Underfull \hbox (badness 10000) in paragraph at lines 343--348
 
  []
 
 
-Overfull \hbox (63.13255pt too wide) in paragraph at lines 316--321
+Overfull \hbox (63.13255pt too wide) in paragraph at lines 343--348
 \OT1/cmr/m/n/9 We can re-duce the last term to $\OML/cmm/m/it/9 x:\OMS/cmsy/m/
 n/9 h\OML/cmm/m/it/9 \OT1/cmr/m/n/9 (\OML/cmm/m/it/9 x\OT1/cmr/m/n/9 )[]\OML/c
 mm/m/it/9 ; []\OT1/cmr/m/n/9 (\OML/cmm/m/it/9 f\OT1/cmr/m/n/9 (\OML/cmm/m/it/9 
@@ -340,19 +340,19 @@ mr/m/n/9 (\OML/cmm/m/it/9 \OT1/cmr/m/n/9 (\OML/cmm/m/it/9 x\OT1/cmr/m/n/9 )[])
 )\OMS/cmsy/m/n/9 i$\OT1/cmr/m/n/9 . 
  []
 
-[9] (notes.bbl) [10] (notes.aux)
+[10] (notes.bbl) [11] (notes.aux)
 
 LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 3523 strings out of 480236
- 45020 string characters out of 2881034
- 342896 words of memory out of 3000000
- 20037 multiletter control sequences out of 15000+200000
+ 3525 strings out of 480236
+ 45053 string characters out of 2881034
+ 342899 words of memory out of 3000000
+ 20039 multiletter control sequences out of 15000+200000
  552175 words of font info for 94 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 59i,13n,66p,1223b,219s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 59i,13n,66p,1223b,243s stack positions out of 5000i,500n,10000p,200000b,50000s
  <C:\Users\Alex\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcti0
 900.pk> <C:\Users\Alex\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\
 tcrm1000.pk><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
@@ -386,9 +386,9 @@ ublic/amsfonts/cm/cmti10.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts
 X/fonts/type1/public/amsfonts/cm/cmti9.pfb><E:/Users/Alex/AppData/Local/Program
 s/MiKTeX/fonts/type1/public/amsfonts/symbols/msam10.pfb><E:/Users/Alex/AppData/
 Local/Programs/MiKTeX/fonts/type1/public/hoekwater/stmary10.pfb>
-Output written on notes.pdf (10 pages, 350523 bytes).
+Output written on notes.pdf (11 pages, 355052 bytes).
 PDF statistics:
- 157 PDF objects out of 1000 (max. 8388607)
+ 160 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
