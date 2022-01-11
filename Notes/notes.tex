@@ -6,6 +6,7 @@
 \usepackage{ mathpartir }
 \usepackage{xcolor}
 \usepackage{bussproofs}
+\usepackage[left=3.00cm, right=3.00cm, top=3.00cm,bottom=3.0cm]{geometry}
 
 
 
@@ -57,299 +58,279 @@ Goal:
 
 \pagebreak
 
-\section{Type theory}
+\section{Extracting constructive content from resolution proofs}
+\subsection{The superposition calculus}
+First let us define the calculus from which we wish to extract programs. It will comprise a core set of rules used in the vampire theorem prover taken from~\cite{Kov_cs_2013}. Note that we pay special attention to the usually neglected (and highly non-constructive) part of CNF transformation and Skolemization. Also note that we neglect the simplification ordering which is necessary to formulate a strategy for proof search but not for our proof transformation.
 
-As we are interested in a proof-as-programs correspondence for first order logic our underlying type theory has to be of dependant nature, meaning that types can and will depend on terms.
-
-One interesting aspect of choosing a type theory is how to handle equality. There are many different ways to do this but for our purposes the relatively simple model in agda~\cite{agda} is sufficient (?). Namely the only equality inherent to the type theory is definitional equality, i.e. equality induced by equivalence under $\beta$-reductions and $\eta$-equivalences whereas propositional equality is itself an inductive type (or rather inductive schema) with a single constructor $$\text{refl}_x : x =_A x$$ (the type is parametrized by a type $A$ and $x:A$), i.e. for all types $A$ and $x:A$ we have the rule
+\noindent\textbf{Resolution.}
 \begin{center}
-\AxiomC{}
-\RightLabel{\scriptsize $=$-intro}
-\UnaryInfC{$\text{refl}_x : x =_A x$}
+\AxiomC{$A\vee B$}
+\AxiomC{$\neg A'\vee C$}
+\BinaryInfC{$(B\vee C)\theta$}
 \DisplayProof
 \end{center}
-Many of the expected properties of equality hold. For instance we can derive the term
-\begin{align*}
-	\text{subst} &: \Pi_{A}\Pi_{x, y:A}\Pi_{P:A\to Type}\Pi_{e : x=_Ay}\Pi_{p:P x}P y\\
-	\text{subst} &\: A\:x\:y\:P\: \text{refl}_x\: px = px 
-\end{align*}
-by pattern matching, i.e. matching refl the type checker can unify $x$ and $y$.
+where $\theta$ is an mgu of $A$ and $A'$.
 
-However there are some issues with this handling of equality. For example it is impossible to define quotient structures: Let's say we prove prime decomposition for PIDs and want to apply it to some ring. Then the ring will be most likely defined as a setoid-like structure with the equality being a more coarse relation on the set of terms and in particular not equal to the equality above. Our proof-as-programs translation will have to take this into account.
-
-
-\section{Proof translation for saturation-based theorem proving with induction}
-
-Most modern theorem provers for first order logic utilize resolution and saturation based techniques. The standard intuitionistic proofs-as-programs correspondence fails as even the very method itself crucially depends on double negation elimination. As a first step we work out a way to convert proofs of $\forall\exists$-proofs based on the calculus presented in~\cite{Echenim_2019} into programs. An advantage of the calculus as presented in~\cite{Echenim_2019} is that it can (at least in theory) handle general induction for inductive datatype. Many advances have recently been made for incorporating induction in existing theorem provers~\cite{hajdu2021automating}\cite{10.1007/978-3-030-53518-6_8} however all of the calculi fail to support induction in the general case, in particular sentences involving existential quantifiers and requiring induction depth greater than $1$ are problematic.
-
-The approach in~\cite{Echenim_2019} seems promising as, despite being able to handle general induction, there is no explosion in the number of clauses due to a clever use of so-called \textit{constrained clauses}, special symbols $\textbf{T}_\alpha^\prec$ for induction and a special activation mechanism for potential inductive invariants, although how it performs in practice is yet to be seen.
-
-Program translation for classical proofs has been outlined in~\cite{Griffin_1990}. Based on this~\cite{de_Groote_1995} and~\cite{Barbanera_1996} have been developed. Our a approach is a combination of both. At the moment it is quite crude and is mostly based on the exception method from~\cite{de_Groote_1995}. We aim to later translate this to the CPS approach presented in the same paper to better see how it relates to the normal proofs-as-program correspondence known from intuitionistic logic.
-
-
-
-\subsection{The Calculus}
-
-As explained above our calculus is based on~\cite{Echenim_2019}. We take the core rules, which are not mentioned in~\cite{Echenim_2019}, from~\cite{Kov_cs_2013}.
-
-The first five inferences are standard in resolution based theorem proving. We assume some simplification ordering $\succeq^*$.\\
-\textbf{Resolution.}
-$$\inferrule{{A}\vee C_1\\{\neg B}\vee C_2}{(C_1\vee C_2)\theta}$$
-where $\theta$ is a mgu of $A$ and $\neg B$.\\
-\textbf{Factoring.}
-$$\inferrule{{A}\vee{\neg B}\vee C}{(A\vee C)\theta}$$
-where theta is a mgu of $A$ and $B$.\\
-\textbf{Superposition.}
-$$\inferrule{{l=r}\vee C_1\\{L[s]}\vee C_2}{(L[r]\vee C_1\vee C_2)\theta}\:
-\inferrule{{l=r}\vee C_1\\ {t[s]=t'}\vee C_2}{(t[r]=t'\vee C_1\vee C_2)\theta}\:
-\inferrule{{l=r}\vee C_1\\{t[s]\neq t'}\vee C_2}{(t[r]\neq t'\vee C_1\vee C_2)\theta}$$
-where $\theta$ is a mgu of $l$ and $s$, $s$ is not a variable, $r\theta\not\succeq^* l\theta$, $L[s]$ is not an equality literal, and $t'\theta\succeq^* t[s]\theta$.\\
-\textbf{Equality Resolution.}
-$$\inferrule{{s\neq t}\vee C}{C\theta}$$
-where $\theta$ is a mgu of $s$ and $t$.\\
-\textbf{Equality Factoring.}
-$$\inferrule{{s=t}\vee{s'=t'}\vee C}{(s=t\vee t=t'\vee C)\theta}$$
-where $\theta$ is an mgu of $s$ and $s'$, $t\theta\not\succeq^* s\theta$, and $t'\theta\succeq^* t\theta$.
-
-In addition to regular clauses and inference rules we introduce c-clauses and special rules for them, i.e. (all of this will be made more precise later)
-\begin{definition}
-	A \textit{constrained clause} (c-clause) is an expression of  the form $\llb C\:|\:\mathcal X \rrb$, where
-	\begin{itemize}
-		\item C is a clause,
-		\item $\mathcal{X}$ is a conjunction of the form $\bigwedge_{i=1}^ n f_i(\mathbf{u_i})\simeq v_i\wedge\bigwedge_{i=1}^m \mathbf{T}_{\alpha_i}^\prec(z_i,\textbf{w}_i)$, where $n, m\geq 0$ and $\forall i\in\{1\dots n\}, f_i$ are uninterpreted function symbols (possibly nullary).
-	\end{itemize}
-\end{definition}
-The semantics of $\llb C\:|\:\mathcal X \rrb$ is more or less ``if all constraints in $\mathcal X$ hold, then $C$ holds" and of $\mathbf{T}_{\alpha_i}^\prec(z,\mathbf{w})$ ``for all $z'\prec z$ $\alpha(z', \mathbf{w})$ holds" where $\prec$ is the standard wfo of an inductive type.
-
-All of the above inference rules extend naturally to constrained clauses, i.e. if $\tiny{\inferrule{H_1,\dots,H_n}{C\theta}}$ is an inference rule for regular clauses, then $$\inferrule{\llb H_1\:|\:\mathcal X_1\rrb,\dots,\llb H_1\:|\:\mathcal X_1\rrb}{\llb C\:|\:\mathcal X_1\wedge\dots\wedge\mathcal X_n\rrb\theta}$$ is the corresponding inference rule for c-clauses.
-
-Furthermore we have some special rules for c-clauses:\\
-\textbf{Constraint Factorization.}
-$$\inferrule{\llb C\:|\:l_1\wedge l_2\wedge \mathcal{X}\rrb}{\llb C\:|\:l_1\wedge \mathcal{X}\rrb\theta}$$where $\theta$ is an mgu of $l_1$ and $l_2$.\\
-\textbf{Abstraction.}
-$$\inferrule{\llb C[f(\mathbf{t})]_p\:|\:\mathcal{X}\rrb}{\llb C[x]_p\:|\:f(\mathbf{t})\simeq x\wedge\mathcal{X}\rrb}$$ where $f$ is a uninterpreted function symbol, $x$ is a fresh variable.\\
-\textbf{Instantiation.}
-$$\inferrule{C\:|\:\mathcal{X}\wedge t\simeq s\rrb}{\llb C\:|\:\mathcal{X}\rrb\theta}$$
-where $\theta$ is a mgu of $t$ and $s$.
-
-In addition there are some rules that generate candidates for an inductive invariant in~\cite{Echenim_2019}. We will leave those out for now an choose our variant ``magically" by hand. For every formula $\alpha[z,\textbf{w}]$ we than have axiom $$\Gamma_\mathbf{T_\alpha^\prec}:= \llb z' \not\prec z\vee \alpha(z', \mathbf{w})\:|\:\mathbf{T}_\alpha^\prec(z,\mathbf{w})\rrb$$ and $\prec $ is axiomatized by $$\Gamma_\prec^s:=\llb x_i\prec s(x_1,\dots, x_n)\:|\:\top\rrb\indent \Gamma_\prec:=\llb x\not\prec y\vee y\not\prec z\vee x\prec z\:|\:\top\rrb$$for every n-ary inductive constructor $s$, $i\in\{1\dots n\}$.
-
-Finally we have additional rules for inductive types. Since we are (for now) not interested in how to generate inductive invariants it is possible to present just one combination rule for Domain Decomposition and Induction.\\
-\textbf{Induction.}
-$$\inferrule{\llb C_1\:|\:\beta_1(t_1)\wedge \mathcal{X}_1\rrb\dots\llb C_n\:|\:\beta_n(t_n)\wedge \mathcal{X}_n\rrb}{\llb C_1\vee\dots\vee C_n\vee \alpha(x,\mathbf{w}_1)\:|\:\mathcal{X}_1\setminus\{\mathbf{T}_{\alpha}^\prec(t_1,\mathbf w_1)\}\wedge\dots\wedge\mathcal{X}_n\setminus\{\mathbf{T}_{\alpha}^\prec(t_n,\mathbf w_n)\}\wedge\beta_1(x)\rrb\theta}$$where $\theta$ is the most general idempotent substitution such that $\beta_j\theta\subseteq\beta_1\theta$ for $n\in\{2\dots n\}$ and a mgu for $\mathbf{w}_1,\dots,\mathbf{w}_n$, the variables occurring in $t_1,\dots,t_n$ do not occur in $C_i,\beta_i,\mathbf{w}_i$ or $\mathcal{X}_i$. $\{t_1\dots t_n\}$ is \textit{covering}, i.e. the whole type can be constructed using $\{t_1\dots t_n\}$, for instance for $nat$ both $\{z, s(x)\}$ and $\{z, s(z), s(s(x))\}$ are covering and $x$ is some fresh variable.
-
-Note that setting $\alpha=\bot$ and $\mathbf{w_i}=\emptyset$ we obtain the regular Domain Decomposition Rule from~\cite{Echenim_2019}.
-
-\subsection{Type system}
-
-Since we want to apply our method to first-order resolution proofs we will require a dependant type system. For this purpose we shall use the practical type system of agda as described in~\cite{agda}.
-
-\subsection{Examples and Translations}
-
-\begin{example}\hfill
-	\begin{align*}
-		1. &\forall x_0 : \text{Nat}(z + x_0 = x_0) & \text{Axiom}\\
-		2.&\forall x_0x_1: \text{Nat}(s(x_0 + x_1) = s(x_0) + x_1) & \text{Axiom}\\
-		3.&\neg\forall x_0 : \text{Nat}\exists x_1:\text{Nat}(x_1 + z = x_0) & \text{negated claim}\\
-		4.&(\forall x_0:\text{Nat}\exists x_1:\text{Nat}, x_1 + z = x_0)\vee(\forall x_0:\text{Nat},z\neq x_0 + z)\vee&\\
-		&\exists x_0:\text{Nat}(\forall x_1:\text{Nat}, x_1 + z\neq s(x_0)\wedge \exists x_1:\text{Nat}, x_1+z=x_0)&\text{Induction axiom (ENNF)}\\
-		5.&\exists x_0: \text{Nat}\forall x_1: \text{Nat}(x_1 + z \neq x_0) & \text{ENNF transformation 3}\\
-		6.&\forall x_1: \text{Nat}(x_1 + z \neq sk_0) & \text{skolemization 5}\\
-		7.&(\forall x_0:\text{Nat}, sk_1(x_0) + z = x_0)\vee(\forall x_0:\text{Nat},z\neq x_0 + z)\vee&\\
-		&(\forall x_1:\text{Nat}, x_1 + z\neq s(sk_2)\wedge sk_3+z=sk_2)&\text{skolemization 4}\\
-		8.&x_1 + z\neq sk_0&\text{cnf 6}\\
-		9.&sk_1(x_0) + z = x_0\vee z\neq x_1 + z\vee sk_2 = sk_3 + z&\text{cnf 7}\\
-		10.&sk_1(x_0) + z = x_0\vee z\neq x_1 + z\vee x_2 + z\neq s(sk_2)&\text{cnf 7}\\
-		11.&s(x_0 + x_1) = s(x_0) + x_1&\text{cnf 2}\\
-		12.&z + x_0 = x_0&\text{cnf 1}\\
-		13.&sk_1(x_0) + z = x_0\vee z\neq z\vee sk_2 = sk_3 + z&\text{superposition 9, 12}\\
-		14.&sk_1(x_0) + z = x_0\vee sk_2 = sk_3 + z&\text{trivial inequality removal 13}\\
-		15.&sk_1(x_0) + z = x_0\vee z\neq x_1 + z\vee s(x_3 + z)\neq s(sk_2)&\text{supserposition 10, 11}\\
-		16.&sk_0\neq x_0\vee sk_2 = sk_3 + z&\text{superposition 8, 14}\\
-		17.&sk_2 = sk_3 + z&\text{equality resolution 16}\\
-		18.&sk_1(x_0) + z = x_0\vee z\neq x_1 + z\vee s(sk_2)\neq s(sk_2)&\text{superposition 15, 17}\\
-		19.&sk_1(x_0) + z = x_0\vee z\neq x_1 + z&\text{trivial inequality removal 18}\\
-		20.&sk_1(x_0) + z = x_0\vee z\neq z&\text{superposition 12, 19}\\
-		21.&sk_1(x_0) + z = x_0&\text{trivial inequality removal 20}\\
-		22.&sk_0 \neq x_0&\text{superoisition 21, 8}\\
-		23.&\bot&\text{equality resolution 22}
-	\end{align*}
-\end{example}
-
-\begin{example}\hfill
-	\begin{align*}
-		1. &\vdash \lambda f. f(\lambda x.\text{id}_{x}): \text{Cont }\Pi_{x_0 : \text{Nat}}(z + x_0 = x_0) & \text{Axiom}\\
-		2.&\vdash \lambda f. f(\lambda x_0x_1.\text{id}_{s(x_0 + x_1)}): \text{Cont }\Pi_{x_0:\text{Nat}}\Pi_{x_1: \text{Nat}}(s(x_0 + x_1) = s(x_0) + x_1) & \text{Axiom}\\
-		3.&\vdash f: (\Pi_{x_0 : \text{Nat}}\Sigma_{x_1:\text{Nat}}x_1 + z = x_0)\to\bot & \text{negated claim}\\
-		4.&\vdash \lambda f.:\text{Cont }(\Pi_{x_0 : \text{Nat}}\Sigma_{x_1:\text{Nat}}x_1 + z = x_0)\vee(\Pi_{x_0 : \text{Nat}}z\neq x_0 + z)\vee&\\
-		&\Sigma_{x_0:\text{Nat}}(\Pi_{x_1:\text{Nat}}x_1 + z\neq s(x_0)\wedge \Sigma_{x_1:\text{Nat}} x_1+z=x_0)&\text{Induction axiom (ENNF)}\\
-		5.&\exists x_0: \text{Nat}\forall x_1: \text{Nat}(x_1 + z \neq x_0) & \text{ENNF transformation 3}\\
-		6.&\forall x_1: \text{Nat}(x_1 + z \neq sk_0) & \text{skolemization 5}\\
-		7.&(\forall x_0:\text{Nat}, sk_1(x_0) + z = x_0)\vee(\forall x_0:\text{Nat},z\neq x_0 + z)\vee&\\
-		&(\forall x_1:\text{Nat}, x_1 + z\neq s(sk_2)\wedge sk_3+z=sk_2)&\text{skolemization 4}\\
-		8.&x_1 + z\neq sk_0&\text{cnf 6}\\
-		9.&sk_1(x_0) + z = x_0\vee z\neq x_1 + z\vee sk_2 = sk_3 + z&\text{cnf 7}\\
-		10.&sk_1(x_0) + z = x_0\vee z\neq x_1 + z\vee x_2 + z\neq s(sk_2)&\text{cnf 7}\\
-		11.&s(x_0 + x_1) = s(x_0) + x_1&\text{cnf 2}\\
-		12.&z + x_0 = x_0&\text{cnf 1}\\
-		13.&sk_1(x_0) + z = x_0\vee z\neq z\vee sk_2 = sk_3 + z&\text{superposition 9, 12}\\
-		14.&sk_1(x_0) + z = x_0\vee sk_2 = sk_3 + z&\text{trivial inequality removal 13}\\
-		15.&sk_1(x_0) + z = x_0\vee z\neq x_1 + z\vee s(x_3 + z)\neq s(sk_2)&\text{supserposition 10, 11}\\
-		16.&sk_0\neq x_0\vee sk_2 = sk_3 + z&\text{superposition 8, 14}\\
-		17.&sk_2 = sk_3 + z&\text{equality resolution 16}\\
-		18.&sk_1(x_0) + z = x_0\vee z\neq x_1 + z\vee s(sk_2)\neq s(sk_2)&\text{superposition 15, 17}\\
-		19.&sk_1(x_0) + z = x_0\vee z\neq x_1 + z&\text{trivial inequality removal 18}\\
-		20.&sk_1(x_0) + z = x_0\vee z\neq z&\text{superposition 12, 19}\\
-		21.&sk_1(x_0) + z = x_0&\text{trivial inequality removal 20}\\
-		22.&sk_0 \neq x_0&\text{superoisition 21, 8}\\
-		23.&\bot&\text{equality resolution 22}
-	\end{align*}
-\end{example}
-
-
-For now we will consider two minimal examples. The first doesn't use induction. There are two constant symbols $a, b$ and a binary proposition variable $p(-, -)$. The only axiom is $\forall x\:p(x,a)\vee p(x, b)$. We seek to prove $\forall x\exists y p(x, y)$. It is immediately clear that unless the axiom has computational content, our extracted program cannot yield a value. On the other hand we will see that we can still create a well-typed program. And if the axiom contains computational content it will indeed yield a result.
-
-
-
-
-\begin{example}\hfill
-	\begin{align}
-		& p(x_1,a)\vee p(x_1, b) & \text{Axiom}\\
-		& \llb \neg p(x_2, y_2) | x\simeq x_2\rrb & \text{negated Hypothesis}\\
-		& \llb p(x_1, b) | x\simeq x_1\rrb & res.\:(1) (2) [x_1/x_2, a/y_2]\\
-		& \llb \square | x\simeq x_1\rrb & res.\:(3) (2) [x_1/x_2, b/y_2]\\
-		& \square &\text{Instantiation }(4)
-	\end{align}
-\end{example}
-
-Now for our computational translation we introduce a special exception terms $e_\alpha(t_1,\dots,t_n)$ and $\overline e_\alpha(t_1,\dots,t_n)$ for every atom $\alpha[t_1,\dots,t_n]$ with $n$ term-variables, which intuitively indicate that $\alpha[t_1,\dots,t_n]$ is not false. They are usually introduced in the manner of the last derivation of definition 3.4 in~\cite{de_Groote_1995}. If one were to assign types we would have $e_\alpha(t_1.\dots,t_n) : (\alpha(t_1,\dots,t_n)\to\bot)\to\bot$ and $\overline e_\alpha(t_1.\dots,t_n) : ((\alpha(t_1,\dots,t_n)\to\bot)\to\bot)\to\bot$. However as we have the (classical) identification, we can simplify $\overline e_\alpha(t_1.\dots,t_n) : \alpha(t_1,\dots,t_n)\to\bot$. Having this in mind both $e_\alpha(t_1.\dots,t_n) \overline e_\alpha(t_1.\dots,t_n) : \bot$ and $\overline e_\alpha(t_1.\dots,t_n) e_\alpha(t_1.\dots,t_n) : \bot$ make ``type-sense" in the exception sense of~\cite{de_Groote_1995}. We will use this in our program. Let us now translate the above proof. Note that the terms for axioms are given. For clarity we will use braces for function application. For convenience we will write $\alpha_i$ for the $i$-the generated term.
-\setcounter{equation}{0}
-\begin{example}\hfill
-	\begin{align}
-		& \alpha_1 & (p(x_1,a)\to\bot)\to(p(x_1, b)\to\bot)\to\bot\\
-		& \overline e_p(x_2, y_2) & p(x_2, y_2)\to\bot\\
-		& \lambda t. \mathbf{let}\:v : \neg p(x_1, a)&(p(x_1, b)\to\bot)\to\bot\\
-		& \phantom{\lambda t.}\mathbf{in}\:\alpha_1(v, t) &\nonumber\\
-		& \phantom{\lambda t.}\mathbf{handle}\:v(w)\Rightarrow \overline e_p(x_1, a)(w)\indent [= \alpha_2[x_1/x_2, a/y_2](w)]\hspace*{-4cm}\nonumber&\\
-		& \mathbf{let}\:v : \neg p(x_1, b)\:&\bot\\
-		& \mathbf{in}\:\alpha_3(v) &\nonumber\\
-		& \mathbf{handle}\:v(w)\Rightarrow \overline e_p(x_1, b)(w)\indent[= \alpha_2[x_1/x_2, b/y_2](w)]\hspace*{-4cm}\nonumber&\\
-		& \lambda x_1.\alpha_4 &(x : X) \to \bot
-	\end{align}
-\end{example}
-
-Now to retrieve a value we just need to handle the final exception, i.e.
-$$\lambda x_1.\alpha_4\:\mathbf{handle}\: \overline{e}_p(x_2, y_2)(w)\Rightarrow y_2$$
-Of course this will not yield an actual value unless $\alpha_1$ yields.\\
-We will now consider a minimal inductive example.
-
-Consider the inductive type $nat$ with constructors $z : nat$ and $s: nat \to nat$ and some predicate $p(x, y)\subseteq nat^2$. We are going to prove $\forall x\exists y\: p(x,y)$ from $p(z, z)$ and $\forall n,m:nat(p(n, m)\Rightarrow p(s(n), s(s(m))))$.
-
-\begin{example}\hfill
-	\begin{align}
-		& p(z, z) & \text{Axiom}\\
-		& \neg p(n_2, m_2)\vee p(s(n_2), s(s(m_2)))& \text{Axiom}\\
-		& \llb \neg p(n_3, m_3) | x\simeq n_3\rrb & \text{negated Hypothesis}\\
-		& \llb \square | x\simeq z\rrb & res.\:(1) (3) [z/n_3, z/m_3]\\
-		& \llb \neg p(n_2, m_2) | x\simeq s(n_2)\rrb &res. (2) (3) [s(n_2)/n_3], s(s(m_2))/m_3]\\
-		& \text{Activate $\alpha := p(a, b)[a, b]$}&\text{Trigger  (4)}\\
-		& \llb n_7\not\prec n_7'\vee p(n_7, m_7) | \mathbf{T}_\alpha^\prec(n_7', m_7)\rrb& \Gamma_{\mathbf{T}_\alpha^\prec}\\
-		& \llb n_7\not\prec n_7'| x\simeq s(n_7)\wedge \mathbf{T}_\alpha^\prec(n_7', m_7)\rrb & res. (5) (7) [n_7/n_2, m_7/ m_2] \\
-		& \llb n_7\prec s(n_7)|\top\rrb &\Gamma_\prec^s\\
-		& \llb \square | x\simeq s(n_7)\wedge\mathbf{T}_\alpha^\prec(s(n_7), m_7)\rrb&res. (8)(9)[s(n_7)/n_7']\\
-		& \llb \square | x\simeq n_{10}\rrb &\text{Induction }(4)(9)\\
-		& \square &\text{Instantiation }(10)
-	\end{align}
-\end{example}
-\pagebreak
-\subsection{Intuitionistic Example}
-
-For simplicity we will use a single sort (0-level type).\\
-Function symbols: $f(-)$\\
-Predicate symbols: $P(-), Q(-, -)$\\
-Axioms: $\forall x P(x)$, $\forall x\exists y x=f(y)$, $\forall x(P(x)\supset Q(f(x), x))$\\
-To Show: $\forall x \exists y Q(x, y)$\\
-
-\noindent Below is a ND-style proof and translation based on the calculus and correspondence presented in~\cite{pfenning2000constructive}.\\
-
-\small{
-\AxiomC{}
-\RightLabel{\scriptsize Axiom}
-\UnaryInfC{$\vdash\forall x\exists y f(y)=x$}
-\RightLabel{\scriptsize $\forall E$}
-\UnaryInfC{$\vdash\exists y f(y)=x$}
-\AxiomC{}
-\RightLabel{\scriptsize Axiom}
-\UnaryInfC{$\vdash \forall x(P(x)\supset Q(f(x), x))$}
-\RightLabel{\scriptsize $\forall E$}
-\UnaryInfC{$\vdash P(y)\supset Q(f(y), y)$}
-\AxiomC{}
-\RightLabel{\scriptsize Axiom}
-\UnaryInfC{$\vdash\forall x P(x)$}
-\RightLabel{\scriptsize $\forall E$}
-\UnaryInfC{$\vdash P(y)$}
-\RightLabel{\scriptsize $\supset\hspace{-2pt}E$}
-\BinaryInfC{$\vdash Q(f(y), y)$}
-\AxiomC{}
-\RightLabel{\scriptsize u}
-\UnaryInfC{[$\vdash f(y) = x$]}
-\RightLabel{\scriptsize subst}
-\BinaryInfC{$\vdash Q(x, y)$}
-\RightLabel{\scriptsize $\supset\hspace{-2pt}I^u$}
-\UnaryInfC{$f(y)=x\vdash Q(x, y)$}
-\RightLabel{\scriptsize$\exists I$}
-\UnaryInfC{$f(y)=x\vdash \exists y Q(x, y)$}
-\RightLabel{\scriptsize $\exists E$}
-\BinaryInfC{$\vdash \exists Q(x, y)$}
-\RightLabel{\scriptsize $\forall I$}
-\UnaryInfC{$\vdash\forall x \exists yQ(x, y)$}
-
-\hspace*{-1cm}
-\DisplayProof
-}
-\vspace{3cm}
-\small{
-	\AxiomC{}
-	\RightLabel{\scriptsize Axiom}
-	\UnaryInfC{$\vdash \alpha : \Pi_x\Sigma_y f(y)=x$}
-	\RightLabel{\scriptsize $\forall E$}
-	\UnaryInfC{$\vdash \alpha(x): \Sigma_y f(y)=x$}
-	\AxiomC{}
-	\RightLabel{\scriptsize Axiom}
-	\UnaryInfC{$\vdash \beta : \Pi_x(P(x)\supset Q(f(x), x))$}
-	\RightLabel{\scriptsize $\forall E$}
-	\UnaryInfC{$\vdash \beta(y) : P(y)\supset Q(f(y), y)$}
-	\AxiomC{}
-	\RightLabel{\scriptsize Axiom}
-	\UnaryInfC{$\vdash\gamma : \Pi_x P(x)$}
-	\RightLabel{\scriptsize $\forall E$}
-	\UnaryInfC{$\vdash\gamma(y) : P(y)$}
-	\RightLabel{\scriptsize $\supset\hspace{-2pt}E$}
-	\BinaryInfC{$\vdash \beta(y)(\gamma(y)) : Q(f(y), y)$}
-	\AxiomC{}
-	\RightLabel{\scriptsize u}
-	\UnaryInfC{[$\vdash\delta : f(y) = x$]}
-	\RightLabel{\scriptsize subst}
-	\BinaryInfC{$\vdash \text{subst}(f(y),x,\Pi_tQ(t, y),\delta,\beta(y)(\gamma(y)) : Q(x, y)$}
-	\RightLabel{\scriptsize $\supset\hspace{-2pt}I^u$}
-	\UnaryInfC{$\delta : f(y)=x\vdash\text{subst}(f(y),x,\Pi_tQ(t, y),\delta,\beta(y)(\gamma(y)) : Q(x, y)$}
-	\RightLabel{\scriptsize$\exists I$}
-	\UnaryInfC{$\delta : f(y)=x\vdash \langle y, \text{subst}(f(y),x,\Pi_tQ(t, y),\delta,\beta(y)(\gamma(y))\rangle :\Sigma_y Q(x, y)$}
-	\RightLabel{\scriptsize $\exists E$}
-	\BinaryInfC{$\vdash \textbf{let }\langle y, \delta\rangle = \alpha(x)\textbf{ in }\langle y,\text{subst}(f(y),x,\Pi_tQ(t, y),\delta,\beta(y)(\gamma(y))\rangle: \Sigma_y Q(x, y)$}
-	\RightLabel{\scriptsize $\forall I$}
-	\UnaryInfC{$\lambda x.\textbf{let }\langle y, \delta\rangle = \alpha(x)\textbf{ in }\langle y,\text{subst}(f(y),x,\Pi_tQ(t, y),\delta,\beta(y)(\gamma(y))\rangle:\Pi_x \Sigma_y Q(x, y)$}
-	
-	\hspace*{-1cm}
+\noindent\textbf{Factoring.}
+\begin{center}
+	\AxiomC{$A\vee A'\vee B$}
+	\UnaryInfC{$(A\vee B)\theta$}
 	\DisplayProof
-}
-\hfill
-\\\\\hspace{2cm}We can reduce the last term to $\lambda x.\langle \alpha(x)_1, \text{subst}(f(\alpha(x)_1),x,\Pi_tQ(t, \alpha(x)_1),\alpha(x)_2,\beta(\alpha(x)_1)(\gamma(\alpha(x)_1))\rangle$.
+\end{center}
+where $\theta$ is an mgu of $A$ and $A'$.
 
-\noindent Finally replacing the proof terms by units we obtain $\lambda x.\langle \alpha(x)_1, ()\rangle : \Pi_x\Sigma_y \top$ from which we may further extract $\lambda x. \alpha(x)_1$.
+\noindent\textbf{Superposition.}
+\begin{center}
+	\AxiomC{$l=r\vee B$}
+	\AxiomC{$L[s]\vee C$}
+	\BinaryInfC{$(L[r]\vee B\vee C)\theta$}
+	\DisplayProof
+	\AxiomC{$l=r\vee B$}
+	\AxiomC{$t[s] = t'\vee C$}
+	\BinaryInfC{$(t[r] = t'\vee B\vee C)\theta$}
+	\DisplayProof
+	\AxiomC{$l=r\vee B$}
+	\AxiomC{$t[s]\neq t'\vee C$}
+	\BinaryInfC{$(t[r]\neq t'\vee B\vee C)\theta$}
+	\DisplayProof
+\end{center}
+where $\theta$ is an mgu of $l$ and $s$, $s$ is not a variable, $L[s]$ is not an equality literal.
+
+\noindent\textbf{Equality Resolution.}
+\begin{center}
+	\AxiomC{$s\neq t\vee C$}
+	\UnaryInfC{$C\theta$}
+	\DisplayProof
+\end{center}
+where $\theta$ is an mgu of $s$ and $t$.
+
+\noindent\textbf{Equality Factoring.}
+\begin{center}
+	\AxiomC{$s=t\vee s'=t'\vee C$}
+	\UnaryInfC{$(s=t\vee t\neq t'\vee C)\theta$}
+	\DisplayProof
+\end{center}
+where $\theta$ is an mgu of $s$ and $s'$.
+
+First let us look at an example of the transformation we going to do. We shall look at a proof of $\forall x\exists y: f(y) = g(x)$ from $\forall x: f(x) = g(h(x))$ and $\forall x: h(h'(x)) = x$. The program we extract hopefully is $h'$.
+
+\begin{align}
+	[\text{axiom}]&&\forall x: f(x) = g(h(x))\\
+	[\text{cnf 1}]&&f(x_0) = g(h(x_0))\\
+	[\text{axiom}]&&\forall x: h(h'(x)) = x\\
+	[\text{cnf 3}]&&h(h'(x_0)) = x_0\\
+	[\text{negated conjecture}]&&\neg\forall x\exists y: f(y) = g(x)\\
+	[\text{ennf 5}]&&\exists x\forall y: f(y)\neq g(x)\\
+	[\text{choice axiom}]&&\exists x\forall y: f(y)\neq g(x)\rightarrow \forall x : f(x) \neq g(s_0)\\
+	[\text{skolemization 6, 7}]&&\forall x: f(x)\neq g(s_0)\\
+	[\text{cnf 8}]&&f(x_1)\neq g(s_0)\\
+	[\text{superposition 9, 2}]&\{\}&g(s_0)\neq g(h(x_0))\\
+	[\text{superposition 10, 4}]&\{x_0\mapsto h'(x_0)\}&g(x_0)\neq g(s_0)\\
+	[\text{equality resolution 11}]&&\bot
+\end{align}
+
+We first use the well known trick of adding the original conjecture to the negated one from~\cite{Luckham_1971} to transform this into a classical proof of $\forall x\exists y: f(x) = g(y)$ rather than a refutation of its negation:
+\setcounter{equation}{0}
+\begin{align}
+	[\text{axiom}]&&\forall x: f(x) = g(h(x))\\
+	[\text{cnf 1}]&&f(x_0) = g(h(x_0))\\
+	[\text{axiom}]&&\forall x: h(h'(x)) = x\\
+	[\text{cnf 3}]&&h(h'(x_0)) = x_0\\
+	[\text{\color{red}{tautology}}]&&\forall x\exists y: f(y) = g(x)\vee\neg\forall x\exists y: f(y) = g(x)\\
+	[\text{ennf 5}]&&\forall x\exists y: f(y) = g(x)\vee\exists x\forall y: f(y)\neq g(x)\\
+	[\text{choice axiom}]&&\exists x\forall y: f(y)\neq g(x)\rightarrow \forall x : f(x) \neq g(s_0)\\
+	[\text{choice axiom}]&&\forall x(\exists y: f(y)= g(x)\rightarrow f(s_1(x)) = g(x))\\
+	[\text{skolemization 6, 7}]&&\forall x\exists y: f(y) = g(x)\vee\forall x: f(x)\neq g(s_0)\\
+	[\text{skolemization 9, 8}]&&\forall x: f(s_1(x)) = g(x)\vee\forall x: f(x)\neq g(s_0)\\
+	[\text{cnf 8}]&&f(s_1(x_1)) = g(x_1)\vee f(x_0)\neq g(s_0)\\
+	[\text{superposition 11, 2}]&\{\}&f(s_1(x_1)) = g(x_1)\vee g(s_0)\neq g(h(x_0))\\
+	[\text{superposition 12, 4}]&\{x_0\mapsto h'(x_0)\}&f(s_1(x_1)) = g(x_1)\vee g(x_0)\neq g(s_0)\\
+	[\text{equality resolution 13}]&\{x_0\to s_0\}&f(s_1(x_1)) = g(x_1)
+\end{align}
+
+Next we eliminate free variables by propagating substitutions:
+
+\setcounter{equation}{0}
+\begin{align}
+	[\text{axiom}]&&\forall x: f(x) = g(h(x))\\
+	[\text{cnf 1}]&&f(h'(x_0)) = g(h(h'(x_0)))\\
+	[\text{axiom}]&&\forall x: h(h'(x)) = x\\
+	[\text{cnf 3}]&&h(h'(x_0)) = x_0\\
+	[\text{tautology}]&&\forall x\exists y: f(y) = g(x)\vee\neg\forall x\exists y: f(y) = g(x)\\
+	[\text{ennf 5}]&&\forall x\exists y: f(y) = g(x)\vee\exists x\forall y: f(y)\neq g(x)\\
+	[\text{choice axiom}]&&\exists x\forall y: f(y)\neq g(x)\rightarrow \forall x : f(x) \neq g(s_0)\\
+	[\text{choice axiom}]&&\forall x(\exists y: f(y)= g(x)\rightarrow f(s_1(x)) = g(x))\\
+	[\text{skolemization 6, 7}]&&\forall x\exists y: f(y) = g(x)\vee\forall x: f(x)\neq g(s_0)\\
+	[\text{skolemization 9, 8}]&&\forall x: f(s_1(x)) = g(x)\vee\forall x: f(x)\neq g(s_0)\\
+	[\text{cnf 8}]&&f(s_1(x_1)) = g(x_1)\vee f(h'(x_0))\neq g(s_0)\\
+	[\text{superposition 11, 2}]&\{\}&f(s_1(x_1)) = g(x_1)\vee g(s_0)\neq g(h(h'(x_0)))\\
+	[\text{superposition 12, 4}]&\{\}&f(s_1(x_1)) = g(x_1)\vee g(x_0)\neq g(s_0)\\
+	[\text{equality resolution 13}]&\{x_0\to s_0\}&f(s_1(x_1)) = g(x_1)
+\end{align}
 
 
+\setcounter{equation}{0}
+\begin{align}
+	[\text{axiom}]&&\forall x: f(x) = g(h(x))\\
+	[\text{cnf 1}]&&f(h'(s_0)) = g(h(h'(s_0)))\\
+	[\text{axiom}]&&\forall x: h(h'(x)) = x\\
+	[\text{cnf 3}]&&h(h'(s_0)) = s_0\\
+	[\text{tautology}]&&\forall x\exists y: f(y) = g(x)\vee\neg\forall x\exists y: f(y) = g(x)\\
+	[\text{ennf 5}]&&\forall x\exists y: f(y) = g(x)\vee\exists x\forall y: f(y)\neq g(x)\\
+	[\text{choice axiom}]&&\exists x\forall y: f(y)\neq g(x)\rightarrow \forall x : f(x) \neq g(s_0)\\
+	[\text{choice axiom}]&&\forall x(\exists y: f(y)= g(x)\rightarrow f(s_1(x)) = g(x))\\
+	[\text{skolemization 6, 7}]&&\forall x\exists y: f(y) = g(x)\vee\forall x: f(x)\neq g(s_0)\\
+	[\text{skolemization 9, 8}]&&\forall x: f(s_1(x)) = g(x)\vee\forall x: f(x)\neq g(s_0)\\
+	[\text{cnf 8}]&&f(s_1(x_1)) = g(x_1)\vee f(h'(s_0))\neq g(s_0)\\
+	[\text{superposition 11, 2}]&\{\}&f(s_1(x_1)) = g(x_1)\vee g(s_0)\neq g(h(h'(s_0)))\\
+	[\text{superposition 12, 4}]&\{\}&f(s_1(x_1)) = g(x_1)\vee g(s_0)\neq g(s_0)\\
+	[\text{equality resolution 13}]&\{\}&f(s_1(x_1)) = g(x_1)
+\end{align}
 
+Next we remove all the skolem constants in the conjecture-tautology by unification, propagate this change, and finally reinterpet superposition as composition to yield a valid intuitionistic proof:
+
+\setcounter{equation}{0}
+\begin{align}
+	[\text{axiom}]&&\forall x: f(x) = g(h(x))\\
+	[\text{instantiation 1}]&&f(h'(x_1)) = g(h(h'(x_1)))\\
+	[\text{axiom}]&&\forall x: h(h'(x)) = x\\
+	[\text{instantiation 3}]&&h(h'(x_1)) = x_1\\
+	[\text{tautology}]&&f(h'(x_1)) = g(x_1)\Rightarrow f(h'(x_1)) = g(x_1)\\
+	[\text{equality 5, 2}]&\{\}&g(x_1)= g(h(h'(x_1)))\Rightarrow f(h'(x_1)) = g(x_1)\\
+	[\text{equality 6, 4}]&\{\}&g(x_1)= g(x_1)\Rightarrow f(h'(x_1)) = g(x_1)\\
+	[\text{equality 13}]&\{\}&f(h'(x_1)) = g(x_1)
+\end{align}
+
+Let us look at a second example: Consider the sentences $\forall x : p(x_0, f(x_0))$, $\forall x_0, x_1: (p(x_0, x_1)\Rightarrow q(x_0, g(x_1))$, $\forall x_0, x_1: (q(x_0, x_1)\Rightarrow r(x_0, h(x_1)))$. We take a look at a proof of $\forall x_0\exists x_1: r(x_0, x_1)$ which hopefully gives us $h\circ g\circ f$. First consider the output of vampire
+
+\setcounter{equation}{0}
+\begin{align}
+	[\text{axiom}] && \forall x_0: p(x_0,f(x_0))\\
+	[\text{axiom}] && \forall x_0, x_1 : (p(x_0,x_1) \Rightarrow q(x_0,g(x_1)))\\
+	[\text{axiom}] && \forall x_0, x_1 : (q(x_0,x_1) \Rightarrow r(x_0,h(x_1)))\\
+	[\text{negated conjecture}] &&\neg\forall  x_0 : \exists x_1 : r(x_0,x_1)\\
+	[\text{ennf transformation 2}] && \forall x_0, x_1 : (q(x_0,g(x_1)) \vee \neg p(x_0,x_1)) \\
+	[\text{ennf transformation 3}] &&\forall x_0, x_1 : (r(x_0,h(x_1)) \vee \neg q(x_0, x_1)) \\
+	[\text{ennf transformation 4}] && \exists x_0 \forall x_1 : \neg r(x_0, x_1)\\
+	[\text{choice axiom}] && \exists x_0 \forall x_1 : \neg r(x_0, x_1) \Rightarrow \forall x_1 : \neg r(s_0,x_1)\\
+	[\text{skolemisation 7,8}] && \forall x_1 : \neg r(s_0, x_1)\\
+	[\text{cnf transformation 1}] && p(x_0,f(x_0))\\
+	[\text{cnf transformation 5}] && q(x_1,g(x_2)) \vee \neg p(x_1, x_2)\\
+	[\text{cnf transformation 6}] && r(x_3,h(x_4)) \vee \neg q(x_3, x_4)\\
+	[\text{cnf transformation 9}] &&. \neg r(s_0,x_5)\\
+	[\text{resolution 12, 13}] &\{x_3\mapsto s_0, x_5\mapsto h(x_4)\}& \neg q(s_0,x_4)\\
+	[\text{resolution 14, 11}] &\{x_1\mapsto s_0, x_4\mapsto g(x_2)\}&\neg p(s_0,x_2)\\
+	[\text{resolution 15, 10}] &\{x_0\mapsto s_0, x_2\mapsto f(s_0)\}& \bot
+\end{align}
+
+Again replace negated conjecture by tautology
+
+\setcounter{equation}{0}
+\begin{align}
+	[\text{axiom}] && \forall x_0: p(x_0,f(x_0))\\
+	[\text{axiom}] && \forall x_0, x_1 : (p(x_0,x_1) \Rightarrow q(x_0,g(x_1)))\\
+	[\text{axiom}] && \forall x_0, x_1 : (q(x_0,x_1) \Rightarrow r(x_0,h(x_1)))\\
+	[\text{tautology}] &&\forall  x_0 \exists x_1 : r(x_0,x_1)\vee \neg\forall  x_0 \exists x_1 : r(x_0,x_1)\\
+	[\text{ennf transformation 2}] && \forall x_0, x_1 : (q(x_0,g(x_1)) \vee \neg p(x_0,x_1)) \\
+	[\text{ennf transformation 3}] &&\forall x_0, x_1 : (r(x_0,h(x_1)) \vee \neg q(x_0, x_1)) \\
+	[\text{ennf transformation 4}] && \forall  x_0 : \exists x_1 : r(x_0,x_1)\vee \exists x_0 \forall x_1 : \neg r(x_0, x_1)\\
+	[\text{choice axiom}] && \exists x_0 : \forall x_1 : \neg r(x_0, x_1) \Rightarrow \forall x_1 : \neg r(s_0,x_1)\\
+	[\text{choice axiom}] &&\forall x_0(\exists x_1: r(x_0, x_1)\Rightarrow r(x_0, s_1(x_0)))\\
+	[\text{skolemisation 7,8}] && \forall  x_0 \exists x_1 : r(x_0,x_1)\vee \forall x_1 : \neg r(s_0, x_1)\\
+	[\text{skolemisation 9,10}] && \forall  x_0 :  r(x_0, s_1(x_0))\vee \forall x_1 : \neg r(s_0, x_1)\\
+	[\text{cnf transformation 1}] && p(x_0,f(x_0))\\
+	[\text{cnf transformation 5}] && q(x_1,g(x_2)) \vee \neg p(x_1, x_2)\\
+	[\text{cnf transformation 6}] && r(x_3,h(x_4)) \vee \neg q(x_3, x_4)\\
+	[\text{cnf transformation 11}] && r(x_6, s_1(x_6))\vee\neg r(s_0, x_5)\\
+	[\text{resolution 14, 15}] &\{x_3\mapsto s_0, x_5\mapsto h(x_4)\}&r(x_6, s_1(x_6))\vee \neg q(s_0,x_4)\\
+	[\text{resolution 16, 13}] &\{x_1\mapsto s_0, x_4\mapsto g(x_2)\}&r(x_6, s_1(x_6))\vee\neg p(s_0,x_2)\\
+	[\text{resolution 17, 12}] &\{x_0\mapsto s_0, x_2\mapsto f(s_0)\}&r(x_6, s_1(x_6))
+\end{align}
+
+We propagate the substitutions
+
+\setcounter{equation}{0}
+\begin{align}
+	[\text{axiom}] && \forall x_0: p(x_0,f(x_0))\\
+	[\text{axiom}] && \forall x_0, x_1 : (p(x_0,x_1) \Rightarrow q(x_0,g(x_1)))\\
+	[\text{axiom}] && \forall x_0, x_1 : (q(x_0,x_1) \Rightarrow r(x_0,h(x_1)))\\
+	[\text{tautology}] &&\forall  x_0 \exists x_1 : r(x_0,x_1)\vee \neg\forall  x_0 \exists x_1 : r(x_0,x_1)\\
+	[\text{ennf transformation 2}] && \forall x_0, x_1 : (q(x_0,g(x_1)) \vee \neg p(x_0,x_1)) \\
+	[\text{ennf transformation 3}] &&\forall x_0, x_1 : (r(x_0,h(x_1)) \vee \neg q(x_0, x_1)) \\
+	[\text{ennf transformation 4}] && \forall  x_0 : \exists x_1 : r(x_0,x_1)\vee \exists x_0 \forall x_1 : \neg r(x_0, x_1)\\
+	[\text{choice axiom}] && \exists x_0 : \forall x_1 : \neg r(x_0, x_1) \Rightarrow \forall x_1 : \neg r(s_0,x_1)\\
+	[\text{choice axiom}] &&\forall x_0(\exists x_1: r(x_0, x_1)\Rightarrow r(x_0, s_1(x_0)))\\
+	[\text{skolemisation 7,8}] && \forall  x_0 \exists x_1 : r(x_0,x_1)\vee \forall x_1 : \neg r(s_0, x_1)\\
+	[\text{skolemisation 9,10}] && \forall  x_0 :  r(x_0, s_1(x_0))\vee \forall x_1 : \neg r(s_0, x_1)\\
+	[\text{cnf transformation 1}] && p(x_0,f(x_0))\\
+	[\text{cnf transformation 5}] && q(x_1,g(x_2)) \vee \neg p(x_1, x_2)\\
+	[\text{cnf transformation 6}] && r(s_0,h(x_4)) \vee \neg q(s_0, x_4)\\
+	[\text{cnf transformation 11}] && r(x_6, s_1(x_6))\vee\neg r(s_0,h(x_4))\\
+	[\text{resolution 14, 15}] &\{\}&r(x_6, s_1(x_6))\vee\neg q(s_0,x_4)\\
+	[\text{resolution 16, 13}] &\{x_1\mapsto s_0, x_4\mapsto g(x_2)\}&r(x_6, s_1(x_6))\vee\neg p(s_0,x_2)\\
+	[\text{resolution 17, 12}] &\{x_0\mapsto s_0, x_2\mapsto f(s_0)\}&r(x_6, s_1(x_6))
+\end{align}
+
+\setcounter{equation}{0}
+\begin{align}
+	[\text{axiom}] && \forall x_0: p(x_0,f(x_0))\\
+	[\text{axiom}] && \forall x_0, x_1 : (p(x_0,x_1) \Rightarrow q(x_0,g(x_1)))\\
+	[\text{axiom}] && \forall x_0, x_1 : (q(x_0,x_1) \Rightarrow r(x_0,h(x_1)))\\
+	[\text{tautology}] &&\forall  x_0 \exists x_1 : r(x_0,x_1)\vee \neg\forall  x_0 \exists x_1 : r(x_0,x_1)\\
+	[\text{ennf transformation 2}] && \forall x_0, x_1 : (q(x_0,g(x_1)) \vee \neg p(x_0,x_1)) \\
+	[\text{ennf transformation 3}] &&\forall x_0, x_1 : (r(x_0,h(x_1)) \vee \neg q(x_0, x_1)) \\
+	[\text{ennf transformation 4}] && \forall  x_0 : \exists x_1 : r(x_0,x_1)\vee \exists x_0 \forall x_1 : \neg r(x_0, x_1)\\
+	[\text{choice axiom}] && \exists x_0 : \forall x_1 : \neg r(x_0, x_1) \Rightarrow \forall x_1 : \neg r(s_0,x_1)\\
+	[\text{choice axiom}] &&\forall x_0(\exists x_1: r(x_0, x_1)\Rightarrow r(x_0, s_1(x_0)))\\
+	[\text{skolemisation 7,8}] && \forall  x_0 \exists x_1 : r(x_0,x_1)\vee \forall x_1 : \neg r(s_0, x_1)\\
+	[\text{skolemisation 9,10}] && \forall  x_0 :  r(x_0, s_1(x_0))\vee \forall x_1 : \neg r(s_0, x_1)\\
+	[\text{cnf transformation 1}] && p(x_0,f(x_0))\\
+	[\text{cnf transformation 5}] && q(s_0,g(x_2)) \vee \neg p(s_0, x_2)\\
+	[\text{cnf transformation 6}] && r(s_0,h(g(x_2))) \vee \neg q(s_0, g(x_2))\\
+	[\text{cnf transformation 11}] && r(x_6, s_1(x_6))\vee\neg r(s_0,h(g(x_2)))\\
+	[\text{resolution 14, 15}] &\{\}&r(x_6, s_1(x_6))\vee\neg q(s_0,g(x_2))\\
+	[\text{resolution 16, 13}] &\{\}&r(x_6, s_1(x_6))\vee\neg p(s_0,x_2)\\
+	[\text{resolution 17, 12}] &\{x_0\mapsto s_0, x_2\mapsto f(s_0)\}&r(x_6, s_1(x_6))
+\end{align}
+
+\setcounter{equation}{0}
+\begin{align}
+	[\text{axiom}] && \forall x_0: p(x_0,f(x_0))\\
+	[\text{axiom}] && \forall x_0, x_1 : (p(x_0,x_1) \Rightarrow q(x_0,g(x_1)))\\
+	[\text{axiom}] && \forall x_0, x_1 : (q(x_0,x_1) \Rightarrow r(x_0,h(x_1)))\\
+	[\text{tautology}] &&\forall  x_0 \exists x_1 : r(x_0,x_1)\vee \neg\forall  x_0 \exists x_1 : r(x_0,x_1)\\
+	[\text{ennf transformation 2}] && \forall x_0, x_1 : (q(x_0,g(x_1)) \vee \neg p(x_0,x_1)) \\
+	[\text{ennf transformation 3}] &&\forall x_0, x_1 : (r(x_0,h(x_1)) \vee \neg q(x_0, x_1)) \\
+	[\text{ennf transformation 4}] && \forall  x_0 : \exists x_1 : r(x_0,x_1)\vee \exists x_0 \forall x_1 : \neg r(x_0, x_1)\\
+	[\text{choice axiom}] && \exists x_0 : \forall x_1 : \neg r(x_0, x_1) \Rightarrow \forall x_1 : \neg r(s_0,x_1)\\
+	[\text{choice axiom}] &&\forall x_0(\exists x_1: r(x_0, x_1)\Rightarrow r(x_0, s_1(x_0)))\\
+	[\text{skolemisation 7,8}] && \forall  x_0 \exists x_1 : r(x_0,x_1)\vee \forall x_1 : \neg r(s_0, x_1)\\
+	[\text{skolemisation 9,10}] && \forall  x_0 :  r(x_0, s_1(x_0))\vee \forall x_1 : \neg r(s_0, x_1)\\
+	[\text{cnf transformation 1}] && p(s_0, f(s_0))\\
+	[\text{cnf transformation 5}] && q(s_0,g(f(s_0))) \vee \neg p(s_0, f(s_0))\\
+	[\text{cnf transformation 6}] && r(s_0,h(g(f(s_0)))) \vee \neg q(s_0, g(f(s_0)))\\
+	[\text{cnf transformation 11}] && r(x_6, s_1(x_6))\vee\neg r(s_0,h(g(f(s_0))))\\
+	[\text{resolution 14, 15}] &\{\}&r(x_6, s_1(x_6))\vee\neg q(s_0,g(f(s_0)))\\
+	[\text{resolution 16, 13}] &\{\}&r(x_6, s_1(x_6))\vee\neg p(s_0,f(s_0))\\
+	[\text{resolution 17, 12}] &\{\}&r(x_6, s_1(x_6))
+\end{align}
+
+Then unification at 15 gives $s_1 = h\circ g\circ f$ and $s_0 = x_6$ and the final transformation gives: 
+
+
+\setcounter{equation}{0}
+\begin{align}
+	[\text{axiom}] && \forall x_0: p(x_0,f(x_0))\\
+	[\text{axiom}] && \forall x_0, x_1 : (p(x_0,x_1) \Rightarrow q(x_0,g(x_1)))\\
+	[\text{axiom}] && \forall x_0, x_1 : (q(x_0,x_1) \Rightarrow r(x_0,h(x_1)))\\
+	[\text{instantiation 1}] && p(x_6, f(x_6))\\
+	[\text{instantiation 2}] && p(x_6, f(x_6))\Rightarrow q(x_6,g(f(x_6))) \\
+	[\text{instantiation 3}] && q(x_6, g(f(x_6)))\Rightarrow r(x_6,h(g(f(x_6)))) \\
+	[\text{tautology}] && r(x_6, h(g(f(x_6))))\Rightarrow r(x_6,h(g(f(x_6))))\\
+	[\text{composition 6, 7}] &\{\}&q(x_6, g(f(x_6)))\Rightarrow r(x_6,h(g(f(x_6))))\\
+	[\text{composition 5, 8}] &\{\}&p(x_6,f(x_6))\Rightarrow r(x_6, h(g(f(x_6))))\\
+	[\text{composition 4, 9}] &\{\}&r(x_6, h(g(f(x_6))))
+\end{align}
 
 \pagebreak
 \bibliographystyle{acm}

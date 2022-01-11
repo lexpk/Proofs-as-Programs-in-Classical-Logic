@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.7) (preloaded format=pdflatex 2020.10.5)  16 NOV 2021 05:54
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.7) (preloaded format=pdflatex 2020.10.5)  11 JAN 2022 23:03
 entering extended mode
 **./notes.tex
 (notes.tex
@@ -177,13 +177,35 @@ Proof Tree (bussproofs) style macros. Version 1.1.
 \htRRRbox=\dimen161
 \htAbox=\dimen162
 \htCbox=\dimen163
-)
-\c@theorem=\count197
+) (E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.sty
+Package: geometry 2020/01/02 v5.9 Page Geometry
+
+(E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/generic/iftex\ifvtex.sty
+Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
+
+(E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/generic/iftex\iftex.sty
+Package: iftex 2020/03/06 v1.0d TeX engine tests
+))
+\Gm@cnth=\count197
+\Gm@cntv=\count198
+\c@Gm@tempcnt=\count199
+\Gm@bindingoffset=\dimen164
+\Gm@wd@mp=\dimen165
+\Gm@odd@mp=\dimen166
+\Gm@even@mp=\dimen167
+\Gm@layoutwidth=\dimen168
+\Gm@layoutheight=\dimen169
+\Gm@layouthoffset=\dimen170
+\Gm@layoutvoffset=\dimen171
+\Gm@dimlist=\toks29
+
+(E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.cfg))
+\c@theorem=\count266
 
 (E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdft
 ex.def
 File: l3backend-pdftex.def 2020-09-24 L3 backend support: PDF output (pdfTeX)
-\l__kernel_color_stack_int=\count198
+\l__kernel_color_stack_int=\count267
 \l__pdf_internal_box=\box58
 )
 
@@ -193,202 +215,134 @@ LaTeX Warning: Unused global option(s):
 (notes.aux)
 \openout1 = `notes.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
 
 (E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mki
 i
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count199
-\scratchdimen=\dimen164
+\scratchcounter=\count268
+\scratchdimen=\dimen172
 \scratchbox=\box59
-\nofMPsegments=\count266
-\nofMParguments=\count267
-\everyMPshowfont=\toks29
-\MPscratchCnt=\count268
-\MPscratchDim=\dimen165
-\MPnumerator=\count269
-\makeMPintoPDFobject=\count270
-\everyMPtoPDFconversion=\toks30
+\nofMPsegments=\count269
+\nofMParguments=\count270
+\everyMPshowfont=\toks30
+\MPscratchCnt=\count271
+\MPscratchDim=\dimen173
+\MPnumerator=\count272
+\makeMPintoPDFobject=\count273
+\everyMPtoPDFconversion=\toks31
 )
-LaTeX Font Info:    Trying to load font information for U+msa on input line 31.
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: <default>
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(85.35826pt, 443.57848pt, 85.35826pt)
+* v-part:(T,H,B)=(85.35826pt, 624.25346pt, 85.35826pt)
+* \paperwidth=614.295pt
+* \paperheight=794.96999pt
+* \textwidth=443.57848pt
+* \textheight=624.25346pt
+* \oddsidemargin=13.08827pt
+* \evensidemargin=13.08827pt
+* \topmargin=-23.91173pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=10.0pt
+* \footskip=30.0pt
+* \marginparwidth=65.0pt
+* \marginparsep=11.0pt
+* \columnsep=10.0pt
+* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
- (E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
+LaTeX Font Info:    Trying to load font information for U+msa on input line 32.
+
+(E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 31.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 32.
 
 
 (E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Trying to load font information for U+wasy on input line 31
+LaTeX Font Info:    Trying to load font information for U+wasy on input line 32
 .
 
 (E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/latex/wasysym\uwasy.fd
 File: uwasy.fd 2020/01/19 v2.4 Wasy-2 symbol font definitions
 )
 LaTeX Font Info:    Trying to load font information for U+stmry on input line 3
-1.
+2.
 
 (E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/latex/stmaryrd\ustmry.fd)
+Overfull \hbox (10.26033pt too wide) in paragraph at lines 44--45
+\OT1/cmr/m/n/10 (pos-si-bly GADTs) and prove (or rather check) prop-er-ties, i.
+e. strong nor-mal-iza-tion, cut-elimination,
+ []
+
 [1
 
 {C:/Users/Alex/AppData/Local/MiKTeX/pdftex/config/pdftex.map}]
 \myBox1=\box60
-\myScoreStart1=\dimen166
-\myCenter1=\dimen167
-\myScoreEnd1=\dimen168
- [2]
-
-LaTeX Warning: Citation `Barbanera_1996' on page 3 undefined on input line 87.
-
-
-Overfull \hbox (6.83261pt too wide) detected at line 105
-[] [] []
- []
-
-[3]
-
-LaTeX Font Warning: Command \tiny invalid in math mode on input line 124.
-
-
-Overfull \hbox (13.39249pt too wide) detected at line 139
-[]
- []
-
-[4]
-Overfull \hbox (62.39815pt too wide) detected at line 176
-[]
- []
-
-[5]
-Overfull \hbox (118.31255pt too wide) detected at line 206
-[]
- []
-
-[6] [7]
-Overfull \hbox (3.13745pt too wide) in paragraph at lines 225--227
-\OT1/cmr/m/n/10 this in mind both $\OML/cmm/m/it/10 e[]\OT1/cmr/m/n/10 (\OML/cm
-m/m/it/10 t[]: [] ; t[]\OT1/cmr/m/n/10 )[][](\OML/cmm/m/it/10 t[]: [] ; t[]\OT1
-/cmr/m/n/10 ) : \OMS/cmsy/m/n/10 ?$ \OT1/cmr/m/n/10 and $[][](\OML/cmm/m/it/10 
-t[]: [] ; t[]\OT1/cmr/m/n/10 )\OML/cmm/m/it/10 e[]\OT1/cmr/m/n/10 (\OML/cmm/m/i
-t/10 t[]: [] ; t[]\OT1/cmr/m/n/10 ) :
- []
-
-[8] [9]
-Underfull \hbox (badness 10000) in paragraph at lines 267--272
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 273--274
-
- []
-
+\myScoreStart1=\dimen174
+\myCenter1=\dimen175
+\myScoreEnd1=\dimen176
 \myBox2=\box61
-\myScoreStart2=\dimen169
-\myCenter2=\dimen170
-\myScoreEnd2=\dimen171
-\myBox3=\box62
-\myScoreStart3=\dimen172
-\myCenter3=\dimen173
-\myScoreEnd3=\dimen174
-
-Overfull \hbox (67.98991pt too wide) in paragraph at lines 307--342
-[]|  []
- []
-
-
-Overfull \hbox (125.52507pt too wide) in paragraph at lines 343--348
-[]|  []
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 343--348
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 343--348
-
- []
-
-
-Overfull \hbox (63.13255pt too wide) in paragraph at lines 343--348
-\OT1/cmr/m/n/9 We can re-duce the last term to $\OML/cmm/m/it/9 x:\OMS/cmsy/m/
-n/9 h\OML/cmm/m/it/9 \OT1/cmr/m/n/9 (\OML/cmm/m/it/9 x\OT1/cmr/m/n/9 )[]\OML/c
-mm/m/it/9 ; []\OT1/cmr/m/n/9 (\OML/cmm/m/it/9 f\OT1/cmr/m/n/9 (\OML/cmm/m/it/9 
-\OT1/cmr/m/n/9 (\OML/cmm/m/it/9 x\OT1/cmr/m/n/9 )[])\OML/cmm/m/it/9 ; x; \OT1/
-cmr/m/n/9 []\OML/cmm/m/it/9 Q\OT1/cmr/m/n/9 (\OML/cmm/m/it/9 t; \OT1/cmr/m/n/
-9 (\OML/cmm/m/it/9 x\OT1/cmr/m/n/9 )[])\OML/cmm/m/it/9 ; \OT1/cmr/m/n/9 (\OML/
-cmm/m/it/9 x\OT1/cmr/m/n/9 )[]\OML/cmm/m/it/9 ; \OT1/cmr/m/n/9 (\OML/cmm/m/it/
-9 \OT1/cmr/m/n/9 (\OML/cmm/m/it/9 x\OT1/cmr/m/n/9 )[])(\OML/cmm/m/it/9 \OT1/c
-mr/m/n/9 (\OML/cmm/m/it/9 \OT1/cmr/m/n/9 (\OML/cmm/m/it/9 x\OT1/cmr/m/n/9 )[])
-)\OMS/cmsy/m/n/9 i$\OT1/cmr/m/n/9 . 
- []
-
-[10] (notes.bbl) [11] (notes.aux)
-
-LaTeX Warning: There were undefined references.
-
- ) 
+\myScoreStart2=\dimen177
+\myCenter2=\dimen178
+\myScoreEnd2=\dimen179
+ [2] [3]
+[4] [5] [6] [7] (notes.bbl) [8] (notes.aux) ) 
 Here is how much of TeX's memory you used:
- 3525 strings out of 480236
- 45053 string characters out of 2881034
- 342899 words of memory out of 3000000
- 20039 multiletter control sequences out of 15000+200000
- 552175 words of font info for 94 fonts, out of 3000000 for 9000
+ 3997 strings out of 480236
+ 52277 string characters out of 2881034
+ 371826 words of memory out of 3000000
+ 20512 multiletter control sequences out of 15000+200000
+ 546472 words of font info for 75 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 59i,13n,66p,1223b,243s stack positions out of 5000i,500n,10000p,200000b,50000s
- <C:\Users\Alex\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcti0
-900.pk> <C:\Users\Alex\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\
-tcrm1000.pk><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
-fonts/cm/cmbx10.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/pu
-blic/amsfonts/cm/cmbx12.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/
-type1/public/amsfonts/cm/cmbx7.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX
-/fonts/type1/public/amsfonts/cm/cmbx9.pfb><E:/Users/Alex/AppData/Local/Programs
-/MiKTeX/fonts/type1/public/amsfonts/cm/cmbxti10.pfb><E:/Users/Alex/AppData/Loca
-l/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><E:/Users/Alex/App
-Data/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><E:/Users/
-Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><E
-:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi5
-.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/c
-m/cmmi6.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
-fonts/cm/cmmi7.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/pub
-lic/amsfonts/cm/cmmi9.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/ty
-pe1/public/amsfonts/cm/cmr10.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/f
-onts/type1/public/amsfonts/cm/cmr12.pfb><E:/Users/Alex/AppData/Local/Programs/M
-iKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><E:/Users/Alex/AppData/Local/Pro
-grams/MiKTeX/fonts/type1/public/amsfonts/cm/cmr5.pfb><E:/Users/Alex/AppData/Loc
-al/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb><E:/Users/Alex/AppDa
-ta/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><E:/Users/Alex
-/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr9.pfb><E:/User
-s/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-<E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cms
-y5.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts
-/cm/cmsy7.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/a
-msfonts/cm/cmsy9.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/p
-ublic/amsfonts/cm/cmti10.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts
-/type1/public/amsfonts/cm/cmti7.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTe
-X/fonts/type1/public/amsfonts/cm/cmti9.pfb><E:/Users/Alex/AppData/Local/Program
-s/MiKTeX/fonts/type1/public/amsfonts/symbols/msam10.pfb><E:/Users/Alex/AppData/
-Local/Programs/MiKTeX/fonts/type1/public/hoekwater/stmary10.pfb>
-Output written on notes.pdf (11 pages, 355052 bytes).
+ 60i,10n,66p,491b,219s stack positions out of 5000i,500n,10000p,200000b,50000s
+ <C:\Users\Alex\AppData\Local\MiKT
+eX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1000.pk><E:/Users/Alex/AppData/Local/
+Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><E:/Users/Alex/AppDat
+a/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><E:/Users/Ale
+x/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><E:/
+Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.
+pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm
+/cmr10.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsf
+onts/cm/cmr12.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/publ
+ic/amsfonts/cm/cmr17.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/typ
+e1/public/amsfonts/cm/cmr7.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fon
+ts/type1/public/amsfonts/cm/cmsy10.pfb><E:/Users/Alex/AppData/Local/Programs/Mi
+KTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><E:/Users/Alex/AppData/Local/Prog
+rams/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb>
+Output written on notes.pdf (8 pages, 155325 bytes).
 PDF statistics:
- 160 PDF objects out of 1000 (max. 8388607)
+ 78 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
