@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.7) (preloaded format=pdflatex 2020.10.5)  11 JAN 2022 23:03
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.7) (preloaded format=pdflatex 2020.10.5)  26 JAN 2022 05:00
 entering extended mode
 **./notes.tex
 (notes.tex
@@ -200,6 +200,26 @@ Package: iftex 2020/03/06 v1.0d TeX engine tests
 \Gm@dimlist=\toks29
 
 (E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.cfg))
+(E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/latex/pdflscape\pdflscape.sty
+Package: pdflscape 2019/12/05 v0.12 Display of landscape pages in PDF (HO)
+
+(E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/latex/graphics\lscape.sty
+Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
+
+(E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphics.sty
+Package: graphics 2020/08/30 v1.4c Standard LaTeX Graphics (DPC,SPQR)
+
+(E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/latex/graphics\trig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+(E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\graphics.cf
+g
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 105.
+))
+Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
+)
 \c@theorem=\count266
 
 (E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdft
@@ -245,6 +265,12 @@ i
 \makeMPintoPDFobject=\count273
 \everyMPtoPDFconversion=\toks31
 )
+(E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-ba
+se.sty
+Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+85.
+)
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -253,15 +279,15 @@ i
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
 * modes: 
-* h-part:(L,W,R)=(85.35826pt, 443.57848pt, 85.35826pt)
-* v-part:(T,H,B)=(85.35826pt, 624.25346pt, 85.35826pt)
+* h-part:(L,W,R)=(56.9055pt, 500.484pt, 56.9055pt)
+* v-part:(T,H,B)=(56.9055pt, 681.15898pt, 56.9055pt)
 * \paperwidth=614.295pt
 * \paperheight=794.96999pt
-* \textwidth=443.57848pt
-* \textheight=624.25346pt
-* \oddsidemargin=13.08827pt
-* \evensidemargin=13.08827pt
-* \topmargin=-23.91173pt
+* \textwidth=500.484pt
+* \textheight=681.15898pt
+* \oddsidemargin=-15.36449pt
+* \evensidemargin=-15.36449pt
+* \topmargin=-52.36449pt
 * \headheight=12.0pt
 * \headsep=25.0pt
 * \topskip=10.0pt
@@ -300,11 +326,6 @@ LaTeX Font Info:    Trying to load font information for U+stmry on input line 3
 2.
 
 (E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/latex/stmaryrd\ustmry.fd)
-Overfull \hbox (10.26033pt too wide) in paragraph at lines 44--45
-\OT1/cmr/m/n/10 (pos-si-bly GADTs) and prove (or rather check) prop-er-ties, i.
-e. strong nor-mal-iza-tion, cut-elimination,
- []
-
 [1
 
 {C:/Users/Alex/AppData/Local/MiKTeX/pdftex/config/pdftex.map}]
@@ -317,32 +338,40 @@ e. strong nor-mal-iza-tion, cut-elimination,
 \myCenter2=\dimen178
 \myScoreEnd2=\dimen179
  [2] [3]
-[4] [5] [6] [7] (notes.bbl) [8] (notes.aux) ) 
+[4] [5] [6] [7] [8] [9] [10] [11
+
+] [12] [13
+
+
+] [14] [15
+
+] [16] (notes.bbl) [17]
+(notes.aux) ) 
 Here is how much of TeX's memory you used:
- 3997 strings out of 480236
- 52277 string characters out of 2881034
- 371826 words of memory out of 3000000
- 20512 multiletter control sequences out of 15000+200000
+ 4241 strings out of 480236
+ 56051 string characters out of 2881034
+ 376674 words of memory out of 3000000
+ 20735 multiletter control sequences out of 15000+200000
  546472 words of font info for 75 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 60i,10n,66p,491b,219s stack positions out of 5000i,500n,10000p,200000b,50000s
- <C:\Users\Alex\AppData\Local\MiKT
-eX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1000.pk><E:/Users/Alex/AppData/Local/
-Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><E:/Users/Alex/AppDat
-a/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><E:/Users/Ale
-x/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><E:/
-Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.
-pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm
-/cmr10.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsf
-onts/cm/cmr12.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/publ
-ic/amsfonts/cm/cmr17.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/typ
-e1/public/amsfonts/cm/cmr7.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fon
-ts/type1/public/amsfonts/cm/cmsy10.pfb><E:/Users/Alex/AppData/Local/Programs/Mi
-KTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><E:/Users/Alex/AppData/Local/Prog
-rams/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on notes.pdf (8 pages, 155325 bytes).
+ 72i,10n,77p,491b,221s stack positions out of 5000i,500n,10000p,200000b,50000s
+ <C:\Users\Alex\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/d
+pi600\tcrm1000.pk><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/publ
+ic/amsfonts/cm/cmbx10.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/ty
+pe1/public/amsfonts/cm/cmbx12.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/
+fonts/type1/public/amsfonts/cm/cmcsc10.pfb><E:/Users/Alex/AppData/Local/Program
+s/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><E:/Users/Alex/AppData/Local
+/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><E:/Users/Alex/AppDat
+a/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><E:/Users/Alex
+/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><E:/Use
+rs/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><
+E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy
+10.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts
+/cm/cmsy7.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/a
+msfonts/cm/cmti10.pfb>
+Output written on notes.pdf (17 pages, 175515 bytes).
 PDF statistics:
- 78 PDF objects out of 1000 (max. 8388607)
+ 106 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

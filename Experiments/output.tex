@@ -1,0 +1,569 @@
+\documentclass[fleqn]{article}
+\usepackage{fullpage,latexsym}
+\newenvironment{VampireProof}{%
+   \section{Proof}}{}
+\newenvironment{VampireInference}{%
+   \begin{array}{c}}{\end{array}}
+\newenvironment{VampireInferencePremises}{}{}
+\newenvironment{VampirePremise}%
+   {\begin{array}{l}}%
+   {\end{array}}
+\newenvironment{VampireConclusion}%
+   {\begin{array}{l}}%
+   {\end{array}}
+\newcommand{\VampireUnit}[3]{%
+   #1.~#2~[#3]}
+\newcommand{\VPremiseSeparator}{\\}
+\newcommand{\VConclusionSeparator}{\\ \hline}
+\newcommand{\Vor}{\vee}
+\newcommand{\Vand}{\wedge}
+\newcommand{\Vimp}{\rightarrow}
+\newcommand{\Viff}{\leftrightarrow}
+\newcommand{\Vxor}{\not\Viff}
+\newcommand{\VEmptyClause}{\Box}
+\begin{document}
+\begin{VampireProof}
+[$882,29\rightarrow 1056$, resolution]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~\mathit{p} (x_{0},\sigma_{0}(x_{0}))
+\end{VampirePremise}
+\VPremiseSeparator
+\begin{VampirePremise}%
+~~\neg \mathit{p} (\sigma_{3}(a0),x_{1})
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~\VEmptyClause
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$20\rightarrow 29$, cnf transformation]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~(\forall x_{1} )\neg \mathit{p} (\sigma_{3}(a0),x_{1})
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~\neg \mathit{p} (\sigma_{3}(a0),x_{1})
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$669,32\rightarrow 882$, resolution]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~\neg \mathit{p} (\mathit{z},x_{1}) \Vor \mathit{p} (x_{0},\sigma_{0}(x_{0}))
+\end{VampirePremise}
+\VPremiseSeparator
+\begin{VampirePremise}%
+~~\mathit{p} (\mathit{z},\mathit{z})
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~\mathit{p} (x_{0},\sigma_{0}(x_{0}))
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$31,21\rightarrow 32$, superposition]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~\mathit{p} (\mathit{add} (x_{1},x_{1}),x_{1})
+\end{VampirePremise}
+\VPremiseSeparator
+\begin{VampirePremise}%
+~~\mathit{add} (\mathit{z},x_{0}) = x_{0}
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~\mathit{p} (\mathit{z},\mathit{z})
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$1\rightarrow 21$, cnf transformation]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~(\forall x_{0} )\mathit{add} (\mathit{z},x_{0}) = x_{0}
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~\mathit{add} (\mathit{z},x_{0}) = x_{0}
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$25\rightarrow 31$, equality resolution]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~\mathit{p} (x_{0},x_{1}) \Vor \mathit{add} (x_{1},x_{1}) \neq x_{0}
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~\mathit{p} (\mathit{add} (x_{1},x_{1}),x_{1})
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$13\rightarrow 25$, cnf transformation]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~(\forall x_{0} \forall x_{1} )((\neg \mathit{p} (x_{0},x_{1}) \Vor \mathit{add} (x_{1},x_{1}) = x_{0} \Vor \mathit{s} (\mathit{add} (x_{1},x_{1})) = x_{0}) \Vand ((\mathit{add} (x_{1},x_{1}) \neq x_{0} \Vand \mathit{s} (\mathit{add} (x_{1},x_{1})) \neq x_{0}) \Vor \mathit{p} (x_{0},x_{1})))
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~\mathit{p} (x_{0},x_{1}) \Vor \mathit{add} (x_{1},x_{1}) \neq x_{0}
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$584,28\rightarrow 669$, resolution]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~\mathit{p} (\mathit{s} (\sigma_{1}(a0)),\sigma_{2}(a0))
+\end{VampirePremise}
+\VPremiseSeparator
+\begin{VampirePremise}%
+~~\neg \mathit{p} (\mathit{s} (\sigma_{1}(a0)),x_{3}) \Vor \mathit{p} (x_{0},\sigma_{0}(x_{0})) \Vor \neg \mathit{p} (\mathit{z},x_{5})
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~\neg \mathit{p} (\mathit{z},x_{1}) \Vor \mathit{p} (x_{0},\sigma_{0}(x_{0}))
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$18\rightarrow 28$, cnf transformation]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~(\forall x_{5} )\neg \mathit{p} (\mathit{z},x_{5}) \Vor (\mathit{p} (\sigma_{1}(a0),\sigma_{2}(a0)) \Vand (\forall x_{3} )\neg \mathit{p} (\mathit{s} (\sigma_{1}(a0)),x_{3})) \Vor (\forall x_{0} )\mathit{p} (x_{0},\sigma_{0}(x_{0}))
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~\neg \mathit{p} (\mathit{s} (\sigma_{1}(a0)),x_{3}) \Vor \mathit{p} (x_{0},\sigma_{0}(x_{0})) \Vor \neg \mathit{p} (\mathit{z},x_{5})
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$30,515\rightarrow 584$, superposition]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~\mathit{p} (\mathit{s} (\mathit{add} (x_{1},x_{1})),x_{1})
+\end{VampirePremise}
+\VPremiseSeparator
+\begin{VampirePremise}%
+~~\sigma_{1}(a0) = \mathit{add} (\sigma_{2}(a0),\sigma_{2}(a0))
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~\mathit{p} (\mathit{s} (\sigma_{1}(a0)),\sigma_{2}(a0))
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$454,29\rightarrow 515$, resolution]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~\mathit{p} (x_{0},\sigma_{0}(x_{0})) \Vor \sigma_{1}(a0) = \mathit{add} (\sigma_{2}(a0),\sigma_{2}(a0))
+\end{VampirePremise}
+\VPremiseSeparator
+\begin{VampirePremise}%
+~~\neg \mathit{p} (\sigma_{3}(a0),x_{1})
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~\sigma_{1}(a0) = \mathit{add} (\sigma_{2}(a0),\sigma_{2}(a0))
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$221,32\rightarrow 454$, resolution]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~\neg \mathit{p} (\mathit{z},x_{1}) \Vor \mathit{p} (x_{0},\sigma_{0}(x_{0})) \Vor \sigma_{1}(a0) = \mathit{add} (\sigma_{2}(a0),\sigma_{2}(a0))
+\end{VampirePremise}
+\VPremiseSeparator
+\begin{VampirePremise}%
+~~\mathit{p} (\mathit{z},\mathit{z})
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~\mathit{p} (x_{0},\sigma_{0}(x_{0})) \Vor \sigma_{1}(a0) = \mathit{add} (\sigma_{2}(a0),\sigma_{2}(a0))
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$158,28\rightarrow 221$, resolution]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~\mathit{p} (\mathit{s} (\sigma_{1}(a0)),\mathit{s} (\sigma_{2}(a0))) \Vor \sigma_{1}(a0) = \mathit{add} (\sigma_{2}(a0),\sigma_{2}(a0))
+\end{VampirePremise}
+\VPremiseSeparator
+\begin{VampirePremise}%
+~~\neg \mathit{p} (\mathit{s} (\sigma_{1}(a0)),x_{3}) \Vor \mathit{p} (x_{0},\sigma_{0}(x_{0})) \Vor \neg \mathit{p} (\mathit{z},x_{5})
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~\neg \mathit{p} (\mathit{z},x_{1}) \Vor \mathit{p} (x_{0},\sigma_{0}(x_{0})) \Vor \sigma_{1}(a0) = \mathit{add} (\sigma_{2}(a0),\sigma_{2}(a0))
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$45,64\rightarrow 158$, superposition]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~\mathit{p} (\mathit{s} (\mathit{s} (\mathit{add} (x_{1},x_{1}))),\mathit{s} (x_{1}))
+\end{VampirePremise}
+\VPremiseSeparator
+\begin{VampirePremise}%
+~~\sigma_{1}(a0) = \mathit{s} (\mathit{add} (\sigma_{2}(a0),\sigma_{2}(a0))) \Vor \sigma_{1}(a0) = \mathit{add} (\sigma_{2}(a0),\sigma_{2}(a0))
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~\mathit{p} (\mathit{s} (\sigma_{1}(a0)),\mathit{s} (\sigma_{2}(a0))) \Vor \sigma_{1}(a0) = \mathit{add} (\sigma_{2}(a0),\sigma_{2}(a0))
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$24,55\rightarrow 64$, resolution]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~\neg \mathit{p} (x_{0},x_{1}) \Vor \mathit{add} (x_{1},x_{1}) = x_{0} \Vor \mathit{s} (\mathit{add} (x_{1},x_{1})) = x_{0}
+\end{VampirePremise}
+\VPremiseSeparator
+\begin{VampirePremise}%
+~~\mathit{p} (\sigma_{1}(a0),\sigma_{2}(a0))
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~\sigma_{1}(a0) = \mathit{s} (\mathit{add} (\sigma_{2}(a0),\sigma_{2}(a0))) \Vor \sigma_{1}(a0) = \mathit{add} (\sigma_{2}(a0),\sigma_{2}(a0))
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$54,29\rightarrow 55$, resolution]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~\mathit{p} (x_{0},\sigma_{0}(x_{0})) \Vor \mathit{p} (\sigma_{1}(a0),\sigma_{2}(a0))
+\end{VampirePremise}
+\VPremiseSeparator
+\begin{VampirePremise}%
+~~\neg \mathit{p} (\sigma_{3}(a0),x_{1})
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~\mathit{p} (\sigma_{1}(a0),\sigma_{2}(a0))
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$27,32\rightarrow 54$, resolution]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~\neg \mathit{p} (\mathit{z},x_{5}) \Vor \mathit{p} (\sigma_{1}(a0),\sigma_{2}(a0)) \Vor \mathit{p} (x_{0},\sigma_{0}(x_{0}))
+\end{VampirePremise}
+\VPremiseSeparator
+\begin{VampirePremise}%
+~~\mathit{p} (\mathit{z},\mathit{z})
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~\mathit{p} (x_{0},\sigma_{0}(x_{0})) \Vor \mathit{p} (\sigma_{1}(a0),\sigma_{2}(a0))
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$18\rightarrow 27$, cnf transformation]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~(\forall x_{5} )\neg \mathit{p} (\mathit{z},x_{5}) \Vor (\mathit{p} (\sigma_{1}(a0),\sigma_{2}(a0)) \Vand (\forall x_{3} )\neg \mathit{p} (\mathit{s} (\sigma_{1}(a0)),x_{3})) \Vor (\forall x_{0} )\mathit{p} (x_{0},\sigma_{0}(x_{0}))
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~\neg \mathit{p} (\mathit{z},x_{5}) \Vor \mathit{p} (\sigma_{1}(a0),\sigma_{2}(a0)) \Vor \mathit{p} (x_{0},\sigma_{0}(x_{0}))
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$13\rightarrow 24$, cnf transformation]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~(\forall x_{0} \forall x_{1} )((\neg \mathit{p} (x_{0},x_{1}) \Vor \mathit{add} (x_{1},x_{1}) = x_{0} \Vor \mathit{s} (\mathit{add} (x_{1},x_{1})) = x_{0}) \Vand ((\mathit{add} (x_{1},x_{1}) \neq x_{0} \Vand \mathit{s} (\mathit{add} (x_{1},x_{1})) \neq x_{0}) \Vor \mathit{p} (x_{0},x_{1})))
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~\neg \mathit{p} (x_{0},x_{1}) \Vor \mathit{add} (x_{1},x_{1}) = x_{0} \Vor \mathit{s} (\mathit{add} (x_{1},x_{1})) = x_{0}
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$41,38\rightarrow 45$, forward demodulation]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~\mathit{p} (\mathit{s} (\mathit{add} (x_{1},\mathit{s} (x_{1}))),\mathit{s} (x_{1}))
+\end{VampirePremise}
+\VPremiseSeparator
+\begin{VampirePremise}%
+~~\mathit{add} (x_{3},\mathit{s} (x_{2})) = \mathit{s} (\mathit{add} (x_{2},x_{3}))
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~\mathit{p} (\mathit{s} (\mathit{s} (\mathit{add} (x_{1},x_{1}))),\mathit{s} (x_{1}))
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$22,23\rightarrow 38$, superposition]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~\mathit{add} (\mathit{s} (x_{0}),x_{1}) = \mathit{s} (\mathit{add} (x_{0},x_{1}))
+\end{VampirePremise}
+\VPremiseSeparator
+\begin{VampirePremise}%
+~~\mathit{add} (x_{0},x_{1}) = \mathit{add} (x_{1},x_{0})
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~\mathit{add} (x_{3},\mathit{s} (x_{2})) = \mathit{s} (\mathit{add} (x_{2},x_{3}))
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$3\rightarrow 23$, cnf transformation]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~(\forall x_{0} \forall x_{1} )\mathit{add} (x_{0},x_{1}) = \mathit{add} (x_{1},x_{0})
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~\mathit{add} (x_{0},x_{1}) = \mathit{add} (x_{1},x_{0})
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$2\rightarrow 22$, cnf transformation]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~(\forall x_{0} \forall x_{1} )\mathit{add} (\mathit{s} (x_{0}),x_{1}) = \mathit{s} (\mathit{add} (x_{0},x_{1}))
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~\mathit{add} (\mathit{s} (x_{0}),x_{1}) = \mathit{s} (\mathit{add} (x_{0},x_{1}))
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$31,22\rightarrow 41$, superposition]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~\mathit{p} (\mathit{add} (x_{1},x_{1}),x_{1})
+\end{VampirePremise}
+\VPremiseSeparator
+\begin{VampirePremise}%
+~~\mathit{add} (\mathit{s} (x_{0}),x_{1}) = \mathit{s} (\mathit{add} (x_{0},x_{1}))
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~\mathit{p} (\mathit{s} (\mathit{add} (x_{1},\mathit{s} (x_{1}))),\mathit{s} (x_{1}))
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$26\rightarrow 30$, equality resolution]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~\mathit{p} (x_{0},x_{1}) \Vor \mathit{s} (\mathit{add} (x_{1},x_{1})) \neq x_{0}
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~\mathit{p} (\mathit{s} (\mathit{add} (x_{1},x_{1})),x_{1})
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$13\rightarrow 26$, cnf transformation]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~(\forall x_{0} \forall x_{1} )((\neg \mathit{p} (x_{0},x_{1}) \Vor \mathit{add} (x_{1},x_{1}) = x_{0} \Vor \mathit{s} (\mathit{add} (x_{1},x_{1})) = x_{0}) \Vand ((\mathit{add} (x_{1},x_{1}) \neq x_{0} \Vand \mathit{s} (\mathit{add} (x_{1},x_{1})) \neq x_{0}) \Vor \mathit{p} (x_{0},x_{1})))
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~\mathit{p} (x_{0},x_{1}) \Vor \mathit{s} (\mathit{add} (x_{1},x_{1})) \neq x_{0}
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$2$, input]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampireConclusion}
+~~(\forall x_{0} \forall x_{1} )\mathit{add} (\mathit{s} (x_{0}),x_{1}) = \mathit{s} (\mathit{add} (x_{0},x_{1}))
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$3$, input]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampireConclusion}
+~~(\forall x_{0} \forall x_{1} )\mathit{add} (x_{0},x_{1}) = \mathit{add} (x_{1},x_{0})
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$14,17,16,15\rightarrow 18$, skolemisation]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~(\forall x_{5} )\neg \mathit{p} (\mathit{z},x_{5}) \Vor (\exists x_{2} )((\exists x_{4} )\mathit{p} (x_{2},x_{4}) \Vand (\forall x_{3} )\neg \mathit{p} (\mathit{s} (x_{2}),x_{3})) \Vor (\forall x_{0} )(\exists x_{1} )\mathit{p} (x_{0},x_{1})
+\end{VampirePremise}
+\VPremiseSeparator
+\begin{VampirePremise}%
+~~(\exists x_{4} )\mathit{p} (\sigma_{1}(a0),x_{4}) \Vimp \mathit{p} (\sigma_{1}(a0),\sigma_{2}(a0))
+\end{VampirePremise}
+\VPremiseSeparator
+\begin{VampirePremise}%
+~~(\exists x_{2} )((\exists x_{4} )\mathit{p} (x_{2},x_{4}) \Vand (\forall x_{3} )\neg \mathit{p} (\mathit{s} (x_{2}),x_{3})) \Vimp ((\exists x_{4} )\mathit{p} (\sigma_{1}(a0),x_{4}) \Vand (\forall x_{3} )\neg \mathit{p} (\mathit{s} (\sigma_{1}(a0)),x_{3}))
+\end{VampirePremise}
+\VPremiseSeparator
+\begin{VampirePremise}%
+~~(\forall x_{0} )((\exists x_{1} )\mathit{p} (x_{0},x_{1}) \Vimp \mathit{p} (x_{0},\sigma_{0}(x_{0})))
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~(\forall x_{5} )\neg \mathit{p} (\mathit{z},x_{5}) \Vor (\mathit{p} (\sigma_{1}(a0),\sigma_{2}(a0)) \Vand (\forall x_{3} )\neg \mathit{p} (\mathit{s} (\sigma_{1}(a0)),x_{3})) \Vor (\forall x_{0} )\mathit{p} (x_{0},\sigma_{0}(x_{0}))
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$15$, choice axiom]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampireConclusion}
+~~(\forall x_{0} )((\exists x_{1} )\mathit{p} (x_{0},x_{1}) \Vimp \mathit{p} (x_{0},\sigma_{0}(x_{0})))
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$16$, choice axiom]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampireConclusion}
+~~(\exists x_{2} )((\exists x_{4} )\mathit{p} (x_{2},x_{4}) \Vand (\forall x_{3} )\neg \mathit{p} (\mathit{s} (x_{2}),x_{3})) \Vimp ((\exists x_{4} )\mathit{p} (\sigma_{1}(a0),x_{4}) \Vand (\forall x_{3} )\neg \mathit{p} (\mathit{s} (\sigma_{1}(a0)),x_{3}))
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$17$, choice axiom]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampireConclusion}
+~~(\exists x_{4} )\mathit{p} (\sigma_{1}(a0),x_{4}) \Vimp \mathit{p} (\sigma_{1}(a0),\sigma_{2}(a0))
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$10\rightarrow 14$, rectify]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~(\forall x_{3} )\neg \mathit{p} (\mathit{z},x_{3}) \Vor (\exists x_{0} )((\exists x_{1} )\mathit{p} (x_{0},x_{1}) \Vand (\forall x_{2} )\neg \mathit{p} (\mathit{s} (x_{0}),x_{2})) \Vor (\forall x_{4} )(\exists x_{5} )\mathit{p} (x_{4},x_{5})
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~(\forall x_{5} )\neg \mathit{p} (\mathit{z},x_{5}) \Vor (\exists x_{2} )((\exists x_{4} )\mathit{p} (x_{2},x_{4}) \Vand (\forall x_{3} )\neg \mathit{p} (\mathit{s} (x_{2}),x_{3})) \Vor (\forall x_{0} )(\exists x_{1} )\mathit{p} (x_{0},x_{1})
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$9\rightarrow 10$, flattening]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~((\forall x_{3} )\neg \mathit{p} (\mathit{z},x_{3}) \Vor (\exists x_{0} )((\exists x_{1} )\mathit{p} (x_{0},x_{1}) \Vand (\forall x_{2} )\neg \mathit{p} (\mathit{s} (x_{0}),x_{2}))) \Vor (\forall x_{4} )(\exists x_{5} )\mathit{p} (x_{4},x_{5})
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~(\forall x_{3} )\neg \mathit{p} (\mathit{z},x_{3}) \Vor (\exists x_{0} )((\exists x_{1} )\mathit{p} (x_{0},x_{1}) \Vand (\forall x_{2} )\neg \mathit{p} (\mathit{s} (x_{0}),x_{2})) \Vor (\forall x_{4} )(\exists x_{5} )\mathit{p} (x_{4},x_{5})
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$8\rightarrow 9$, ennf transformation]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~((\exists x_{3} )\mathit{p} (\mathit{z},x_{3}) \Vand (\forall x_{0} )((\exists x_{1} )\mathit{p} (x_{0},x_{1}) \Vimp (\exists x_{2} )\mathit{p} (\mathit{s} (x_{0}),x_{2}))) \Vimp (\forall x_{4} )(\exists x_{5} )\mathit{p} (x_{4},x_{5})
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~((\forall x_{3} )\neg \mathit{p} (\mathit{z},x_{3}) \Vor (\exists x_{0} )((\exists x_{1} )\mathit{p} (x_{0},x_{1}) \Vand (\forall x_{2} )\neg \mathit{p} (\mathit{s} (x_{0}),x_{2}))) \Vor (\forall x_{4} )(\exists x_{5} )\mathit{p} (x_{4},x_{5})
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$5\rightarrow 8$, rectify]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~((\exists x_{1} )\mathit{p} (\mathit{z},x_{1}) \Vand (\forall x_{0} )((\exists x_{1} )\mathit{p} (x_{0},x_{1}) \Vimp (\exists x_{1} )\mathit{p} (\mathit{s} (x_{0}),x_{1}))) \Vimp (\forall x_{0} )(\exists x_{1} )\mathit{p} (x_{0},x_{1})
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~((\exists x_{3} )\mathit{p} (\mathit{z},x_{3}) \Vand (\forall x_{0} )((\exists x_{1} )\mathit{p} (x_{0},x_{1}) \Vimp (\exists x_{2} )\mathit{p} (\mathit{s} (x_{0}),x_{2}))) \Vimp (\forall x_{4} )(\exists x_{5} )\mathit{p} (x_{4},x_{5})
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$5$, input]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampireConclusion}
+~~((\exists x_{1} )\mathit{p} (\mathit{z},x_{1}) \Vand (\forall x_{0} )((\exists x_{1} )\mathit{p} (x_{0},x_{1}) \Vimp (\exists x_{1} )\mathit{p} (\mathit{s} (x_{0}),x_{1}))) \Vimp (\forall x_{0} )(\exists x_{1} )\mathit{p} (x_{0},x_{1})
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$12\rightarrow 13$, flattening]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~(\forall x_{0} \forall x_{1} )((\neg \mathit{p} (x_{0},x_{1}) \Vor (\mathit{add} (x_{1},x_{1}) = x_{0} \Vor \mathit{s} (\mathit{add} (x_{1},x_{1})) = x_{0})) \Vand ((\mathit{add} (x_{1},x_{1}) \neq x_{0} \Vand \mathit{s} (\mathit{add} (x_{1},x_{1})) \neq x_{0}) \Vor \mathit{p} (x_{0},x_{1})))
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~(\forall x_{0} \forall x_{1} )((\neg \mathit{p} (x_{0},x_{1}) \Vor \mathit{add} (x_{1},x_{1}) = x_{0} \Vor \mathit{s} (\mathit{add} (x_{1},x_{1})) = x_{0}) \Vand ((\mathit{add} (x_{1},x_{1}) \neq x_{0} \Vand \mathit{s} (\mathit{add} (x_{1},x_{1})) \neq x_{0}) \Vor \mathit{p} (x_{0},x_{1})))
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$4\rightarrow 12$, nnf transformation]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~(\forall x_{0} \forall x_{1} )(\mathit{p} (x_{0},x_{1}) \Viff (\mathit{add} (x_{1},x_{1}) = x_{0} \Vor \mathit{s} (\mathit{add} (x_{1},x_{1})) = x_{0}))
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~(\forall x_{0} \forall x_{1} )((\neg \mathit{p} (x_{0},x_{1}) \Vor (\mathit{add} (x_{1},x_{1}) = x_{0} \Vor \mathit{s} (\mathit{add} (x_{1},x_{1})) = x_{0})) \Vand ((\mathit{add} (x_{1},x_{1}) \neq x_{0} \Vand \mathit{s} (\mathit{add} (x_{1},x_{1})) \neq x_{0}) \Vor \mathit{p} (x_{0},x_{1})))
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$4$, input]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampireConclusion}
+~~(\forall x_{0} \forall x_{1} )(\mathit{p} (x_{0},x_{1}) \Viff (\mathit{add} (x_{1},x_{1}) = x_{0} \Vor \mathit{s} (\mathit{add} (x_{1},x_{1})) = x_{0}))
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$1$, input]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampireConclusion}
+~~(\forall x_{0} )\mathit{add} (\mathit{z},x_{0}) = x_{0}
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$11,19\rightarrow 20$, skolemisation]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~(\exists x_{0} )(\forall x_{1} )\neg \mathit{p} (x_{0},x_{1})
+\end{VampirePremise}
+\VPremiseSeparator
+\begin{VampirePremise}%
+~~(\exists x_{0} )(\forall x_{1} )\neg \mathit{p} (x_{0},x_{1}) \Vimp (\forall x_{1} )\neg \mathit{p} (\sigma_{3}(a0),x_{1})
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~(\forall x_{1} )\neg \mathit{p} (\sigma_{3}(a0),x_{1})
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$19$, choice axiom]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampireConclusion}
+~~(\exists x_{0} )(\forall x_{1} )\neg \mathit{p} (x_{0},x_{1}) \Vimp (\forall x_{1} )\neg \mathit{p} (\sigma_{3}(a0),x_{1})
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$7\rightarrow 11$, ennf transformation]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~\neg (\forall x_{0} )(\exists x_{1} )\mathit{p} (x_{0},x_{1})
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~(\exists x_{0} )(\forall x_{1} )\neg \mathit{p} (x_{0},x_{1})
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$6\rightarrow 7$, negated conjecture]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampirePremise}%
+~~(\forall x_{0} )(\exists x_{1} )\mathit{p} (x_{0},x_{1})
+\end{VampirePremise}
+\VConclusionSeparator
+\begin{VampireConclusion}
+~~\neg (\forall x_{0} )(\exists x_{1} )\mathit{p} (x_{0},x_{1})
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+[$6$, input]\\*[-2ex]
+\[\begin{VampireInference}
+\begin{VampireConclusion}
+~~(\forall x_{0} )(\exists x_{1} )\mathit{p} (x_{0},x_{1})
+\end{VampireConclusion}
+\end{VampireInference}
+\]
+\end{VampireProof}
+\end{document}
