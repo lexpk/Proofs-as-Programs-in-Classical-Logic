@@ -1,72 +1,83 @@
 from dataclasses import dataclass
-from typing import Sequence
+from functools import reduce
+from typing import Dict
 
 
-class Term:
-    def variables(self):
-        if type(self) == FunctionApplication:
-            vars = None
-            for arg in self.arguments:
-                if vars:
-                    vars.update(arg.variables())
-                else:
-                    vars = arg.variables()
-            return vars
-        if type(self) == Constant:
-            return {}
-        if type(self) == Variable:
-            return {self}
+class Signature:
+    def __init__(self, d: Dict[str, int]):
+        self._d = d
+        self.constants = {c for c, a in self._d.items() if a == 0}
+        self.functions = {c for c, a in self._d.items() if a > 0}
+        self.symbols = self.constants | self.functions
+        self.arity = lambda x: self._d[x]
 
-    def substitute(self, d):
-        if not d:
-            return self
-        if type(self) == FunctionApplication:
-            return FunctionApplication(self.name, arguments=[arg.substitute(d) for arg in self.arguments])
-        if type(self) == Constant:
-            return Constant(self.name)
-        if type(self) == Variable:
-            if self in d.keys():
-                return(d[self])
+    def __repr__(self):
+        return "[" + ", ".join([f"{s}/{self.arity(s)}" for s in self.symbols]) + "]"
+
+    def __eq__(self, other) -> bool:
+        return self._d == other._d
+
+
+def Term(sig: Signature):
+    class _Term():
+        signature = sig
+
+        def __init__(self, name: str, arguments = []):
+            assert all(type(self).signature == type(arg).signature for arg in arguments)
+            if name in _Term.signature.symbols:
+                assert len(arguments) == _Term.signature.arity(name)
+                self.name = name
+                self.arguments = arguments
             else:
-                return(Variable(self.name))
+                assert len(arguments) == 0
+                self.name = name
+                self.arguments = []
 
-    def mgu(self, f):
-        if type(self) == Variable:
-            return ({self : f}, {})
-        if type(f) == Variable:
-            return ({}, {f : self})
-        if type(self) == FunctionApplication and type(f) == FunctionApplication:
-            s = [{}, {}]
-            for arg1, arg2 in zip(self.arguments, f.arguments):
-                arg1, arg2 = arg1.substitute(s[0]), arg2.substitute(s[1])
-                si = arg1.mgu(arg2)
-                for i in [0, 1]:
-                    if s[i]:
-                        s[i].update(si[i])
-                    else:
-                        s[i] = si[i]
-            return s
-        return ({}, {})
+        def __repr__(self) -> str:
+            return self.name + (("(" + ", ".join(map(str, self.arguments)) + ")") if self.arguments else "")
 
-    def __str__(self):
-        if type(self) in [Variable, Constant]:
-            return self.name
-        if type(self) == FunctionApplication:
-            return self.name + '(' + ','.join(list(map(str, self.arguments))) + ')'
+        def __eq__(self, other) -> bool:
+            return self.name == other.name and self.arguments == other.arguments
 
+        def __hash__(self) -> int:
+            return hash(repr(self))
+        
+        def isVariable(self):
+            return self.name not in _Term.signature.symbols
 
-@dataclass
-class Variable(Term):
-    name : str
+        def variables(self) -> set():
+            return (set() if self.name in _Term.signature.symbols else set([self])) | reduce(lambda x, y: x | y, map(lambda arg: arg.variables(), self.arguments), set())
 
-    def __hash__(self):
-        return hash(self.name)
+        def superterm(self, other):
+            return self == other or any([arg.superterm(other) for arg in self.arguments])
 
-@dataclass
-class Constant(Term):
-    name : str
+        def subterm(self, other):
+            return other.superterm(self)
 
-@dataclass
-class FunctionApplication(Term):
-    name : str
-    arguments : Sequence[Term]
+        def substitute(self, d):
+            if self in d.keys():
+                return d[self]
+            else:
+                return _Term(name=self.name, arguments=list(map(lambda x: x.substitute(d), self.arguments)))
+
+        def mgu(self, other):
+            if self == other:
+                return {}
+            if other.isVariable():
+                if other not in self.variables():   
+                    return {other: self}
+                else:
+                    return None
+            if self.isVariable():
+                if self not in other.variables():
+                    return {self: other}
+                else:
+                    return None
+            if self.name == other.name:
+                def f(s, x):
+                    t = x[0].substitute(s).mgu(x[1].substitute(s))
+                    return {**{k : v.substitute(t) for k, v in s.items()}, **t}
+                return reduce(f, zip(self.arguments, other.arguments), {})
+            return None
+
+    return _Term

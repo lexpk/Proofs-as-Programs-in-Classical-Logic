@@ -58,6 +58,23 @@ Goal:
 
 \pagebreak
 
+\pagebreak
+
+To explain our approach let us first recall how resolution works and why it is effective for classical logic. In a nutshell the principle of resolution works as follows: From a set of formulas $A, B, C\dots$ obtain a set of sequents $A'_1\dots  A'_n\vdash A_1\dots A_n$, $B'_1\dots B'_n\vdash B_1\dots B_n$, $C'_1\dots C'_n\vdash C_1\dots C_n$ in which all occurring formulas are somehow simple. Then iteratively apply the resolution rule (and some other rules, but this is the crucial one), which is an analogon to cut, i.e.
+\begin{center}
+	\AxiomC{$A, \Gamma\vdash \Delta$}
+	\AxiomC{$\Gamma'\vdash A', \Delta'$}
+	\BinaryInfC{$(\Gamma\cup \Gamma')\theta\vdash (\Delta\cup\Delta')\theta$}
+	\DisplayProof
+\end{center}
+where $\theta$ is the mgu of $A$ and $A'$, and by process of saturation (attempt to) obtain the empty Sequent.
+
+Now for classical logic we can simply interpret $A'_1,\dots  A'_n\vdash A_1,\dots, A_n$ as $\neg A'_1\vee\dots\vee\neg A'_n\vee A_1\vee\dots\vee A_n$. Furthermore we can normalize every formula such that each of the $A'_i, A_i$ is atomic. The resolution calculus is then immediately refutationally complete, i.e. if $A, B, C\dots $ are inconsistent there exists a successful resolution, giving a refutation of $A\wedge B\wedge C\dots$, which is classically equivalent to a proof of $B\wedge C\dots\rightarrow\neg A$. I.e. if we want to prove $B\wedge C\dots\rightarrow A$ we can simply preform resolution on $\neg A\wedge B\wedge C\dots$
+
+Now there are a number of hurdles in applying this strategy to intuitionistic logic, or to extract intuitionistic proof from classical resolution proofs. First and foremost is the non-existence of normal forms. In particular with the (intuitionally speaking) strict interpretation of $A'_1,\dots  A'_n\vdash A_1,\dots, A_n$ as $\neg A'_1\vee\dots\vee\neg A'_n\vee A_1\vee\dots\vee A_n$ we can hardly translate any formulas into such a form where the $A_i$ are atomic, or even literals. This can be remedied of course by interpreting $A'_1,\dots  A'_n\vdash A_1,\dots, A_n$ as $\neg(A'_1\wedge\dots\wedge A'_n\wedge(\neg A_1\vee\dots\vee \neg A_n))$, i.e. a double negation translation. But this brings us to the second problem: Even if our calculus is refutationally complete a refutation of $\neg A\wedge B\wedge C\dots$ does not give us a proof of $B\wedge C\dots\to A$ but rather $B\wedge C\dots\to \neg\neg A$. This problem is especially pronounced in the second interpretation of $\vdash$ where we are not even using $A$ but $\neg \neg A$.
+
+Now there are a few saving graces: First of all, if $A$ is decidable, i.e. $\neg\neg A\to A$, we immediately obtain a proof of $A$. Furthermore we may attempt Friedman Translation~\cite{Friedman_1978} of our proof and indeed~\cite{Berger_2002} gives us some quite liberal criteria when this is possible in principle, e.g. when $B, C\dots$ are theorems of PA and $A$ is a $\Pi_0^2$ formula. And indeed interpreting $A'_1,\dots  A'_n\vdash A_1,\dots, A_n$ as $A'_1\to\dots\to A'_n\to A_1\vee\dots\vee A_n$, we are able to obtain an intuitionistic proof if their conditions are met and the input formulas can be transformed to such normal forms.
+
 \section{Extracting constructive content from resolution proofs}
 \subsection{The superposition calculus}
 First let us define the calculus from which we wish to extract programs. It will comprise a core set of rules used in the vampire theorem prover taken from~\cite{Kov_cs_2013}. Note that we pay special attention to the usually neglected (and highly non-constructive) part of CNF transformation and Skolemization. Also note that we neglect the simplification ordering which is necessary to formulate a strategy for proof search but not for our proof transformation.
@@ -463,191 +480,6 @@ Then unification at 15 gives $s_1 = h\circ g\circ f$ and $s_0 = x_6$ and the fin
 	[\text{composition 4, 9}] &\{\}&r(x_6, h(g(f(x_6))))
 \end{align}
 
-
-\setcounter{equation}{0}
-\pagebreak
-\begin{landscape}
-Now a third example including induction:
-\begin{align}
-	[\text{input}] &&	\forall x_0 : z + x_0 = x_0 \\
-	[\text{input}] &&	\forall x_0, x_1 : s(x_0) + x_1 = s(x_0 + x_1) \\
-	[\text{input}] &&	\forall x_0, x_1 : x_0 + x_1 = x_1 + x_0 \\
-	[\text{input}] &&	\forall x_0, x_1 : (p(x_0,x_1) \Leftrightarrow (s(x_1 + x_1) = x_0 \vee x_1 + x_1 = x_0)) \\
-	[\text{input}] &&	(\forall x_0 : (\exists x_1 : p(x_0,x_1) \Rightarrow \exists x_1 : p(s(x_0),x_1)) \wedge \exists x_1 : p(z,x_1)) \Rightarrow \forall x_0 : \exists x_1 : p(x_0,x_1) \\
-	[\text{negated conjecture}] &&	\neg \forall x_0 : \exists x_1 : p(x_0,x_1) \\
-	[\text{rectify 5}] &&	(\forall x_0 : (\exists x_1 : p(x_0,x_1) \Rightarrow \exists x_2 : p(s(x_0),x_2)) \wedge \exists x_3 : p(z,x_3)) \Rightarrow \forall x_4 : \exists x_5 : p(x_4,x_5) \\
-	[\text{ennf transformation 7}]&&	\forall x_4 : \exists x_5 : p(x_4,x_5) \vee (\exists x_0 : (\forall x_2 : \neg p(s(x_0),x_2) \wedge \exists x_1 : p(x_0,x_1)) \vee \forall x_3 : \neg p(z,x_3))  \\
-	[\text{flattening 8}] &&	 \forall x_4 : \exists x_5 : p(x_4,x_5) \vee \exists x_0 : (\forall x_2 : \neg p(s(x_0),x_2) \wedge \exists x_1 : p(x_0,x_1)) \vee \forall x_3 : \neg p(z,x_3) \\
-	[\text{ennf transformation 6}] &&	 \exists x_0 : \forall x_1 : \neg p(x_0,x_1) \\
-	[\text{nnf transformation 4}] &&	 \forall x_0, x_1 : ((p(x_0,x_1) \vee (s(x_1 + x_1) \neq x_0 \wedge x_1 + x_1 \neq x_0)) \wedge ((s(x_1 + x_1) = x_0 \vee x_1 + x_1 = x_0) \vee \neg p(x_0,x_1))) \\
-	[\text{flattening 11}] &&	 \forall x_0, x_1 : ((p(x_0,x_1) \vee (s(x_1 + x_1) \neq x_0 \wedge x_1 + x_1 \neq x_0)) \wedge (s(x_1 + x_1) = x_0 \vee x_1 + x_1 = x_0 \vee \neg p(x_0,x_1))) \\
-	[\text{rectify 9}] &&	 \forall x_0 : \exists x_1 : p(x_0,x_1) \vee \exists x_2 : (\forall x_3 : \neg p(s(x_2),x_3) \wedge \exists x_4 : p(x_2,x_4)) \vee \forall x_5 : \neg p(z,x_5) \\
-	[\text{choice axiom}] &&	 \forall x_0 : (\exists x_1 : p(x_0,x_1) \Rightarrow p(x_0,s_0(x_0))) \\
-	[\text{choice axiom}] &&	 \exists x_2 : (\forall x_3 : \neg p(s(x_2),x_3) \wedge \exists x_4 : p(x_2,x_4)) \Rightarrow (\forall x_3 : \neg p(s(s_1),x_3) \wedge \exists x_4 : p(s_1,x_4)) \\
-	[\text{choice axiom}] &&	 \exists x_4 : p(s_1,x_4) \Rightarrow p(s_1,s_2) \\
-	[\text{skolemisation 13,16,15,14}] &&	 \forall x_0 : p(x_0,s_0(x_0)) \vee (\forall x_3 : \neg p(s(s_1),x_3) \wedge p(s_1,s_2)) \vee \forall x_5 : \neg p(z,x_5) \\
-	[\text{choice axiom}] &&	 \exists x_0 : \forall x_1 : \neg p(x_0,x_1) \Rightarrow \forall x_1 : \neg p(s_3,x_1) \\
-	[\text{skolemisation 9,17}] &&	 \forall x_1 : \neg p(s_3,x_1) \\
-	[\text{cnf transformation 1}] &&	 z + x_0 = x_0 \\
-	[\text{cnf transformation 2}] &&	 s(x_0) + x_1 = s(x_0 + x_1) \\
-	[\text{cnf transformation 3}] &&	 x_0 + x_1 = x_1 + x_0 \\
-	[\text{cnf transformation 11}] &&	 \neg p(x_0,x_1) \vee x_1 + x_1 = x_0 \vee s(x_1 + x_1) = x_0 \\
-	[\text{cnf transformation 11}] &&	 p(x_0,x_1) \vee x_1 + x_1 \neq x_0 \\
-	[\text{cnf transformation 11}] &&	 p(x_0,x_1) \vee s(x_1 + x_1) \neq x_0
-\end{align}
-\begin{align}
-	[\text{cnf transformation 17}] &&	 \neg p(z,x_5) \vee p(s_1,s_2) \vee p(x_0,s_0(x_0)) \\
-	[\text{cnf transformation 17}] &&	 \neg p(s(s_1),x_3) \vee p(x_0,s_0(x_0)) \vee \neg p(z,x_5) \\
-	[\text{cnf transformation 19}] &&	 \neg p(s_3,x_1) \\
-	[\text{equality resolution 25}] &&	 p(s(x_1 + x_1),x_1) \\
-	[\text{equality resolution 24}] &&	 p(x_1 + x_1,x_1) \\
-	[\text{superposition 30,20}] &\{x_0\mapsto x, x_1\mapsto z\}&	 p(z,z) \\
-	[\text{superposition 21,22}] &\{x_0\mapsto x_3, x_1\mapsto x_2\}&	 x_3 + s(x_2) = s(x_2+x_3) \\
-	[\text{superposition 30,21}] &\{x_0\mapsto x_1\}&	 p(s(x_1+s(x_1)),s(x_1)) \\
-	[\text{forward demodulation 33,32}] &\{x_2\mapsto x_1, x_3\mapsto x_1\}&	 p(s(s(x_1 + x_1)),s(x_1)) \\
-	[\text{resolution 26,31}] &\{x_5\mapsto z\}&	 p(x_0,s_0(x_0)) \vee p(s_1,s_2) \\
-	[\text{resolution 35,28}] &\{x_0\mapsto s_3, x_1\mapsto s_0(s_3)\}&	 p(s_1,s_2) \\
-	[\text{resolution 23,36}] &\{x_0\mapsto s_1, x_1\mapsto s_2\}& 	s_1 = s(s_2 + s_2) \vee s_1 = s_2 + s_2 \\
-	[\text{superposition 24,37}] &\{x_0\mapsto s_1, x_1\mapsto s_2\}& 	 p(s(s_1),s(s_2)) \vee s_1 = s_2 + s_2 \\
-	[\text{resolution 38,27}] &\{x_2\mapsto s(s_2), x_5\mapsto x_1\}& 	 \neg p(z,x_1) \vee p(x_0,s_0(x_0)) \vee s_1 = s_2 + s_2 \\
-	[\text{resolution 39,31}] &\{x_1\mapsto z\}& 	 p(x_0,s_0(x_0)) \vee s_1 = s_2 + s_2 \\
-	[\text{resolution 40,28}] &\{x_0\mapsto s_3, x_1\mapsto s_0(s_3)\}& 	 s_1 = s_2 + s_2 \\
-	[\text{superposition 41,29}] &\{x_1\mapsto s_2\}&   p(s(s_1),s_2)\\
-	[\text{resolution 42,27}] &\{x_3\mapsto s_2, x_5\mapsto x_1\}& 	 \neg p(z,x_1) \vee p(x_0,s_0(x_0)) \\
-	[\text{resolution 43,31}] &\{x_1\mapsto z\}& 	 p(x_0,s_0(x_0)) \\
-	[\text{resolution 44,28}] &\{x_0\mapsto s_3, x_1\mapsto s_0(s_3)\}& \bot
-\end{align}
-\end{landscape}
-
-\setcounter{equation}{0}
-\pagebreak
-\begin{landscape}
-	Again replace negated conjecture by tautology
-	\begin{align}
-		[\text{input}] &&	\forall x_0 : z + x_0 = x_0 \\
-		[\text{input}] &&	\forall x_0, x_1 : s(x_0) + x_1 = s(x_0 + x_1) \\
-		[\text{input}] &&	\forall x_0, x_1 : x_0 + x_1 = x_1 + x_0 \\
-		[\text{input}] &&	\forall x_0, x_1 : (p(x_0,x_1) \Leftrightarrow (s(x_1 + x_1) = x_0 \vee x_1 + x_1 = x_0)) \\
-		[\text{input}] &&	(\forall x_0 : (\exists x_1 : p(x_0,x_1) \Rightarrow \exists x_1 : p(s(x_0),x_1)) \wedge \exists x_1 : p(z,x_1)) \Rightarrow \forall x_0 : \exists x_1 : p(x_0,x_1) \\
-		[\text{tautology}] &&	\forall x_0:\exists x_1:p(x_0, x_1)\vee \neg \forall x_0 : \exists x_1 : p(x_0,x_1) \\
-		[\text{rectify 5}] &&	(\forall x_0 : (\exists x_1 : p(x_0,x_1) \Rightarrow \exists x_2 : p(s(x_0),x_2)) \wedge \exists x_3 : p(z,x_3)) \Rightarrow \forall x_4 : \exists x_5 : p(x_4,x_5) \\
-		[\text{ennf transformation 7}]&&	\forall x_4 : \exists x_5 : p(x_4,x_5) \vee (\exists x_0 : (\forall x_2 : \neg p(s(x_0),x_2) \wedge \exists x_1 : p(x_0,x_1)) \vee \forall x_3 : \neg p(z,x_3))  \\
-		[\text{flattening 8}] &&	 \forall x_4 : \exists x_5 : p(x_4,x_5) \vee \exists x_0 : (\forall x_2 : \neg p(s(x_0),x_2) \wedge \exists x_1 : p(x_0,x_1)) \vee \forall x_3 : \neg p(z,x_3) \\
-		[\text{ennf transformation 6}] &&	 \exists x_0 : \forall x_1 : \neg p(x_0,x_1) \\
-		[\text{nnf transformation 4}] &&	 \forall x_0, x_1 : ((p(x_0,x_1) \vee (s(x_1 + x_1) \neq x_0 \wedge x_1 + x_1 \neq x_0)) \wedge ((s(x_1 + x_1) = x_0 \vee x_1 + x_1 = x_0) \vee \neg p(x_0,x_1))) \\
-		[\text{flattening 11}] &&	 \forall x_0, x_1 : ((p(x_0,x_1) \vee (s(x_1 + x_1) \neq x_0 \wedge x_1 + x_1 \neq x_0)) \wedge (s(x_1 + x_1) = x_0 \vee x_1 + x_1 = x_0 \vee \neg p(x_0,x_1))) \\
-		[\text{rectify 9}] &&	 \forall x_0 : \exists x_1 : p(x_0,x_1) \vee \exists x_2 : (\forall x_3 : \neg p(s(x_2),x_3) \wedge \exists x_4 : p(x_2,x_4)) \vee \forall x_5 : \neg p(z,x_5) \\
-		[\text{choice axiom}] &&	 \forall x_0 : (\exists x_1 : p(x_0,x_1) \Rightarrow p(x_0,s_0(x_0))) \\
-		[\text{choice axiom}] &&	 \exists x_2 : (\forall x_3 : \neg p(s(x_2),x_3) \wedge \exists x_4 : p(x_2,x_4)) \Rightarrow (\forall x_3 : \neg p(s(s_1),x_3) \wedge \exists x_4 : p(s_1,x_4)) \\
-		[\text{choice axiom}] &&	 \exists x_4 : p(s_1,x_4) \Rightarrow p(s_1,s_2) \\
-		[\text{skolemisation 13,16,15,14}] &&	 \forall x_0 : p(x_0,s_0(x_0)) \vee (\forall x_3 : \neg p(s(s_1),x_3) \wedge p(s_1,s_2)) \vee \forall x_5 : \neg p(z,x_5) \\
-		[\text{choice axiom}] &&	 \exists x_0 : \forall x_1 : \neg p(x_0,x_1) \Rightarrow \forall x_1 : \neg p(s_3,x_1) \\
-		[\text{choice axiom}] &&     \forall x_0(\exists x_1: p(x_0, x_1)\Rightarrow p(x_0, s_4(x_0)))\\
-		[\text{skolemisation 9,17,18}] &&	 \forall x_0: p(x_0, s_4(x_0))\vee\forall x_1 : \neg p(s_3,x_1) \\
-		[\text{cnf transformation 1}] &&	 z + x_0 = x_0 \\
-		[\text{cnf transformation 2}] &&	 s(x_0) + x_1 = s(x_0 + x_1) \\
-		[\text{cnf transformation 3}] &&	 x_0 + x_1 = x_1 + x_0 \\
-		[\text{cnf transformation 11}] &&	 \neg p(x_0,x_1) \vee x_1 + x_1 = x_0 \vee s(x_1 + x_1) = x_0 \\
-		[\text{cnf transformation 11}] &&	 p(x_0,x_1) \vee x_1 + x_1 \neq x_0 \\
-		[\text{cnf transformation 11}] &&	 p(x_0,x_1) \vee s(x_1 + x_1) \neq x_0
-	\end{align}
-	\begin{align}
-		[\text{cnf transformation 17}] &&	 \neg p(z,x_5) \vee p(s_1,s_2) \vee p(x_0,s_0(x_0)) \\
-		[\text{cnf transformation 17}] &&	 \neg p(s(s_1),x_3) \vee p(x_0,s_0(x_0)) \vee \neg p(z,x_5) \\
-		[\text{cnf transformation 20}] &&	 p(x_0, s_4(x_0))\vee\neg p(s_3,x_1) \\
-		[\text{equality resolution 26}] &&	 p(s(x_1 + x_1),x_1) \\
-		[\text{equality resolution 25}] &&	 p(x_1 + x_1,x_1) \\
-		[\text{superposition 31,21}] &\{x_0\mapsto z, x_1\mapsto z\}&	 p(z,z) \\
-		[\text{superposition 22,23}] &\{x_0\mapsto x_3, x_1\mapsto x_2\}&	 x_3 + s(x_2)) = s(x_2+x_3)) \\
-		[\text{superposition 31,22}] &\{x_0\mapsto x_1\}&	 p(s(x_1+s(x_1)),s(x_1)) \\
-		[\text{forward demodulation 34,33}] &\{x_2\mapsto x_1, x_3\mapsto x_1\}&	 p(s(s(x_1 + x_1)),s(x_1)) \\
-		[\text{resolution 27,32}] &\{x_5\mapsto z\}&	 p(x_0,s_0(x_0)) \vee p(s_1,s_2) \\
-		[\text{resolution 36,29}] &\{x_0\mapsto s_3, x_1\mapsto s_0(s_3)\}&	 p(x_0, s_4(x_0))\vee p(s_1,s_2) \\
-		[\text{resolution 24,37}] &\{x_0\mapsto s_1, x_1\mapsto s_2\}& 	p(x_0, s_4(x_0))\vee s_1 = s(s_2 + s_2) \vee s_1 = s_2 + s_2 \\
-		[\text{superposition 25,38}] &\{x_0\mapsto s_1, x_1\mapsto s_2\}& 	 p(x_0, s_4(x_0))\vee p(s(s_1),s(s_2)) \vee s_1 = s_2 + s_2 \\
-		[\text{resolution 39,28}] &\{x_2\mapsto s(s_2), x_5\mapsto x_1\}& 	 p(x_0, s_4(x_0))\vee \neg p(z,x_1) \vee p(x_0,s_0(x_0)) \vee s_1 = s_2 + s_2 \\
-		[\text{resolution 40,32}] &\{x_1\mapsto z\}& 	 p(x_0, s_4(x_0))\vee p(x_0,s_0(x_0)) \vee s_1 = s_2 + s_2 \\
-		[\text{resolution 41,29}] &\{x_0\mapsto s_3, x_1\mapsto s_0(s_3)\}& 	 p(x_0, s_4(x_0))\vee s_1 = s_2 + s_2 \\
-		[\text{superposition 42,30}] &\{x_1\mapsto s_2\}& 	p(x_0, s_4(x_0))\vee p(s(s_1),s_2)\\
-		[\text{resolution 43,28}] &\{x_3\mapsto s_2, x_5\mapsto x_1\}& 	 p(x_0, s_4(x_0))\vee\neg p(z,x_1) \vee p(x_0,s_0(x_0)) \\
-		[\text{resolution 44,32}] &\{x_1\mapsto z\}& 	 p(x_0, s_4(x_0))\vee p(x_0,s_0(x_0)) \\
-		[\text{resolution 45,29}] &\{x_0\mapsto s_3, x_1\mapsto s_0(s_3)\}& p(x_0, s_4(x_0))
-	\end{align}
-\end{landscape}
-
-
-\setcounter{equation}{0}
-\pagebreak
-\begin{landscape}
-	We propagate the substitutions
-	\begin{align}
-		[\text{input}] &&	\forall x_0 : z + x_0 = x_0 \\
-		[\text{input}] &&	\forall x_0, x_1 : s(x_0) + x_1 = s(x_0 + x_1) \\
-		[\text{input}] &&	\forall x_0, x_1 : x_0 + x_1 = x_1 + x_0 \\
-		[\text{input}] &&	\forall x_0, x_1 : (p(x_0,x_1) \Leftrightarrow (s(x_1 + x_1) = x_0 \vee x_1 + x_1 = x_0)) \\
-		[\text{input}] &&	(\forall x_0 : (\exists x_1 : p(x_0,x_1) \Rightarrow \exists x_1 : p(s(x_0),x_1)) \wedge \exists x_1 : p(z,x_1)) \Rightarrow \forall x_0 : \exists x_1 : p(x_0,x_1) \\
-		[\text{tautology}] &&	\forall x_0:\exists x_1:p(x_0, x_1)\vee \neg \forall x_0 : \exists x_1 : p(x_0,x_1) \\
-		[\text{rectify 5}] &&	(\forall x_0 : (\exists x_1 : p(x_0,x_1) \Rightarrow \exists x_2 : p(s(x_0),x_2)) \wedge \exists x_3 : p(z,x_3)) \Rightarrow \forall x_4 : \exists x_5 : p(x_4,x_5) \\
-		[\text{ennf transformation 7}]&&	\forall x_4 : \exists x_5 : p(x_4,x_5) \vee (\exists x_0 : (\forall x_2 : \neg p(s(x_0),x_2) \wedge \exists x_1 : p(x_0,x_1)) \vee \forall x_3 : \neg p(z,x_3))  \\
-		[\text{flattening 8}] &&	 \forall x_4 : \exists x_5 : p(x_4,x_5) \vee \exists x_0 : (\forall x_2 : \neg p(s(x_0),x_2) \wedge \exists x_1 : p(x_0,x_1)) \vee \forall x_3 : \neg p(z,x_3) \\
-		[\text{ennf transformation 6}] &&	 \exists x_0 : \forall x_1 : \neg p(x_0,x_1) \\
-		[\text{nnf transformation 4}] &&	 \forall x_0, x_1 : ((p(x_0,x_1) \vee (s(x_1 + x_1) \neq x_0 \wedge x_1 + x_1 \neq x_0)) \wedge ((s(x_1 + x_1) = x_0 \vee x_1 + x_1 = x_0) \vee \neg p(x_0,x_1))) \\
-		[\text{flattening 11}] &&	 \forall x_0, x_1 : ((p(x_0,x_1) \vee (s(x_1 + x_1) \neq x_0 \wedge x_1 + x_1 \neq x_0)) \wedge (s(x_1 + x_1) = x_0 \vee x_1 + x_1 = x_0 \vee \neg p(x_0,x_1))) \\
-		[\text{rectify 9}] &&	 \forall x_0 : \exists x_1 : p(x_0,x_1) \vee \exists x_2 : (\forall x_3 : \neg p(s(x_2),x_3) \wedge \exists x_4 : p(x_2,x_4)) \vee \forall x_5 : \neg p(z,x_5) \\
-		[\text{choice axiom}] &&	 \forall x_0 : (\exists x_1 : p(x_0,x_1) \Rightarrow p(x_0,s_0(x_0))) \\
-		[\text{choice axiom}] &&	 \exists x_2 : (\forall x_3 : \neg p(s(x_2),x_3) \wedge \exists x_4 : p(x_2,x_4)) \Rightarrow (\forall x_3 : \neg p(s(s_1),x_3) \wedge \exists x_4 : p(s_1,x_4)) \\
-		[\text{choice axiom}] &&	 \exists x_4 : p(s_1,x_4) \Rightarrow p(s_1,s_2) \\
-		[\text{skolemisation 13,16,15,14}] &&	 \forall x_0 : p(x_0,s_0(x_0)) \vee (\forall x_3 : \neg p(s(s_1),x_3) \wedge p(s_1,s_2)) \vee \forall x_5 : \neg p(z,x_5) \\
-		[\text{choice axiom}] &&	 \exists x_0 : \forall x_1 : \neg p(x_0,x_1) \Rightarrow \forall x_1 : \neg p(s_3,x_1) \\
-		[\text{choice axiom}] &&     \forall x_0(\exists x_1: p(x_0, x_1)\Rightarrow p(x_0, s_4(x_0)))\\
-		[\text{skolemisation 9,17,18}] &&	 \forall x_0: p(x_0, s_4(x_0))\vee\forall x_1 : \neg p(s_3,x_1) \\
-		[\text{cnf transformation 1}] &&	 z + z = z \\
-		[\text{cnf transformation 2}] &&	 s(x_1) + x_1 = s(x_1 + x_1) \\
-		[\text{cnf transformation 3}] &&	 x_1 + x_2 = x_1 + x_1 \\
-		[\text{cnf transformation 11}] &&	 \neg p(x_0,x_1) \vee x_1 + x_1 = x_0 \vee s(x_1 + x_1) = x_0 \\
-		[\text{cnf transformation 11}] &&	 p(x_0,z) \vee z + z \neq x_0 \\
-		[\text{cnf transformation 11}] &&	 p(x_0,x_1) \vee s(x_1 + x_1) \neq x_0
-	\end{align}
-	\begin{align}
-		[\text{cnf transformation 17}] &&	 \neg p(z,z) \vee p(s_1,s_2) \vee p(s_3,s_0(s_3)) \\
-		[\text{cnf transformation 17}] &&	 \neg p(s(s_1),x_3) \vee p(x_0,s_0(x_0)) \vee \neg p(z,x_5) \\
-		[\text{cnf transformation 20}] &&	 p(s_3, s_4(s_3))\vee\neg p(s_3,s_0(s_3)) \\
-		[\text{equality resolution 26}] &&	 p(s(x_1 + x_1),x_1) \\
-		[\text{equality resolution 25}] &&	 p(z + z, z) \\
-		[\text{superposition 31,21}] &\{\}&	 p(z,z) \\
-		[\text{superposition 22,23}] &\{\}&	 x_1 + s(x_1) = s(x_1+x_1) \\
-		[\text{superposition 31,22}] &\{\}&	 p(s(x_1+s(x_1)),s(x_1)) \\
-		[\text{forward demodulation 34,33}] &&	 p(s(s(x_1 + x_1)),s(x_1)) \\
-		[\text{resolution 27,32}] &\{\}&	 p(s_3,s_0(s_3)) \vee p(s_1,s_2) \\
-		[\text{resolution 36,29}] &\{\}&	 p(s_1, s_4(s_1))\vee p(s_1,s_2) \\
-		[\text{resolution 24,37}] &\{x_0\mapsto s_1, x_1\mapsto s_2\}& 	p(x_0, s_4(x_0))\vee s_1 = s(s_2 + s_2) \vee s_1 = s_2 + s_2 \\
-		[\text{superposition 25,38}] &\{x_0\mapsto s_1, x_1\mapsto s_2\}& 	 p(x_0, s_4(x_0))\vee p(s(s_1),s(s_2)) \vee s_1 = s_2 + s_2 \\
-		[\text{resolution 39,28}] &\{x_2\mapsto s(s_2), x_5\mapsto x_1\}& 	 p(x_0, s_4(x_0))\vee \neg p(z,x_1) \vee p(x_0,s_0(x_0)) \vee s_1 = s_2 + s_2 \\
-		[\text{resolution 40,32}] &\{x_1\mapsto z\}& 	 p(x_0, s_4(x_0))\vee p(x_0,s_0(x_0)) \vee s_1 = s_2 + s_2 \\
-		[\text{resolution 41,29}] &\{x_0\mapsto s_3, x_1\mapsto s_0(s_3)\}& 	 p(x_0, s_4(x_0))\vee s_1 = s_2 + s_2 \\
-		[\text{superposition 42,30}] &\{x_1\mapsto s_2\}& 	p(x_0, s_4(x_0))\vee p(s(s_1),s_2)\\
-		[\text{resolution 43,28}] &\{x_3\mapsto s_2, x_5\mapsto x_1\}& 	 p(x_0, s_4(x_0))\vee\neg p(z,x_1) \vee p(x_0,s_0(x_0)) \\
-		[\text{resolution 44,32}] &\{x_1\mapsto z\}& 	 p(x_0, s_4(x_0))\vee p(x_0,s_0(x_0)) \\
-		[\text{resolution 45,29}] &\{x_0\mapsto s_3, x_1\mapsto s_0(s_3)\}& p(x_0, s_4(x_0))
-	\end{align}
-\end{landscape}
-
-Then unification at 15 gives $s_1 = h\circ g\circ f$ and $s_0 = x_6$ and the final transformation gives: 
-
-
-\setcounter{equation}{0}
-\begin{align}
-	[\text{axiom}] && \forall x_0: p(x_0,f(x_0))\\
-	[\text{axiom}] && \forall x_0, x_1 : (p(x_0,x_1) \Rightarrow q(x_0,g(x_1)))\\
-	[\text{axiom}] && \forall x_0, x_1 : (q(x_0,x_1) \Rightarrow r(x_0,h(x_1)))\\
-	[\text{instantiation 1}] && p(x_6, f(x_6))\\
-	[\text{instantiation 2}] && p(x_6, f(x_6))\Rightarrow q(x_6,g(f(x_6))) \\
-	[\text{instantiation 3}] && q(x_6, g(f(x_6)))\Rightarrow r(x_6,h(g(f(x_6)))) \\
-	[\text{tautology}] && r(x_6, h(g(f(x_6))))\Rightarrow r(x_6,h(g(f(x_6))))\\
-	[\text{composition 6, 7}] &\{\}&q(x_6, g(f(x_6)))\Rightarrow r(x_6,h(g(f(x_6))))\\
-	[\text{composition 5, 8}] &\{\}&p(x_6,f(x_6))\Rightarrow r(x_6, h(g(f(x_6))))\\
-	[\text{composition 4, 9}] &\{\}&r(x_6, h(g(f(x_6))))
-\end{align}
 
 
 

@@ -1,107 +1,97 @@
-from dataclasses import dataclass
-from typing import Sequence
-from term import Term, Variable
+from ast import arguments
+from term import Term, Signature
 
-class Formula:  
-    def variables(self):
-        if type(self) == Atom:
-            vars = {}
-            for arg in self.arguments:
-                if vars:
-                    vars.update(arg.variables())
+from functools import reduce
+from typing import Dict, Set
+
+
+class Signature:
+    def __init__(self, atoms: Dict[str, int], connectors: Dict[str, int], quantifiers: Set[str], termType: type):
+        self._d = {**atoms, **connectors}
+        self.termType = termType
+        self.atoms = set(atoms.keys()) | {c for c, a in connectors.items() if a == 0}
+        self.connectors = {c for c, a in connectors.items() if a > 0}
+        self.quantifiers = quantifiers
+        self.symbols = self.connectors | self.atoms | self.quantifiers
+        self.arity = lambda x: self._d[x]
+
+    def __repr__(self):
+        return f"""
+        Atoms: {", ".join([f"{s}/{self.termArity(s)}" for s in self.atoms])}
+        Connectors: {", ".join([f"{s}/{self.formulaArity(s)}" for s in self.connectors])}
+        Quantifiers: {", ".join([f"{s}" for s in self.quantifiers])}
+        """
+
+    def __eq__(self, other) -> bool:
+        return self._d == other._d
+
+def Formula(sig: Signature):
+    class _Formula:
+        signature = sig
+        
+        def __init__(self, name: str, arguments = [], boundVariables = []):
+            if name in _Formula.signature.quantifiers:
+                self.name = name
+                self.boundVariables = boundVariables
+                self.arguments = arguments
+            else:
+                if name in _Formula.signature.atoms | _Formula.signature.connectors:
+                    assert len(arguments) == _Formula.signature.arity(name)
+                    assert all(type(arg) == _Formula.signature.termType if name in _Formula.signature.atoms else type(arg) == type(self) for arg in arguments) 
+                    self.name = name
+                    self.arguments = arguments
                 else:
-                    vars = arg.variables()
-            return vars
-        if type(self) in [Conjunction, Disjunction, Implication, Equivalence]:
-            vars = {}
-            for arg in self.arguments:
-                if vars:
-                    vars.update(arg.variables())
-                else:
-                    vars = arg.variables()
-            return vars
-        if type(self) == Negation:
-            return self.argument.variables()
-        if type(self) in [Forall, Exists]:
-            return self.formula.variables()
-        else:
-            return {}
-    
-    def substitute(self, d):
-        if type(self) == Atom:
-            return type(self)(name=self.name, arguments=[arg.substitute(d) for arg in self.arguments])
-        if type(self) in [Conjunction, Disjunction, Implication, Equivalence]:
-            return type(self)(arguments=[arg.substitute(d) for arg in self.arguments])
-        if type(self) == Negation:
-            return Negation(argument=self.argument.substitute(d))
-        if type(self) in [BTrue, BFalse]:
-            return self
-        if type(self) in [Forall, Exists]:
-            return type(self)(bound_variables=self.bound_variables, formula=self.formula.substitute({k : d[k] for k in d.keys() if k not in self.bound_variables}))
+                    assert len(arguments) == 0
+                    self.name = name
+                    self.arguments = []
 
-    def __str__(self):
-        if type(self) == Atom:
-            return self.name + '(' + ','.join(list(map(str, self.arguments))) +')'
-        if type(self) == Conjunction:
-            return '(' + ') & ('.join(list(map(str, self.arguments))) + ')'
-        if type(self) == Disjunction:
-            return '(' + ') | ('.join(list(map(str, self.arguments))) + ')'
-        if type(self) == Implication:
-            return '(' + ') => ('.join(list(map(str, self.arguments))) + ')'
-        if type(self) == Equivalence:
-            return '(' + ') <=> ('.join(list(map(str, self.arguments))) + ')'
-        if type(self) == Negation:
-            return '~(' + str(self.argument) + ')'
-        if type(self) == BTrue:
-            return 'True'
-        if type(self) == BFalse:
-            return 'False'
-        if type(self) == Forall:
-            return '! [' + ','.join(list(map(str, self.bound_variables))) + ']: ' + str(self.formula)
-        if type(self) == Exists:
-            return '! [' + ','.join(list(map(str, self.bound_variables))) + ']: ' + str(self.formula)
-
-@dataclass
-class Atom(Formula):
-    name : str
-    arguments : Sequence[Term]
+        def __repr__(self) -> str:
+            if self.name not in _Formula.signature.quantifiers:   
+                return self.name + (("(" + ", ".join(map(str, self.arguments)) + ")") if self.arguments else "")
+            else:
+                return self.name + (("[" + ", ".join(map(str, self.boundVariables)) + "]")if self.boundVariables else "") + (("(" + ", ".join(map(str, self.arguments)) + ")") if self.arguments else "")
 
 
-@dataclass
-class Conjunction(Formula):
-    arguments : Sequence[Formula]
+        def __eq__(self, other) -> bool:
+            return self.name == other.name and self.arguments == other.arguments
 
-@dataclass
-class Disjunction(Formula):
-    arguments : Sequence[Formula]
+        def __hash__(self) -> int:
+            return hash(repr(self))
 
-@dataclass
-class Implication(Formula):
-    arguments : Sequence[Formula]
+        def variables(self) -> set():
+            return reduce(lambda x, y: x | y, map(lambda arg: arg.variables(), self.arguments), set())
 
-@dataclass
-class Negation(Formula):
-    argument : Formula
+        def freeVariables(self) -> set():
+            if self.isQuantifierFree():
+                return self.variables()
+            if self.name in _Formula.signature.quantifiers:
+                return reduce(lambda x, y: x | y, map(lambda arg: arg.freeVariables(), self.arguments), set()) - set(self.boundVariables)
+            return reduce(lambda x, y: x | y, map(lambda arg: arg.freeVariables(), self.arguments), set())
+                
+        def isAtomic(self):
+            return self.name in _Formula.signature.atoms
 
-@dataclass
-class Equivalence(Formula):
-    arguments : Sequence[Formula]
+        def isQuantifierFree(self):
+            return (self.name not in _Formula.signature.quantifiers) and (all(arg.isQuantifierFree() for arg in self.arguments) if self.name in _Formula.signature.connectors else True)
 
+        def superformula(self, other):
+            return self == other or any([arg.superterm(other) for arg in self.arguments])
 
-@dataclass
-class BTrue(Formula):
-    pass
+        def subformula(self, other):
+            return other.superterm(self)
 
-@dataclass
-class BFalse(Formula):
-    pass
+        def substitute(self, d):
+            if self in d.keys():
+                return d[self]
+            else:
+                return _Formula(name=self.name, arguments=list(map(lambda x: x.substitute(d), self.arguments)))
 
-@dataclass
-class Forall(Formula):
-    bound_variables : Sequence[Variable]
-    formula : Formula = BTrue()
+        def mgu(self, other):
+            if self.name == other.name:
+                def f(s, x):
+                    t = x[0].substitute(s).mgu(x[1].substitute(s))
+                    return {**{k : v.substitute(t) for k, v in s.items()}, **t}
+                return reduce(f, zip(self.arguments, other.arguments), {})
+            return None
 
-@dataclass
-class Exists(Formula):
-    bound_variables : Sequence[Variable]
-    formula : Formula = BTrue()
+    return _Formula

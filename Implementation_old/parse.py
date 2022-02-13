@@ -1,6 +1,6 @@
 from parsimonious.grammar import Grammar, NodeVisitor
 from formula import Disjunction, Conjunction, Implication, Equivalence, Forall, Exists, Negation, Atom, BTrue, BFalse
-from term import Term, Variable, FunctionApplication, Constant
+from term import Variable, FunctionApplication, Constant
 
 
 proof = Grammar(
@@ -72,14 +72,14 @@ class ProofVisitor(NodeVisitor):
 
     def visit_forall(self, node, visited_children):
         _, vars, _, f = visited_children
-        return Forall(vars, f[0])
+        return Forall(vars, f)
 
     def visit_exists(self, node, visited_children):
         _, vars, _, f = visited_children
-        return Exists(vars, f[0])
+        return Exists(vars, f)
 
     def visit_negation(self, node, visited_children):
-        return Negation(visited_children[1][0])
+        return Negation(visited_children[1])
     
     def visit_atom(self, node, visited_children):
         return visited_children[0]

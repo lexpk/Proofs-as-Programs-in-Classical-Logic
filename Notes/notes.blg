@@ -5,44 +5,44 @@ Reallocating 'name_of_file' (item size: 1) to 4 items.
 The style file: acm.bst
 Reallocating 'name_of_file' (item size: 1) to 11 items.
 Database file #1: references.bib
-You've used 3 entries,
+You've used 5 entries,
             2253 wiz_defined-function locations,
-            551 strings with 4388 characters,
-and the built_in function-call counts, 930 in all, are:
-= -- 94
-> -- 31
+            570 strings with 4765 characters,
+and the built_in function-call counts, 1679 in all, are:
+= -- 168
+> -- 63
 < -- 0
-+ -- 13
-- -- 10
-* -- 68
-:= -- 155
-add.period$ -- 10
-call.type$ -- 3
-change.case$ -- 14
++ -- 25
+- -- 20
+* -- 126
+:= -- 272
+add.period$ -- 16
+call.type$ -- 5
+change.case$ -- 24
 chr.to.int$ -- 0
-cite$ -- 3
-duplicate$ -- 38
-empty$ -- 82
-format.name$ -- 10
-if$ -- 197
+cite$ -- 5
+duplicate$ -- 69
+empty$ -- 145
+format.name$ -- 20
+if$ -- 358
 int.to.chr$ -- 0
-int.to.str$ -- 3
-missing$ -- 3
-newline$ -- 18
-num.names$ -- 6
-pop$ -- 14
+int.to.str$ -- 5
+missing$ -- 5
+newline$ -- 28
+num.names$ -- 12
+pop$ -- 24
 preamble$ -- 1
-purify$ -- 11
+purify$ -- 19
 quote$ -- 0
-skip$ -- 23
+skip$ -- 44
 stack$ -- 0
-substring$ -- 53
-swap$ -- 10
+substring$ -- 103
+swap$ -- 20
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 12
+type$ -- 20
 warning$ -- 0
-while$ -- 11
-width$ -- 4
-write$ -- 33
+while$ -- 21
+width$ -- 6
+write$ -- 55
