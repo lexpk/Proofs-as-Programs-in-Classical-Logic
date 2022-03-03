@@ -8,21 +8,33 @@
 \usepackage{bussproofs}
 \usepackage[left=2.00cm, right=2.00cm, top=2.00cm,bottom=2.0cm]{geometry}
 \usepackage{pdflscape}
+\usepackage{xspace}
+\usepackage{todonotes}
+\usepackage{stackengine}
 
+\setlength\parindent{0pt}
 
-
+\theoremstyle{definition}
 \newtheorem{theorem}{Theorem}[section]
+\theoremstyle{definition}
 \newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
 \newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
 \newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
+\theoremstyle{definition}
 \newtheorem{example}[theorem]{Example}
 
 \newcommand{\llb}{\llbracket}
 \newcommand{\rrb}{\rrbracket}
 \newcommand{\blue}[1]{{\color{blue}#1}}
 \newcommand{\var}{\text{var}}
-
+\newcommand{\Gc}{\textbf{Gc}\xspace}
+\newcommand{\Gi}{\textbf{Gi}\xspace}
+\newcommand{\Res}{\textbf{Res}\xspace}
+\newcommand{\I}{\mathcal{I}}
 
 \author{Alexander Pluska}
 \title{Proofs as Programs in Classical Logic\\Notes}
@@ -60,7 +72,7 @@ Goal:
 
 \pagebreak
 
-To explain our approach let us first recall how resolution works and why it is effective for classical logic. In a nutshell the principle of resolution works as follows: From a set of formulas $A, B, C\dots$ obtain a set of sequents $A'_1\dots  A'_n\vdash A_1\dots A_n$, $B'_1\dots B'_n\vdash B_1\dots B_n$, $C'_1\dots C'_n\vdash C_1\dots C_n$ in which all occurring formulas are somehow simple. Then iteratively apply the resolution rule (and some other rules, but this is the crucial one), which is an analogon to cut, i.e.
+To exdefinition our approach let us first recall how resolution works and why it is effective for classical logic. In a nutshell the principle of resolution works as follows: From a set of formulas $A, B, C\dots$ obtain a set of sequents $A'_1\dots  A'_n\vdash A_1\dots A_n$, $B'_1\dots B'_n\vdash B_1\dots B_n$, $C'_1\dots C'_n\vdash C_1\dots C_n$ in which all occurring formulas are somehow simple. Then iteratively apply the resolution rule (and some other rules, but this is the crucial one), which is an analogon to cut, i.e.
 \begin{center}
 	\AxiomC{$A, \Gamma\vdash \Delta$}
 	\AxiomC{$\Gamma'\vdash A', \Delta'$}
@@ -69,7 +81,7 @@ To explain our approach let us first recall how resolution works and why it is e
 \end{center}
 where $\theta$ is the mgu of $A$ and $A'$, and by process of saturation (attempt to) obtain the empty Sequent.
 
-Now for classical logic we can simply interpret $A'_1,\dots  A'_n\vdash A_1,\dots, A_n$ as $\neg A'_1\vee\dots\vee\neg A'_n\vee A_1\vee\dots\vee A_n$. Furthermore we can normalize every formula such that each of the $A'_i, A_i$ is atomic. The resolution calculus is then immediately refutationally complete, i.e. if $A, B, C\dots $ are inconsistent there exists a successful resolution, giving a refutation of $A\wedge B\wedge C\dots$, which is classically equivalent to a proof of $B\wedge C\dots\rightarrow\neg A$. I.e. if we want to prove $B\wedge C\dots\rightarrow A$ we can simply preform resolution on $\neg A\wedge B\wedge C\dots$
+Now for classical logic we can simply interpret $A'_1,\dots  A'_n\vdash A_1,\dots, A_n$ as $\neg A'_1\vee\dots\vee\neg A'_n\vee A_1\vee\dots\vee A_n$. Furthermore we can normalize every formula such that each of the $A'_i, A_i$ is atomic. The resolution calculus is then immediately refutationally complete, i.e. if $A, B, C\dots $ are inconsistent there exists a successful resolution, giving a refutation of $A\wedge B\wedge C\dots$, which is classically equivalent to a proof of $B\wedge C\dots\rightarrow\neg A$. I.e. if we want to prove $B\wedge C\dots\rightarrow A$ we can simply perform resolution on $\neg A\wedge B\wedge C\dots$
 
 Now there are a number of hurdles in applying this strategy to intuitionistic logic, or to extract intuitionistic proof from classical resolution proofs. First and foremost is the non-existence of normal forms. In particular with the (intuitionally speaking) strict interpretation of $A'_1,\dots  A'_n\vdash A_1,\dots, A_n$ as $\neg A'_1\vee\dots\vee\neg A'_n\vee A_1\vee\dots\vee A_n$ we can hardly translate any formulas into such a form where the $A_i$ are atomic, or even literals. This can be remedied of course by interpreting $A'_1,\dots  A'_n\vdash A_1,\dots, A_n$ as $\neg(A'_1\wedge\dots\wedge A'_n\wedge(\neg A_1\vee\dots\vee \neg A_n))$, i.e. a double negation translation. But this brings us to the second problem: Even if our calculus is refutationally complete a refutation of $\neg A\wedge B\wedge C\dots$ does not give us a proof of $B\wedge C\dots\to A$ but rather $B\wedge C\dots\to \neg\neg A$. This problem is especially pronounced in the second interpretation of $\vdash$ where we are not even using $A$ but $\neg \neg A$.
 
@@ -482,9 +494,878 @@ Then unification at 15 gives $s_1 = h\circ g\circ f$ and $s_0 = x_6$ and the fin
 
 
 
-
-
 \pagebreak
+\newgeometry{left=3.00cm, right=3.00cm, top=3.00cm,bottom=3.0cm}
+\section{Preliminaries}
+
+\subsection{First-Order Logic}
+Since the details of syntax are a delicate concern for proof theory we will collect some important definitions and basic facts in this chapter. We define terms inductively for the sequent calculus as usual.
+
+\begin{definition}
+	A \textit{Signature} consists of
+	\begin{enumerate}
+		\item a finite set $S_f$ of function symbols $f_1, \dots, f_n$
+		\item a finite set $S_R$ of relation symbols $R_1,\dots, R_m$
+		\item  a function ar$: S_f\cup S_R\to \mathbb{N}$ assigning to each symbol its arity (possibly 0).
+	\end{enumerate}
+\end{definition}
+
+\noindent We will sometimes denote a Signature by $\{f_1/\text{ar}(f_1),\dots,f_n/\text{ar}(f_n), R_1/\text{ar}(R_1).\dots,R_m/\text{ar}(R_m)\}$.
+Fix a countably infinite collection of free variables $a, b, c\dots$ and bound variables $x, y, z\dots$. 
+Note that the following definitions could be simplified by not distinguishing between bound and free variables. However this has some other drawbacks and in particular when defining a sequent calculus for first-order logic having disjoint sets of bound and free variables is convenient.
+
+\begin{definition}
+	A \textit{Semiterm} is one of the following
+	\begin{enumerate}
+		\item A bound or free variable
+		\item $f(t_1, \dots, t_n)$ given semiterms $t_1,\dots,t_n$ and an $n$-ary function symbol $f$.
+	\end{enumerate}
+	A \textit{Term} is defined as above but without allowing bound variables. We denote the set of bound variables as $\mathcal{V}_b$, of free variables as $\mathcal{V}_f$ and the set of terms as $\mathcal{T}$.
+\end{definition}
+
+\begin{definition}
+	A \textit{Semiformula} is one of the following
+	\begin{enumerate}
+		\item $R(t_1, \dots, t_n), t_1 = t_2, \bot, \top$ given semiterms $t_1,\dots,t_n$ and an $n$-ary function symbol $R$.
+		\item $\forall x A, \exists x A, A\wedge B, A\vee B, A\to B$ given Semiformulas $A, B$ and a bound variable $x$.
+	\end{enumerate}
+	A \textit{Formula} is semiformula in which every occurrence of a bound variable is guarded by a quantifier. A formula created by the first rule is called \textit{atomic}.
+\end{definition}
+
+\begin{definition}
+	A \textit{Substitution} is a function $\sigma: \mathcal{V}_\text{f}\to\mathcal{T}$. For a semiterm $t$ we define $t\sigma$ as follows:
+	\begin{itemize}
+		\item $x\sigma = x$ for $x\in \mathcal{V}_b$
+		\item $a\sigma = \sigma(a)$ for $a\in \mathcal{V}_f$
+		\item $f(t_1,\dots,t_n)\sigma = f(t_1\sigma,\dots,t_n\sigma)$ for an $n$-ary function symbol $f$ and terms $t_1,\dots,t_n$.
+	\end{itemize}
+	Analogously we define $F\sigma$ for formulas $F$. Given free variables $a_1,\dots,a_n$ and terms $t_1,\dots,t_n$ we define a special substitution $[t_1/a_1,\dots,t_n/a_n]$ as $$\sigma(a) = \begin{cases}
+		t_i & \text{if } a = a_i \text{ for } i \in \{1\dots n\}\\
+		a & \text{else}
+	\end{cases}$$this notion can be naturally extended where $a_i$ are arbitrary terms.
+\end{definition}
+
+\subsubsection{Semantics}
+\begin{definition}
+	A $\Sigma$-\textit{Structure} $\mathcal{A}$ is a pair $(A, I)$ where
+	\begin{itemize}
+		\item $A$ is a non-empty set, called the carrier of $\mathcal{A}$
+		\item $I$ is a function that assigns
+		\begin{itemize}
+			\item to each $n$-ary $f\in S_f$ a function $I(f): A^n\to A$
+			\item to each $n$-ary $R\in S_R$ a relation $I(R)\subseteq A^n$.
+		\end{itemize}
+		we will usually write $f^\mathcal{A}, R^\mathcal{A}$ instead of $I(f), I(R)$.
+	\end{itemize}
+\end{definition}
+
+
+\begin{definition}
+	An \textit{Interpretation} is a pair $(\mathcal{A}, \beta)$ where $\mathcal{A}$ is a $\Sigma$-structure and $\beta :\mathcal{V}_f\to A$ is called the \textit{Valuation}. As usual we can extend $\beta$ to quantifier-free semi-terms. We denote this extension by $\I_\beta$ and write $\I$ for $\I_\beta$ where it is not confusing.
+	
+	For $a\in A, v\in \mathcal{V}_f$ and valuation $\beta$ we define $\beta[a/v]$ as
+	$$\beta[a/v](w) = \begin{cases}
+		v & \text{ if } v = w\\
+		w & \text{ else }
+	\end{cases}$$
+	and similarly $\I[a/v] = \langle \I, \beta[a/v]\rangle$.
+\end{definition}
+
+
+\begin{definition}We can now define the model relation $\I\models F$ for $\Sigma$-Formulas $F$:\\
+	\begin{tabular}{lcll}
+		$\I\models\top, \mathcal I\not\models\bot$ &&& always\\
+		$\I\models R(t_1,\dots t_n)$ & iff & $(\I(t_1),\dots,\I(t_n))\in R^\mathcal A$ & for $n$-ary $R\in S_R$ and terms $t_1\dots t_n$\\
+		$\I\models t_1 = t_2$ & iff & $\I(t_1)=\I(t_2)$ & for terms $t_1, t_2$\\
+		$\I\models \varphi\wedge\psi$ & iff & $\I\models \varphi$ and $\I\models \psi$ & \\
+		$\I\models \varphi\vee\psi$ & iff & $\I\models \varphi$ or $\I\models \psi$ & \\
+		$\I\models \varphi\to\psi$ & iff & $\I\models \varphi$ implies $\I\models \psi$ & \\
+		$\I\models \forall x\varphi$ & iff & $\I[a/v]\models\varphi[v/x]$ for all $a\in A$ & where $v$ is a new free variable\\
+		$\I\models \forall x\varphi$ & iff & $\I[a/v]\models\varphi[v/x]$ for some $a\in A$ & where $v$ is a new free variable\\
+		\end{tabular}
+	As usual for sets of formulas $\Phi$ we write $\I\models\Phi$ iff $\I\models\varphi$ for all $\varphi\in\Phi$. We say $\I$ \textit{models} $\Phi$ and $\Phi$ \textit{satisfies} $\I$. A set $\Phi$ is \textit{valid} iff it satisfies every interpretation.
+	
+	Furthermore we write $\Phi\models\varphi$ if every interpretation that satisfies $\Phi$ also satisfies $\varphi$ and say that $\varphi$ \textit{semantically follows} from $\Phi$.
+\end{definition}
+
+
+
+\begin{example}We now introduce our running example: Consider $\Sigma = \{f/1, P/2, Q/2\}$. We show that from $\forall x \exists y P(x, y)\wedge\forall x \forall y(P(x, y)\to Q(x, f(y)))$ follows $\forall x\exists yQ(x, y)$. Consider the following semantic argument: Suppose $\mathcal{I}\models \forall x \exists y P(x, y)\wedge\forall x \forall y(P(x, y)\to Q(x, f(y)))$. We want to show $\I\models\forall x\exists y(Q)$. Let $a\in A$. Then $\mathcal{I}\models \exists yP(a, y)$, i.e. there exists $b\in A$ such that $\I\models P(a, b)$. Furthermore $\I\models P(a, b)\to Q(a, f(b))$ and thus $\I\models Q(a, f(b))$ and finally $\I\models \exists y Q(a, y)$. Since $a$ was chosen arbitrarily at the start $\I\models\forall x\exists yQ(x,y)$. Therefore $\forall x \exists y P(x, y)\wedge\forall x \forall y(P(x, y)\to Q(x, f(y)))\models\forall x\exists yQ(x, y)$.
+\end{example}
+
+The following is a central theorem resulting from the above definitions
+
+\begin{theorem}[Deduction Theorem]
+$\{\varphi_1,\dots,\varphi_n\}\models\varphi$ iff $\models \varphi_1\to\dots\to\varphi_n\to\varphi$.
+\end{theorem}
+
+
+\subsubsection{Proof Theory}
+\begin{definition}
+   Pairs of multisets of formulas $A = \{A_1,\dots, A_n\}, B = \{B_1,\dots, B_m\}$ form a \textit{Sequent} $A\Rightarrow B$. Usually we will write $A_1,\dots, A_n\Rightarrow B_1,\dots, B_m$, note however that $A$ and $B$ are \textbf{not} to be interpreted as sequences but as multisets. For a substitution $\theta$ define $$(A_1,\dots, A_n\Rightarrow B_1,\dots, B_m)\theta = A_1\theta,\dots, A_n\theta\Rightarrow B_1\theta,\dots, B_m\theta.$$
+\end{definition}
+
+We define a sequent calculus very similar to that in~\cite[p.77]{basicprooftheory}. We have following inferences\\
+
+\begin{tabular}{lll}
+	\AxiomC{\hphantom{x}}
+	\RightLabel{Ax ($P$ atomic)}
+	\UnaryInfC{$P,\Gamma\Rightarrow \Delta, P$}
+	\DisplayProof&
+	\AxiomC{\hphantom{x}}
+	\RightLabel{L$\bot$}
+	\UnaryInfC{$\bot,\Gamma\Rightarrow\Delta$}
+	\DisplayProof&
+\\&&\\
+	\AxiomC{$A, B,\Gamma\Rightarrow\Delta$}
+	\RightLabel{L$\wedge$}
+	\UnaryInfC{$A\wedge B, \Gamma\Rightarrow \Delta$}
+	\DisplayProof&
+	\AxiomC{$\Gamma\Rightarrow\Delta, A$}
+	\AxiomC{$\Gamma\Rightarrow\Delta, B$}
+	\RightLabel{R$\wedge$}
+	\BinaryInfC{$\Gamma\Rightarrow \Delta, A\wedge B$}
+	\DisplayProof&
+\\&&\\
+	\AxiomC{$A, \Gamma\Rightarrow\Delta$}
+	\AxiomC{$B, \Gamma\Rightarrow\Delta$}
+	\RightLabel{L$\vee$}
+	\BinaryInfC{$A\vee B, \Gamma\Rightarrow \Delta$}
+	\DisplayProof&
+	\AxiomC{$\Gamma\Rightarrow\Delta, A, B$}
+	\RightLabel{R$\vee$}
+	\UnaryInfC{$\Gamma\Rightarrow \Delta, A\vee B$}
+	\DisplayProof&
+\\&&\\
+	\AxiomC{$A\to B, \Gamma\Rightarrow\Delta, A$}
+	\AxiomC{$B, \Gamma\Rightarrow\Delta$}
+	\RightLabel{L$\to$}
+	\BinaryInfC{$A\to B, \Gamma\Rightarrow \Delta$}
+	\DisplayProof&
+	\AxiomC{$A,\Gamma\Rightarrow\Delta, B$}
+	\RightLabel{R$\to$}
+	\UnaryInfC{$\Gamma\Rightarrow \Delta, A\to B$}
+	\DisplayProof&
+\\&&\\
+	\AxiomC{$\forall xA, A[t/x], \Gamma\Rightarrow\Delta$}
+	\RightLabel{L$\forall$}
+	\UnaryInfC{$\forall xA, \Gamma\Rightarrow \Delta$}
+	\DisplayProof&
+	\AxiomC{$\Gamma\Rightarrow\Delta, A[a/x]$}
+	\RightLabel{R$\forall$}
+	\UnaryInfC{$\Gamma\Rightarrow \Delta, \forall xA$}
+	\DisplayProof&
+\\&&\\
+	\AxiomC{$A[a/x], \Gamma\Rightarrow\Delta$}
+	\RightLabel{L$\exists$}
+	\UnaryInfC{$\exists xA, \Gamma\Rightarrow \Delta$}
+	\DisplayProof&
+	\AxiomC{$\Gamma\Rightarrow\Delta, A[t/x], \exists xA$}
+	\RightLabel{R$\exists$}
+	\UnaryInfC{$\Gamma\Rightarrow \Delta, \exists xA$}
+	\DisplayProof&
+\\&&\\
+	\AxiomC{$t = t, \Gamma\Rightarrow \Delta$}
+	\RightLabel{Ref}
+	\UnaryInfC{$\Gamma\Rightarrow \Delta$}
+	\DisplayProof&
+	\AxiomC{$s = t, P[s/x], P[t/x], \Gamma\Rightarrow \Delta$}
+	\RightLabel{Ref}
+	\UnaryInfC{$s = t, P[s/x],\Gamma\Rightarrow \Delta$}
+	\DisplayProof&
+\\&&\\
+\end{tabular}
+
+where in R$\forall$ and L$\exists$ $a$ is a free variable not occurring in the conclusion.
+
+The above rules make up the calculus called \textbf{Gc}. It corresponds to \textbf{G3c}$^=$ from~\cite{basicprooftheory}. 
+
+\begin{definition}
+	A \textit{Derivation} is a rooted finite labelled tree, in which each leaf is labelled with one of the two axiom rules and each other label is derived from the labels of the successor nodes in accordance to the rules above. The label of the root is called \textit{Head}. A formula that is the head of a derivation is said to be \textit{derivable}.
+\end{definition}
+
+\begin{example} We return to our running example and give a Derivation:\\
+	
+	\hspace{-1cm}
+	\AxiomC{}
+	\RightLabel{Ax}
+	\UnaryInfC{\scriptsize{\stackanchor{$P(a, b)\to Q(a, f(b)), \forall x\forall y(P(x, y)\to Q(x, f(y)))$}{$\forall x\exists yP(x, y), P(a, b), \forall y(P(a, y)\to Q(a, f(y)))$}$\Rightarrow$\stackanchor{$P(a, b), Q(a, f(b))$}{$\exists yQ(a, f(y))$}}}
+	\RightLabel{Ax}
+	\AxiomC{}
+	\UnaryInfC{\scriptsize{\stackanchor{$Q(a, f(b)), P(a, b), \forall y(P(a, y)\to Q(a, f(y)))$}{$\forall x\exists yP(x, y), \forall x\forall y(P(x, y)\to Q(x, f(y)))$}$\Rightarrow$\stackanchor{$Q(a, f(b))$}{$\exists yQ(a, f(y))$}}}
+	\RightLabel{L$\to$}
+	\BinaryInfC{\stackanchor{$\forall y(P(a, y)\to Q(a, f(y))), P(a, b)\to Q(a, f(b))$}{$ \forall x\exists yP(x, y), P(a, b), \forall x\forall y(P(x, y)\to Q(x, f(y))) $}$\Rightarrow Q(a, f(b)), \exists yQ(a, f(y))$}
+	\RightLabel{L$\forall$}
+	\UnaryInfC{\stackanchor{$\forall x\forall y(P(x, y)\to Q(x, f(y))), P(a, b)$}{$\forall y(P(a, y)\to Q(a, f(y))), \forall x\exists yP(x, y)$}$\Rightarrow Q(a, f(b)), \exists yQ(a, f(y))$}
+	\RightLabel{L$\forall$}
+	\UnaryInfC{$P(a, b),\forall x\exists yP(x, y), \forall x\forall y(P(x, y)\to Q(x, f(y)))\Rightarrow Q(a, f(b)), \exists yQ(a, f(y))$}
+	\RightLabel{R$\exists$}
+	\UnaryInfC{$P(a, b),\forall x\exists yP(x, y), \forall x\forall y(P(x, y)\to Q(x, f(y)))\Rightarrow \exists yQ(a, f(y))$}
+	\RightLabel{L$\exists$}
+	\UnaryInfC{$\exists yP(a, y),\forall x\exists yP(x, y), \forall x\forall y(P(x, y)\to Q(x, f(y)))\Rightarrow \exists yQ(a, f(y))$}
+	\RightLabel{L$\forall$}
+	\UnaryInfC{$\forall x\exists yP(x, y),\forall x\forall y(P(x, y)\to Q(x, f(y)))\Rightarrow \exists yQ(a, f(y))$}
+	\DisplayProof
+\end{example}
+
+The following is one of the fundamental results of first-order Logic:
+
+\begin{theorem}[Completeness theorem]
+	A sequent $\Phi\Rightarrow \varphi$ is derivable iff $\Phi\models \varphi$.
+\end{theorem}
+
+Since we are ultimately interested in program extraction we shall also define a calculus for intuitionistic logic. Usually this is done by restricting all sequents to a single Formula in the succedent and adjusting R$\vee$. Instead we remain with a multi-succedent system by adjusting R$\to$ and R$\forall$:\\
+
+\begin{center}
+	\AxiomC{$A, \Gamma\Rightarrow B$}
+	\RightLabel{R$\to$}
+	\UnaryInfC{$\Gamma\Rightarrow\Delta, A\to B$}
+	\DisplayProof\hspace{2cm}
+	\AxiomC{$\Gamma\Rightarrow A[a/x]$}
+	\RightLabel{R$\forall$}
+	\UnaryInfC{$\Gamma\Rightarrow\Delta, \forall xA$}
+	\DisplayProof
+\end{center}
+
+We call this modified calculus \Gi, it corresponds to \textbf{m-G3i}$^=$ from~\cite{basicprooftheory}. Note that any proof in \Gc is also a proof in \Gi and many proofs in \Gc are also valid in \Gi, such as the above example.
+
+\section{Resolution}
+
+Resolution systems usually consist of two parts: First formulas are transformed into a normal form, usually a disjunction of ground atoms, and then the obtained clause set is extended by process of saturation until the empty clause is found. The first step is usually part of the preprocessing and treated in passing. However from the perspective of constructive content normal from translation is crucial, when taken naively many of the steps are intuitionistically invalid, e.g. going from $A\to B$ to $\neg A\vee B$. Therefore we must give a comprehensive account of the normal form translation.
+
+\subsection{Normal Form Translation}
+
+\begin{tabular}{lll}
+	\AxiomC{$A\vee B, \Delta\Rightarrow \Gamma$}
+	\RightLabel{L$\vee$1}
+	\UnaryInfC{$A, \Delta\Rightarrow \Gamma$}
+	\DisplayProof&
+	\AxiomC{$A\vee B, \Delta\Rightarrow \Gamma$}
+	\RightLabel{L$\vee$2}
+	\UnaryInfC{$B, \Delta\Rightarrow \Gamma$}
+	\DisplayProof&
+	\AxiomC{$\Delta\Rightarrow \Gamma, A\vee B$}
+	\RightLabel{R$\vee$}
+	\UnaryInfC{$\Delta\Rightarrow \Gamma, A, B$}
+	\DisplayProof
+	\\&\\
+	\AxiomC{$A\wedge B, \Delta\Rightarrow \Gamma$}
+	\RightLabel{L$\wedge$}
+	\UnaryInfC{$A, B, \Delta\Rightarrow \Gamma$}
+	\DisplayProof&
+	\AxiomC{$\Delta\Rightarrow \Gamma, A\wedge B$}
+	\RightLabel{R$\vee$1}
+	\UnaryInfC{$\Delta\Rightarrow\Gamma, A$}
+	\DisplayProof&
+	\AxiomC{$\Delta\Rightarrow \Gamma, A\wedge B$}
+	\RightLabel{R$\vee$1}
+	\UnaryInfC{$\Delta\Rightarrow\Gamma, B$}
+	\DisplayProof
+	\\&\\
+	\AxiomC{$A\to B, \Delta\Rightarrow \Gamma$}
+	\RightLabel{L$\to$1}
+	\UnaryInfC{$B, \Delta\Rightarrow \Gamma$}
+	\DisplayProof&
+	\AxiomC{$A\to B,\Delta\Rightarrow \Gamma$}
+	\RightLabel{L$\to$2}
+	\UnaryInfC{$\Delta\Rightarrow\Gamma, A$}
+	\DisplayProof&
+	\AxiomC{$\Delta\Rightarrow \Gamma, A\to B$}
+	\RightLabel{R$\to$}
+	\UnaryInfC{$A, \Delta\Rightarrow\Gamma, B$}
+	\DisplayProof
+	\\&\\
+	\AxiomC{$\top, \Delta\Rightarrow \Gamma$}
+	\RightLabel{L$\top$}
+	\UnaryInfC{$\Delta\Rightarrow \Gamma$}
+	\DisplayProof&
+	\AxiomC{$\Delta\Rightarrow \Gamma, \bot$}
+	\RightLabel{R$\bot$}
+	\UnaryInfC{$\Delta\Rightarrow\Gamma$}
+	\DisplayProof&
+	\\&\\
+	\AxiomC{$\forall xA, \Delta\Rightarrow \Gamma$}
+	\RightLabel{L$\forall$}
+	\UnaryInfC{$A[s(a_1,\dots,a_n)/x], \Delta\Rightarrow \Gamma$}
+	\DisplayProof&
+	\AxiomC{$\Delta\Rightarrow \Gamma, \forall xA$}
+	\RightLabel{R$\forall$}
+	\UnaryInfC{$\Delta\Rightarrow\Gamma, A[a/x]$}
+	\DisplayProof&
+	\\&\\
+	\AxiomC{$\exists xA, \Delta\Rightarrow \Gamma$}
+	\RightLabel{L$\exists$}
+	\UnaryInfC{$A[a/x], \Delta\Rightarrow \Gamma$}
+	\DisplayProof&
+	\AxiomC{$\Delta\Rightarrow \Gamma, \exists xA$}
+	\RightLabel{R$\exists$}
+	\UnaryInfC{$\Delta\Rightarrow\Gamma, A[s(a_1,\dots,a_n)/x]$}
+	\DisplayProof&
+	\\&\\
+\end{tabular}
+	
+where $a_1,\dots,a_n$ are the free variables occurring in $A$ and $s$ is a new function symbol.
+
+\subsection{Unification}
+
+\begin{definition}
+	Let $A, B$ be formulas with disjoint sets of free variables occurring in them. A \textit{Unifier} of $A$ and $B$ is a substitution $\theta$ such that $A\theta = B\theta$, if a such a unifier exists $A, B$ are said to be \textit{unifiable}. A \textit{mgu} of most general unifier of $A$ and $B$ is a unifier $\theta$ such that for every other unifier $\theta'$ there exists a substitution $\tau$ such that $\tau\circ \theta = \theta'$.
+\end{definition}
+
+\begin{lemma}
+	If $A, B$ are unifiable there exists an mgu.
+\end{lemma}
+
+\subsection{Ground Resolution}
+The following rules are only to be applied to ground sequents.
+
+\begin{center}
+	\AxiomC{$\Delta\to \Gamma, A$}
+	\AxiomC{$B, \Delta'\to \Gamma'$}
+	\RightLabel{Res}
+	\BinaryInfC{$(\Delta, \Delta'\to \Gamma\cup\Gamma')\theta$}
+	\DisplayProof
+\end{center}
+where $\theta$ is an mgu of $A$ and $B$.
+
+\begin{center}
+	\AxiomC{$A, B,\Delta\to \Gamma$}
+	\RightLabel{LFac}
+	\UnaryInfC{$(A, \Delta\to\Gamma)\theta$}
+	\DisplayProof\hspace*{1cm}
+	\AxiomC{$\Delta\to \Gamma, A, B$}
+	\RightLabel{RFac}
+	\UnaryInfC{$(\Delta\to\Gamma, A)\theta$}
+	\DisplayProof
+\end{center}
+where $\theta$ is an mgu of $A$ and $B$.
+
+\begin{center}
+	\AxiomC{$\Delta\to\Gamma, l=r$}
+	\AxiomC{$L[s], \Delta'\to \Gamma'$}
+	\RightLabel{LSup}
+	\BinaryInfC{$(L[r],\Delta, \Delta'\to \Gamma,\Gamma')\theta$}
+	\DisplayProof\hspace*{1cm}
+	\AxiomC{$\Delta\to\Gamma, l=r$}
+	\AxiomC{$\Delta'\to \Gamma',L[s]$}
+	\RightLabel{RSup}
+	\BinaryInfC{$(\Delta, \Delta'\to \Gamma,\Gamma', L[r])\theta$}
+	\DisplayProof
+\end{center}
+where $\theta$ is an mgu of $l$ and $s$, $s$ is not a variable.
+
+\begin{center}
+	\AxiomC{$s= t,\Delta\to\Gamma$}
+	\RightLabel{eqRes}
+	\UnaryInfC{$(\Delta\to\Gamma)\theta$}
+	\DisplayProof
+\end{center}
+where $\theta$ is an mgu of $s$ and $t$.
+
+\begin{center}
+	\AxiomC{$\Gamma\to\Delta, s=t, s'=t'$}
+	\RightLabel{eqFac}
+	\UnaryInfC{$(t=t', \Delta\to\Gamma, s=t)\theta$}
+	\DisplayProof
+\end{center}
+where $\theta$ is an mgu of $s$ and $s'$.
+
+\begin{definition}
+	A \textit{Resolution Refutation} of a set of Sequents $\{A_1,\dots, A_n\}$ is a finite rooted tree whose roots are labelled with some $A_i$, the label of each other node follows from the labels of its children nodes by one of the normalization rules or the rules above, and the root is labelled with the empty sequent. A \textit{Resolution Proof} of $A_1,\dots,A_n\Rightarrow B_1,\dots,B_n$ is a resolution refutation of $\{\Rightarrow A_i\}\cup\{B_i\Rightarrow\}$.
+\end{definition}
+
+\begin{example}
+	Let's prove our running example.\\\\
+	\AxiomC{$\Rightarrow \forall x\exists y P(x, y)$}
+	\RightLabel{R$\forall$}
+	\UnaryInfC{$\Rightarrow\exists yP(a, y)$}
+	\RightLabel{R$\exists$}
+	\UnaryInfC{$\Rightarrow P(a, s_1(a))$}
+	\AxiomC{$\Rightarrow\forall x\forall y(P(x, y) \to Q(x, f(y)))$}
+	\RightLabel{R$\forall$}
+	\UnaryInfC{$\Rightarrow\forall y(P(b, y)\to Q(b, f(y)))$}
+	\RightLabel{R$\forall$}
+	\UnaryInfC{$\Rightarrow P(b, c)\to Q(b, f(c))$}
+	\RightLabel{R$\to$}
+	\UnaryInfC{$P(b, c)\Rightarrow Q(b, f(c))$}
+	\RightLabel{Res}
+	\BinaryInfC{$\Rightarrow Q(a, f(s_1(a)))$}
+	\AxiomC{$\forall x\exists y Q(x, y)\Rightarrow$}
+	\RightLabel{L$\forall$}
+	\UnaryInfC{$\exists y Q(s_2, y)\Rightarrow$}
+	\RightLabel{L$\exists$}
+	\UnaryInfC{$Q(s_2, b)\Rightarrow$}
+	\RightLabel{Res}
+	\BinaryInfC{$\vphantom{h}\Rightarrow$}
+	\DisplayProof
+\end{example}
+
+
+
+\begin{theorem}
+	\Res is refutationally complete, i.e. $\Phi\Rightarrow\varphi$ has a resolution proof iff $\Phi\models \varphi$.
+\end{theorem}
+
+\section{From \Res to \Gc}
+
+We now detail a transformation algorithm that takes Resolution proofs and transforms the into sequent calculus proofs. Note that at most of the intermediate steps the finite labeled tree will constitute a valid proof in neither \Res nor \Gc.
+
+At the bottom of this algorithm lies the observation that the normalization rules are (almost) dual to the rules of \Gc, and indeed we will construct the \Gc proof "upside down". A notable difference of \Res and \Gc is that in \Res it is possible that already assigned free variables are substituted with other terms. This does not happen in \Gc, so let us first eliminate all substitutions. To that end let us define substitution for (sub)trees via
+
+$$\left\lbrack
+	\AxiomC{$\mathcal{T}_1$}
+	\AxiomC{$\dots$}
+	\AxiomC{$\mathcal T_n$}
+	\TrinaryInfC{$S$}
+	\DisplayProof
+\right\rbrack\theta = 
+	\AxiomC{$\mathcal{T}_1\theta$}
+	\AxiomC{$\dots$}
+	\AxiomC{$\mathcal T_n\theta$}
+	\TrinaryInfC{$S\theta$}
+	\DisplayProof$$
+
+We can then eliminate all substitutions from a \Res tree by defining a function $f$ on finite labeled rooted trees\\
+
+\begin{tabular}{llr}
+$\mathfrak f_1\left(\AxiomC{$\mathcal T_1$}
+\AxiomC{$\mathcal T_2$}
+\RightLabel{Res}
+\BinaryInfC{$(\Delta, \Delta'\to \Gamma\cup\Gamma')\theta$}
+\DisplayProof\right)$&$=$&\AxiomC{$\mathfrak f_1(\mathcal T_1)\theta$}
+\AxiomC{$\mathfrak f_1(\mathcal T_2)\theta$}
+\RightLabel{Cut}
+\BinaryInfC{$(\Delta, \Delta'\to \Gamma\cup\Gamma')\theta$}
+\DisplayProof\\&&\\
+$\mathfrak f_1\left(\AxiomC{$\mathcal T$}
+\RightLabel{LFac}
+\UnaryInfC{$(A, \Delta\to\Gamma)\theta$}
+\DisplayProof\right)$&$=$&\AxiomC{$\mathfrak f_1(\mathcal T)\theta$}
+\RightLabel{LWeak}
+\UnaryInfC{$(A, \Delta\to\Gamma)\theta$}
+\DisplayProof\\&&\\
+$\mathfrak f_1\left(\AxiomC{$\mathcal T$}
+\RightLabel{RFac}
+\UnaryInfC{$(\Delta\to\Gamma, A)\theta$}
+\DisplayProof\right)$&$=$&\AxiomC{$\mathfrak f_1(\mathcal T)\theta$}
+\RightLabel{RWeak}
+\UnaryInfC{$(\Delta\to\Gamma, A)\theta$}
+\DisplayProof\\&&\\
+$\mathfrak f_1\left(\AxiomC{$\mathcal T$}
+\RightLabel{eqRes}
+\UnaryInfC{$(\Delta\to\Gamma)\theta$}
+\DisplayProof\right)$&$=$&$\mathfrak f_1(\mathcal T')\theta\hspace*{2.1cm}$
+\end{tabular}
+
+where in $\mathcal{T}'$ we remove $s=t$ in the antecedent of every sequent.
+
+
+\begin{lemma}
+	All applications of Cut, LWeak and RWeak in a such transformed Resolution tree are valid.
+\end{lemma}
+
+\begin{example} Let's perform this transformation on our example
+	\\\\
+	\AxiomC{$\Rightarrow \forall x\exists y P(x, y)$}
+	\RightLabel{R$\forall$}
+	\UnaryInfC{$\Rightarrow\exists yP(s_2, y)$}
+	\RightLabel{R$\exists$}
+	\UnaryInfC{$\Rightarrow P(s_2, s_1(s_2))$}
+	\AxiomC{$\Rightarrow\forall x\forall y(P(x, y) \to Q(x, f(y)))$}
+	\RightLabel{R$\forall$}
+	\UnaryInfC{$\Rightarrow\forall y(P(s_2, y)\to Q(s_2, f(y)))$}
+	\RightLabel{R$\forall$}
+	\UnaryInfC{$\Rightarrow P(s_2, s_1(s_2))\to Q(s_2, f(s_1(s_2)))$}
+	\RightLabel{R$\to$}
+	\UnaryInfC{$P(s_2, s_1(s_2))\Rightarrow Q(s_2, f(s_1(s_2)))$}
+	\RightLabel{Cut}
+	\BinaryInfC{$\Rightarrow Q(s_2, f(s_1(s_2)))$}
+	\AxiomC{$\forall x\exists y Q(x, y)\Rightarrow$}
+	\RightLabel{L$\forall$}
+	\UnaryInfC{$\exists y Q(s_2, y)\Rightarrow$}
+	\RightLabel{L$\exists$}
+	\UnaryInfC{$Q(s_2, f(s_1(s_2)))\Rightarrow$}
+	\RightLabel{Cut}
+	\BinaryInfC{$\vphantom{h}\Rightarrow$}
+	\DisplayProof
+\end{example}
+
+We observe of course that the applications of the qunatifier rules have become invalid in doing this.
+Now we are ready to give a definition of the transformation\\
+
+\newsavebox\InnerProofa
+\sbox\InnerProofa{
+	\AxiomC{$A_1\Rightarrow B_1$}\UnaryInfC{$\ddots$}
+	\AxiomC{$A_n\Rightarrow B_n$}\UnaryInfC{\reflectbox{$\ddots$}}
+	\noLine \BinaryInfC{\vphantom{T}}\UnaryInfC{\vphantom{T}$\Rightarrow$}\DisplayProof
+}
+
+\newsavebox\InnerProofba
+\sbox\InnerProofba{
+	\AxiomC{$\forall xA, \Delta\Rightarrow\Gamma$}\RightLabel{L$\forall$}\UnaryInfC{$A[t/x], \Delta\Rightarrow\Gamma$}\noLine\UnaryInfC{$\vdots$}
+	\noLine \UnaryInfC{\vphantom{T}}\UnaryInfC{\vphantom{T}$\Rightarrow$}\DisplayProof
+}
+\newsavebox\InnerProofbb
+\sbox\InnerProofbb{
+	\AxiomC{$A[t/x],\Delta\Rightarrow\Gamma$}\noLine\UnaryInfC{$\vdots$}
+	\noLine \UnaryInfC{\vphantom{T}}\UnaryInfC{\vphantom{T}$\Rightarrow$}\DisplayProof
+}
+\newsavebox\InnerProofca
+\sbox\InnerProofca{
+	\AxiomC{$\Delta\Rightarrow\Gamma, \forall xA$}\RightLabel{R$\forall$}\UnaryInfC{$\Delta\Rightarrow\Gamma, A[t/x]$}\noLine\UnaryInfC{$\vdots$}
+	\noLine \UnaryInfC{\vphantom{T}}\UnaryInfC{\vphantom{T}$\Rightarrow$}\DisplayProof
+}
+\newsavebox\InnerProofcb
+\sbox\InnerProofcb{
+	\AxiomC{$\Delta\Rightarrow\Gamma, A[t/x]$}\noLine\UnaryInfC{$\vdots$}
+	\noLine \UnaryInfC{\vphantom{T}}\UnaryInfC{\vphantom{T}$\Rightarrow$}\DisplayProof
+}
+\newsavebox\InnerProofda
+\sbox\InnerProofda{
+	\AxiomC{$\exists xA, \Delta\Rightarrow\Gamma$}\RightLabel{L$\exists$}\UnaryInfC{$A[t/x], \Delta\Rightarrow\Gamma$}\noLine\UnaryInfC{$\vdots$}
+	\noLine \UnaryInfC{\vphantom{T}}\UnaryInfC{\vphantom{T}$\Rightarrow$}\DisplayProof
+}
+\newsavebox\InnerProofdb
+\sbox\InnerProofdb{
+	\AxiomC{$A[t/x],\Delta\Rightarrow\Gamma$}\noLine\UnaryInfC{$\vdots$}
+	\noLine \UnaryInfC{\vphantom{T}}\UnaryInfC{\vphantom{T}$\Rightarrow$}\DisplayProof
+}
+\newsavebox\InnerProofea
+\sbox\InnerProofea{
+	\AxiomC{$\Delta\Rightarrow\Gamma, \exists xA$}\RightLabel{R$\exists$}\UnaryInfC{$\Delta\Rightarrow\Gamma, A[t/x]$}\noLine\UnaryInfC{$\vdots$}
+	\noLine \UnaryInfC{\vphantom{T}}\UnaryInfC{\vphantom{T}$\Rightarrow$}\DisplayProof
+}
+\newsavebox\InnerProofeb
+\sbox\InnerProofeb{
+	\AxiomC{$\Delta\Rightarrow\Gamma, A[t/x]$}\noLine\UnaryInfC{$\vdots$}
+	\noLine \UnaryInfC{\vphantom{T}}\UnaryInfC{\vphantom{T}$\Rightarrow$}\DisplayProof
+}
+\newsavebox\InnerProoffa
+\sbox\InnerProoffa{
+	\AxiomC{$A\to B,\Delta\Rightarrow\Gamma$}\RightLabel{L$\to$1}\UnaryInfC{$B, \Delta\Rightarrow\Gamma$}\noLine\UnaryInfC{$\vdots$}\AxiomC{$A\to B, \Delta\Rightarrow\Gamma$}\RightLabel{L$\to$2}\UnaryInfC{$\Delta\Rightarrow\Gamma, A$}\noLine\UnaryInfC{$\vdots$}
+	\noLine \BinaryInfC{\vphantom{T}}\UnaryInfC{\vphantom{T}$\Rightarrow$}\DisplayProof
+}
+\newsavebox\InnerProoffb
+\sbox\InnerProoffb{
+	\AxiomC{$B, \Delta\Rightarrow\Gamma$}\noLine\UnaryInfC{$\vdots$}
+	\AxiomC{$\Delta\Rightarrow\Gamma, A$}\noLine\UnaryInfC{$\vdots$}
+	\noLine \BinaryInfC{\vphantom{T}}\UnaryInfC{\vphantom{T}$\Rightarrow$}\DisplayProof
+}
+
+\newsavebox\InnerProofga
+\sbox\InnerProofga{
+	\AxiomC{$\Delta\Rightarrow\Gamma, A\to B$}\RightLabel{R$\to$}\UnaryInfC{$A, \Delta\Rightarrow\Gamma, B$}\noLine\UnaryInfC{$\vdots$}
+	\noLine \UnaryInfC{\vphantom{T}}\UnaryInfC{\vphantom{T}$\Rightarrow$}\DisplayProof
+}
+\newsavebox\InnerProofgb
+\sbox\InnerProofgb{
+	\AxiomC{$A, \Delta\Rightarrow\Gamma, B$}\noLine\UnaryInfC{$\vdots$}
+	\noLine \UnaryInfC{\vphantom{T}}\UnaryInfC{\vphantom{T}$\Rightarrow$}\DisplayProof
+}
+
+
+
+{\hspace*{-1cm}}
+\begin{tabular}{ccc}
+	$\mathfrak f_2\left(\usebox\InnerProofa\right)$& = &
+	$\mathfrak f_3\left(\usebox\InnerProofa, B_1\dots B_n\Rightarrow A_1\dots A_n\right)$\\&&\\
+	
+	
+	$\mathfrak f_3\left(\usebox\InnerProofba, \Gamma'\Rightarrow\Delta'\right)$& = &
+	\AxiomC{$\mathfrak f_3\left(\left(\usebox\InnerProofbb\right)[a/t],(\Gamma'\Rightarrow \Delta'\setminus\{\forall xA\}, A[a/x])\right)$}\RightLabel{R$\forall$}\UnaryInfC{$\Gamma'\Rightarrow \Delta'$}\DisplayProof\\\multicolumn{3}{l}{where $a$ is a new free variable, unless $t$ is a free variable, then $t = a$.}\\&&\\
+	
+	$\mathfrak f_3\left(\usebox\InnerProofca, \Gamma'\Rightarrow\Delta'\right)$& = &
+	\AxiomC{$\mathfrak f_3\left(\usebox\InnerProofcb, A[t/x], \Gamma'\Rightarrow \Delta' \right)$}\RightLabel{L$\forall$}\UnaryInfC{$\Gamma'\Rightarrow \Delta'$}\DisplayProof\\&&\\
+	
+	$\mathfrak f_3\left(\usebox\InnerProofda, \Gamma'\Rightarrow\Delta'\right)$& = &
+	\AxiomC{$\mathfrak f_3\left(\usebox\InnerProofdb, \Gamma'\Rightarrow \Delta', A[t/x]\right)$}\RightLabel{R$\exists$}\UnaryInfC{$\Gamma'\Rightarrow \Delta'$}\DisplayProof\\&&\\
+	
+	$\mathfrak f_3\left(\usebox\InnerProofea, \Gamma'\Rightarrow\Delta'\right)$& = &
+	\AxiomC{$\mathfrak f_3\left(\left(\usebox\InnerProofeb\right)[a/t], (A[a/x], \Gamma'\setminus\{\exists xA\}\Rightarrow \Delta')\right)$}\RightLabel{L$\exists$}\UnaryInfC{$\Gamma'\Rightarrow \Delta'$}\DisplayProof\\\multicolumn{3}{l}{where $a$ is a new free variable, unless $t$ is a free variable, then $t = a$.}\\&&\\
+\end{tabular}	
+	
+	$${\hspace*{-2.5cm}}\mathfrak f_3\left(\usebox\InnerProoffa, \Gamma'\Rightarrow\Delta'\right) = 
+	\AxiomC{$\mathfrak f_3\left(\usebox\InnerProoffb, A, \Gamma'\Rightarrow \Delta'\setminus\{A\to B\}, B\right)$}\RightLabel{R$\to$}\UnaryInfC{$\Gamma'\Rightarrow \Delta'$}\DisplayProof$$
+	
+	where the occurrence of one of the rules on the left is optional.
+
+
+	
+	$${\hspace*{-2.5cm}}\mathfrak f_3\left(\usebox\InnerProofga, \Gamma'\Rightarrow\Delta'\right)= 
+	\AxiomC{$\mathfrak f_3\left(\usebox\InnerProofgb, \Gamma'\Rightarrow \Delta', A\right)$}\AxiomC{$\mathfrak f_3\left(\usebox\InnerProofgb, B, \Gamma'\setminus\{A\to B\}\Rightarrow \Delta'\right)$}\RightLabel{L$\to$}\BinaryInfC{$\Gamma'\Rightarrow \Delta'$}\DisplayProof$$
+
+	And finally $\mathfrak f_3\left(T, \Gamma\Rightarrow\Delta\right) = \Gamma\Rightarrow\Delta$ if no more noramlization rules are left in $T$. (Note that so far $\mathfrak{f}_3$ does not technically determine a function since we have not specified which leaf to match on)
+
+Let's evaluate $\mathfrak f_2$ on our example:
+
+$$\mathfrak{f}_2\left(\AxiomC{$\Rightarrow \forall x\exists y P(x, y)$}
+\RightLabel{R$\forall$}
+\UnaryInfC{$\Rightarrow\exists yP(s_2, y)$}
+\RightLabel{R$\exists$}
+\UnaryInfC{$\Rightarrow P(s_2, s_1(s_2))$}
+\AxiomC{$\Rightarrow\forall x\forall y(P(x, y) \to Q(x, f(y)))$}
+\RightLabel{R$\forall$}
+\UnaryInfC{$\Rightarrow\forall y(P(s_2, y)\to Q(s_2, f(y)))$}
+\RightLabel{R$\forall$}
+\UnaryInfC{$\Rightarrow P(s_2, s_1(s_2))\to Q(s_2, f(s_1(s_2)))$}
+\RightLabel{R$\to$}
+\UnaryInfC{$P(s_2, s_1(s_2))\Rightarrow Q(s_2, f(s_1(s_2)))$}
+\RightLabel{Cut}
+\BinaryInfC{$\Rightarrow Q(s_2, f(s_1(s_2)))$}
+\AxiomC{$\forall x\exists y Q(x, y)\Rightarrow$}
+\RightLabel{L$\forall$}
+\UnaryInfC{$\exists y Q(s_2, y)\Rightarrow$}
+\RightLabel{L$\exists$}
+\UnaryInfC{$Q(s_2, f(s_1(s_2)))\Rightarrow$}
+\RightLabel{Cut}
+\BinaryInfC{$\vphantom{h}\Rightarrow$}
+\DisplayProof\right)=$$
+
+$$\mathfrak{f}_3\left(\begin{array}{l}\AxiomC{$\Rightarrow \forall x\exists y P(x, y)$}
+\RightLabel{R$\forall$}
+\UnaryInfC{$\Rightarrow\exists yP(a, y)$}
+\RightLabel{R$\exists$}
+\UnaryInfC{$\Rightarrow P(a, s_1(a))$}
+\AxiomC{$\Rightarrow\forall x\forall y(P(x, y) \to Q(x, f(y)))$}
+\RightLabel{R$\forall$}
+\UnaryInfC{$\Rightarrow\forall y(P(a, y)\to Q(a, f(y)))$}
+\RightLabel{R$\forall$}
+\UnaryInfC{$\Rightarrow P(a, s_1(a))\to Q(a, f(s_1(a)))$}
+\RightLabel{R$\to$}
+\UnaryInfC{$P(a, s_1(a))\Rightarrow Q(a, f(s_1(a)))$}
+\RightLabel{Cut}
+\BinaryInfC{$\Rightarrow Q(a, f(s_1(a)))$}
+\AxiomC{$\forall x\exists y Q(x, y)\Rightarrow$}
+\RightLabel{L$\forall$}
+\UnaryInfC{$\exists y Q(a, y)\Rightarrow$}
+\RightLabel{L$\exists$}
+\UnaryInfC{$Q(a, f(s_1(a)))\Rightarrow$}
+\RightLabel{Cut}
+\BinaryInfC{$\vphantom{h}\Rightarrow$}
+\DisplayProof\\\\\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))\Rightarrow \forall x\exists y Q(x, y)\end{array}\right)=$$
+\newsavebox\InnerProof
+\sbox\InnerProof{$\mathfrak{f}_3\left(\begin{array}{l}
+		\AxiomC{$\Rightarrow\exists yP(a, y)$}
+		\RightLabel{R$\exists$}
+		\UnaryInfC{$\Rightarrow P(a, s_1(a))$}
+		\AxiomC{$\Rightarrow\forall x\forall y(P(x, y) \to Q(x, f(y)))$}
+		\RightLabel{R$\forall$}
+		\UnaryInfC{$\Rightarrow\forall y(P(a, y)\to Q(a, f(y)))$}
+		\RightLabel{R$\forall$}
+		\UnaryInfC{$\Rightarrow P(a, s_1(a))\to Q(a, f(s_1(a)))$}
+		\RightLabel{R$\to$}
+		\UnaryInfC{$P(a, s_1(a))\Rightarrow Q(a, f(s_1(a)))$}
+		\RightLabel{Cut}
+		\BinaryInfC{$\Rightarrow Q(a, f(s_1(a)))$}
+		\AxiomC{$\forall x\exists y Q(x, y)\Rightarrow$}
+		\RightLabel{L$\forall$}
+		\UnaryInfC{$\exists y Q(a, y)\Rightarrow$}
+		\RightLabel{L$\exists$}
+		\UnaryInfC{$Q(a, f(s_1(a)))\Rightarrow$}
+		\RightLabel{Cut}
+		\BinaryInfC{$\vphantom{h}\Rightarrow$}
+		\DisplayProof\\\\\exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))\Rightarrow \forall x\exists y Q(x, y)\end{array}\right)$
+}
+$$\AxiomC{\usebox\InnerProof}\RightLabel{L$\forall$}\UnaryInfC{$\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))\Rightarrow \forall x\exists y Q(x, y)$}\DisplayProof=$$
+
+\newsavebox\InnerProoff
+\sbox\InnerProoff{$\mathfrak{f}_3\left(\begin{array}{l}
+		\AxiomC{$\Rightarrow P(a, s_1(a))$}
+		\AxiomC{$\Rightarrow\forall x\forall y(P(x, y) \to Q(x, f(y)))$}
+		\RightLabel{R$\forall$}
+		\UnaryInfC{$\Rightarrow\forall y(P(a, y)\to Q(a, f(y)))$}
+		\RightLabel{R$\forall$}
+		\UnaryInfC{$\Rightarrow P(a, s_1(a))\to Q(a, f(s_1(a)))$}
+		\RightLabel{R$\to$}
+		\UnaryInfC{$P(a, s_1(a))\Rightarrow Q(a, f(s_1(a)))$}
+		\RightLabel{Cut}
+		\BinaryInfC{$\Rightarrow Q(a, f(s_1(a)))$}
+		\AxiomC{$\forall x\exists y Q(x, y)\Rightarrow$}
+		\RightLabel{L$\forall$}
+		\UnaryInfC{$\exists y Q(a, y)\Rightarrow$}
+		\RightLabel{L$\exists$}
+		\UnaryInfC{$Q(a, f(s_1(a)))\Rightarrow$}
+		\RightLabel{Cut}
+		\BinaryInfC{$\vphantom{h}\Rightarrow$}
+		\DisplayProof\\\\P(a, s_1(a)), \exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))\Rightarrow \forall x\exists y Q(x, y)\end{array}\right)$
+}
+$$\AxiomC{\usebox\InnerProoff}\RightLabel{L$\exists$}\UnaryInfC{$\exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))\Rightarrow \forall x\exists y Q(x, y)$}\RightLabel{L$\forall$}\UnaryInfC{$\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))\Rightarrow \forall x\exists y Q(x, y)$}\DisplayProof=$$
+
+\newsavebox\InnerProofff
+\sbox\InnerProofff{$\mathfrak{f}_3\left(\begin{array}{l}
+		\AxiomC{$\Rightarrow P(a, s_1(a))$}
+		\AxiomC{$\Rightarrow\forall y(P(a, y)\to Q(a, f(y)))$}
+		\RightLabel{R$\forall$}
+		\UnaryInfC{$\Rightarrow P(a, s_1(a))\to Q(a, f(s_1(a)))$}
+		\RightLabel{R$\to$}
+		\UnaryInfC{$P(a, s_1(a))\Rightarrow Q(a, f(s_1(a)))$}
+		\RightLabel{Cut}
+		\BinaryInfC{$\Rightarrow Q(a, f(s_1(a)))$}
+		\AxiomC{$\forall x\exists y Q(x, y)\Rightarrow$}
+		\RightLabel{L$\forall$}
+		\UnaryInfC{$\exists y Q(a, y)\Rightarrow$}
+		\RightLabel{L$\exists$}
+		\UnaryInfC{$Q(a, f(s_1(a)))\Rightarrow$}
+		\RightLabel{Cut}
+		\BinaryInfC{$\vphantom{h}\Rightarrow$}
+		\DisplayProof\\\\\stackanchor{$\forall y(P(a, y)\to Q(a, f(y))), P(a, s_1(a))$}{$\exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))$}\Rightarrow \forall x\exists y Q(x, y)\end{array}\right)$
+}
+$$\AxiomC{\usebox\InnerProofff}\RightLabel{L$\forall$}\UnaryInfC{$P(a, s_1(a)), \exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))\Rightarrow \forall x\exists y Q(x, y)$}\RightLabel{L$\exists$}\UnaryInfC{$\exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))\Rightarrow \forall x\exists y Q(x, y)$}\RightLabel{L$\forall$}\UnaryInfC{$\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))\Rightarrow \forall x\exists y Q(x, y)$}\DisplayProof=$$
+
+\newsavebox\InnerProoffff
+\sbox\InnerProoffff{$\mathfrak{f}_3\left(\begin{array}{l}
+		\AxiomC{$\Rightarrow P(a, s_1(a))$}
+		\AxiomC{$\Rightarrow P(a, s_1(a))\to Q(a, f(s_1(a)))$}
+		\RightLabel{R$\to$}
+		\UnaryInfC{$P(a, s_1(a))\Rightarrow Q(a, f(s_1(a)))$}
+		\RightLabel{Cut}
+		\BinaryInfC{$\Rightarrow Q(a, f(s_1(a)))$}
+		\AxiomC{$\forall x\exists y Q(x, y)\Rightarrow$}
+		\RightLabel{L$\forall$}
+		\UnaryInfC{$\exists y Q(a, y)\Rightarrow$}
+		\RightLabel{L$\exists$}
+		\UnaryInfC{$Q(a, f(s_1(a)))\Rightarrow$}
+		\RightLabel{Cut}
+		\BinaryInfC{$\vphantom{h}\Rightarrow$}
+		\DisplayProof\\\\\stackanchor{$P(a, s_1(a))\to Q(a, f(s_1(a))),\forall y(P(a, y)\to Q(a, f(y))), P(a, s_1(a))$}{$\exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))$}\Rightarrow \forall x\exists y Q(x, y)\end{array}\right)$
+}
+$$\AxiomC{\usebox\InnerProoffff}\RightLabel{L$\forall$}\UnaryInfC{$\stackanchor{$P(a, s_1(a))\to Q(a, f(s_1(a))),\forall y(P(a, y)\to Q(a, f(y)))$}{$P(a, s_1(a)), \exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))$}\Rightarrow \forall x\exists y Q(x, y)$}\RightLabel{L$\forall$}\UnaryInfC{$P(a, s_1(a)), \exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))\Rightarrow \forall x\exists y Q(x, y)$}\RightLabel{L$\exists$}\UnaryInfC{$\exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))\Rightarrow \forall x\exists y Q(x, y)$}\RightLabel{L$\forall$}\UnaryInfC{$\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))\Rightarrow \forall x\exists y Q(x, y)$}\DisplayProof=$$
+
+\newsavebox\InnerProofffff
+\sbox\InnerProofffff{$\mathfrak{f}_3\left(\begin{array}{l}
+		\AxiomC{$\Rightarrow P(a, s_1(a))$}
+		\AxiomC{$P(a, s_1(a))\Rightarrow Q(a, f(s_1(a)))$}
+		\RightLabel{Cut}
+		\BinaryInfC{$\Rightarrow Q(a, f(s_1(a)))$}
+		\AxiomC{$\forall x\exists y Q(x, y)\Rightarrow$}
+		\RightLabel{L$\forall$}
+		\UnaryInfC{$\exists y Q(a, y)\Rightarrow$}
+		\RightLabel{L$\exists$}
+		\UnaryInfC{$Q(a, f(s_1(a)))\Rightarrow$}
+		\RightLabel{Cut}
+		\BinaryInfC{$\vphantom{h}\Rightarrow$}
+		\DisplayProof\\\\\stackanchor{$Q(a, f(s_1(a))), \forall y(P(a, y)\to Q(a, f(y))), P(a, s_1(a))$}{$\exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))$}\Rightarrow \forall x\exists y Q(x, y)\end{array}\right)$
+}
+$$\hspace*{-1.5cm}\AxiomC{$\mathfrak f_3(\dots)$}\AxiomC{\usebox\InnerProofffff}\RightLabel{L$\to$}\BinaryInfC{$\stackanchor{$P(a, s_1(a))\to Q(a, f(s_1(a))),\forall y(P(a, y)\to Q(a, f(y)))$}{$P(a, s_1(a)), \exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))$}\Rightarrow \forall x\exists y Q(x, y)$}\RightLabel{L$\forall$}\UnaryInfC{$\stackanchor{$\forall y(P(a, y)\to Q(a, f(y)))$}{$P(a, s_1(a)), \exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))$}\Rightarrow \forall x\exists y Q(x, y)$}\RightLabel{L$\forall$}\UnaryInfC{$P(a, s_1(a)), \exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))\Rightarrow \forall x\exists y Q(x, y)$}\RightLabel{L$\exists$}\UnaryInfC{$\exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))\Rightarrow \forall x\exists y Q(x, y)$}\RightLabel{L$\forall$}\UnaryInfC{$\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))\Rightarrow \forall x\exists y Q(x, y)$}\DisplayProof=$$
+
+\newsavebox\InnerProoffffff
+\sbox\InnerProoffffff{$\mathfrak{f}_3\left(\begin{array}{l}
+		\AxiomC{$\Rightarrow P(a, s_1(a))$}
+		\AxiomC{$P(a, s_1(a))\Rightarrow Q(a, f(s_1(a)))$}
+		\RightLabel{Cut}
+		\BinaryInfC{$\Rightarrow Q(a, f(s_1(a)))$}
+		\AxiomC{$\exists y Q(a, y)\Rightarrow$}
+		\RightLabel{L$\exists$}
+		\UnaryInfC{$Q(a, f(s_1(a)))\Rightarrow$}
+		\RightLabel{Cut}
+		\BinaryInfC{$\vphantom{h}\Rightarrow$}
+		\DisplayProof\\\\\stackanchor{$Q(a, f(s_1(a))), \forall y(P(a, y)\to Q(a, f(y))), P(a, s_1(a))$}{$\exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))$}\Rightarrow \exists y Q(a, y)\end{array}\right)$
+}
+$$\hspace*{-1.5cm}\AxiomC{$\mathfrak f_3(\dots)$}\AxiomC{\usebox\InnerProoffffff}\RightLabel{R$\forall$}\UnaryInfC{$\stackanchor{$Q(a, f(s_1(a))), \forall y(P(a, y)\to Q(a, f(y))), P(a, s_1(a))$}{$\exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))$}\Rightarrow \forall x\exists y Q(x, y)$}\RightLabel{L$\to$}\BinaryInfC{$\stackanchor{$P(a, s_1(a))\to Q(a, f(s_1(a))),\forall y(P(a, y)\to Q(a, f(y)))$}{$P(a, s_1(a)), \exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))$}\Rightarrow \forall x\exists y Q(x, y)$}\RightLabel{L$\forall$}\UnaryInfC{$\stackanchor{$\forall y(P(a, y)\to Q(a, f(y)))$}{$P(a, s_1(a)), \exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))$}\Rightarrow \forall x\exists y Q(x, y)$}\RightLabel{L$\forall$}\UnaryInfC{$P(a, s_1(a)), \exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))\Rightarrow \forall x\exists y Q(x, y)$}\RightLabel{L$\exists$}\UnaryInfC{$\exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))\Rightarrow \forall x\exists y Q(x, y)$}\RightLabel{L$\forall$}\UnaryInfC{$\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))\Rightarrow \forall x\exists y Q(x, y)$}\DisplayProof=$$
+
+
+\newsavebox\InnerProofffffff
+\sbox\InnerProofffffff{$\mathfrak{f}_3\left(\begin{array}{l}
+		\AxiomC{$\Rightarrow P(a, s_1(a))$}
+		\AxiomC{$P(a, s_1(a))\Rightarrow Q(a, f(s_1(a)))$}
+		\RightLabel{Cut}
+		\BinaryInfC{$\Rightarrow Q(a, f(s_1(a)))$}
+		\AxiomC{$Q(a, f(s_1(a)))\Rightarrow$}
+		\RightLabel{Cut}
+		\BinaryInfC{$\vphantom{h}\Rightarrow$}
+		\DisplayProof\\\\\stackanchor{$Q(a, f(s_1(a))), \forall y(P(a, y)\to Q(a, f(y))), P(a, s_1(a))$}{$\exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))$}\Rightarrow \exists y Q(a, y), Q(a, f(s_1(a)))\end{array}\right)$
+}
+$$\hspace*{-1.5cm}\AxiomC{$\mathfrak f_3(\dots)$}\AxiomC{\usebox\InnerProofffffff}\RightLabel{R$\exists$}\UnaryInfC{$\stackanchor{$Q(a, f(s_1(a))), \forall y(P(a, y)\to Q(a, f(y))), P(a, s_1(a))$}{$\exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))$}\Rightarrow \exists y Q(a, y)$}\RightLabel{R$\forall$}\UnaryInfC{$\stackanchor{$Q(a, f(s_1(a))), \forall y(P(a, y)\to Q(a, f(y))), P(a, s_1(a))$}{$\exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))$}\Rightarrow \forall x\exists y Q(x, y)$}\RightLabel{L$\to$}\BinaryInfC{$\stackanchor{$P(a, s_1(a))\to Q(a, f(s_1(a))),\forall y(P(a, y)\to Q(a, f(y)))$}{$P(a, s_1(a)), \exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))$}\Rightarrow \forall x\exists y Q(x, y)$}\RightLabel{L$\forall$}\UnaryInfC{$\stackanchor{$\forall y(P(a, y)\to Q(a, f(y)))$}{$P(a, s_1(a)), \exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))$}\Rightarrow \forall x\exists y Q(x, y)$}\RightLabel{L$\forall$}\UnaryInfC{$P(a, s_1(a)), \exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))\Rightarrow \forall x\exists y Q(x, y)$}\RightLabel{L$\exists$}\UnaryInfC{$\exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))\Rightarrow \forall x\exists y Q(x, y)$}\RightLabel{L$\forall$}\UnaryInfC{$\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))\Rightarrow \forall x\exists y Q(x, y)$}\DisplayProof=$$
+
+$$\AxiomC{$\mathfrak f_3(\dots)$}\AxiomC{$\stackanchor{$Q(a, f(s_1(a))), \forall y(P(a, y)\to Q(a, f(y))), P(a, s_1(a))$}{$\exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))$}\Rightarrow \exists y Q(a, y), Q(a, f(s_1(a)))$}\RightLabel{R$\exists$}\UnaryInfC{$\stackanchor{$Q(a, f(s_1(a))), \forall y(P(a, y)\to Q(a, f(y))), P(a, s_1(a))$}{$\exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))$}\Rightarrow \exists y Q(a, y)$}\RightLabel{R$\forall$}\UnaryInfC{$\stackanchor{$Q(a, f(s_1(a))), \forall y(P(a, y)\to Q(a, f(y))), P(a, s_1(a))$}{$\exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))$}\Rightarrow \forall x\exists y Q(x, y)$}\RightLabel{L$\to$}\BinaryInfC{$\stackanchor{$P(a, s_1(a))\to Q(a, f(s_1(a))),\forall y(P(a, y)\to Q(a, f(y)))$}{$P(a, s_1(a)), \exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))$}\Rightarrow \forall x\exists y Q(x, y)$}\RightLabel{L$\forall$}\UnaryInfC{$\stackanchor{$\forall y(P(a, y)\to Q(a, f(y)))$}{$P(a, s_1(a)), \exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))$}\Rightarrow \forall x\exists y Q(x, y)$}\RightLabel{L$\forall$}\UnaryInfC{$P(a, s_1(a)), \exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))\Rightarrow \forall x\exists y Q(x, y)$}\RightLabel{L$\exists$}\UnaryInfC{$\exists yP(a, y),\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))\Rightarrow \forall x\exists y Q(x, y)$}\RightLabel{L$\forall$}\UnaryInfC{$\forall x\exists y P(x, y),\forall x\forall y(P(x, y) \to Q(x, f(y)))\Rightarrow \forall x\exists y Q(x, y)$}\DisplayProof$$
+
+The left subtree is evaluated analogously giving us indeed a valid \Gc and even \Gi proof.
+
+\begin{lemma}[Correctness]
+	If $T$ is a valid Resolution proof then $\mathfrak{f}_2(\mathfrak{f}_1(T))$ is a valid \Gc proof.
+\end{lemma}
+
+Now the extracted proof is intuitionistically valid if for $\mathfrak{f}_2$ in the cases L$\to$ we have $\Delta' = A\to B$ and in L$\forall$ we have $\Delta' = \forall xA$. Note that this is however not even deterministic, since we have not specified which leaf to match on! Consider the resolution proof of the trivial $A\to B\Rightarrow A\to B$.
+$$
+\AxiomC{$\Rightarrow A\to B$}
+\RightLabel{R$\to$}
+\UnaryInfC{$A\Rightarrow B$}
+\AxiomC{$A\to B\Rightarrow$}
+\RightLabel{L$\to$1}
+\UnaryInfC{$B\Rightarrow$}
+\RightLabel{Res}
+\BinaryInfC{A$\Rightarrow$}
+\AxiomC{$A\to B\Rightarrow$}
+\RightLabel{L$\to$1}
+\UnaryInfC{$\Rightarrow A$}
+\RightLabel{Res}
+\BinaryInfC{$\Rightarrow$}
+\DisplayProof
+$$
+
+Then we can have
+
+$$\mathfrak{f_2}\left(\AxiomC{$\Rightarrow A\to B$}
+\RightLabel{R$\to$}
+\UnaryInfC{$A\Rightarrow B$}
+\AxiomC{$A\to B\Rightarrow$}
+\RightLabel{L$\to$1}
+\UnaryInfC{$B\Rightarrow$}
+\RightLabel{Res}
+\BinaryInfC{A$\Rightarrow$}
+\AxiomC{$A\to B\Rightarrow$}
+\RightLabel{L$\to$1}
+\UnaryInfC{$\Rightarrow A$}
+\RightLabel{Res}
+\BinaryInfC{$\Rightarrow$}
+\DisplayProof\right)$$ can be, if we match on L$\to$ first, the intuitionistically valid $$\AxiomC{$A\to B, A\Rightarrow B, A$}\AxiomC{$A, B\Rightarrow B$}\RightLabel{R$\to$}\BinaryInfC{$A\to B, A\Rightarrow B$}\RightLabel{L$\to$}\UnaryInfC{$A\to B\Rightarrow A\to B$}\DisplayProof$$
+or, if we match on R$\to$ first, the not intuitionistically valid $$\AxiomC{$A\to B, A\Rightarrow B, A$}\RightLabel{R$\to$}\UnaryInfC{$A\to B\Rightarrow A\to B, A$}\AxiomC{$A, B\Rightarrow B$}\RightLabel{R$\to$}\UnaryInfC{$B\Rightarrow A\to B$}\RightLabel{L$\to$}\BinaryInfC{$A\to B\Rightarrow A\to B$}\DisplayProof$$
+a
+\\
+
+Now towards the main result:
+\begin{definition}
+	A formula is \textit{relevant} if it can constructed by the following steps:
+	\begin{itemize}
+		\item $\bot$ is a relevant
+		\item If $B$ is relevant and $A$ is arbitrary $A\to B$ is relevant.
+		\item if $A$ is relevant then $\forall x A[x/a]$ is relevant.
+	\end{itemize}
+	it is \textit{irrelevant} if it is not relevant.
+\end{definition}
+
+Intuitively a relevant formula is a formula that ends in $\bot$.
+
+We can now by simultaneous induction define the notions of goal formulas and definite formulas
+
+\begin{definition}
+	A formula is a \textit{Goal Formula} if it can be constructed by the following steps:
+	\begin{itemize}
+		\item Any atomic formula is a goal formula
+		\item For a definite formula $D$, goal formula $G$, if $D$ is relevant or quantifier-free, $D\to G$ is a goal formula.
+		\item If $G$ is a goal formula then $\forall xG[x/a]$ is a goal formula.
+	\end{itemize}
+	A formula is a \textit{Definite Formula} if it can be constructed by the following steps:
+	\begin{itemize}
+		\item Any atomic formula is a definite formula
+		\item For a definite formula $D$, goal formula $G$, if $D$ is relevant or $G$ irrelevant, $G\to D$ is a definite formula.
+		\item If $D$ is a definite formula then $\forall xD[x/a]$ is a definite formula.
+	\end{itemize}
+\end{definition}
+
+\begin{theorem}
+	Let $D_1,\dots, D_n$ be definite formulas and $G$ a goal formula. If $D_1,\dots,D_n\Rightarrow G$ has a resolution proof then $D_1,\dots,D_n\Rightarrow G$ is provable in \Gi.
+\end{theorem}
+
+\begin{lemma}
+	Let $A_1,\dots, A_n\Rightarrow B_1, \dots, B_m$ be the label in the node of a resolution refutation of $\{\Rightarrow D_i\}\cup\{G\}$. Then each $A_i$ is a goal forumla and each $B_i$ is definite.
+\end{lemma}
+\begin{proof}
+	Induction.
+\end{proof}
+\pagebreak
+
+
 \bibliographystyle{acm}
 \bibliography{references}
 

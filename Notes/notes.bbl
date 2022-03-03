@@ -28,4 +28,9 @@
 \newblock Extracting information from resolution proof trees.
 \newblock {\em Artificial Intelligence 2}, 1 (1971), 27--54.
 
+\bibitem{basicprooftheory}
+{\sc Troelstra, A.~S., and Schwichtenberg, H.}
+\newblock {\em Basic proof theory}.
+\newblock No.~43. Cambridge University Press, 2000.
+
 \end{thebibliography}
