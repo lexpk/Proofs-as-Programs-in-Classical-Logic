@@ -12,6 +12,7 @@
 \usepackage{todonotes}
 \usepackage{stackengine}
 
+
 \setlength\parindent{0pt}
 
 \theoremstyle{definition}
@@ -344,7 +345,7 @@ We propagate the substitutions
 	[\text{resolution 17, 12}] &\{\}&r(x_6, s_1(x_6))
 \end{align}
 
-Then unification at 15 gives $s_1 = h\circ g\circ f$ and $s_0 = x_6$ and the final transformation gives: 
+Then unification at 15 gives $s_1 = h\circ g\circ f$ and $s_0 = x_6$ and the final transformation gives:
 
 
 \setcounter{equation}{0}
@@ -475,7 +476,7 @@ We propagate the substitutions
 	[\text{resolution 17, 12}] &\{\}&r(x_6, s_1(x_6))
 \end{align}
 
-Then unification at 15 gives $s_1 = h\circ g\circ f$ and $s_0 = x_6$ and the final transformation gives: 
+Then unification at 15 gives $s_1 = h\circ g\circ f$ and $s_0 = x_6$ and the final transformation gives:
 
 
 \setcounter{equation}{0}
@@ -511,7 +512,7 @@ Since the details of syntax are a delicate concern for proof theory we will coll
 \end{definition}
 
 \noindent We will sometimes denote a Signature by $\{f_1/\text{ar}(f_1),\dots,f_n/\text{ar}(f_n), R_1/\text{ar}(R_1).\dots,R_m/\text{ar}(R_m)\}$.
-Fix a countably infinite collection of free variables $a, b, c\dots$ and bound variables $x, y, z\dots$. 
+Fix a countably infinite collection of free variables $a, b, c\dots$ and bound variables $x, y, z\dots$.
 Note that the following definitions could be simplified by not distinguishing between bound and free variables. However this has some other drawbacks and in particular when defining a sequent calculus for first-order logic having disjoint sets of bound and free variables is convenient.
 
 \begin{definition}
@@ -678,7 +679,7 @@ We define a sequent calculus very similar to that in~\cite[p.77]{basicprooftheor
 
 where in R$\forall$ and L$\exists$ $a$ is a free variable not occurring in the conclusion.
 
-The above rules make up the calculus called \textbf{Gc}. It corresponds to \textbf{G3c}$^=$ from~\cite{basicprooftheory}. 
+The above rules make up the calculus called \textbf{Gc}. It corresponds to \textbf{G3c}$^=$ from~\cite{basicprooftheory}.
 
 \begin{definition}
 	A \textit{Derivation} is a rooted finite labelled tree, in which each leaf is labelled with one of the two axiom rules and each other label is derived from the labels of the successor nodes in accordance to the rules above. The label of the root is called \textit{Head}. A formula that is the head of a derivation is said to be \textit{derivable}.
@@ -918,7 +919,7 @@ $$\left\lbrack
 	\AxiomC{$\mathcal T_n$}
 	\TrinaryInfC{$S$}
 	\DisplayProof
-\right\rbrack\theta = 
+\right\rbrack\theta =
 	\AxiomC{$\mathcal{T}_1\theta$}
 	\AxiomC{$\dots$}
 	\AxiomC{$\mathcal T_n\theta$}
@@ -1084,14 +1085,14 @@ Now we are ready to give a definition of the transformation\\
 	\AxiomC{$\mathfrak f_3\left(\left(\usebox\InnerProofeb\right)[a/t], (A[a/x], \Gamma'\setminus\{\exists xA\}\Rightarrow \Delta')\right)$}\RightLabel{L$\exists$}\UnaryInfC{$\Gamma'\Rightarrow \Delta'$}\DisplayProof\\\multicolumn{3}{l}{where $a$ is a new free variable, unless $t$ is a free variable, then $t = a$.}\\&&\\
 \end{tabular}	
 	
-	$${\hspace*{-2.5cm}}\mathfrak f_3\left(\usebox\InnerProoffa, \Gamma'\Rightarrow\Delta'\right) = 
+	$${\hspace*{-2.5cm}}\mathfrak f_3\left(\usebox\InnerProoffa, \Gamma'\Rightarrow\Delta'\right) =
 	\AxiomC{$\mathfrak f_3\left(\usebox\InnerProoffb, A, \Gamma'\Rightarrow \Delta'\setminus\{A\to B\}, B\right)$}\RightLabel{R$\to$}\UnaryInfC{$\Gamma'\Rightarrow \Delta'$}\DisplayProof$$
 	
 	where the occurrence of one of the rules on the left is optional.
 
 
 	
-	$${\hspace*{-2.5cm}}\mathfrak f_3\left(\usebox\InnerProofga, \Gamma'\Rightarrow\Delta'\right)= 
+	$${\hspace*{-2.5cm}}\mathfrak f_3\left(\usebox\InnerProofga, \Gamma'\Rightarrow\Delta'\right)=
 	\AxiomC{$\mathfrak f_3\left(\usebox\InnerProofgb, \Gamma'\Rightarrow \Delta', A\right)$}\AxiomC{$\mathfrak f_3\left(\usebox\InnerProofgb, B, \Gamma'\setminus\{A\to B\}\Rightarrow \Delta'\right)$}\RightLabel{L$\to$}\BinaryInfC{$\Gamma'\Rightarrow \Delta'$}\DisplayProof$$
 
 	And finally $\mathfrak f_3\left(T, \Gamma\Rightarrow\Delta\right) = \Gamma\Rightarrow\Delta$ if no more noramlization rules are left in $T$. (Note that so far $\mathfrak{f}_3$ does not technically determine a function since we have not specified which leaf to match on)
@@ -1369,4 +1370,4 @@ We can now by simultaneous induction define the notions of goal formulas and def
 \bibliographystyle{acm}
 \bibliography{references}
 
-\end{document}
+\end{document} 
