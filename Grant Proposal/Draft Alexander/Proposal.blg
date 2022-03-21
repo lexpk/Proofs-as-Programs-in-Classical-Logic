@@ -1,0 +1,54 @@
+This is BibTeX, Version 0.99d
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: Proposal.aux
+Reallocating 'name_of_file' (item size: 1) to 4 items.
+The style file: acm.bst
+Reallocating 'name_of_file' (item size: 1) to 11 items.
+Database file #1: references.bib
+Warning--entry type for "Copilot1" isn't style-file defined
+--line 15 of file references.bib
+Warning--entry type for "CASC" isn't style-file defined
+--line 22 of file references.bib
+Warning--to sort, need author or key in CASC
+You've used 13 entries,
+            2253 wiz_defined-function locations,
+            620 strings with 6221 characters,
+and the built_in function-call counts, 5051 in all, are:
+= -- 484
+> -- 236
+< -- 0
++ -- 97
+- -- 82
+* -- 359
+:= -- 777
+add.period$ -- 39
+call.type$ -- 13
+change.case$ -- 76
+chr.to.int$ -- 0
+cite$ -- 14
+duplicate$ -- 209
+empty$ -- 419
+format.name$ -- 82
+if$ -- 1093
+int.to.chr$ -- 0
+int.to.str$ -- 13
+missing$ -- 11
+newline$ -- 67
+num.names$ -- 28
+pop$ -- 103
+preamble$ -- 1
+purify$ -- 63
+quote$ -- 0
+skip$ -- 155
+stack$ -- 0
+substring$ -- 304
+swap$ -- 71
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 52
+warning$ -- 1
+while$ -- 51
+width$ -- 15
+write$ -- 136
+(There were 3 warnings)

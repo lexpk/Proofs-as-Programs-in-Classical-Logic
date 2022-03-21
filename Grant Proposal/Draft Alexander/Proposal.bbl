@@ -1,0 +1,79 @@
+\begin{thebibliography}{10}
+
+\bibitem{CASC}
+{The CADE ATP System Competition}.
+\newblock http://www.tptp.org/CASC/.
+
+\bibitem{Codex1}
+{\sc Chen, M., Tworek, J., Jun, H., Yuan, Q., Pinto, H. P. d.~O., Kaplan, J.,
+  Edwards, H., Burda, Y., Joseph, N., Brockman, G., et~al.}
+\newblock {Evaluating large language models trained on code}.
+\newblock {\em arXiv preprint arXiv:2107.03374\/} (2021).
+
+\bibitem{HAPA}
+{\sc Friedman, H.}
+\newblock Classically and intuitionistically provably recursive functions.
+\newblock In {\em Higher Set Theory\/} (Berlin, Heidelberg, 1978), G.~H.
+  M{\"u}ller and D.~S. Scott, Eds., Springer Berlin Heidelberg, pp.~21--27.
+
+\bibitem{Copilot1}
+{\sc GitHub}.
+\newblock {Your AI pair programmer}, 2021.
+\newblock https://copilot.github.com/ accessed on 20.03.2022.
+
+\bibitem{Control1}
+{\sc Griffin, T.~G.}
+\newblock A formulae-as-type notion of control.
+\newblock In {\em Proceedings of the 17th ACM SIGPLAN-SIGACT symposium on
+  Principles of programming languages\/} (1989), pp.~47--58.
+
+\bibitem{CPS1}
+{\sc Groote, P.~d.}
+\newblock A cps-translation of the $\lambda$$\mu$-calculus.
+\newblock In {\em Colloquium on Trees in Algebra and Programming\/} (1994),
+  Springer, pp.~85--99.
+
+\bibitem{Vampire3}
+{\sc Hajd{\'u}, M., Hozzov{\'a}, P., Kov{\'a}cs, L., Schoisswohl, J., and
+  Voronkov, A.}
+\newblock {Induction with generalization in superposition reasoning}.
+\newblock In {\em International Conference on Intelligent Computer
+  Mathematics\/} (2020), Springer, pp.~123--137.
+
+\bibitem{Vampire2}
+{\sc Hozzov{\'a}, P., Kov{\'a}cs, L., and Voronkov, A.}
+\newblock Integer induction in saturation.
+\newblock In {\em Automated Deduction -- CADE 28\/} (Cham, 2021), A.~Platzer
+  and G.~Sutcliffe, Eds., Springer International Publishing, pp.~361--377.
+
+\bibitem{Friedman}
+{\sc Kohlenbach, U.}
+\newblock {The Friedman A-translation}.
+\newblock {\em Applied Proof Theory: Proof Interpretations and Their Use in
+  Mathematics\/} (2008), 273--277.
+
+\bibitem{Vampire1}
+{\sc Kov{\'{a}}cs, L., and Voronkov, A.}
+\newblock {First-Order Theorem Proving and Vampire}.
+\newblock In {\em Computer Aided Verification}. Springer Berlin Heidelberg,
+  2013, pp.~1--35.
+
+\bibitem{AlphaCode1}
+{\sc Li, Y., Choi, D., Chung, J., Kushman, N., Schrittwieser, J., Leblond, R.,
+  Eccles, T., Keeling, J., Gimeno, F., Lago, A.~D., et~al.}
+\newblock {Competition-Level Code Generation with AlphaCode}.
+\newblock {\em arXiv preprint arXiv:2203.07814\/} (2022).
+
+\bibitem{Parigot1}
+{\sc Parigot, M.}
+\newblock $\lambda$$\mu$-calculus: an algorithmic interpretation of classical
+  natural deduction.
+\newblock In {\em International Conference on Logic for Programming Artificial
+  Intelligence and Reasoning\/} (1992), Springer, pp.~190--201.
+
+\bibitem{E1}
+{\sc Schulz, S.}
+\newblock {E--a brainiac theorem prover}.
+\newblock {\em Ai Communications 15}, 2-3 (2002), 111--126.
+
+\end{thebibliography}

@@ -11,6 +11,9 @@
 \usepackage{xspace}
 \usepackage{todonotes}
 \usepackage{stackengine}
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+
 
 \setlength\parindent{0pt}
 
@@ -637,7 +640,7 @@ We define a sequent calculus very similar to that in~\cite[p.77]{basicprooftheor
 	\UnaryInfC{$\Gamma\Rightarrow \Delta, A\vee B$}
 	\DisplayProof&
 \\&&\\
-	\AxiomC{$A\to B, \Gamma\Rightarrow\Delta, A$}
+	\AxiomC{$\Gamma\Rightarrow\Delta, A$}
 	\AxiomC{$B, \Gamma\Rightarrow\Delta$}
 	\RightLabel{L$\to$}
 	\BinaryInfC{$A\to B, \Gamma\Rightarrow \Delta$}
@@ -647,7 +650,7 @@ We define a sequent calculus very similar to that in~\cite[p.77]{basicprooftheor
 	\UnaryInfC{$\Gamma\Rightarrow \Delta, A\to B$}
 	\DisplayProof&
 \\&&\\
-	\AxiomC{$\forall xA, A[t/x], \Gamma\Rightarrow\Delta$}
+	\AxiomC{$A[t/x], \Gamma\Rightarrow\Delta$}
 	\RightLabel{L$\forall$}
 	\UnaryInfC{$\forall xA, \Gamma\Rightarrow \Delta$}
 	\DisplayProof&
@@ -660,7 +663,7 @@ We define a sequent calculus very similar to that in~\cite[p.77]{basicprooftheor
 	\RightLabel{L$\exists$}
 	\UnaryInfC{$\exists xA, \Gamma\Rightarrow \Delta$}
 	\DisplayProof&
-	\AxiomC{$\Gamma\Rightarrow\Delta, A[t/x], \exists xA$}
+	\AxiomC{$\Gamma\Rightarrow\Delta, A[t/x]$}
 	\RightLabel{R$\exists$}
 	\UnaryInfC{$\Gamma\Rightarrow \Delta, \exists xA$}
 	\DisplayProof&
@@ -676,7 +679,7 @@ We define a sequent calculus very similar to that in~\cite[p.77]{basicprooftheor
 \\&&\\
 \end{tabular}
 
-where in R$\forall$ and L$\exists$ $a$ is a free variable not occurring in the conclusion.
+where in R$\forall$ and L$\exists$ $a$ is a free variable not occurring in the sequent otherwise.
 
 The above rules make up the calculus called \textbf{Gc}. It corresponds to \textbf{G3c}$^=$ from~\cite{basicprooftheory}. 
 
@@ -686,10 +689,10 @@ The above rules make up the calculus called \textbf{Gc}. It corresponds to \text
 
 \begin{example} We return to our running example and give a Derivation:\\
 	
-	\hspace{-1cm}
+	\hspace{-.5cm}
 	\AxiomC{}
 	\RightLabel{Ax}
-	\UnaryInfC{\scriptsize{\stackanchor{$P(a, b)\to Q(a, f(b)), \forall x\forall y(P(x, y)\to Q(x, f(y)))$}{$\forall x\exists yP(x, y), P(a, b), \forall y(P(a, y)\to Q(a, f(y)))$}$\Rightarrow$\stackanchor{$P(a, b), Q(a, f(b))$}{$\exists yQ(a, f(y))$}}}
+	\UnaryInfC{\scriptsize{\stackanchor{$\forall x\forall y(P(x, y)\to Q(x, f(y))), P(a, b)$}{$\forall x\exists yP(x, y), \forall y(P(a, y)\to Q(a, f(y)))$}$\Rightarrow$\stackanchor{$P(a, b), Q(a, f(b))$}{$\exists yQ(a, f(y))$}}}
 	\RightLabel{Ax}
 	\AxiomC{}
 	\UnaryInfC{\scriptsize{\stackanchor{$Q(a, f(b)), P(a, b), \forall y(P(a, y)\to Q(a, f(y)))$}{$\forall x\exists yP(x, y), \forall x\forall y(P(x, y)\to Q(x, f(y)))$}$\Rightarrow$\stackanchor{$Q(a, f(b))$}{$\exists yQ(a, f(y))$}}}
@@ -718,11 +721,11 @@ Since we are ultimately interested in program extraction we shall also define a 
 
 \begin{center}
 	\AxiomC{$A, \Gamma\Rightarrow B$}
-	\RightLabel{R$\to$}
+	\RightLabel{R$\to_1$}
 	\UnaryInfC{$\Gamma\Rightarrow\Delta, A\to B$}
 	\DisplayProof\hspace{2cm}
 	\AxiomC{$\Gamma\Rightarrow A[a/x]$}
-	\RightLabel{R$\forall$}
+	\RightLabel{R$\forall_1$}
 	\UnaryInfC{$\Gamma\Rightarrow\Delta, \forall xA$}
 	\DisplayProof
 \end{center}
@@ -1091,8 +1094,8 @@ Now we are ready to give a definition of the transformation\\
 
 
 	
-	$${\hspace*{-2.5cm}}\mathfrak f_3\left(\usebox\InnerProofga, \Gamma'\Rightarrow\Delta'\right)= 
-	\AxiomC{$\mathfrak f_3\left(\usebox\InnerProofgb, \Gamma'\Rightarrow \Delta', A\right)$}\AxiomC{$\mathfrak f_3\left(\usebox\InnerProofgb, B, \Gamma'\setminus\{A\to B\}\Rightarrow \Delta'\right)$}\RightLabel{L$\to$}\BinaryInfC{$\Gamma'\Rightarrow \Delta'$}\DisplayProof$$
+	$${\hspace*{-2.95cm}}\mathfrak f_3\left(\usebox\InnerProofga, \Gamma'\Rightarrow\Delta'\right)= 
+	\AxiomC{$\mathfrak f_3\left(\usebox\InnerProofgb, \Gamma'\setminus\{A\to B\}\Rightarrow \Delta', A\right)$}\AxiomC{$\mathfrak f_3\left(\usebox\InnerProofgb, B, \Gamma'\setminus\{A\to B\}\Rightarrow \Delta'\right)$}\RightLabel{L$\to$}\BinaryInfC{$\Gamma'\Rightarrow \Delta'$}\DisplayProof$$
 
 	And finally $\mathfrak f_3\left(T, \Gamma\Rightarrow\Delta\right) = \Gamma\Rightarrow\Delta$ if no more noramlization rules are left in $T$. (Note that so far $\mathfrak{f}_3$ does not technically determine a function since we have not specified which leaf to match on)
 
@@ -1320,50 +1323,85 @@ $$\mathfrak{f_2}\left(\AxiomC{$\Rightarrow A\to B$}
 \BinaryInfC{$\Rightarrow$}
 \DisplayProof\right)$$ can be, if we match on L$\to$ first, the intuitionistically valid $$\AxiomC{$A\to B, A\Rightarrow B, A$}\AxiomC{$A, B\Rightarrow B$}\RightLabel{R$\to$}\BinaryInfC{$A\to B, A\Rightarrow B$}\RightLabel{L$\to$}\UnaryInfC{$A\to B\Rightarrow A\to B$}\DisplayProof$$
 or, if we match on R$\to$ first, the not intuitionistically valid $$\AxiomC{$A\to B, A\Rightarrow B, A$}\RightLabel{R$\to$}\UnaryInfC{$A\to B\Rightarrow A\to B, A$}\AxiomC{$A, B\Rightarrow B$}\RightLabel{R$\to$}\UnaryInfC{$B\Rightarrow A\to B$}\RightLabel{L$\to$}\BinaryInfC{$A\to B\Rightarrow A\to B$}\DisplayProof$$
-a
 \\
 
-Now towards the main result:
-\begin{definition}
-	A formula is \textit{relevant} if it can constructed by the following steps:
-	\begin{itemize}
-		\item $\bot$ is a relevant
-		\item If $B$ is relevant and $A$ is arbitrary $A\to B$ is relevant.
-		\item if $A$ is relevant then $\forall x A[x/a]$ is relevant.
-	\end{itemize}
-	it is \textit{irrelevant} if it is not relevant.
-\end{definition}
+Now we may ask what structural conditions we have to impose on a sequent so that we can always extract an intuitionistic proof, i.e. every instance of R$\to$ and R$\to$ is a valid instance of R$\to_1$ and R$\forall_1$. 
 
-Intuitively a relevant formula is a formula that ends in $\bot$.
-
-We can now by simultaneous induction define the notions of goal formulas and definite formulas
+As usual we can associate with every sequent and formula a tree:
 
 \begin{definition}
-	A formula is a \textit{Goal Formula} if it can be constructed by the following steps:
+	A \textit{Formula Tree} is a labelled ordered rooted tree in which every node is labelled with a connector, quantifier or atom. We can define a function $\iota$ that transforms sequents and formulas into formula trees as follows:
 	\begin{itemize}
-		\item Any atomic formula is a goal formula
-		\item For a definite formula $D$, goal formula $G$, if $D$ is relevant or quantifier-free, $D\to G$ is a goal formula.
-		\item If $G$ is a goal formula then $\forall xG[x/a]$ is a goal formula.
-	\end{itemize}
-	A formula is a \textit{Definite Formula} if it can be constructed by the following steps:
-	\begin{itemize}
-		\item Any atomic formula is a definite formula
-		\item For a definite formula $D$, goal formula $G$, if $D$ is relevant or $G$ irrelevant, $G\to D$ is a definite formula.
-		\item If $D$ is a definite formula then $\forall xD[x/a]$ is a definite formula.
+		\item $\iota(A_1,\dots, A_n\Rightarrow B) = \iota(A_1,\dots, A_{n-1}\Rightarrow A_n\to B)$, $\iota(\Rightarrow B) = \iota(B)$
+		\item $\iota(A\square B) = $\tikz[scale=0.9, baseline=-5mm, thick]{\Tree [.$\square$ [.$\iota(A)$  ] [.$\iota(B)$  ] ]} for $\square\in\{\wedge,\vee,\to\}$.
+		\item $\iota(\square xA) = $\tikz[scale=0.9, baseline=-5mm, thick]{\Tree [.$\square x$ [.$\iota(A)$  ]]} for $\square\in\{\forall, \exists\}$.
+		\item $\iota(A) = A$ for $A$ atomic.
 	\end{itemize}
 \end{definition}
+
+\begin{definition}
+	To each node of a formula tree we assign a \textit{Polarity} as follows:
+	The polarity of the root node is $1$. If the label of a node with polarity $p$ is in $\{\wedge,\vee,\forall,\exists\}$ then the polarity of its children is also $p$. If the label of a node with polarity $p$ is $\to$ then then polarity of its left child is $-p$ and of its right child $p$.
+\end{definition}
+ We annotate the polarity of a node with a superscript $+$ or $-$.
+
+
+\begin{example}
+	For our running example $\forall x\exists yP(x, y), \forall x\forall y(P(x, y)\to Q(x, f(y)))\Rightarrow\forall x\exists Q(x, y)$ the associated formula tree is
+	\begin{center}
+		\begin{tikzpicture}
+			\Tree [.$\to^+$ [.$\to^-$  [.$\forall x^+$ [.$\exists y^+$ $P(x,y)^+$ ] ] [.$\exists x^-$ [.$\forall y^-$ [.$\to^-$ $P(x,y)^+$ $Q(x,f(x))^-$ ] ] ] ]  [.$\forall x^+$  [.$\exists y^+$ $Q(x,y)^+$ ] ] ]
+		\end{tikzpicture}
+	\end{center}
+\end{example}
+
+We can now give sufficient conditions for when an extracted proof will always be intuitionstic:
 
 \begin{theorem}
-	Let $D_1,\dots, D_n$ be definite formulas and $G$ a goal formula. If $D_1,\dots,D_n\Rightarrow G$ has a resolution proof then $D_1,\dots,D_n\Rightarrow G$ is provable in \Gi.
+	Suppose in the formula tree of $\varphi$ there is no occurrence of $\to^+$ or $\forall^+$ below $\to^-$ or $\vee^+$. Then for any resolution proof $\mathcal{T}$ of $\varphi$ the extracted \Gc proof $\mathfrak{f}_2(\mathcal{T})$ is a valid \Gi proof.\\
 \end{theorem}
 
-\begin{lemma}
-	Let $A_1,\dots, A_n\Rightarrow B_1, \dots, B_m$ be the label in the node of a resolution refutation of $\{\Rightarrow D_i\}\cup\{G\}$. Then each $A_i$ is a goal forumla and each $B_i$ is definite.
-\end{lemma}
-\begin{proof}
-	Induction.
-\end{proof}
+This is however quite restrictive. Even quite simple, intuitionistically valid sequents like $$(A\to A)\to A\Rightarrow A$$ or $$(A\to B)\to C, A\to B\Rightarrow C$$ are not covered by the above theorem.\\
+However by examining alternatives to rules R$\to_1$, R$\forall_1$ we can find more broadly applicable results.
+
+\subsection{$\Pi_2$ sentences in PA}
+
+\subsection{A refined algorithm}
+
+Consider the calculus \Gi' obtained from \Gi by replacing R$\to_1$ and R$\forall_1$ with the rules 
+\begin{center}
+	\AxiomC{$A, \Gamma\Rightarrow \Delta, B$}
+	\RightLabel{R$\to_2$}
+	\UnaryInfC{$\Gamma\Rightarrow\Delta, A\to B$}
+	\DisplayProof\hspace{2cm}
+	\AxiomC{$\Gamma\Rightarrow \Delta,A[a/x]$}
+	\RightLabel{R$\forall_2$}
+	\UnaryInfC{$\Gamma\Rightarrow\Delta, \forall xA$}
+	\DisplayProof
+\end{center}
+where the introductory axiom in the branch is not between atoms from $\Delta$ and $A$.
+
+In we analyse our reasoning for theorem 5.7 under this calculus we identify for each formula precisely the atoms we may not resolve with each other.
+
+Intuitively this corresponds to the fact that doubly negated atoms cannot resolve request.
+
 \pagebreak
+
+
+We now propose a translation procedure for formulas $\varphi$ such that $\varphi^\circ$ is provable by resolution iff $\varphi$ is valid in \Gi'. The key insight is that atoms that occur left below $\to^-$ may not be resolved with atoms that occur below only positive nodes and atoms that occur below an initial $\vee^+$ may not be resolved with atoms from the other branch of $\vee^+$:
+
+First rename every atom $P$ to $P^0$. Rename all atoms that do not occur below a $\to^-$ to $P^1$ and all positive atoms that occurr below only positive nodes to $P^{-1}$, these atoms are not affected by any further relabelling. If a node is labelled $\vee^+$ and every node above is positive relabel all atoms $P^i$ in the left branch to $P^{i+1}$ and in the right branch to $P^{i+2}$. The thus obtained formula we call $\varphi^\circ$ and for each atom $P$ we denote the maximum $i$ such that $P^i$ occurs in $\varphi^\circ$ with $\chi_P(\varphi)$.
+\begin{example}The sequent $(A\to A)\to A\Rightarrow A$ gets transformed to $(A^0\to A^0)\to A^1\Rightarrow A^1$, the sequent $(A\to \bot)\to \bot\Rightarrow A$ gets transformed to $(A^0\to \bot)\to\bot\Rightarrow A^1$.
+	
+\begin{theorem}
+	$\{P^i\to P^0\:|\:P \text{ atom in $\varphi$}, i\leq \chi_{P}(\varphi)\}\Rightarrow \varphi^\circ$ is provable by resolution iff $\varphi$ provable in \Gi'.
+\end{theorem}
+	
+
+	
+	
+\end{example}
+
 
 
 \bibliographystyle{acm}

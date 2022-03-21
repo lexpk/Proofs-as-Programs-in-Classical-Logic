@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.7) (preloaded format=pdflatex 2020.10.5)  3 MAR 2022 01:14
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.7) (preloaded format=pdflatex 2020.10.5)  21 MAR 2022 00:59
 entering extended mode
 **./notes.tex
 (notes.tex
@@ -614,13 +614,54 @@ sep char (CT)
 \@centerbox=\box74
 \c@ROWcellindex@=\count296
 )
-\c@theorem=\count297
+(E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/latex/tikz-qtree\tikz-qtree.st
+y (E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/latex/tikz-qtree\pgftree.sty
+
+(E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/latex/tikz-qtree\pgfsubpic.sty
+
+(E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/generic/tikz-qtree\pgfsubpic.t
+ex
+\pgf@subpicminx=\dimen282
+\pgf@subpicminy=\dimen283
+\pgf@subpicmaxx=\dimen284
+\pgf@subpicmaxy=\dimen285
+))
+(E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/generic/tikz-qtree\pgftree.tex
+\levelsep=\dimen286
+\subtreesep=\dimen287
+\smuggle@levelsep=\dimen288
+\smuggle@subtreesep=\dimen289
+\this@levelsep=\dimen290
+\this@subtreesep=\dimen291
+\pgftree@childx=\dimen292
+\pgftree@savechildx=\dimen293
+\pgftree@childy=\dimen294
+\pgftree@savechildy=\dimen295
+\pgftree@childi=\count297
+\pgftree@savechildi=\count298
+\pgftree@level=\count299
+\pgftree@depth=\dimen296
+\pgf@subpic@hbox@children=\box75
+\pgf@subpic@minx@children=\dimen297
+\pgf@subpic@miny@children=\dimen298
+\pgf@subpic@maxx@children=\dimen299
+\pgf@subpic@maxy@children=\dimen300
+\pgftree@lastchildx=\dimen301
+\pgftree@lastchildy=\dimen302
+))
+(E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/generic/tikz-qtree\tikz-qtree.
+tex
+\@result=\toks44
+\child@list=\toks45
+\root@node=\toks46
+))
+\c@theorem=\count300
 
 (E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdft
 ex.def
 File: l3backend-pdftex.def 2020-09-24 L3 backend support: PDF output (pdfTeX)
-\l__kernel_color_stack_int=\count298
-\l__pdf_internal_box=\box75
+\l__kernel_color_stack_int=\count301
+\l__pdf_internal_box=\box76
 )
 
 LaTeX Warning: Unused global option(s):
@@ -629,35 +670,35 @@ LaTeX Warning: Unused global option(s):
 (notes.aux)
 \openout1 = `notes.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 42.
-LaTeX Font Info:    ... okay on input line 42.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 42.
-LaTeX Font Info:    ... okay on input line 42.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 42.
-LaTeX Font Info:    ... okay on input line 42.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 42.
-LaTeX Font Info:    ... okay on input line 42.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 42.
-LaTeX Font Info:    ... okay on input line 42.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 42.
-LaTeX Font Info:    ... okay on input line 42.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 42.
-LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
 
 (E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mki
 i
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count299
-\scratchdimen=\dimen282
-\scratchbox=\box76
-\nofMPsegments=\count300
-\nofMParguments=\count301
-\everyMPshowfont=\toks44
-\MPscratchCnt=\count302
-\MPscratchDim=\dimen283
-\MPnumerator=\count303
-\makeMPintoPDFobject=\count304
-\everyMPtoPDFconversion=\toks45
+\scratchcounter=\count302
+\scratchdimen=\dimen303
+\scratchbox=\box77
+\nofMPsegments=\count303
+\nofMParguments=\count304
+\everyMPshowfont=\toks47
+\MPscratchCnt=\count305
+\MPscratchDim=\dimen304
+\MPnumerator=\count306
+\makeMPintoPDFobject=\count307
+\everyMPtoPDFconversion=\toks48
 )
 (E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-ba
 se.sty
@@ -699,38 +740,38 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 44.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 47.
 
 (E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 44.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 47.
 
 
 (E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Trying to load font information for U+wasy on input line 44
+LaTeX Font Info:    Trying to load font information for U+wasy on input line 47
 .
 
 (E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/latex/wasysym\uwasy.fd
 File: uwasy.fd 2020/01/19 v2.4 Wasy-2 symbol font definitions
 )
 LaTeX Font Info:    Trying to load font information for U+stmry on input line 4
-4.
+7.
 
 (E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/latex/stmaryrd\ustmry.fd)
 [1
 
 {C:/Users/Alex/AppData/Local/MiKTeX/pdftex/config/pdftex.map}]
-\myBox1=\box77
-\myScoreStart1=\dimen284
-\myCenter1=\dimen285
-\myScoreEnd1=\dimen286
-\myBox2=\box78
-\myScoreStart2=\dimen287
-\myCenter2=\dimen288
-\myScoreEnd2=\dimen289
+\myBox1=\box78
+\myScoreStart1=\dimen305
+\myCenter1=\dimen306
+\myScoreEnd1=\dimen307
+\myBox2=\box79
+\myScoreStart2=\dimen308
+\myCenter2=\dimen309
+\myScoreEnd2=\dimen310
  [2] [3]
 [4] [5] [6] [7] [8] [9] [10]
 *geometry* verbose mode - [ newgeometry ] result:
@@ -768,121 +809,126 @@ LaTeX Font Info:    Trying to load font information for U+stmry on input line 4
  [11
 
 ]
-Overfull \hbox (18.70021pt too wide) in paragraph at lines 575--587
+Overfull \hbox (18.70021pt too wide) in paragraph at lines 578--590
 [] \OT1/cmr/m/n/10 As usual
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 608--609
+Underfull \hbox (badness 10000) in paragraph at lines 611--612
 
  []
 
 [12]
-Underfull \hbox (badness 10000) in paragraph at lines 687--688
+Underfull \hbox (badness 10000) in paragraph at lines 690--691
 
  []
 
 
-Overfull \hbox (49.31291pt too wide) in paragraph at lines 689--709
+Overfull \hbox (25.36516pt too wide) in paragraph at lines 692--712
 []   [] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 717--718
+Underfull \hbox (badness 10000) in paragraph at lines 720--721
 
  []
 
 [13] [14]
-Underfull \hbox (badness 10000) in paragraph at lines 878--901
+Underfull \hbox (badness 10000) in paragraph at lines 881--904
 
  []
 
-\myBox3=\box79
-\myScoreStart3=\dimen290
-\myCenter3=\dimen291
-\myScoreEnd3=\dimen292
+\myBox3=\box80
+\myScoreStart3=\dimen311
+\myCenter3=\dimen312
+\myScoreEnd3=\dimen313
 
-Underfull \hbox (badness 10000) in paragraph at lines 928--929
+Underfull \hbox (badness 10000) in paragraph at lines 931--932
 
  []
 
-LaTeX Font Info:    Trying to load font information for U+euf on input line 931
+LaTeX Font Info:    Trying to load font information for U+euf on input line 934
 .
 (E:\Users\Alex\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\ueuf.fd
 File: ueuf.fd 2013/01/14 v3.01 Euler Fraktur
 )
 [15]
-Underfull \hbox (badness 10000) in paragraph at lines 967--991
+Underfull \hbox (badness 10000) in paragraph at lines 970--994
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 993--995
+Underfull \hbox (badness 10000) in paragraph at lines 996--998
 
  []
 
-\InnerProofa=\box80
-\InnerProofba=\box81
-\InnerProofbb=\box82
-\InnerProofca=\box83
-\InnerProofcb=\box84
-\InnerProofda=\box85
-\InnerProofdb=\box86
-\InnerProofea=\box87
-\InnerProofeb=\box88
-\InnerProoffa=\box89
-\InnerProoffb=\box90
-\InnerProofga=\box91
-\InnerProofgb=\box92
+\InnerProofa=\box81
+\InnerProofba=\box82
+\InnerProofbb=\box83
+\InnerProofca=\box84
+\InnerProofcb=\box85
+\InnerProofda=\box86
+\InnerProofdb=\box87
+\InnerProofea=\box88
+\InnerProofeb=\box89
+\InnerProoffa=\box90
+\InnerProoffb=\box91
+\InnerProofga=\box92
+\InnerProofgb=\box93
 
-Overfull \hbox (26.06546pt too wide) in paragraph at lines 1068--1086
+Overfull \hbox (26.06546pt too wide) in paragraph at lines 1071--1089
 []|  [] 
  []
 
 [16]
-Overfull \hbox (81.87749pt too wide) detected at line 1088
+Overfull \hbox (81.87749pt too wide) detected at line 1091
 []\U/euf/m/n/10 f[] [] \OT1/cmr/m/n/10 = []
  []
 
 
-Overfull \hbox (74.03351pt too wide) detected at line 1095
+Overfull \hbox (111.8165pt too wide) detected at line 1098
 []\U/euf/m/n/10 f[] [] \OT1/cmr/m/n/10 = []
  []
 
 
-Overfull \hbox (5.64597pt too wide) detected at line 1122
+Overfull \hbox (5.64597pt too wide) detected at line 1125
 \U/euf/m/n/10 f[] [] \OT1/cmr/m/n/10 =
  []
 
 [17]
-\InnerProof=\box93
+\InnerProof=\box94
 
-Overfull \hbox (10.68295pt too wide) detected at line 1169
+Overfull \hbox (10.68295pt too wide) detected at line 1172
 [] \OT1/cmr/m/n/10 =
  []
 
-\InnerProoff=\box94
-\InnerProofff=\box95
+\InnerProoff=\box95
+\InnerProofff=\box96
 [18]
-\InnerProoffff=\box96
-\InnerProofffff=\box97
-\InnerProoffffff=\box98
+\InnerProoffff=\box97
+\InnerProofffff=\box98
+\InnerProoffffff=\box99
  [19]
-\InnerProofffffff=\box99
+\InnerProofffffff=\box100
  [20]
-Underfull \hbox (badness 10000) in paragraph at lines 1322--1325
+Underfull \hbox (badness 10000) in paragraph at lines 1325--1327
 
  []
 
-[21] [22] (notes.bbl) [23] (notes.aux) ) 
+[21]
+Underfull \hbox (badness 10000) in paragraph at lines 1361--1362
+
+ []
+
+[22] [23] (notes.bbl) [24] (notes.aux) ) 
 Here is how much of TeX's memory you used:
- 15572 strings out of 480236
- 301409 string characters out of 2881034
- 600191 words of memory out of 3000000
- 31798 multiletter control sequences out of 15000+200000
- 547180 words of font info for 78 fonts, out of 3000000 for 9000
+ 16131 strings out of 480236
+ 312230 string characters out of 2881034
+ 612023 words of memory out of 3000000
+ 32340 multiletter control sequences out of 15000+200000
+ 547888 words of font info for 81 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 89i,14n,99p,1767b,255s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 89i,14n,99p,1767b,969s stack positions out of 5000i,500n,10000p,200000b,50000s
  <C:\Users\Alex\AppData\Local\MiKTeX\fo
 nts/pk/ljfour/jknappen/ec/dpi600\tcrm1000.pk><E:/Users/Alex/AppData/Local/Progr
 ams/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><E:/Users/Alex/AppData/Loc
@@ -896,16 +942,18 @@ msfonts/cm/cmr10.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/p
 ublic/amsfonts/cm/cmr12.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/
 type1/public/amsfonts/cm/cmr17.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX
 /fonts/type1/public/amsfonts/cm/cmr7.pfb><E:/Users/Alex/AppData/Local/Programs/
-MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><E:/Users/Alex/AppData/Local/P
-rograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><E:/Users/Alex/AppData/
-Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb><E:/Users/Alex/
-AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/euler/eufm10.pfb><E:/
-Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/euler/eufm
-7.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/
-symbols/msbm10.pfb>
-Output written on notes.pdf (23 pages, 265725 bytes).
+MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><E:/Users/Alex/AppData/Local/Pro
+grams/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><E:/Users/Alex/AppData/L
+ocal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><E:/Users/Alex/Ap
+pData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb><E:/Users
+/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/euler/eufm10.pf
+b><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/eule
+r/eufm7.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
+fonts/symbols/msam10.pfb><E:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/typ
+e1/public/amsfonts/symbols/msbm10.pfb>
+Output written on notes.pdf (24 pages, 287779 bytes).
 PDF statistics:
- 172 PDF objects out of 1000 (max. 8388607)
+ 183 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  109 words of extra memory for PDF output out of 10000 (max. 10000000)
 
