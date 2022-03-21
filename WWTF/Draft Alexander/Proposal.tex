@@ -18,28 +18,28 @@
 	
 	\section{Project summary}
 	
-	Program synthesis is a long-standing problem crossing many areas of computer science and mathematics including programming languages, artificial intelligence, formal methods and proof theory. There have been major advances in NLP (natural language processing) based program synthesis recently, most prominently DeeepMind's AlphaCode~\cite{AlphaCode1}, OpenAI's Codex~\cite{Codex1} and Github's Copilot~\cite{Copilot1}.
+	Program synthesis is a long-standing problem crossing many areas of computer science and mathematics including programming languages, artificial intelligence, formal methods and proof theory. There have been major advances in NLP (natural language processing) based program synthesis recently, most prominently DeeepMind's AlphaCode, OpenAI's Codex and Github's Copilot.
 	
 	However a major drawback of such an approach is that there is little control over the generated code leaving us with no guarantees for reliability or security of the resulting programs.
 	
-	Another route to program synthesis is offered through the Curry-Howard correspondence. Exploiting the equivalence of proofs in intuitionistic logic and functional programs allows us to reduce the problem of synthesising a program satisfying a specification into proving its validity. The added benefit of this approach is that a program generated from such a proof is guaranteed to be correct. From the perspective of formal methods there are benefits as well. At the moment creating a verified program requires both writing specification and code. Being able to automate the latter step would save considerable overhead.
+	Another route to program synthesis is offered through the Curry-Howard correspondence. Exploiting the equivalence of proofs in intuitionistic logic and functional programs allows us to reduce the problem of synthesising a program satisfying a specification into proving the validity of said specification. The added benefit of this approach is that a program generated from such a proof is guaranteed to be correct.
 	
-	However automated theorem proving in intuitionistic logic is notoriously difficult in particular due to the absence of convenient normal forms. Most state of the art theorem provers like Vampire~\cite{Vampire1} and E~\cite{E1} use resolution which is a great technique for automation but inherently non-intuitionistic in that it requires the formulas to be transformed into conjunctive normal form and works through refutation of the negated formula, which is not  intuitionistically sufficient for a proof of validity.
+	However automated theorem proving in intuitionistic logic is notoriously difficult in particular due to the absence of convenient normal forms. Most state of the art provers use techniques which are inherently non-intuitionistic.
 	
 	The goal of this project is to establish when and to what degree theorem provers based on classical logic can still be utilized, allowing us to leverage the simplicity of resolution to synthesize programs, and to then implement a functionality to this end on top of the Vampire theorem prover.
 	
 	
 	\section{Introduction, background and state of the art}	
 	
-	Program synthesis in the sense of this project is concerned with generating a program that satisfies a specification given in FOL (first order logic). Instead of directly generating a program however we obtain it via the Curry-Howard correspondence from a proof of the validity of the specification. Such a program will always be valid.
+	Program synthesis in the sense of this project is concerned with generating a program that satisfies a specification given in FOL (first order logic). Instead of directly generating a program however we obtain it via the Curry-Howard correspondence from a proof of the validity of the specification. Such a program will always satisfy the specification.
 	
 	Cutting edge theorem provers like Vampire~\cite{Vampire1} and E~\cite{E1} have advanced to a point where they can already fully automatically prove many specifications~\cite{CASC} and are ready to be used in practical systems, in particular when provided with hints. With recent development to inductive reasoning~\cite{Vampire2}\cite{Vampire3} we can expect that more and more specifications will be provable in the future.
 	
-	However for the Curry-Howard correspondence to apply the initial proof has to be valid in intuitionistic logic but state-of-the-art theorem provers utilize resolution which is an inherently classical techniques. There are 2 approaches  present in literature that can help to remedy this fact.
+	However for the Curry-Howard correspondence to apply the initial proof has to be valid in intuitionistic logic but state-of-the-art theorem provers utilize resolution which is an inherently classical technique. There are 2 approaches  present in literature that can help to remedy this.
 	
 	On the one hand the Curry-Howard correspondence can be extended to classical logic using control operators~\cite{Control1}, Parigot's $\lambda\mu$-Calculus~\cite{Parigot1} or CPS-translation~\cite{CPS1}. However in this process we must in general give up on some desirable properties, at the very least realizability of $\vee$ and $\exists$, i.e. a proof of $\exists xP(x)$ will not necessarily give us an $x$ such that $P(x)$ and a proof of $A\vee B$ might give us neither a proof of $A$ nor a proof of $B$.
 	
-	On the other hand in certain regimes it is possible to transform a classical proof into an intuitionistic one, e.g. proofs of $\Pi_2$ sentences in Peano Arithmetic~\cite{HAPA}, via Friedman's Translation or similar methods.~\cite{Friedman} This approach has been examined in different small-scale settings and would have to be adapted for a general setting.
+	On the other hand in certain regimes it is possible to transform a classical proof into an intuitionistic one, e.g. proofs of $\Pi_2$ sentences in Peano Arithmetic~\cite{HAPA}, via Friedman's Translation or similar methods.~\cite{Friedman} This approach has been examined in different model settings and would have to be adapted and extended for our general problem.
 	
 	Finally we suggest a third approach which has not been covered in literature yet, that is to pass a modified formula to the classical prover which can give us additional information about what an intuitionistic proof can look like.
 	
@@ -70,7 +70,7 @@
 	
 	\section{Potential to span across disciplines and to build bridges to application fields}
 	
-	\bibliographystyle{acm}
+	\bibliographystyle{plain}
 	\bibliography{references}
 	
 \end{document}
