@@ -1,6 +1,7 @@
 \documentclass[a4paper,12pt]{article}
 \begin{document}
-\title{WWTF ICT 2022}
+\title{Leveraging The Progress in Automated Theorem Proving for Automated Program Synthesis\\\\
+\small{WWTF ICT 2022}}
 \author{Florian Zuleger and Alexander Pluska}
 \date{\today}
 \maketitle
@@ -9,7 +10,8 @@
   %Project Summary/Abstract (max. 1500 characters)
   %
   %Please provide an overall project summary. Clearly state the research question and the aims of the team. Describe the most innovative aspects of your proposal, and its potential relevance and impact.
-  tba
+
+
 \end{abstract}
 
 
@@ -17,16 +19,36 @@
 
 \section{Introduction, background and state of the art (max. 2500 characters)}
 %What is the topic and broad background of this research project? What is the state of the art in this field?
+Programs are usually first written and then tested/verified.
+In contrast, program synthesis allows a system developer to derive a program in one step.
+At the same time, program synthesis holds the promise of freeing the programmer from low-level details and of enabling the programmer to focus on the high-level intent.
+Program synthesis is a long-standing problem that crosses many areas of computer science and mathematics including programming languages, AI, formal methods and proof theory.
+Traditionally, program synthesis has been formalized as a problem in deductive theorem proving~\cite{conf/ijcai/MannaW79}:
+Given a logical formula that states that for all inputs there exists an output such that the required specification holds, one searches for a constructive proof of this formula and then extracts a program from this proof.
+Progress on the deductive synthesis problem was slow for many years because of a lack of automated and scalable provers.
+However, a recent variant of the program synthesis problem has enabled dramatic progress (we refer to the special issue~\cite{fisman2022special} and the synthesis workshop\footnote{https://simons.berkeley.edu/workshops/tfcs2021-1} for an overview):
+%\footnote{https://www.cs.technion.ac.il/~shaull/SYNT2022/index.html}
+The logical specification is accompanied by a syntactic template that constrains the space of possible implementations.
+The synthesis procedure then searches for/enumerates candidate implementations and either rejects these candidates by finding violating input/output pairs or accept the generated program by verifying their correctness.
+The syntactic approach is very versatile and synthesis approaches have been explored that solely start from input/output examples or that mine possible program fragments from public code repositories.
+While the reported progress is impressive, we believe that the traditional deductive approach to synthesis has been unjustly neglected.
+In this project we aim at connecting classical ideas of proofs-as-programs~\cite{?} with modern automated theorem provers, in particular first-order solvers (and SMT solvers???), which have made impressive progress over the recent years (as evidenced by yearly competitions).
+We believe this approach offers the following advantages:
+1) First-order solvers are particularly suitable to solving \emph{quantified} formulas as needed for synthesis.
+2) Proofs-as-programs represent a longstanding approach to program extraction for which a large body of theory has been developed.
+3) We are able to take advantage of the highly sophisticated and optimized proof search strategies of first-order solvers instead of needing to define and implement \emph{ad-hoc} search strategies.
 
 
-``WORKSHOP ON SYNTHESIS''
-https://www.cs.technion.ac.il/~shaull/SYNT2022/index.html
 
-workshop on ``Synthesis of Models and Systems'' 
-https://simons.berkeley.edu/workshops/tfcs2021-1
+
+
 
 \section{Research questions, hypotheses and objectives (max. 2000 characters)}
 %What are the fundamental research questions/hypotheses that the project seeks to address? What are the goals the project seeks to achieve? Provide an outline of the scientific approach that will be used to address the questions and reach the objectives. The objectives should be achievable within the duration of your project. Please provide preliminary data and any relevant research experience.
+
+gap in the literature
+
+input/output pairs, existing program fragments
 
 \section{Expected results, novelty and relevance (max. 2000 characters)}
 %What kind of advancements are expected to be gained from the research project? Which aspects of the proposed project are especially innovative? Describe the scientific relevance and the timeliness of the research project. Please note that the development of source code, systems or protocols should not be the main goal of the project; however, they are encouraged in the context of demonstrating the practical applicability of new scientific results.
@@ -51,9 +73,9 @@ Schedule/ Project overview (1 page Gantt chart, PDF upload)
 Upload a Gantt chart to give an overview of the milestones to be achieved during the project period. Specify the time periods and the respective PIs responsible for each milestone.
 
 \section{Potential ethical aspects (max. 500 characters)}
-%If required, information should be given with respect to the ethical approval. Is an ethical approval available that covers the prospective use of data and the planned analysis? If not, state whether an additional approval is required. 
+%If required, information should be given with respect to the ethical approval. Is an ethical approval available that covers the prospective use of data and the planned analysis? If not, state whether an additional approval is required.
 
 \bibliographystyle{plain} % We choose the "plain" reference style
-\bibliography{refs} % Entries are in the refs.bib file
+\bibliography{literature} % Entries are in the refs.bib file
 
-\end{document}
+\end{document} 
