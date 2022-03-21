@@ -26,7 +26,7 @@ Program synthesis is a long-standing problem that crosses many areas of computer
 Traditionally, program synthesis has been formalized as a problem in deductive theorem proving~\cite{conf/ijcai/MannaW79}:
 Given a logical formula that states that for all inputs there exists an output such that the required specification holds, one searches for a constructive proof of this formula and then extracts a program from this proof.
 Progress on the deductive synthesis problem was slow for many years because of a lack of automated and scalable provers.
-However, a recent variant of the program synthesis problem has enabled dramatic progress (we refer to the special issue~\cite{fisman2022special} and the synthesis workshop\footnote{https://simons.berkeley.edu/workshops/tfcs2021-1} for an overview):
+However, a recent variant of the program synthesis problem has enabled dramatic progress (we refer to the special issue~\cite{fisman2022special} and the workshop\footnote{https://simons.berkeley.edu/workshops/tfcs2021-1} for an overview):
 %\footnote{https://www.cs.technion.ac.il/~shaull/SYNT2022/index.html}
 The logical specification is accompanied by a syntactic template that constrains the space of possible implementations.
 The synthesis procedure then searches for/enumerates candidate implementations and either rejects these candidates by finding violating input/output pairs or accept the generated program by verifying their correctness.
