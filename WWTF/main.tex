@@ -29,12 +29,12 @@ Program synthesis is a long-standing problem that crosses many areas of computer
 Traditionally, program synthesis has been formalized as a problem in deductive theorem proving~\cite{conf/ijcai/MannaW79}:
 Given a logical formula that states that for all inputs there exists an output such that the required specification holds, one searches for a constructive proof of this formula and then extracts a program from this proof.
 A classic route to program extraction is the \emph{Curry-Howard correspondence}~\cite{?} (also known as \emph{proofs-as-programs}) where one exploits the equivalence between proofs in intuitionist logic and functional programs in order to directly extract a functional program from an intuitionistic proof.
-The Curry-Howard correspondence denotes the fundamental relationship between two seemingly unrelated formalisms, namely proofs systems on one hand and computational models on the other hand.
+The Curry-Howard correspondence denotes a fundamental relationship between two seemingly unrelated formalisms, namely proofs systems on one hand and computational models on the other hand.
 The Curry-Howard correspondence has been a major driving force for research spanning functional programming languages, type theory, proof systems and constructive logic.
 However, progress on the deductive synthesis problem has been slow for many years because of a lack of automated and scalable provers.
 Instead, a recent variant of the program synthesis problem has enabled dramatic progress (we refer to the special issue~\cite{fisman2022special} and the workshop\footnote{\url{https://simons.berkeley.edu/workshops/tfcs2021-1}} for an overview):
 %\footnote{https://www.cs.technion.ac.il/~shaull/SYNT2022/index.html}
-The logical specification is accompanied by a syntactic template that constrains the space of possible implementations.
+The logical specification is accompanied by a \emph{syntactic template} that constrains the space of possible implementations.
 The synthesis procedure then searches for/enumerates candidate implementations and either rejects these candidates by finding violating input/output pairs or accept the generated program by verifying their correctness.
 The syntactic approach is very versatile and synthesis approaches have been explored that solely start from input/output examples or that mine possible program fragments from public code repositories.
 While the reported progress is impressive, we believe that the traditional deductive approach to synthesis has been unjustly neglected.
@@ -47,29 +47,25 @@ The main goal of this project is to connect the classical approach to deductive 
 
 We believe this approach offers the following advantages:
 1) First-order solvers are particularly suitable to solving \emph{quantified} formulas as needed for synthesis.
-2) Proofs-as-programs represents a longstanding approach to program extraction for which a large body of theory has been developed.
+2) Proofs-as-programs represents a longstanding approach to program extraction.
 That is to say, the groundwork for program extraction from proofs has been laid, we just need to adapt this theory to the specifics of modern automated theorem provers.
 3) We are able to take advantage of the highly sophisticated and optimized proof search strategies of first-order solvers instead of needing to define and implement \emph{ad-hoc} search strategies.
-Moreover, we will profit from any future advancements in automated theorem proving.
+%Moreover, we will profit from any future advancements in automated theorem proving.
 
-We believe this research goal is very timely, because the improved hardware and the progress in automated theorem proving have finally made automated proof search feasible.
-Thus the proposed research promises to fill a longstanding gap in the literature.
+We believe the proposed research is very timely, because improved hardware and the progress in automated theorem proving have finally made automated proof search feasible.
+Thus the proposed research promises to fill a longstanding gap in the state-of-the-art.
 
-The main challenge consists in the fact that the proofs-as-programs approach to program synthesis requires proofs that are valid in intuitionistic logic, while state-of-the-art theorem provers
+We will advance the above main goal by two work packages (WPs):
+
+(WP1) We will lay the theoretical groundwork for program extraction with automated theorem provers.
+The challenge here is that the proofs-as-programs approach requires proofs in intuitionistic logic, while state-of-the-art theorem provers
 utilize resolution which is an inherently classical technique.
-While the literature has identified
-We plan to address this challenge by adapting techniques from the literature as well as directions identified in our own preliminary research:
-1) The Curry-Howard correspondence can be extended to classical logic using control operators~\cite{Control1}, Parigot's $\lambda\mu$-Calculus~\cite{Parigot1} or CPS-translation~\cite{CPS1}.
-% However in this process we must in general give up on some desirable properties, at the very least realizability of $\vee$ and $\exists$, i.e. a proof of $\exists xP(x)$ will not necessarily give us an $x$ such that $P(x)$ and a proof of $A\vee B$ might give us neither a proof of $A$ nor a proof of $B$.	
-2) Under certain conditions, classically valid proofs can be transformed into an intuitionistic proofs, e.g. proofs of $\Pi_2$ sentences in Peano Arithmetic~\cite{HAPA}, via Friedman's Translation~\cite{Friedman} or similar methods.
-%This approach has been examined in different model settings and would have to be adapted and extended for our general problem.
-	
-3) Finally we suggest a third approach which has not been covered in literature yet, that is to pass a modified formula to the classical prover which can give us additional information about what an intuitionistic proof can look like.
-(Florian: unclear what is meant here)
+For this, we will adapt and extend techniques from the literature that connect the Curry-Howard correspondence to classical logic.
 
-We plan to examine the following 
+(WP2) We will implement a proof-of-concept tool that demonstrates the feasibility of our approach.
+This tool will take proofs produced by automated theorem provers as an input, and will output programs that are correct by construction.
+We will further experiment with techniques that relate to modern syntax-guided approaches to synthesis.
 
-input/output pairs, existing program fragments
 
 \section{Expected results, novelty and relevance (max. 2000 characters)}
 %What kind of advancements are expected to be gained from the research project? Which aspects of the proposed project are especially innovative? Describe the scientific relevance and the timeliness of the research project. Please note that the development of source code, systems or protocols should not be the main goal of the project; however, they are encouraged in the context of demonstrating the practical applicability of new scientific results.
@@ -77,16 +73,48 @@ input/output pairs, existing program fragments
 The final goal of our project is to leverage state-of-the-art first-order automated
 theorem provers, in particular Vampire, for program synthesis. 
 This is motivated by the recent and prospective advancements in their capabilities.
-As outlined we expect to obtain the necessary theoretical foundations as well
-as a practical system to leverage state-of-the-art classical theorem provers for
-program extraction. 
+We will lay the necessary theoretical foundations as well as implement a prototype system to leverage state-of-the-art classical theorem provers for program extraction. 
 At the current time no such system exists. 
+
 Much of the theoretical groundwork for implementing such a system is already present,
-but is scattered and mostly applied in theoretical model settings.
+but is scattered and mostly limited to theoretical settings.
+We sketch here the two main directions that connect the Curry-Howard correspondence to classical logic:
+1) The Curry-Howard correspondence can be extended to classical logic using control operators~\cite{Control1}, Parigot's $\lambda\mu$-Calculus~\cite{Parigot1} or CPS-translation~\cite{CPS1}.
+However in this process we must in general give up on some desirable properties, at the very least the realizability of $\vee$ and $\exists$.
+2) Under certain conditions, classically valid proofs can be transformed into intuitionistic proofs, e.g. proofs of $\Pi_2$ sentences in Peano Arithmetic~\cite{HAPA}, via Friedman's Translation~\cite{Friedman} or similar methods.
+We will adapt and specialise these techniques from the literature to the proofs produced by automated theorem provers such as Vampire:
+A) We will develop the first\emph{ program extraction calculi} for \emph{resolution resp. superposition proofs}.
+In particular, we need to pay careful attentiont to the normal-form transformation --- a pre-processing step --- in automated theorem provers, which also involve equivalences that are only classically valid.
+C) We will identify assumptions under which our adaptions of the techniques 1) and 2) guarantee that such a program extraction is possible.
+We are not aware of related results in the literature.
+
+%This approach has been examined in different model settings and would have to be adapted and extended for our general problem.
+	
 
 \section{Methods and feasibility (max. 2000 characters)}
 %Specify the methodology intended to be used in order to answer the research question(s) and objective(s).
 %Describe the basic working principles and concepts, and why the chosen approach/ specific mix of approaches is the most suitable for the research question. Include a short assessment on the feasibility of the approach.
+	
+We now give the details on (WP1):
+An optimal procedure for synthesis would consist of
+\begin{itemize}
+\item transforming the specification into an alternate form that would guarantee the use of as few non-intuitionistic rules as possible and applicability of Friedman translation in as many places as possible
+\item applying the prover to this modified specification obtaining a classical proof
+\item apply Friedman translation or similar translation procedures in as many places as possible
+\item extracting a program via Curry-Howard correspondence, applying control operators to non-intuitionistic remnants as necessary.
+\end{itemize}
+All of these elements except the initial modification of the specification already exist separately and in model settings such as arithmetic. 
+Extending these results and combining them will be the first major undertaking of this project. 
+This is also a necessary precondition for determining what initial modifications should be undertaken. 
+We expect that for most real-world synthesis problems our procedure will be sufficient to transform classical proofs into usable and verified programs.
+	
+Finally we want to implement a real system on top of Vampire realizing the synthesis problem (WP2) which will target a suitable functional programming language.
+
+Finally we suggest a third approach which has not been covered in literature yet, that is to pass a modified formula to the classical prover which can give us additional information about what an intuitionistic proof can look like.
+
+
+
+We will investigate how to restrict proof search in order to steer the search towards programs from certain syntactic fragments, we will experiment with different axioms that can be given as input to the automated theorem provers and we will examine input/output pairs to the tool.
 
 \section{Role of team members and collaborative aspects (max. 1500 characters)}
 %Each team member should describe his/her role in accomplishing the goal of the team. If applicable, which different disciplines are represented in the project and which partnerships across research groups and institutions will result from the project? Which collaborative elements are essential for the project to succeed; what makes the team more than the sum of its individual contributions? A team member’s contribution should be integrated into the overall plan and should not appear merely as a resource.
