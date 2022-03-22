@@ -1,6 +1,9 @@
 \documentclass[a4paper,12pt]{article}
+
+\usepackage{url}
+
 \begin{document}
-\title{Leveraging The Progress in Automated Theorem Proving for Automated Program Synthesis\\\\
+\title{Leveraging The Progress in Automated Theorem Proving for Program Synthesis\\
 \small{WWTF ICT 2022}}
 \author{Florian Zuleger and Alexander Pluska}
 \date{\today}
@@ -25,31 +28,61 @@ At the same time, program synthesis holds the promise of freeing the programmer 
 Program synthesis is a long-standing problem that crosses many areas of computer science and mathematics including programming languages, AI, formal methods and proof theory.
 Traditionally, program synthesis has been formalized as a problem in deductive theorem proving~\cite{conf/ijcai/MannaW79}:
 Given a logical formula that states that for all inputs there exists an output such that the required specification holds, one searches for a constructive proof of this formula and then extracts a program from this proof.
-Progress on the deductive synthesis problem was slow for many years because of a lack of automated and scalable provers.
-However, a recent variant of the program synthesis problem has enabled dramatic progress (we refer to the special issue~\cite{fisman2022special} and the workshop\footnote{https://simons.berkeley.edu/workshops/tfcs2021-1} for an overview):
+A classic route to program extraction is the \emph{Curry-Howard correspondence}~\cite{?} (also known as \emph{proofs-as-programs}) where one exploits the equivalence between proofs in intuitionist logic and functional programs in order to directly extract a functional program from an intuitionistic proof.
+The Curry-Howard correspondence denotes the fundamental relationship between two seemingly unrelated formalisms, namely proofs systems on one hand and computational models on the other hand.
+The Curry-Howard correspondence has been a major driving force for research spanning functional programming languages, type theory, proof systems and constructive logic.
+However, progress on the deductive synthesis problem has been slow for many years because of a lack of automated and scalable provers.
+Instead, a recent variant of the program synthesis problem has enabled dramatic progress (we refer to the special issue~\cite{fisman2022special} and the workshop\footnote{\url{https://simons.berkeley.edu/workshops/tfcs2021-1}} for an overview):
 %\footnote{https://www.cs.technion.ac.il/~shaull/SYNT2022/index.html}
 The logical specification is accompanied by a syntactic template that constrains the space of possible implementations.
 The synthesis procedure then searches for/enumerates candidate implementations and either rejects these candidates by finding violating input/output pairs or accept the generated program by verifying their correctness.
 The syntactic approach is very versatile and synthesis approaches have been explored that solely start from input/output examples or that mine possible program fragments from public code repositories.
 While the reported progress is impressive, we believe that the traditional deductive approach to synthesis has been unjustly neglected.
-In this project we aim at connecting classical ideas of proofs-as-programs~\cite{?} with modern automated theorem provers, in particular first-order solvers (and SMT solvers???), which have made impressive progress over the recent years (as evidenced by yearly competitions).
-We believe this approach offers the following advantages:
-1) First-order solvers are particularly suitable to solving \emph{quantified} formulas as needed for synthesis.
-2) Proofs-as-programs represent a longstanding approach to program extraction for which a large body of theory has been developed.
-3) We are able to take advantage of the highly sophisticated and optimized proof search strategies of first-order solvers instead of needing to define and implement \emph{ad-hoc} search strategies.
-
-
 
 
 \section{Research questions, hypotheses and objectives (max. 2000 characters)}
 %What are the fundamental research questions/hypotheses that the project seeks to address? What are the goals the project seeks to achieve? Provide an outline of the scientific approach that will be used to address the questions and reach the objectives. The objectives should be achievable within the duration of your project. Please provide preliminary data and any relevant research experience.
 
-gap in the literature
+The main goal of this project is to connect the classical approach to deductive synthesis --  proofs-as-programs~\cite{?}--, with modern automated theorem provers, in particular first-order solvers (and SMT solvers???), which have made impressive progress over the recent years (as evidenced by yearly competitions\footnote{\url{http://www.tptp.org/CASC/}}).
+
+We believe this approach offers the following advantages:
+1) First-order solvers are particularly suitable to solving \emph{quantified} formulas as needed for synthesis.
+2) Proofs-as-programs represents a longstanding approach to program extraction for which a large body of theory has been developed.
+That is to say, the groundwork for program extraction from proofs has been laid, we just need to adapt this theory to the specifics of modern automated theorem provers.
+3) We are able to take advantage of the highly sophisticated and optimized proof search strategies of first-order solvers instead of needing to define and implement \emph{ad-hoc} search strategies.
+Moreover, we will profit from any future advancements in automated theorem proving.
+
+We believe this research goal is very timely, because the improved hardware and the progress in automated theorem proving have finally made automated proof search feasible.
+Thus the proposed research promises to fill a longstanding gap in the literature.
+
+The main challenge consists in the fact that the proofs-as-programs approach to program synthesis requires proofs that are valid in intuitionistic logic, while state-of-the-art theorem provers
+utilize resolution which is an inherently classical technique.
+While the literature has identified
+We plan to address this challenge by adapting techniques from the literature as well as directions identified in our own preliminary research:
+1) The Curry-Howard correspondence can be extended to classical logic using control operators~\cite{Control1}, Parigot's $\lambda\mu$-Calculus~\cite{Parigot1} or CPS-translation~\cite{CPS1}.
+% However in this process we must in general give up on some desirable properties, at the very least realizability of $\vee$ and $\exists$, i.e. a proof of $\exists xP(x)$ will not necessarily give us an $x$ such that $P(x)$ and a proof of $A\vee B$ might give us neither a proof of $A$ nor a proof of $B$.	
+2) Under certain conditions, classically valid proofs can be transformed into an intuitionistic proofs, e.g. proofs of $\Pi_2$ sentences in Peano Arithmetic~\cite{HAPA}, via Friedman's Translation~\cite{Friedman} or similar methods.
+%This approach has been examined in different model settings and would have to be adapted and extended for our general problem.
+	
+3) Finally we suggest a third approach which has not been covered in literature yet, that is to pass a modified formula to the classical prover which can give us additional information about what an intuitionistic proof can look like.
+(Florian: unclear what is meant here)
+
+We plan to examine the following 
 
 input/output pairs, existing program fragments
 
 \section{Expected results, novelty and relevance (max. 2000 characters)}
 %What kind of advancements are expected to be gained from the research project? Which aspects of the proposed project are especially innovative? Describe the scientific relevance and the timeliness of the research project. Please note that the development of source code, systems or protocols should not be the main goal of the project; however, they are encouraged in the context of demonstrating the practical applicability of new scientific results.
+
+The final goal of our project is to leverage state-of-the-art first-order automated
+theorem provers, in particular Vampire, for program synthesis. 
+This is motivated by the recent and prospective advancements in their capabilities.
+As outlined we expect to obtain the necessary theoretical foundations as well
+as a practical system to leverage state-of-the-art classical theorem provers for
+program extraction. 
+At the current time no such system exists. 
+Much of the theoretical groundwork for implementing such a system is already present,
+but is scattered and mostly applied in theoretical model settings.
 
 \section{Methods and feasibility (max. 2000 characters)}
 %Specify the methodology intended to be used in order to answer the research question(s) and objective(s).
