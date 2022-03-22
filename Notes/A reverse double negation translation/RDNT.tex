@@ -1,0 +1,191 @@
+\documentclass[a4paper,12pt]{article}
+
+\title{A reverse double negation translation}
+\author{Alexander Pluska}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{ wasysym }
+\usepackage{ stmaryrd }
+\usepackage{ mathpartir }
+\usepackage{bussproofs}
+
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}[section]
+\theoremstyle{definition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{definition}
+\newtheorem{example}[theorem]{Example}
+
+\begin{document}
+	
+	\maketitle
+	
+	\begin{abstract}
+		The aim of this paper is for a propositional sequent to give a transformed sequent that is valid in classical logic if and only if the original one is valid in intuitionistic logic. Since intuitionistic propositional logic is decidable this is of course trivially possible, however our procedure will be local. This means that our transformation will also be sound for first-order logic, allowing us to reduce the non-intuitionistic content of such sequents which yields benefits for program extraction in a situation where only a classical prover is available. 
+	\end{abstract}
+	
+
+	\section{Porpositional logic}
+	
+	A sequent $A\Rightarrow B$ consists of two sets of formulas $A, B$. We will be using the following rules for our classical calculus:\\\\
+	\begin{center}
+	\begin{tabular}{lll}
+		\AxiomC{\hphantom{x}}
+		\RightLabel{Ax ($P$ atomic)}
+		\UnaryInfC{$P,\Gamma\Rightarrow \Delta, P$}
+		\DisplayProof&
+		\AxiomC{\hphantom{x}}
+		\RightLabel{L$\bot$}
+		\UnaryInfC{$\bot,\Gamma\Rightarrow\Delta$}
+		\DisplayProof&
+		\\&&\\
+		\AxiomC{$A, B,\Gamma\Rightarrow\Delta$}
+		\RightLabel{L$\wedge$}
+		\UnaryInfC{$A\wedge B, \Gamma\Rightarrow \Delta$}
+		\DisplayProof&
+		\AxiomC{$\Gamma\Rightarrow\Delta, A$}
+		\AxiomC{$\Gamma\Rightarrow\Delta, B$}
+		\RightLabel{R$\wedge$}
+		\BinaryInfC{$\Gamma\Rightarrow \Delta, A\wedge B$}
+		\DisplayProof&
+		\\&&\\
+		\AxiomC{$A, \Gamma\Rightarrow\Delta$}
+		\AxiomC{$B, \Gamma\Rightarrow\Delta$}
+		\RightLabel{L$\vee$}
+		\BinaryInfC{$A\vee B, \Gamma\Rightarrow \Delta$}
+		\DisplayProof&
+		\AxiomC{$\Gamma\Rightarrow\Delta, A, B$}
+		\RightLabel{R$\vee$}
+		\UnaryInfC{$\Gamma\Rightarrow \Delta, A\vee B$}
+		\DisplayProof&
+		\\&&\\
+		\AxiomC{$\Gamma\Rightarrow\Delta, A$}
+		\AxiomC{$B, \Gamma\Rightarrow\Delta$}
+		\RightLabel{L$\to$}
+		\BinaryInfC{$A\to B, \Gamma\Rightarrow \Delta$}
+		\DisplayProof&
+		\AxiomC{$A,\Gamma\Rightarrow\Delta, B$}
+		\RightLabel{R$\to$}
+		\UnaryInfC{$\Gamma\Rightarrow \Delta, A\to B$}
+		\DisplayProof&
+		\\&&\\
+	\end{tabular}
+	\end{center}
+	
+	For the intuitionistic calculus we just need to modify R$\to$:\\
+	\begin{center}
+		\AxiomC{$A, \Gamma\Rightarrow B$}
+		\RightLabel{R$\to'$}
+		\UnaryInfC{$\Gamma\Rightarrow\Delta, A\to B$}
+		\DisplayProof
+	\end{center}
+	
+	\section{The Translation Procedure}
+	
+	\begin{definition}
+		We say that two sequents $S, S'$ are \textit{equi-valid} if $S$ is provable in intuitionistic logic iff $S'$ is provable.
+	\end{definition}
+	
+	\begin{example}
+		The sequents $\Rightarrow A\vee B$ and $A\to C, B\to C\Rightarrow C$ are equi-valid:  By examining how a proof of the latter must end it is easy to argue that if there is a proof of one there must be a proof of the other, an alternative argument of course is that neither is provable.
+	\end{example}
+
+		Note that they are not equivalent in the typical sense however, due to the absence of $C$ in the former. The reason that equivalence is insufficient for our procedure is that new atoms may be introduced. In trying to reverse double negation translation this is to be expected however: In double negation translation we collapse the veracity of $A$ and $\neg\neg A$, which are not equivalent before the translation. In our case we do the opposite, i.e. we must modifiy our formula such that $A$ and $\neg\neg A$ are no longer classically equivalent. For that we require new atoms.
+
+	\begin{definition}
+		A sequent $A_1,\dots,A_n\Rightarrow B$ is \textit{implicational} if $B$ is atomic and each $A_i$ is of the form either $C\to (D\to E)$, $(C\to D)\to E$, $C\to D$ or $C$ for some atomic $C, D, E$.
+	\end{definition}
+
+	The first result is that for every sequent there is some equi-valid implicational sequent. This transformation is not strictly necessary for what follows, but it makes the arguments and procedure considerably simpler.
+	
+	Consider the following rules, where $X$ is not atomic, $N$ is a new atom:
+	\begin{center}
+		\begin{tabular}{lcl}
+			$\Delta\Rightarrow \Gamma, A, B$&$\rightsquigarrow$&$\Delta, A\to N, B\to N\Rightarrow\Gamma, N$\\
+			$\Delta\Rightarrow A\vee B$&$\rightsquigarrow$&$\Delta, A\to N, B\to N\Rightarrow N$\\
+			$\Delta\Rightarrow A\wedge B$&$\rightsquigarrow$&$\Delta, A\to (B\to N)\Rightarrow N$\\
+			$\Delta\Rightarrow A\to B$&$\rightsquigarrow$&$\Delta, A\Rightarrow B$\\
+			
+			$\Delta, A\wedge B\Rightarrow C$&$\rightsquigarrow$&$\Delta, A, B\Rightarrow C$\\
+			$\Delta, A\vee B\Rightarrow C$&$\rightsquigarrow$&$\Delta, (A\to C)\to (B\to C)\to C\Rightarrow  C$\\
+			$\Delta, (A\wedge B)\to C\Rightarrow D$&$\rightsquigarrow$&$\Delta, A\to (B\to C)\Rightarrow D$\\
+			$\Delta, (A\vee B)\to C\Rightarrow D$&$\rightsquigarrow$&$\Delta, A\to C, B\to C\Rightarrow D$\\
+			$\Delta, A\to (B\vee C)\Rightarrow D$&$\rightsquigarrow$&$\Delta, A\to (B\to D)\to (C\to D)\to D\Rightarrow D$\\
+			$\Delta, A\to (B\wedge C)\Rightarrow D$&$\rightsquigarrow$&$\Delta, A\to B, A\to C\Rightarrow D$\\
+			$\Delta, X\to (A\to B)\Rightarrow C$&$\rightsquigarrow$&$\Delta, X\to N, N\to (A\to B)\Rightarrow C$\\
+			$\Delta, A\to (X\to B)\Rightarrow C$&$\rightsquigarrow$&$\Delta, X\to N, A\to (N\to B)\Rightarrow C$\\
+			$\Delta, A\to (B\to X)\Rightarrow C$&$\rightsquigarrow$&$\Delta, N\to X, A\to (B\to N)\Rightarrow C$\\
+			$\Delta, (X\to A)\to B\Rightarrow C$&$\rightsquigarrow$&$\Delta, N\to X, (N\to A)\to B\Rightarrow C$\\
+			$\Delta, (A\to X)\to B\Rightarrow C$&$\rightsquigarrow$&$\Delta, X\to N, (A\to N)\to B\Rightarrow C$\\
+			$\Delta, (A\to B)\to X\Rightarrow C$&$\rightsquigarrow$&$\Delta, N\to X, (A\to B)\to N\Rightarrow C$\\
+		\end{tabular}
+	\end{center}
+	\pagebreak
+	\begin{example}\hphantom{x}
+	\begin{center}
+		\begin{tabular}{ll}
+			&$(A\to B)\to (C\vee D)\to E\Rightarrow F\vee G$\\
+			$\rightsquigarrow$&$(A\to B)\to (C\vee D)\to E, F\to N, G\to N\Rightarrow N$\\
+			$\rightsquigarrow$&$(A\to B)\to M, M\to (C\vee D)\to E, F\to N, G\to N\Rightarrow N$\\
+			$\rightsquigarrow$&$(A\to B)\to M, M\to O\to E, (C\vee D)\to O, F\to N, G\to N\Rightarrow N$\\
+			$\rightsquigarrow$&$(A\to B)\to M, M\to O\to E, C\to O, D\to O, F\to N, G\to N\Rightarrow N$\\
+		\end{tabular}
+	\end{center}
+	\end{example}
+
+	\begin{lemma}
+		Iteratively applying the above transformations we can obtain from every sequent $S$ an equi-valid implicational sequent $S_\to$.
+	\end{lemma}
+
+	\begin{proof}[Proofsketch]
+		
+		Check that for any formula that is not implicational there is an applicable rule.
+		
+		Check that the sequents on both sides of each rule are equi-valid.
+		
+		Termination can be shown by well-foundedness: First the number of formulas in the succedent is reduced to $1$, then the succedent is reduced to an atom. Then in each step the number of disjunctions, conjunctions or the depth of nested implications is reduced. 
+	\end{proof}
+	
+	For each atom $A$ consider a new atom $A'$ and a special atom $\omega = \bot'$. Have $\top' = \top$. Fix some implicational sequent $S := \Delta\Rightarrow C$ for now. Let $\mathcal{A}$ be the set of atoms occurring in $S$. Then define 
+	\begin{align*}
+		\Delta' = &\{A\to A', \omega\to A'\:|\:A\in\mathcal{A}\}
+		\\&\cup \{(A'\to B')\to C\:|\: (A\to B)\to C\in\Delta\}
+		\\&\cup \{A'\to (B'\to C'), A\to(B\to C)\:|\: A\to (B\to C)\in\Delta\}
+		\\&\cup \{A'\to B', A\to B\:|\: A\to (B\to C)\in\Delta\}
+	\end{align*}
+and have $$S' := \Delta' \Rightarrow C$$
+
+	\begin{lemma}
+		An implicational sequent $S$ is intuitionistically provable if and only if $S'$ is classically provable
+	\end{lemma}
+	
+	\begin{proof}[Proofsketch]
+		
+		$\Rightarrow$ the classical proof can be obtained by appropriate renaming of atoms and weakening. It will still be intuitionistically sound.
+		
+		$\Leftarrow$ Rename all variables $A'$ to $A$ and rewrite the R$\to$ rules. At the end apply a number of cuts to remove the $A\to A,\bot\to A$.
+		
+	\end{proof}
+
+	\begin{theorem}
+		A sequent $S$ in intuitionistically provable if and only if $S^\circ_\to$ is classically provable.
+	\end{theorem}
+
+	\begin{example}
+		Consider Pierce's law $P := (A\to B)\to A\Rightarrow A$. This is a classic non-intuitionistic tautology. Note that it is already implicational. $P'$ is $$(A'\to B')\to A, A\to A', B\to B', \omega\to A', \omega\to B'\Rightarrow A$$ As proven this sequent is not classically valid, $A = B = B' = \omega = 0$, $A' = 1$  provides a countermodel.
+		
+		If we add $A\to B$ to the hypothesis set $P'$ is $$(A'\to B')\to A, A'\to B', A\to B, A\to A', B\to B', \omega\to A', \omega\to B'\Rightarrow A$$ which is classically and intuitionistically valid. Argueing in BHK terms, we can provide a terms of type $A'\to B'$ to $(A'\to B')\to A$ in order to obtain a term of type $A$, which is what is needed.
+	\end{example}
+
+	Intuitively the primed atoms may only be used in implications, i.e. as arguments to formulas of type $(A\to B)\to C$ but never as proper atoms, i.e. as arguments to $A\to B$.
+	
+	\bibliographystyle{plain}
+	\bibliography{references}
+	
+\end{document}
