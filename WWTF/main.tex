@@ -1,6 +1,7 @@
 \documentclass[a4paper,12pt]{article}
 
 \usepackage{url}
+\usepackage{xcolor}
 
 \begin{document}
 \title{Leveraging The Progress in Automated Theorem Proving for Program Synthesis\\
@@ -28,7 +29,7 @@ At the same time, program synthesis holds the promise of freeing the programmer 
 Program synthesis is a long-standing problem that crosses many areas of computer science and mathematics including programming languages, AI, formal methods and proof theory.
 Traditionally, program synthesis has been formalized as a problem in deductive theorem proving~\cite{conf/ijcai/MannaW79}:
 Given a logical formula that states that for all inputs there exists an output such that the required specification holds, one searches for a constructive proof of this formula and then extracts a program from this proof.
-A classic route to program extraction is the \emph{Curry-Howard correspondence}~\cite{?} (also known as \emph{proofs-as-programs}) where one exploits the equivalence between proofs in intuitionist logic and functional programs in order to directly extract a functional program from an intuitionistic proof.
+A classic route to program extraction is the \emph{Curry-Howard correspondence}~\cite{?} {\color{red}Standardreferenz Proofs and Types~\cite{girard1989proofs} oder Original Curry~\cite{curry1934functionality}} (also known as \emph{proofs-as-programs}) where one exploits the equivalence between proofs in intuitionist logic and functional programs in order to directly extract a functional program from an intuitionistic proof.
 The Curry-Howard correspondence denotes a fundamental relationship between two seemingly unrelated formalisms, namely proofs systems on one hand and computational models on the other hand.
 The Curry-Howard correspondence has been a major driving force for research spanning functional programming languages, type theory, proof systems and constructive logic.
 However, progress on the deductive synthesis problem has been slow for many years because of a lack of automated and scalable provers.
@@ -43,12 +44,12 @@ While the reported progress is impressive, we believe that the traditional deduc
 \section{Research questions, hypotheses and objectives (max. 2000 characters)}
 %What are the fundamental research questions/hypotheses that the project seeks to address? What are the goals the project seeks to achieve? Provide an outline of the scientific approach that will be used to address the questions and reach the objectives. The objectives should be achievable within the duration of your project. Please provide preliminary data and any relevant research experience.
 
-The main goal of this project is to connect the classical approach to deductive synthesis --  proofs-as-programs~\cite{?}--, with modern automated theorem provers, in particular first-order solvers (and SMT solvers???), which have made impressive progress over the recent years (as evidenced by yearly competitions\footnote{\url{http://www.tptp.org/CASC/}}).
+The main goal of this project is to connect the classical approach to deductive synthesis --  proofs-as-programs~\cite{?}{ \color{red}s.o.}--, with modern automated theorem provers, in particular first-order solvers (and SMT solvers???), which have made impressive progress over the recent years (as evidenced by yearly competitions\footnote{\url{http://www.tptp.org/CASC/}}).
 
 We believe this approach offers the following advantages:
 1) First-order solvers are particularly suitable to solving \emph{quantified} formulas as needed for synthesis.
 2) Proofs-as-programs represents a longstanding approach to program extraction.
-That is to say, the groundwork for program extraction from proofs has been laid, we just need to adapt this theory to the specifics of modern automated theorem provers.
+That is to say, the groundwork for program extraction from proofs has been laid, we just need to adapt this theory to the specifics of modern automated theorem provers. {\color{red}in the classical case not everything has been said, perhaps "much groundwork..." and "...adapt and extend..."}
 3) We are able to take advantage of the highly sophisticated and optimized proof search strategies of first-order solvers instead of needing to define and implement \emph{ad-hoc} search strategies.
 %Moreover, we will profit from any future advancements in automated theorem proving.
 
@@ -79,13 +80,13 @@ At the current time no such system exists.
 Much of the theoretical groundwork for implementing such a system is already present,
 but is scattered and mostly limited to theoretical settings.
 We sketch here the two main directions that connect the Curry-Howard correspondence to classical logic:
-1) The Curry-Howard correspondence can be extended to classical logic using control operators~\cite{Control1}, Parigot's $\lambda\mu$-Calculus~\cite{Parigot1} or CPS-translation~\cite{CPS1}.
+1) The Curry-Howard correspondence can be extended to classical logic using control operators~\cite{Control1}, Parigot's $\lambda\mu$-Calculus~\cite{Parigot1} or CPS-translation.
 However in this process we must in general give up on some desirable properties, at the very least the realizability of $\vee$ and $\exists$.
-2) Under certain conditions, classically valid proofs can be transformed into intuitionistic proofs, e.g. proofs of $\Pi_2$ sentences in Peano Arithmetic~\cite{HAPA}, via Friedman's Translation~\cite{Friedman} or similar methods.
+2) Under certain conditions, classically valid proofs can be transformed into intuitionistic proofs, e.g. proofs of $\Pi_2$-sentences in Peano Arithmetic~\cite{HAPA}.
 We will adapt and specialise these techniques from the literature to the proofs produced by automated theorem provers such as Vampire:
 A) We will develop the first\emph{ program extraction calculi} for \emph{resolution resp. superposition proofs}.
 In particular, we need to pay careful attentiont to the normal-form transformation --- a pre-processing step --- in automated theorem provers, which also involve equivalences that are only classically valid.
-C) We will identify assumptions under which our adaptions of the techniques 1) and 2) guarantee that such a program extraction is possible.
+B) We will identify assumptions under which our adaptions of the techniques 1) and 2) guarantee that such a program extraction is possible.
 We are not aware of related results in the literature.
 
 %This approach has been examined in different model settings and would have to be adapted and extended for our general problem.
