@@ -51,7 +51,13 @@
 	Finally we want to implement a real system on top of Vampire realizing the synthesis problem (WP2) which will target a suitable functional programming language.
 	
 	\section{Expected results, novelty, and relevance}
+
 	
+	
+
+	\section{Methods and feasibility}
+	
+		
 	We now give details on (WP1). As mentioned in the previous section there are currently two main approaches in the literature for obtaining programs from classical proofs: 1) Parigot's $\lambda\mu$-calculus~\cite{Parigot1} gives a direct translation of classical proofs with datatypes and is essentially ready for implementation. However, since non-intuitionistic tautologies like $\neg\forall xP(x)\to \exists x\neg P(x)$ or $A\vee \neg A$ are assigned a program, we lose the realizability of $\exists$ and $\vee$. As discussed in~\cite{practical}, in practice it is often possible to eliminate the non-intuitionistic fragments. We aim to establish stronger theoretical guarantees on when this is possible but also more practical benchmarks on the feasibility of this approach, even when realizability is not ensured by a theorem. 2) Sometimes classical validity guarantees intuitionistic validity, most famously for $\Pi_2$-formulas in Arithmetic~\cite{Friedman}. There have been various generalizations of this result, most notably by Schwichtenberg's group~\cite{schwichtenberg}. We will adapt their work to our more general setting.
 	
 	We expect that in practice these approaches will be sufficient in many situations. However we also suggest a completely new direction: We aim for a translation between provers rather than proofs, so we examine what can be learned by attempting proofs of modified versions of the target formula. A hopeful sign is the reverse direction: given an intuitionistic prover we can establish classical provability via double negation translation. A first approximation has been outlined in~\cite{RDNT}.
@@ -59,9 +65,6 @@
 	Using this theoretical groundwork we will implement a synthesis system on top of Vampire for (WP2) targeting a suitable functional programming language. We will investigate how syntactic context and redundant
 	axioms can be used to restrict and guide proof search and we will examine the merit of our approach when only input/output pairs are given.
 	
-	
-
-	\section{Methods and feasibility}
 	
 	\section{Potential to span across disciplines and to build bridges to application fields}
 	
