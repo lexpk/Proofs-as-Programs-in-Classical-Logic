@@ -10,12 +10,29 @@
 \date{\today}
 \maketitle
 
+%DIESEL: Deductive Synthesis Reloaded
+%DITTO: Deductive Synthesis with Automated Theorem Provers
+%LEGION: Leveraging The Progress in Automated Theorem Proving for Program Synthesis
+
 \begin{abstract}
   %Project Summary/Abstract (max. 1500 characters)
   %
   %Please provide an overall project summary. Clearly state the research question and the aims of the team. Describe the most innovative aspects of your proposal, and its potential relevance and impact.
-
-
+  
+  Program synthesis is a long-standing problem that crosses many areas of computer science and mathematics.
+  Program synthesis holds the promise to  increase the reliability of software systems (because the synthesized program are correct by construction) and for increasing programmer productivity by enabling programmers to focus on high-level ideas instead of low-level details.
+    
+  %
+  Traditionally, program synthesis has been formalized as a problem in deductive theorem proving:
+  %
+  Given a logical formula that states that for all inputs there exists an output such that the required specification holds, one searches for a constructive proof of this formula and then extracts a program from this proof.
+  
+  However, progress on deductive synthesis has been slow because of a lack of automated and scalable provers.
+  We believe that the impressive progress in automated theorem proving finally has made automated proof search feasible.
+  
+  Thus, the main goal of our project is to leverage state-of-the-art first-order automated theorem provers (such as Vampire) for program synthesis, demonstrating the feasibility of deductive synthesis via automated theorem proving.
+  
+  Specifically, we plan to 1) adapt and extend the theory on program extraction to the specifics of modern automated theorem provers, and to 2) implement a proof-of-concept tool that demonstrates the feasibility of our approach.
 \end{abstract}
 
 
@@ -132,12 +149,29 @@ We will further examine if proof search is possible when only input/output pairs
 \section{Potential for interdisciplinarity and application to other research fields (max. 1000 characters)}
 %How will the scientific advancements gained through this project benefit other research fields that are beyond the immediate scope of the project? Describe how the knowledge, methods or technology developed in this project could further understanding or contribute to applications in other research disciplines.
 
+%The project promises to make advancements in the design of correct of systems, automated theorem proving and proof theory.
+
+%The complexity of modern software systems, including in particular, \emph{safety-critical systems}, continues to grow.
+Traditionally quality assurance techniques rely on first building the desired system and then testing/verifying the system.
+%, which may become costly or even impossible for sufficiently complex systems.
+In contrast, \emph{correct-by-construction} approaches seek to develop a product that continues to be correct, from the initial design to the final product.
+Advances in deductive synthesis promise to increase the applicability of the correct-by-construction approach, leading to higher reliability in software development.
+
+Automated theorem proving has made impressive progress in recent years, demonstrated in yearly solver competitions. 
+We will submit our benchmarks to these competitions in order to interest solver developers in improving their tools wrt to the specific needs of deductive synthesis.
+%(formulas with quantifier alternation, support for induction, etc.).
+
+We expect that a successful prototype for program extraction with automated theorem provers will lead to a revival of proof-as-programs for automated deductive synthesis, inspiring more members of the community to investigate this approach.
+
+
 \section{Potential medium-term economic / societal benefits (max. 500 characters)}
 %Provide a brief statement how the results from this research project could contribute towards solving a recognised problem that affects broader society or the economy.
 
-Programs that are correct by construction represent a longstanding goal of computer science.
-Correct Their is holds particularly true for safet
+- As a correct-by-construction methodology, program synthesis will increase the reliability of important safety-critical systems such as avionics, cars, medical devices, etc.
+ 
+\noindent - Enabling programmers to focus on high-level ideas instead of low-level details will increase programmer productivity.
 
+\noindent - Non-expert/ end-user programmers are also expected to promise from automated synthesis by only needing to communicate their intent to the synthesis engine (instead of writing a whole program).
 
 
 \section{Potential ethical aspects (max. 500 characters)}
