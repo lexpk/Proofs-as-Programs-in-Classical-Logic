@@ -29,7 +29,7 @@ At the same time, program synthesis holds the promise of freeing the programmer 
 Program synthesis is a long-standing problem that crosses many areas of computer science and mathematics including programming languages, AI, formal methods and proof theory.
 Traditionally, program synthesis has been formalized as a problem in deductive theorem proving~\cite{conf/ijcai/MannaW79}:
 Given a logical formula that states that for all inputs there exists an output such that the required specification holds, one searches for a constructive proof of this formula and then extracts a program from this proof.
-A classic route to program extraction is the \emph{Curry-Howard correspondence}~\cite{?} {\color{red}Standardreferenz Proofs and Types~\cite{girard1989proofs} oder Original Curry~\cite{curry1934functionality}} (also known as \emph{proofs-as-programs}) where one exploits the equivalence between proofs in intuitionist logic and functional programs in order to directly extract a functional program from an intuitionistic proof.
+A classic route to program extraction is the \emph{Curry-Howard correspondence}~\cite{girard1989proofs} (also known as \emph{proofs-as-programs}) where one exploits the equivalence between proofs in intuitionist logic and functional programs in order to directly extract a functional program from an intuitionistic proof.
 The Curry-Howard correspondence denotes a fundamental relationship between two seemingly unrelated formalisms, namely proofs systems on one hand and computational models on the other hand.
 The Curry-Howard correspondence has been a major driving force for research spanning functional programming languages, type theory, proof systems and constructive logic.
 However, progress on the deductive synthesis problem has been slow for many years because of a lack of automated and scalable provers.
@@ -44,12 +44,12 @@ While the reported progress is impressive, we believe that the traditional deduc
 \section{Research questions, hypotheses and objectives (max. 2000 characters)}
 %What are the fundamental research questions/hypotheses that the project seeks to address? What are the goals the project seeks to achieve? Provide an outline of the scientific approach that will be used to address the questions and reach the objectives. The objectives should be achievable within the duration of your project. Please provide preliminary data and any relevant research experience.
 
-The main goal of this project is to connect the classical approach to deductive synthesis --  proofs-as-programs~\cite{?}{ \color{red}s.o.}--, with modern automated theorem provers, in particular first-order solvers (and SMT solvers???), which have made impressive progress over the recent years (as evidenced by yearly competitions\footnote{\url{http://www.tptp.org/CASC/}}).
+The main goal of this project is to connect the classical approach to deductive synthesis --  proofs-as-programs~\cite{girard1989proofs} --, with modern automated theorem provers, in particular first-order solvers (and SMT solvers???), which have made impressive progress over the recent years (as evidenced by yearly competitions\footnote{\url{http://www.tptp.org/CASC/}}).
 
 We believe this approach offers the following advantages:
 1) First-order solvers are particularly suitable to solving \emph{quantified} formulas as needed for synthesis.
 2) Proofs-as-programs represents a longstanding approach to program extraction.
-That is to say, the groundwork for program extraction from proofs has been laid, we just need to adapt this theory to the specifics of modern automated theorem provers. {\color{red}in the classical case not everything has been said, perhaps "much groundwork..." and "...adapt and extend..."}
+That is to say, much groundwork for program extraction from proofs has been laid, we just need to adapt and extend this theory to the specifics of modern automated theorem provers.
 3) We are able to take advantage of the highly sophisticated and optimized proof search strategies of first-order solvers instead of needing to define and implement \emph{ad-hoc} search strategies.
 %Moreover, we will profit from any future advancements in automated theorem proving.
 
@@ -72,10 +72,10 @@ We will further experiment with techniques that relate to modern syntax-guided a
 %What kind of advancements are expected to be gained from the research project? Which aspects of the proposed project are especially innovative? Describe the scientific relevance and the timeliness of the research project. Please note that the development of source code, systems or protocols should not be the main goal of the project; however, they are encouraged in the context of demonstrating the practical applicability of new scientific results.
 
 The final goal of our project is to leverage state-of-the-art first-order automated
-theorem provers, in particular Vampire, for program synthesis. 
+theorem provers, in particular Vampire, for program synthesis.
 This is motivated by the recent and prospective advancements in their capabilities.
-We will lay the necessary theoretical foundations as well as implement a prototype system to leverage state-of-the-art classical theorem provers for program extraction. 
-At the current time no such system exists. 
+We will lay the necessary theoretical foundations as well as implement a prototype system to leverage state-of-the-art classical theorem provers for program extraction.
+At the current time no such system exists.
 
 Much of the theoretical groundwork for implementing such a system is already present,
 but is scattered and mostly limited to theoretical settings.
@@ -95,28 +95,37 @@ We are not aware of related results in the literature.
 \section{Methods and feasibility (max. 2000 characters)}
 %Specify the methodology intended to be used in order to answer the research question(s) and objective(s).
 %Describe the basic working principles and concepts, and why the chosen approach/ specific mix of approaches is the most suitable for the research question. Include a short assessment on the feasibility of the approach.
+			
+We now give details on (WP1).
+We will consider two approaches from the literature:
+
+1) Parigot's $\lambda\mu$-calculus~\cite{Parigot1} gives a direct translation of classical proofs with datatypes and is essentially ready for implementation.
+However, since non-intuitionistic tautologies like $\neg\forall xA(x)\to \exists x\neg A(x)$ or $A\vee \neg A$ are assigned a program, we lose the realizability of $\exists$ and $\vee$.
+{\color{red} unclear: ``are assigned a program''}
+As discussed in~\cite{practical}, in practice it is often possible to eliminate the non-intuitionistic fragments.
+{\color{red} unclear: ``fragments''}
+We aim to establish stronger theoretical guarantees on when this is possible but also more practical benchmarks on the feasibility of this approach, even when realizability is not ensured by a theorem.
+{\color{red} unclear: ``more practical benchmarks''}
+
+2) Sometimes classical validity guarantees intuitionistic validity, most famously for $\Pi_2$-formulas in Arithmetic~\cite{Friedman}. There have been various variations of this result, most notably by Schwichtenberg's group~\cite{schwichtenberg}.
+We will adapt their work to our more general setting.
+{\color{red} Can the previous sentence be made more concrete? Also why we this promising and feasiable?}
+%	
+%We expect that in practice these approaches will be sufficient in many situations.
+
+Third, we also investigate a completely new direction:
+We aim for a translation between provers rather than proofs. 
+E.g., we study under what conditions classic proofs of a modified input formula allow to extract intuitionistic proofs of the actual input.
+A promising example is actually the reverse direction:
+given an intuitionistic prover one can establish classical provability via double negation translation.
+%A first approximation has been outlined in~\cite{RDNT}.
 	
-We now give the details on (WP1):
-An optimal procedure for synthesis would consist of
-\begin{itemize}
-\item transforming the specification into an alternate form that would guarantee the use of as few non-intuitionistic rules as possible and applicability of Friedman translation in as many places as possible
-\item applying the prover to this modified specification obtaining a classical proof
-\item apply Friedman translation or similar translation procedures in as many places as possible
-\item extracting a program via Curry-Howard correspondence, applying control operators to non-intuitionistic remnants as necessary.
-\end{itemize}
-All of these elements except the initial modification of the specification already exist separately and in model settings such as arithmetic. 
-Extending these results and combining them will be the first major undertaking of this project. 
-This is also a necessary precondition for determining what initial modifications should be undertaken. 
-We expect that for most real-world synthesis problems our procedure will be sufficient to transform classical proofs into usable and verified programs.
+Using the results of (WP1) we will implement a synthesis system on top of Vampire (WP2), targeting a suitable functional programming language.
+We will experiment with various benchmark problems (e.g., median computation, sorting algorithms, arithmetic functions such as sqrt) and compare our results with the SyGuS-competition.
+We will use ideas from syntax-guided synthesis (sketched in 1) in order to restrict and guide proof search:
+We will experiment with different formulations of arithmetic axioms, induction axioms and redundant axioms.
+We will further examine if proof search is possible when only input/output pairs are given.
 	
-Finally we want to implement a real system on top of Vampire realizing the synthesis problem (WP2) which will target a suitable functional programming language.
-
-Finally we suggest a third approach which has not been covered in literature yet, that is to pass a modified formula to the classical prover which can give us additional information about what an intuitionistic proof can look like.
-
-
-
-We will investigate how to restrict proof search in order to steer the search towards programs from certain syntactic fragments, we will experiment with different axioms that can be given as input to the automated theorem provers and we will examine input/output pairs to the tool.
-
 \section{Role of team members and collaborative aspects (max. 1500 characters)}
 %Each team member should describe his/her role in accomplishing the goal of the team. If applicable, which different disciplines are represented in the project and which partnerships across research groups and institutions will result from the project? Which collaborative elements are essential for the project to succeed; what makes the team more than the sum of its individual contributions? A team member’s contribution should be integrated into the overall plan and should not appear merely as a resource.
 
@@ -126,14 +135,24 @@ We will investigate how to restrict proof search in order to steer the search to
 \section{Potential medium-term economic / societal benefits (max. 500 characters)}
 %Provide a brief statement how the results from this research project could contribute towards solving a recognised problem that affects broader society or the economy.
 
+Programs that are correct by construction represent a longstanding goal of computer science.
+Correct Their is holds particularly true for safet
+
+
+
+\section{Potential ethical aspects (max. 500 characters)}
+%If required, information should be given with respect to the ethical approval. Is an ethical approval available that covers the prospective use of data and the planned analysis? If not, state whether an additional approval is required.
+
+Due to the focus on basic research and the mathematical and formal methodology, the proposed research does not entail ethical aspects beyond the usual mandate of good scientific practice.
+Similarly, the proposed research does not entail sex-specific or gender-related aspects.
+
+\section{Further Needed Stuff}
+
 Key references (max. 10 citations, max. 1250 characters)
 Cite a maximum of 10 of the most relevant background publications for the proposal. There is no required citation format, nevertheless publications should be cited in a way that allows the reader to easily retrieve the key information.
 
 Schedule/ Project overview (1 page Gantt chart, PDF upload)
 Upload a Gantt chart to give an overview of the milestones to be achieved during the project period. Specify the time periods and the respective PIs responsible for each milestone.
-
-\section{Potential ethical aspects (max. 500 characters)}
-%If required, information should be given with respect to the ethical approval. Is an ethical approval available that covers the prospective use of data and the planned analysis? If not, state whether an additional approval is required.
 
 \bibliographystyle{plain} % We choose the "plain" reference style
 \bibliography{literature} % Entries are in the refs.bib file
