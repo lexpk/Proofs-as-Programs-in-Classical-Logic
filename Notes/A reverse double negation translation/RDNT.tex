@@ -33,12 +33,12 @@
 
 	\section{Porpositional logic}
 	
-	A sequent $A\Rightarrow B$ consists of two sets of formulas $A, B$. We will be using the following rules for our classical calculus:\\\\
+	A sequent $A\Rightarrow B$ consists of two multi-sets of formulas $A, B$. We will be using the following rules for our classical calculus:\\
 	\begin{center}
 	\begin{tabular}{lll}
 		\AxiomC{\hphantom{x}}
-		\RightLabel{Ax ($P$ atomic)}
-		\UnaryInfC{$P,\Gamma\Rightarrow \Delta, P$}
+		\RightLabel{Ax}
+		\UnaryInfC{$A,\Gamma\Rightarrow \Delta, A$}
 		\DisplayProof&
 		\AxiomC{\hphantom{x}}
 		\RightLabel{L$\bot$}
@@ -65,7 +65,7 @@
 		\UnaryInfC{$\Gamma\Rightarrow \Delta, A\vee B$}
 		\DisplayProof&
 		\\&&\\
-		\AxiomC{$\Gamma\Rightarrow\Delta, A$}
+		\AxiomC{$A\to B, \Gamma\Rightarrow\Delta, A$}
 		\AxiomC{$B, \Gamma\Rightarrow\Delta$}
 		\RightLabel{L$\to$}
 		\BinaryInfC{$A\to B, \Gamma\Rightarrow \Delta$}
@@ -78,38 +78,152 @@
 	\end{tabular}
 	\end{center}
 	
-	For the intuitionistic calculus we just need to modify R$\to$:\\
+	For the intuitionistic calculus we just need to modify R$\to$:
 	\begin{center}
 		\AxiomC{$A, \Gamma\Rightarrow B$}
 		\RightLabel{R$\to'$}
 		\UnaryInfC{$\Gamma\Rightarrow\Delta, A\to B$}
 		\DisplayProof
 	\end{center}
+
+	These calculi have the following nice property:
+	
+	\begin{theorem}[subformula property]
+		Any formula that appears in a derivation is a subformula of a forumla that occurs in the root sequent.
+	\end{theorem}
+	
+	We consider the following additional rules, which are not a priori part of our calculus:
+		\begin{center}
+		\begin{tabular}{lll}
+			\AxiomC{$\Gamma\Rightarrow\Delta$}
+			\RightLabel{Lweak}
+			\UnaryInfC{$A,\Gamma\Rightarrow \Delta$}
+			\DisplayProof&
+			\AxiomC{$\Gamma\Rightarrow\Delta$}
+			\RightLabel{Rweak}
+			\UnaryInfC{$\Gamma\Rightarrow \Delta, A$}
+			\DisplayProof&
+			\\&&\\
+			\AxiomC{$A, A,\Gamma\Rightarrow\Delta$}
+			\RightLabel{Lcontr}
+			\UnaryInfC{$A, \Gamma\Rightarrow \Delta$}
+			\DisplayProof&
+			\AxiomC{$\Gamma\Rightarrow\Delta, A, A$}
+			\RightLabel{Rcontr}
+			\UnaryInfC{$\Gamma\Rightarrow \Delta, A$}
+			\DisplayProof&
+			\\&&\\
+		\end{tabular}
+	
+		\AxiomC{$\Gamma\Rightarrow A, \Delta$}
+		\AxiomC{$\Gamma', A\Rightarrow \Delta'$}
+		\RightLabel{Cut}
+		\BinaryInfC{$\Gamma, \Gamma'\Rightarrow\Delta, \Delta'$}
+		\DisplayProof
+	\end{center}
+
+
+	The following central result of proof theory will be useful to us in many places:
+	\begin{theorem}[admissibility of cut (and structural rules)]
+		The 5 above rules are admissible in our calculi for classical and intuitionistic logic, i.e. adding them we are not able to prove any additional theorems.
+	\end{theorem}
+
+
+	This means that we may assume that all proofs are free of these rules, but in constructing new proofs we may apply them. We exclude them from our calculus to keep it simple for proofs and because cut destroys the subformula property.
 	
 	\section{The Translation Procedure}
 	
 	\begin{definition}
-		We say that two sequents $S, S'$ are \textit{equi-valid} if $S$ is provable in intuitionistic logic iff $S'$ is provable.
+		We say that two sequents $S, S'$ are \textit{equi-provable} if $S$ is provable iff $S'$ is provable in intuitionistic logic.
 	\end{definition}
+
+	Clearly equi-provability is an equivalence relation.
 	
 	\begin{example}
-		The sequents $\Rightarrow A\vee B$ and $A\to C, B\to C\Rightarrow C$ are equi-valid:  By examining how a proof of the latter must end it is easy to argue that if there is a proof of one there must be a proof of the other, an alternative argument of course is that neither is provable.
+		The sequents $\Rightarrow A\vee B$ and $A\to C, B\to C\Rightarrow C$ are equi-provable. Note that they are not equivalent in the typical sense however, due to the absence of $C$ in the former. 
 	\end{example}
 
-		Note that they are not equivalent in the typical sense however, due to the absence of $C$ in the former. The reason that equivalence is insufficient for our procedure is that new atoms may be introduced. In trying to reverse double negation translation this is to be expected however: In double negation translation we collapse the veracity of $A$ and $\neg\neg A$, which are not equivalent before the translation. In our case we do the opposite, i.e. we must modifiy our formula such that $A$ and $\neg\neg A$ are no longer classically equivalent. For that we require new atoms.
+		The reason that equivalence is insufficient for our procedure is that new atoms may be introduced. In trying to reverse double negation translation this is to be expected however: In double negation translation we collapse the veracity of $A$ and $\neg\neg A$, which are not intuitionistically equivalent. In our case we do the opposite, i.e. we must modifiy our formula such that $A$ and $\neg\neg A$ are no longer classically equivalent. For that we require new atoms.
+
+		However there is clearly some collection between the two notions:
+		
+		\begin{lemma}
+			Let $A$ and $B$ be equivalent formulas, i.e. $A\Rightarrow B$ and $B\Rightarrow A$ are provable, then for any $\Gamma, \Delta$ the sequents $A,\Gamma\Rightarrow\Delta$ and $B, \Gamma\Rightarrow\Delta$ as well as $\Gamma\Rightarrow\Delta, A$ and $\Gamma\Rightarrow\Delta, B$ are equi-provable.
+		\end{lemma}
+	
+		\begin{proof}
+			This is a direct consequence of the admissibility of cut, e.g.
+			\begin{center}
+				\AxiomC{$\vdots$}
+				\noLine
+				\UnaryInfC{$A,\Gamma\Rightarrow\Delta$}
+				\AxiomC{$\vdots$}
+				\noLine
+				\UnaryInfC{$B\Rightarrow A$}
+				\RightLabel{Cut}
+				\BinaryInfC{$B, \Gamma\Rightarrow\Delta$}
+				\DisplayProof
+			\end{center}
+		\end{proof}
+
+		We observe some other basic properties of equiprovability.
+	
+	\begin{lemma}
+		Let $N$ be a atomic proposition that does not occur in $\Gamma$ or $\Delta$, $A, B$ arbitrary formulas that do not contain $N$, then:
+		\begin{enumerate}
+			\item $\Gamma\Rightarrow\Delta$ and $\Gamma\Rightarrow\Delta, N$ are equi-provable.
+			\item $\Gamma\Rightarrow\Delta, A$ and $\Gamma, A\to N\Rightarrow \Delta, N$ are equi-provable.
+		\end{enumerate} 
+	\end{lemma}
+
+	\begin{proof}
+		1. If $\Gamma\Rightarrow\Delta$ is provable then we obtain a proof of $\Gamma\Rightarrow\Delta, N$ through a simple application of weakening. Suppose on the other hand we have a proof of  $\Gamma\Rightarrow\Delta, N$. Then by the subformula property $N$ may only occur as a pure atom. In particular $N$ can never appear in the antecedent as it would occur in $\Gamma$ then. Since we may assume that our proof does not contain weakenings, $N$ has to be introduced as part of $\Delta$ in the axioms. Therefore removing $N$ from all succedents produces a valid proof of $\Gamma\Rightarrow\Delta$.
+		
+		2. If $\Gamma\Rightarrow\Delta, A$ is provable we obtain $\Gamma, A\to N\Rightarrow \Delta, N$ through a simple application of cut:
+		\begin{center}
+			\AxiomC{$\vdots$}
+			\noLine
+			\UnaryInfC{$\Gamma\Rightarrow\Delta, A$}
+			\AxiomC{\hphantom{X}}
+			\RightLabel{Ax}
+			\UnaryInfC{$A, A\to N\Rightarrow P, A$}
+			\AxiomC{\hphantom{X}}
+			\RightLabel{Ax}
+			\UnaryInfC{$N, A\Rightarrow N$}
+			\RightLabel{L$\to$}
+			\BinaryInfC{$A, A\to N\Rightarrow N$}
+			\RightLabel{Cut}
+			\BinaryInfC{$\Gamma, A\to N\Rightarrow\Delta, N$}
+			\DisplayProof
+		\end{center}
+		Suppose on the other hand we have a proof of $\Gamma, A\to N\Rightarrow \Delta, N$. Consider the proof obtained by replacing every occurrence of $N$ with $A$. By induction on the proof height it can be checked that this constitutes a valid proof of $\Gamma, A\to A\Rightarrow\Delta, N$. We obtain $\Gamma\Rightarrow\Delta, A$ through an application fo Cut:
+		\begin{center}
+			\AxiomC{\hphantom{X}}
+			\RightLabel{Ax}
+			\UnaryInfC{$A, \Rightarrow A$}
+			\RightLabel{R$\to$}
+			\UnaryInfC{$\Rightarrow A\to A$}
+			\AxiomC{$\vdots$}
+			\noLine
+			\UnaryInfC{$\Gamma, A\to A\Rightarrow\Delta, A$}
+			\RightLabel{Cut}
+			\BinaryInfC{$\Gamma\Rightarrow\Delta, A$}
+			\DisplayProof
+		\end{center}
+	\end{proof}
 
 	\begin{definition}
 		A sequent $A_1,\dots,A_n\Rightarrow B$ is \textit{implicational} if $B$ is atomic and each $A_i$ is of the form either $C\to (D\to E)$, $(C\to D)\to E$, $C\to D$ or $C$ for some atomic $C, D, E$.
 	\end{definition}
 
-	The first result is that for every sequent there is some equi-valid implicational sequent. This transformation is not strictly necessary for what follows, but it makes the arguments and procedure considerably simpler.
+	The first result is that for every sequent there is some equi-provable implicational sequent. This transformation is not strictly necessary for what follows, but it makes the arguments and procedure considerably simpler. It is reminiscent of the definitions of connectors in second order logic.
 	
 	Consider the following rules, where $X$ is not atomic, $N$ is a new atom:
 	\begin{center}
 		\begin{tabular}{lcl}
-			$\Delta\Rightarrow \Gamma, A, B$&$\rightsquigarrow$&$\Delta, A\to N, B\to N\Rightarrow\Gamma, N$\\
-			$\Delta\Rightarrow A\vee B$&$\rightsquigarrow$&$\Delta, A\to N, B\to N\Rightarrow N$\\
-			$\Delta\Rightarrow A\wedge B$&$\rightsquigarrow$&$\Delta, A\to (B\to N)\Rightarrow N$\\
+			$\Delta\Rightarrow \Gamma, A, B$&$\rightsquigarrow$&$\Delta\Rightarrow\Gamma, A\vee B$\\
+			$\Delta\Rightarrow A\vee B$&$\rightsquigarrow$&$\Delta, (A\vee B)\to N\Rightarrow N$\\
+			$\Delta\Rightarrow A\wedge B$&$\rightsquigarrow$&$\Delta,(A\wedge B)\to N\Rightarrow N$\\
 			$\Delta\Rightarrow A\to B$&$\rightsquigarrow$&$\Delta, A\Rightarrow B$\\
 			
 			$\Delta, A\wedge B\Rightarrow C$&$\rightsquigarrow$&$\Delta, A, B\Rightarrow C$\\
@@ -126,7 +240,7 @@
 			$\Delta, (A\to B)\to X\Rightarrow C$&$\rightsquigarrow$&$\Delta, N\to X, (A\to B)\to N\Rightarrow C$\\
 		\end{tabular}
 	\end{center}
-	\pagebreak
+
 	\begin{example}\hphantom{x}
 	\begin{center}
 		\begin{tabular}{ll}
@@ -140,14 +254,14 @@
 	\end{example}
 
 	\begin{lemma}
-		Iteratively applying the above transformations we can obtain from every sequent $S$ an equi-valid implicational sequent $S_\to$.
+		Iteratively applying the above transformations we can obtain from every sequent $S$ an equi-provable implicational sequent $S_\to$.
 	\end{lemma}
 
 	\begin{proof}[Proofsketch]
 		
 		Check that for any formula that is not implicational there is an applicable rule.
 		
-		Check that the sequents on both sides of each rule are equi-valid.
+		Check that the sequents on both sides of each rule are equi-provable.
 		
 		Termination can be shown by well-foundedness: First the number of formulas in the succedent is reduced to $1$, then the succedent is reduced to an atom. Then in each step the number of disjunctions, conjunctions or the depth of nested implications is reduced. 
 	\end{proof}
