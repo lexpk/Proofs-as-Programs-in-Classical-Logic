@@ -66,7 +66,7 @@ While the reported progress is impressive, we believe that the traditional deduc
 \section{Research questions, hypotheses and objectives (max. 2000 characters)}
 %What are the fundamental research questions/hypotheses that the project seeks to address? What are the goals the project seeks to achieve? Provide an outline of the scientific approach that will be used to address the questions and reach the objectives. The objectives should be achievable within the duration of your project. Please provide preliminary data and any relevant research experience.
 
-The main goal of this project is to connect the classical approach to deductive synthesis --  proofs-as-programs~\cite{girard1989proofs} --, with modern automated theorem provers, in particular first-order solvers (and SMT solvers???), which have made impressive progress over the recent years (as evidenced by yearly competitions\footnote{\url{http://www.tptp.org/CASC/}}).
+The main goal of this project is to connect the classical approach to deductive synthesis --  proofs-as-programs~\cite{girard1989proofs} --, with modern automated theorem provers, in particular first-order solvers \sout{(}and SMT solvers\sout{???)}, which have made impressive progress over the recent years (as evidenced by yearly competitions\footnote{\url{http://www.tptp.org/CASC/}}).
 
 We believe this approach offers the following advantages:
 1) First-order solvers are particularly suitable to solving \emph{quantified} formulas as needed for synthesis.
@@ -104,7 +104,7 @@ but is scattered and mostly limited to theoretical settings.
 We sketch here the two main directions that connect the Curry-Howard correspondence to classical logic:
 1) The Curry-Howard correspondence can be extended to classical logic using control operators~\cite{Control1}, Parigot's $\lambda\mu$-Calculus~\cite{Parigot1} or CPS-translation.
 However in this process we must in general give up on some desirable properties, at the very least the realizability of $\vee$ and $\exists$.
-2) Under certain conditions, classically valid proofs can be transformed into intuitionistic proofs, e.g. proofs of $\Pi_2$-sentences in Peano Arithmetic~\cite{HAPA}.
+2) Under certain conditions, classically valid proofs can be transformed into intuitionistic proofs, e.g. proofs of $\Pi_2$-sentences in Peano Arithmetic~\cite{HAPA}, {\color{blue}this point is of particular interest for SMT}.
 We will adapt and specialise these techniques from the literature to the proofs produced by automated theorem provers such as Vampire:
 A) We will develop the first\emph{ program extraction calculi} for \emph{resolution resp. superposition proofs}.
 In particular, we need to pay careful attentiont to the normal-form transformation --- a pre-processing step --- in automated theorem provers, which also involve equivalences that are only classically valid.
@@ -122,14 +122,13 @@ We now give details on (WP1).
 We will consider two approaches from the literature:
 
 1) Parigot's $\lambda\mu$-calculus~\cite{Parigot1} gives a direct translation of classical proofs with datatypes and is essentially ready for implementation.
-However, since non-constructive tautologies like $\neg\forall xA(x)\to \exists x\neg A(x)$ or $A\vee \neg A$ {\color{blue} are classically provable}, we lose the realizability of $\exists$ and $\vee$.
+However, since non-constructive tautologies like $\neg\forall xA(x)\to \exists x\neg A(x)$ or $A\vee \neg A$ are classically provable, we lose the realizability of $\exists$ and $\vee$.
 As discussed in~\cite{practical}, in practice it is sometimes possible to eliminate the non-constructive reasoning steps from proofs.
 We aim to establish stronger theoretical guarantees on when this is possible but also evaluate this approach when realizability is not ensured by a theorem.
 
 2) Sometimes classical validity guarantees intuitionistic validity, most famously for $\Pi_2$-formulas in Arithmetic~\cite{Friedman}. There have been many variations of this result, most notably by Schwichtenberg's group~\cite{schwichtenberg}.
 We will collect, adapt and extend these results with regard to our concrete setting. 
-This is particularly promising when considering altered specifications (see next point).
-%	
+This is particularly promising when  {\color{blue} applied to SMT, which can be interpreted as a restricted subproblem of the full first-order case~\cite{reynolds2015counterexample}, or when} considering altered specifications (see next point).
 %We expect that in practice these approaches will be sufficient in many situations.
 
 Third, we investigate a new direction:
