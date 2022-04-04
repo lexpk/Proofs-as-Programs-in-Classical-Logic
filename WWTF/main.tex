@@ -66,9 +66,10 @@ While the reported progress is impressive, we believe that the traditional deduc
 \section{Research questions, hypotheses and objectives (max. 2000 characters)}
 %What are the fundamental research questions/hypotheses that the project seeks to address? What are the goals the project seeks to achieve? Provide an outline of the scientific approach that will be used to address the questions and reach the objectives. The objectives should be achievable within the duration of your project. Please provide preliminary data and any relevant research experience.
 
-The main goal of this project is to connect the classical approach to deductive synthesis --  proofs-as-programs~\cite{girard1989proofs} --, with modern automated theorem provers, in particular first-order solvers (including SMT solvers), which have made impressive progress over the recent years (as evidenced by yearly competitions\footnote{\url{http://www.tptp.org/CASC/}}).
+The main goal of this project is to connect the classical approach to deductive synthesis --- proofs-as-programs~\cite{girard1989proofs} ---, with modern automated theorem provers, in particular first-order solvers (including SMT solvers), which have made impressive progress over the recent years (as evidenced by yearly competitions).
+%\footnote{\url{http://www.tptp.org/CASC/}})
 
-We believe this approach offers the following advantages:
+We believe that this approach offers the following advantages:
 1) First-order solvers are particularly suitable to solving \emph{quantified} formulas as needed for synthesis.
 2) Proofs-as-programs represents a longstanding approach to program extraction.
 That is to say, much groundwork for program extraction from proofs has been laid, we just need to adapt and extend this theory to the specifics of modern automated theorem provers.
@@ -76,8 +77,6 @@ That is to say, much groundwork for program extraction from proofs has been laid
 %Moreover, we will profit from any future advancements in automated theorem proving.
 
 We believe the proposed research is very timely, because improved hardware and the progress in automated theorem proving have finally made automated proof search feasible.
-Thus the proposed research promises to fill a longstanding gap in the state-of-the-art.
-
 We will advance the above main goal by two work packages (WPs):
 
 (WP1) We will lay the theoretical groundwork for program extraction with automated theorem provers.
@@ -98,6 +97,7 @@ theorem provers, in particular Vampire, for program synthesis.
 This is motivated by the recent and prospective advancements in their capabilities.
 We will lay the necessary theoretical foundations as well as implement a prototype system to leverage state-of-the-art classical theorem provers for program extraction.
 At the current time no such system exists.
+Thus the proposed research promises to fill a longstanding gap in the state-of-the-art.
 
 Much of the theoretical groundwork for implementing such a system is already present,
 but is scattered and mostly limited to theoretical settings.
@@ -118,20 +118,20 @@ We are not aware of related results in the literature.
 %Specify the methodology intended to be used in order to answer the research question(s) and objective(s).
 %Describe the basic working principles and concepts, and why the chosen approach/ specific mix of approaches is the most suitable for the research question. Include a short assessment on the feasibility of the approach.
 			
-We now give details on (WP1).
-We will consider two approaches from the literature:
+We now give details on (WP1):
+%We will consider two approaches from the literature:
 
 1) Parigot's $\lambda\mu$-calculus~\cite{Parigot1} gives a direct translation of classical proofs with datatypes and is essentially ready for implementation.
 Unfortunately, we loose the realizability of $\exists$ and $\vee$, since non-constructive tautologies like $\neg\forall xA(x)\to \exists x\neg A(x)$ or $A\vee \neg A$ are classically provable.
-As discussed in~\cite{practical}, in practice it is sometimes possible to eliminate the non-constructive reasoning steps from proofs.
+In practice it is sometimes possible to eliminate the non-constructive reasoning steps from proofs~\cite{practical}.
 We aim to establish stronger theoretical guarantees on when this is possible but also evaluate this approach when realizability is not ensured by a theorem.
 
 2) Sometimes classical validity guarantees intuitionistic validity, most famously for $\Pi_2$-formulas in Arithmetic~\cite{Friedman}. There have been many variations of this result, most notably by Schwichtenberg's group~\cite{schwichtenberg}.
 We will collect, adapt and extend these results with regard to our concrete setting.
-This is particularly promising when applied to SMT, which can be interpreted as a restricted subproblem of the full first-order case~\cite{reynolds2015counterexample}, or when considering altered specifications (see next point).
+This is particularly promising when applied to SMT, interpreted as a restricted subproblem of the full first-order case~\cite{reynolds2015counterexample}, or when considering altered specifications (see next point).
 %We expect that in practice these approaches will be sufficient in many situations.
 
-Third, we investigate a new direction:
+3) We investigate a new direction:
 We aim for a translation between provers rather than proofs.
 E.g., we study under what conditions classical proofs of a modified input formula allow to extract intuitionistic proofs of the actual input.
 A motivating example is actually the reverse direction:
@@ -139,8 +139,9 @@ given an intuitionistic prover one can establish classical provability via doubl
 %A first approximation has been outlined in~\cite{RDNT}.
 	
 Using the results of (WP1) we will implement a synthesis system on top of Vampire (WP2), targeting a suitable functional programming language.
-We will experiment with various benchmark problems (e.g., median computation, sorting algorithms, arithmetic functions such as sqrt) and compare our results with the SyGuS-competition.
-We will use ideas from syntax-guided synthesis (sketched in 1) in order to restrict and guide proof search:
+We will experiment with various benchmark problems %(e.g., median computation, sorting algorithms, arithmetic functions such as sqrt) 
+and compare our results with the SyGuS-competition.
+We will use ideas from syntax-guided synthesis in order to restrict and guide proof search:
 We will experiment with different formulations of arithmetic axioms, induction axioms and redundant axioms.
 We will further examine if proof search is possible when only input/output pairs are given.
 	
@@ -191,5 +192,32 @@ Upload a Gantt chart to give an overview of the milestones to be achieved during
 
 \bibliographystyle{plain} % We choose the "plain" reference style
 \bibliography{literature} % Entries are in the refs.bib file
+
+%[1] Ulrich Berger, Wilfried Buchholz, and Helmut Schwichtenberg. Refined
+%program extraction from classical proofs. 2002.
+%
+%[2] Dana Fisman, Rishabh Singh, and Armando Solar-Lezama. Special issue
+%on syntax-guided synthesis preface. 2022.
+%
+%[3] Harvey Friedman. Classically and intuitionistically provably recursive
+%functions. 1978.
+%
+%[4] Jean-Yves Girard, Paul Taylor, and Yves Lafont. Proofs and types. 1989.
+%
+%[5] Timothy G Griffin. A formulae-as-type notion of control. 1989.
+%
+%[6] Ulrich Kohlenbach. The Friedman A-translation. 2008.
+%
+%[7] Yevgeniy Makarov. Practical program extraction from classical proofs.  2006.
+%
+%[8] Zohar Manna and Richard Waldinger. A deductive approach to program
+%synthesis. 1979.
+%
+%[9] Michel Parigot. λμ-calculus: an algorithmic interpretation of classical
+%natural deduction. 1992.
+%
+%[10] Andrew Reynolds, Morgan Deters, Viktor Kuncak, Cesare Tinelli, and
+%Clark Barrett. Counterexample-guided quantifier instantiation for synthesis
+%in SMT. 2015.
 
 \end{document} 
