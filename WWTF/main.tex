@@ -51,14 +51,14 @@ At the same time, program synthesis holds the promise of freeing the programmer 
 Program synthesis is a long-standing problem that crosses many areas of computer science and mathematics including programming languages, AI, formal methods and proof theory.
 Traditionally, program synthesis has been formalized as a problem in deductive theorem proving~\cite{conf/ijcai/MannaW79}:
 Given a logical formula that states that for all inputs there exists an output such that the required specification holds, one searches for a constructive proof of this formula and then extracts a program from this proof.
-A classic route to program extraction is the \emph{Curry-Howard correspondence}~\cite{girard1989proofs} (also known as \emph{proofs-as-programs}) where one exploits the equivalence between proofs in intuitionist logic and functional programs in order to directly extract a functional program from an intuitionistic proof.
+A classic route to program extraction is the \emph{Curry-Howard correspondence}~\cite{girard1989proofs} (also known as \emph{proofs-as-programs}) where one exploits the equivalence between proofs in intuitionistic logic and functional programs in order to directly extract a functional program from an intuitionistic proof.
 The Curry-Howard correspondence denotes a fundamental relationship between two seemingly unrelated formalisms, namely proofs systems on one hand and computational models on the other hand.
 The Curry-Howard correspondence has been a major driving force for research spanning functional programming languages, type theory, proof systems and constructive logic.
 However, progress on the deductive synthesis problem has been slow for many years because of a lack of automated and scalable provers.
 Instead, a recent variant of the program synthesis problem has enabled dramatic progress (we refer to the special issue~\cite{fisman2022special} and the workshop\footnote{\url{https://simons.berkeley.edu/workshops/tfcs2021-1}} for an overview):
 %\footnote{https://www.cs.technion.ac.il/~shaull/SYNT2022/index.html}
 The logical specification is accompanied by a \emph{syntactic template} that constrains the space of possible implementations.
-The synthesis procedure then searches for/enumerates candidate implementations and either rejects these candidates by finding violating input/output pairs or accept the generated program by verifying their correctness.
+The synthesis procedure then searches for/enumerates candidate implementations and either rejects these candidates by finding violating input/output pairs or accepts the generated program by verifying their correctness.
 The syntactic approach is very versatile and synthesis approaches have been explored that solely start from input/output examples or that mine possible program fragments from public code repositories.
 While the reported progress is impressive, we believe that the traditional deductive approach to synthesis has been unjustly neglected.
 
@@ -85,15 +85,14 @@ utilize resolution which is an inherently classical technique.
 For this, we will adapt and extend techniques from the literature that connect the Curry-Howard correspondence to classical logic.
 
 (WP2) We will implement a proof-of-concept tool that demonstrates the feasibility of our approach.
-This tool will take proofs produced by automated theorem provers as an input, and will output programs that are correct by construction.
+This tool will take first-order specifications as an input, and leverage automated theorem provers to output programs that are correct by construction.
 We will further experiment with techniques that relate to modern syntax-guided approaches to synthesis.
 
 
 \section{Expected results, novelty and relevance (max. 2000 characters)}
 %What kind of advancements are expected to be gained from the research project? Which aspects of the proposed project are especially innovative? Describe the scientific relevance and the timeliness of the research project. Please note that the development of source code, systems or protocols should not be the main goal of the project; however, they are encouraged in the context of demonstrating the practical applicability of new scientific results.
 
-The final goal of our project is to leverage state-of-the-art first-order automated
-theorem provers, in particular Vampire, for program synthesis.
+The final goal of our project is to leverage state-of-the-art first-order automated theorem provers, in particular Vampire~\cite{conf/cav/KovacsV13}, for program synthesis.
 This is motivated by the recent and prospective advancements in their capabilities.
 We will lay the necessary theoretical foundations as well as implement a prototype system to leverage state-of-the-art classical theorem provers for program extraction.
 At the current time no such system exists.
@@ -122,7 +121,7 @@ We now give details on (WP1):
 %We will consider two approaches from the literature:
 
 1) Parigot's $\lambda\mu$-calculus~\cite{Parigot1} gives a direct translation of classical proofs with datatypes and is essentially ready for implementation.
-Unfortunately, we loose the realizability of $\exists$ and $\vee$, since non-constructive tautologies like $\neg\forall xA(x)\to \exists x\neg A(x)$ or $A\vee \neg A$ are classically provable.
+Unfortunately, we lose the realizability of $\exists$ and $\vee$ since non-constructive tautologies like $\neg\forall xA(x)\to \exists x\neg A(x)$ or $A\vee \neg A$ are classically provable.
 In practice it is sometimes possible to eliminate the non-constructive reasoning steps from proofs~\cite{practical}.
 We aim to establish stronger theoretical guarantees on when this is possible but also evaluate this approach when realizability is not ensured by a theorem.
 
@@ -139,7 +138,7 @@ given an intuitionistic prover one can establish classical provability via doubl
 %A first approximation has been outlined in~\cite{RDNT}.
 	
 Using the results of (WP1) we will implement a synthesis system on top of Vampire (WP2), targeting a suitable functional programming language.
-We will experiment with various benchmark problems %(e.g., median computation, sorting algorithms, arithmetic functions such as sqrt) 
+We will experiment with various benchmark problems %(e.g., median computation, sorting algorithms, arithmetic functions such as sqrt)
 and compare our results with the SyGuS-competition.
 We will use ideas from syntax-guided synthesis in order to restrict and guide proof search:
 We will experiment with different formulations of arithmetic axioms, induction axioms and redundant axioms.
