@@ -9,6 +9,9 @@
 \usepackage{ mathpartir }
 \usepackage{bussproofs}
 
+\usepackage{hyperref}% http://ctan.org/pkg/hyperref
+\usepackage{cleveref}% http://ctan.org/pkg/cleveref
+
 \theoremstyle{definition}
 \newtheorem{theorem}{Theorem}[section]
 \theoremstyle{definition}
@@ -22,6 +25,8 @@
 \theoremstyle{definition}
 \newtheorem{example}[theorem]{Example}
 
+\DeclareMathOperator*{\argmax}{arg\,max}
+
 \begin{document}
 	
 	\maketitle
@@ -33,7 +38,7 @@
 
 	\section{Porpositional logic}
 	
-	A sequent $A\Rightarrow B$ consists of two multi-sets of formulas $A, B$. We will be using the following rules for our classical calculus:\\
+	A sequent $A\Rightarrow B$ consists of two finite multi-sets of formulas $A, B$. We will be using the following rules for our classical calculus:\\
 	\begin{center}
 	\begin{tabular}{lll}
 		\AxiomC{\hphantom{x}}
@@ -134,21 +139,24 @@
 	\section{The Translation Procedure}
 	
 	\begin{definition}
-		We say that two sequents $S, S'$ are \textit{equi-provable} if $S$ is provable iff $S'$ is provable in intuitionistic logic.
+		We say that two sequents $S, S'$ are \textit{equiprovable} if $S$ is intuitionistically provable iff $S'$ is intuitionistically provable and write $$S\sim_p S'.$$
 	\end{definition}
 
-	Clearly equi-provability is an equivalence relation.
+	Clearly equiprovability is an equivalence relation. Since every sequent is either provable or not the above notion is trivial in a sense. However we can often argue that two sequents are equiprovable even when we cannot determine their individual provability. This is in particular useful when discussing transformations of sequents that are to preserve intuitionistic provability.
 	
 	\begin{example}
-		The sequents $\Rightarrow A\vee B$ and $A\to C, B\to C\Rightarrow C$ are equi-provable. Note that they are not equivalent in the typical sense however, due to the absence of $C$ in the former. 
+		The sequents $\Rightarrow A\vee B$ and $A\to C, B\to C\Rightarrow C$ are equiprovable. Note that they are not equivalent in the typical sense however, due to the absence of $C$ in the former. 
 	\end{example}
 
 		The reason that equivalence is insufficient for our procedure is that new atoms may be introduced. In trying to reverse double negation translation this is to be expected however: In double negation translation we collapse the veracity of $A$ and $\neg\neg A$, which are not intuitionistically equivalent. In our case we do the opposite, i.e. we must modifiy our formula such that $A$ and $\neg\neg A$ are no longer classically equivalent. For that we require new atoms.
 
-		However there is clearly some collection between the two notions:
+		However there is clearly some connection between the two notions:
 		
-		\begin{lemma}
-			Let $A$ and $B$ be equivalent formulas, i.e. $A\Rightarrow B$ and $B\Rightarrow A$ are provable, then for any $\Gamma, \Delta$ the sequents $A,\Gamma\Rightarrow\Delta$ and $B, \Gamma\Rightarrow\Delta$ as well as $\Gamma\Rightarrow\Delta, A$ and $\Gamma\Rightarrow\Delta, B$ are equi-provable.
+		\begin{lemma}\label{ep1}
+			Let $A$ and $B$ be equivalent formulas, i.e. $A\Rightarrow B$ and $B\Rightarrow A$ are provable. Then \begin{enumerate}
+				\item $A,\Gamma\Rightarrow\Delta \sim_p B, \Gamma\Rightarrow\Delta$
+				\item $\Gamma\Rightarrow\Delta, A\sim_p\Gamma\Rightarrow\Delta, B$
+			\end{enumerate}
 		\end{lemma}
 	
 		\begin{proof}
@@ -168,11 +176,13 @@
 
 		We observe some other basic properties of equiprovability.
 	
-	\begin{lemma}
+	\begin{lemma}\label{ep2}
 		Let $N$ be a atomic proposition that does not occur in $\Gamma$ or $\Delta$, $A, B$ arbitrary formulas that do not contain $N$, then:
 		\begin{enumerate}
-			\item $\Gamma\Rightarrow\Delta$ and $\Gamma\Rightarrow\Delta, N$ are equi-provable.
-			\item $\Gamma\Rightarrow\Delta, A$ and $\Gamma, A\to N\Rightarrow \Delta, N$ are equi-provable.
+			\item $\Gamma\Rightarrow\Delta\sim_p\Gamma\Rightarrow\Delta, N$
+			\item $\Gamma\Rightarrow\Delta, A\sim_p\Gamma, A\to N\Rightarrow \Delta, N$
+			\item $\Gamma, A, B\Rightarrow\Delta\sim_p\Gamma, A\wedge B\Rightarrow\Delta$
+			\item $\Gamma\Rightarrow A\vee B,\Delta\sim_p\Gamma\Rightarrow A, B,\Delta$
 		\end{enumerate} 
 	\end{lemma}
 
@@ -200,7 +210,7 @@
 		\begin{center}
 			\AxiomC{\hphantom{X}}
 			\RightLabel{Ax}
-			\UnaryInfC{$A, \Rightarrow A$}
+			\UnaryInfC{$A \Rightarrow A$}
 			\RightLabel{R$\to$}
 			\UnaryInfC{$\Rightarrow A\to A$}
 			\AxiomC{$\vdots$}
@@ -210,31 +220,52 @@
 			\BinaryInfC{$\Gamma\Rightarrow\Delta, A$}
 			\DisplayProof
 		\end{center}
+	
+		3. Going from $\Gamma, A, B\Rightarrow\Delta$ to $\Gamma, A\wedge B\Rightarrow\Delta$ is a single $L\wedge$ step. The other direction is a simple application of Cut:
+		
+		\begin{center}
+			\AxiomC{\hphantom{X}}
+			\RightLabel{Ax}
+			\UnaryInfC{$A, B \Rightarrow A$}
+			\AxiomC{\hphantom{X}}
+			\RightLabel{Ax}
+			\UnaryInfC{$A, B \Rightarrow B$}
+			\RightLabel{R$\wedge$}
+			\BinaryInfC{$A, B \Rightarrow A\wedge B$}
+			\AxiomC{$\vdots$}
+			\noLine
+			\UnaryInfC{$\Gamma, A\wedge B\Rightarrow\Delta$}
+			\RightLabel{Cut}
+			\BinaryInfC{$\Gamma, A, B\Rightarrow\Delta$}
+			\DisplayProof
+		\end{center}
+		
+		4. Analogous to 3.
 	\end{proof}
 
 	\begin{definition}
 		A sequent $A_1,\dots,A_n\Rightarrow B$ is \textit{implicational} if $B$ is atomic and each $A_i$ is of the form either $C\to (D\to E)$, $(C\to D)\to E$, $C\to D$ or $C$ for some atomic $C, D, E$.
 	\end{definition}
 
-	The first result is that for every sequent there is some equi-provable implicational sequent. This transformation is not strictly necessary for what follows, but it makes the arguments and procedure considerably simpler. It is reminiscent of the definitions of connectors in second order logic.
+	The first result is that for every sequent there is some equiprovable implicational sequent. This transformation is not strictly necessary for what follows, but it makes the arguments and procedure considerably simpler. It is reminiscent of the definitions of connectors in second order logic.
 	
 	Consider the following rules, where $X$ is not atomic, $N$ is a new atom:
 	\begin{center}
 		\begin{tabular}{lcl}
 			$\Delta\Rightarrow \Gamma, A, B$&$\rightsquigarrow$&$\Delta\Rightarrow\Gamma, A\vee B$\\
+			$\Delta\Rightarrow A\to B$&$\rightsquigarrow$&$\Delta, A\Rightarrow B$\\
 			$\Delta\Rightarrow A\vee B$&$\rightsquigarrow$&$\Delta, (A\vee B)\to N\Rightarrow N$\\
 			$\Delta\Rightarrow A\wedge B$&$\rightsquigarrow$&$\Delta,(A\wedge B)\to N\Rightarrow N$\\
-			$\Delta\Rightarrow A\to B$&$\rightsquigarrow$&$\Delta, A\Rightarrow B$\\
 			
 			$\Delta, A\wedge B\Rightarrow C$&$\rightsquigarrow$&$\Delta, A, B\Rightarrow C$\\
-			$\Delta, A\vee B\Rightarrow C$&$\rightsquigarrow$&$\Delta, (A\to C)\to (B\to C)\to C\Rightarrow  C$\\
+			$\Delta, A\vee B\Rightarrow C$&$\rightsquigarrow$&$\Delta, (A\to C)\to (B\to C)\to N\Rightarrow  N$\\
 			$\Delta, (A\wedge B)\to C\Rightarrow D$&$\rightsquigarrow$&$\Delta, A\to (B\to C)\Rightarrow D$\\
 			$\Delta, (A\vee B)\to C\Rightarrow D$&$\rightsquigarrow$&$\Delta, A\to C, B\to C\Rightarrow D$\\
-			$\Delta, A\to (B\vee C)\Rightarrow D$&$\rightsquigarrow$&$\Delta, A\to (B\to D)\to (C\to D)\to D\Rightarrow D$\\
+			$\Delta, A\to (B\vee C)\Rightarrow D$&$\rightsquigarrow$&$\Delta, A\to (B\to D)\to (C\to D)\to N\Rightarrow N$\\
 			$\Delta, A\to (B\wedge C)\Rightarrow D$&$\rightsquigarrow$&$\Delta, A\to B, A\to C\Rightarrow D$\\
-			$\Delta, X\to (A\to B)\Rightarrow C$&$\rightsquigarrow$&$\Delta, X\to N, N\to (A\to B)\Rightarrow C$\\
-			$\Delta, A\to (X\to B)\Rightarrow C$&$\rightsquigarrow$&$\Delta, X\to N, A\to (N\to B)\Rightarrow C$\\
-			$\Delta, A\to (B\to X)\Rightarrow C$&$\rightsquigarrow$&$\Delta, N\to X, A\to (B\to N)\Rightarrow C$\\
+			$\Delta, X\to A\to B\Rightarrow C$&$\rightsquigarrow$&$\Delta, X\to N, N\to (A\to B)\Rightarrow C$\\
+			$\Delta, A\to X\to B\Rightarrow C$&$\rightsquigarrow$&$\Delta, X\to N, A\to (N\to B)\Rightarrow C$\\
+			$\Delta, A\to B\to X\Rightarrow C$&$\rightsquigarrow$&$\Delta, N\to X, A\to (B\to N)\Rightarrow C$\\
 			$\Delta, (X\to A)\to B\Rightarrow C$&$\rightsquigarrow$&$\Delta, N\to X, (N\to A)\to B\Rightarrow C$\\
 			$\Delta, (A\to X)\to B\Rightarrow C$&$\rightsquigarrow$&$\Delta, X\to N, (A\to N)\to B\Rightarrow C$\\
 			$\Delta, (A\to B)\to X\Rightarrow C$&$\rightsquigarrow$&$\Delta, N\to X, (A\to B)\to N\Rightarrow C$\\
@@ -254,16 +285,46 @@
 	\end{example}
 
 	\begin{lemma}
-		Iteratively applying the above transformations we can obtain from every sequent $S$ an equi-provable implicational sequent $S_\to$.
+		Iteratively applying the above transformations we can obtain from every sequent $S$ an equiprovable implicational sequent $S_\to$.
 	\end{lemma}
 
-	\begin{proof}[Proofsketch]
+	\begin{proof}[Proof]
 		
-		Check that for any formula that is not implicational there is an applicable rule.
+		There are three things to check: 1. There is an applicable transformation for every non-implicational sequent. 2. The translation procedure terminates on every input. 3. The sequents involved in every transformation are equiprovable.
 		
-		Check that the sequents on both sides of each rule are equi-provable.
+		1. Suppose $\Gamma\Rightarrow\Delta$ is not implicational. Then the succedent is not a single atom, or there is a formula in the antecedent that is not of the form $(C\to D)\to E, C\to (D\to E), C\to D$ or $D$ for some atoms $C, D, E$. In the former case one of transformations 1-4 is applicable. In the latter case one of the other rules is.
+
+		2. Define the complexity $c(\varphi)$ of a formula as $c(A) = 0$ for atoms $A$, $c(A\circ B) = c(A) + c(B) + 1$ for $\circ\in\{\wedge,\vee,\to\}$. We can use $c$ to define a partial order $\succ$ on finite multi-sets of formulas, i.e. have $\emptyset\not \succ\Delta$ and $\Gamma\succ\emptyset$ for $\Gamma$ non-empty and for both $\Gamma,\Delta$ non-empty have\begin{align*}
+			\Gamma \succ\Delta:\Longleftrightarrow&\max_\Gamma c > \max_\Delta c\text{ or }\\&\max_\Delta c =\max_\Gamma c\text{ and }\Gamma - \argmax_\Gamma c \succ\Delta - \argmax_\Delta c.
+		\end{align*} $\succ$ is well-founded: Suppose towards contradiction that there is an infinite chain $$\Gamma_0^{(0)} \succ \Gamma_1^{(0)} \succ\dots\succ\Gamma_n^{(0)}\succ\dots$$Then every $\Gamma_i^{(0)}$ must be non-empty and $$\max_{\Gamma_0^{(0)}}c \geq \max_{\Gamma_1^{(0)}}c \geq\dots \geq \max_{\Gamma_n^{(0)}}c \geq\dots$$ and since $\mathbb{N}$ is well-ordered this chain must become stationary, i.e. there is $N_0$ such that $\max_{\Gamma_i^{(0)}}c = \max_{\Gamma_{N_0}^{(0)}}c$ for $i\geq N_0$ and $\max_{\Gamma_i^{(0)}}c>\max_{\Gamma_{N_0}^{(0)}}c$ for $i<N_0$. In particular for $i\geq N_0$ we have $\Gamma_i^{(0)}-\argmax_{\Gamma_i^{(0)}}c >_c \Gamma_{i+1}^{(0)}-\argmax_{\Gamma_{i+1}^{(0)}}c$, thus we obtain a second chain $$\Gamma_0^{(1)} \succ\Gamma_1^{(1)} \succ\dots\succ\Gamma_n^{(1)}\succ\dots$$ with $$\Gamma_i^{(1)} = \Gamma_{N+i}^{(0)} - \argmax_{\Gamma_{N+i}^{(0)}}c.$$We can repeat this construction to obtain an sequence $N_0, N_1,\dots$ Note that $$ \max_{\Gamma_{N_i}^{(i)}}c\geq \max_{\Gamma_{0}^{(i+1)}}c\geq \max_{\Gamma_{N_{i+1}}^{(i+1)}}c$$where the last is even a strict inequality if $N_{i+1} > 0$. Observe that $\Gamma_{N_0+\dots+N_i}^{(0)}$ by construction must contain at least $i+1$ formulas, i.e. $N_0,N_1,\dots$ cannot become constant 0. Consider a subsequence $N_{\alpha(0)},N_{\alpha(1)},\dots$ that does not contain a zero. Then we have $$\max_{\Gamma_{N_{\alpha(0)}}^{({\alpha(0)})}}c > \max_{\Gamma_{N_{\alpha(1)}}^{({\alpha(1)})}}c>\dots >\max_{\Gamma_{N_{\alpha(n)}}^{({\alpha(n)})}}c>\dots$$ which is an infinite decreasing chain, but $\mathbb{N}$ is a well-order. $\lightning$
+	
 		
-		Termination can be shown by well-foundedness: First the number of formulas in the succedent is reduced to $1$, then the succedent is reduced to an atom. Then in each step the number of disjunctions, conjunctions or the depth of nested implications is reduced. 
+	 	We can now use $\succ$ to define a partial order $\gg$ on the set of sequents as follows: $$\Gamma\Rightarrow\Delta \gg \Gamma'\Rightarrow\Delta'$$ iff
+		\begin{enumerate}
+			\item $|\Delta| > |\Delta'|$ 
+			\item not 1 and $\Delta \succ \Delta'$
+			\item not 1, 2 and the number of occurrences of $\wedge$ in $\Gamma$ is higher than in $\Gamma' $.
+			\item not 1 - 3 and the number of occurrences of $\vee$ in $\Gamma$ is higher than in $\Gamma' $.
+			\item not 1 - 4 and $\Gamma \succ\Gamma' $.
+		\end{enumerate}
+		Since each of 1 - 5 is well-founded, $\gg$ is well-founded, i.e. for each set we can obtain a minimal element by considering first a minimal subset with regard to 1, then to 2 and so on.
+		
+		Now every transformation is reductive with regard to $\gg$. Therefore iteratively applying transformations creates a descending chain. Since every descending chain in a well-founded order is finite this proves termination.
+		 
+		3. For most cases equiprovability follows from Lemmas \ref{ep1} and \ref{ep2}, e.g. consider $$\Delta, A\to (B\wedge C)\Rightarrow D\indent\rightsquigarrow\indent\Delta, A\to B, A\to C\Rightarrow D$$Then we have
+		\begin{align*}
+			\Delta, A\to (B\wedge C)\Rightarrow D&\overset{\ref{ep1}.1}{\sim_p}\Delta, (A\to B)\wedge (A\to C)\Rightarrow D\\&\overset{\ref{ep2}.3}{\sim_p}\Delta, A\to B, A\to C\Rightarrow D
+		\end{align*}
+		
+		Some cases require simple applications of cut using intuitionistic tautologies, e.g. for
+		$$\Delta, A\vee B\Rightarrow C\indent\rightsquigarrow\indent\Delta, (A\to C)\to (B\to C)\to N\Rightarrow  N$$
+		we have 
+		\begin{align*}
+			\Delta, A\vee B\Rightarrow C&\overset{\star}{\sim_p}\Delta\Rightarrow (A\vee B)\to C\\&\overset{\ref{ep2}.3}{\sim_p}\Delta\Rightarrow (A\to C)\wedge(B\to C)\\&\overset{\ref{ep2}.2}{\sim_p} \Delta, ((A\to C)\wedge (B\to C))\to N\Rightarrow N\\&\overset{\ref{ep1}.1}{\sim_p}\Delta, (A\to C)\to(B\to C)\to N\Rightarrow N.
+		\end{align*}
+		Where one direction of $\star$ is trivial and the other is obtained via cut with $$A\vee B, (A\vee B)\to C\Rightarrow C$$
+		
+		For the last 6 rules one direction in obtained via cut and the other one by substituting all occurrences of $N$ in a proof with $X$.
 	\end{proof}
 	
 	For each atom $A$ consider a new atom $A'$ and a special atom $\omega = \bot'$. Have $\top' = \top$. Fix some implicational sequent $S := \Delta\Rightarrow C$ for now. Let $\mathcal{A}$ be the set of atoms occurring in $S$. Then define 
