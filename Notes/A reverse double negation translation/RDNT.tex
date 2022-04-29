@@ -1,6 +1,6 @@
 \documentclass[a4paper,12pt]{article}
 
-\title{A reverse double negation translation}
+\title{Embedding intuitionistic into classical logic}
 \author{Alexander Pluska}
 
 \usepackage{amsmath,amssymb,amsthm}
@@ -8,6 +8,9 @@
 \usepackage{ stmaryrd }
 \usepackage{ mathpartir }
 \usepackage{bussproofs}
+\usepackage{enumerate}
+\usepackage{tikz-qtree}
+\usepackage{stackengine}
 
 \usepackage{hyperref}% http://ctan.org/pkg/hyperref
 \usepackage{cleveref}% http://ctan.org/pkg/cleveref
@@ -36,63 +39,119 @@
 	\end{abstract}
 	
 
+	
+
 	\section{Porpositional logic}
 	
-	A sequent $A\Rightarrow B$ consists of two finite multi-sets of formulas $A, B$. We will be using the following rules for our classical calculus:\\
-	\begin{center}
-	\begin{tabular}{lll}
-		\AxiomC{\hphantom{x}}
-		\RightLabel{Ax}
-		\UnaryInfC{$A,\Gamma\Rightarrow \Delta, A$}
-		\DisplayProof&
-		\AxiomC{\hphantom{x}}
-		\RightLabel{L$\bot$}
-		\UnaryInfC{$\bot,\Gamma\Rightarrow\Delta$}
-		\DisplayProof&
-		\\&&\\
-		\AxiomC{$A, B,\Gamma\Rightarrow\Delta$}
-		\RightLabel{L$\wedge$}
-		\UnaryInfC{$A\wedge B, \Gamma\Rightarrow \Delta$}
-		\DisplayProof&
-		\AxiomC{$\Gamma\Rightarrow\Delta, A$}
-		\AxiomC{$\Gamma\Rightarrow\Delta, B$}
-		\RightLabel{R$\wedge$}
-		\BinaryInfC{$\Gamma\Rightarrow \Delta, A\wedge B$}
-		\DisplayProof&
-		\\&&\\
-		\AxiomC{$A, \Gamma\Rightarrow\Delta$}
-		\AxiomC{$B, \Gamma\Rightarrow\Delta$}
-		\RightLabel{L$\vee$}
-		\BinaryInfC{$A\vee B, \Gamma\Rightarrow \Delta$}
-		\DisplayProof&
-		\AxiomC{$\Gamma\Rightarrow\Delta, A, B$}
-		\RightLabel{R$\vee$}
-		\UnaryInfC{$\Gamma\Rightarrow \Delta, A\vee B$}
-		\DisplayProof&
-		\\&&\\
-		\AxiomC{$A\to B, \Gamma\Rightarrow\Delta, A$}
-		\AxiomC{$B, \Gamma\Rightarrow\Delta$}
-		\RightLabel{L$\to$}
-		\BinaryInfC{$A\to B, \Gamma\Rightarrow \Delta$}
-		\DisplayProof&
-		\AxiomC{$A,\Gamma\Rightarrow\Delta, B$}
-		\RightLabel{R$\to$}
-		\UnaryInfC{$\Gamma\Rightarrow \Delta, A\to B$}
-		\DisplayProof&
-		\\&&\\
-	\end{tabular}
-	\end{center}
+	Since the details of syntax are a delicate concern for proof theory we will first collect some important definitions and facts. Fix a countably infinite number of atomic propositions $A, B, C,\dots$ as well as a special atomic proposition $\bot$.
 	
-	For the intuitionistic calculus we just need to modify R$\to$:
-	\begin{center}
-		\AxiomC{$A, \Gamma\Rightarrow B$}
-		\RightLabel{R$\to'$}
-		\UnaryInfC{$\Gamma\Rightarrow\Delta, A\to B$}
-		\DisplayProof
-	\end{center}
+	\begin{definition}
+		A \textit{Fomrula} can be constructed only in the following ways:
+		\begin{itemize}
+			\item every atomic proposition is a formula.
+			\item given formulas $A, B$ we have formulas $A\wedge B, A\vee B, A\to B$.
+		\end{itemize}
+	 	With every formula $\varphi$ we can associate a unique labelled rooted binary tree, the \textit{syntax tree} $T(\varphi)$:
+		 \begin{itemize}
+		 	\item If $\varphi$ is atomic then $T(\varphi)$ consists of a single node with label $\varphi$: \tikz[scale=0.9, baseline=0mm, thick]{\node[draw] {$ \varphi$}}
+		 	\item If $\varphi = \varphi_1\circ\varphi_2$ then the root node is again labelled with gamma and has two child nodes, at which the trees $T(\varphi_1)$ and $T(\varphi_2)$ are attached:
+		 	\begin{center}
+		 	\tikz[scale=1, baseline=-5mm, thick]{\Tree [.\node[draw]{$\varphi$}; [.$T(\varphi_1)$  ] [.$T(\varphi_2)$  ] ]}
+	 		\end{center}
+		 \end{itemize}
+	 	$\psi$ is a \textit{subformula} of $\varphi$ if it is the label of some node of $T(\varphi)$.
+	 \end{definition}
+	 
+	 
+	 \begin{example}
+	 	Consider the formula $((A\wedge B)\to A) \to (B\vee A)$. Then its syntax tree is
+	 	\begin{center}
+	 		\tikz[scale=1, baseline=-5mm, thick]{\Tree [.\node[draw]{$((A\to B)\to A)\to (B\vee A)$}; [.\node[draw]{$(A\to B)\to A$}; [.\node[draw]{$A\to B$}; [.\node[draw]{$A$}; ] [.\node[draw]{$B$}; ] ] [.\node[draw]{$A$}; ] ] [.\node[draw]{$B\vee A$}; [.\node[draw]{$B$}; ] [.\node[draw]{$A$};] ] ]}
+	 	\end{center}
+	 \end{example}
+ 
+ 	We are now ready to introduce our calculi for intuitionistic and classical logic:
+	
+	\begin{definition}
+			A \textit{sequent} $A\Rightarrow B$ consists of two multisets of formulas $A, B$. The position of $A_i$ in $A_1,\dots, A_n\Rightarrow B_1,\dots, B_m$ is $0i$ and that of $B_i$ is $1i$. A formula $\varphi$ occurs at $p = (ji, p')$ if $\varphi$ occurs at $p'$ in $A_i$ if $j=0$ and in $B_i$ if $j=1$. The following rules make up our classical calculus $\mathbf{GC}$, corresponding roughly to the propositional fragment of \textbf{G3c} from~\cite{basicprooftheory}:\\
+		\begin{center}
+			\begin{tabular}{lll}
+				\AxiomC{\hphantom{x}}
+				\RightLabel{Ax}
+				\UnaryInfC{$A,\Gamma\Rightarrow \Delta, A$}
+				\DisplayProof&
+				\AxiomC{\hphantom{x}}
+				\RightLabel{L$\bot$}
+				\UnaryInfC{$\bot,\Gamma\Rightarrow\Delta$}
+				\DisplayProof&
+				\\&&\\
+				\AxiomC{$A, B,\Gamma\Rightarrow\Delta$}
+				\RightLabel{L$\wedge$}
+				\UnaryInfC{$A\wedge B, \Gamma\Rightarrow \Delta$}
+				\DisplayProof&
+				\AxiomC{$\Gamma\Rightarrow\Delta, A$}
+				\AxiomC{$\Gamma\Rightarrow\Delta, B$}
+				\RightLabel{R$\wedge$}
+				\BinaryInfC{$\Gamma\Rightarrow \Delta, A\wedge B$}
+				\DisplayProof&
+				\\&&\\
+				\AxiomC{$A, \Gamma\Rightarrow\Delta$}
+				\AxiomC{$B, \Gamma\Rightarrow\Delta$}
+				\RightLabel{L$\vee$}
+				\BinaryInfC{$A\vee B, \Gamma\Rightarrow \Delta$}
+				\DisplayProof&
+				\AxiomC{$\Gamma\Rightarrow\Delta, A, B$}
+				\RightLabel{R$\vee$}
+				\UnaryInfC{$\Gamma\Rightarrow \Delta, A\vee B$}
+				\DisplayProof&
+				\\&&\\
+				\AxiomC{$A\to B, \Gamma\Rightarrow\Delta, A$}
+				\AxiomC{$B, \Gamma\Rightarrow\Delta$}
+				\RightLabel{L$\to$}
+				\BinaryInfC{$A\to B, \Gamma\Rightarrow \Delta$}
+				\DisplayProof&
+				\AxiomC{$A,\Gamma\Rightarrow\Delta, B$}
+				\RightLabel{R$\to$}
+				\UnaryInfC{$\Gamma\Rightarrow \Delta, A\to B$}
+				\DisplayProof&
+				\\&&\\
+			\end{tabular}
+		\end{center}
+		
+		To obtain our intuitionistic calculus \textbf{GI} (corresponding to \textbf{m-G3i} from~\cite{basicprooftheory}) substitute R$\to$ with
+		\begin{center}
+			\AxiomC{$A, \Gamma\Rightarrow B$}
+			\RightLabel{R$\to'$}
+			\UnaryInfC{$\Gamma\Rightarrow\Delta, A\to B$}
+			\DisplayProof
+		\end{center}
+	
+		A \textit{proof} of a formula $\varphi$ in a calculus $\mathbf{G}$ is a labelled binary rooted tree in which every node is labelled with a pair of the name of a rule in $\mathbf{G}$, its rule, and a sequent, its sequent, such that
+		\begin{itemize}
+			\item Every leaf is labelled with (Ax, $A,\Gamma\Rightarrow\Delta, A$) or (L$\bot$, $\bot, \Gamma\Rightarrow\Delta$) for some formula $A$, multi-sets of formulas $\Gamma,\Delta$.
+			\item The sequent of an interior node can be derived from sequents of its child nodes according to its rule.
+		\end{itemize}
+		We usually present a proof directly as a sequence of applications of rules rather than in a more usual tree presentation. Note that we implicitly permute the antecedent and succedent, i.e. we implicitly may apply a number of exchange rules at any point in the proof. 
+	\end{definition}
 
-	These calculi have the following nice property:
-	
+	\begin{example}
+		The following is a proof of $(A\to B)\to A\Rightarrow B$:
+		\begin{center}
+			\AxiomC{}
+			\RightLabel{Ax}
+			\UnaryInfC{$A\to B, A\Rightarrow B, A$}
+			\AxiomC{}
+			\RightLabel{Ax}
+			\UnaryInfC{$A, B\Rightarrow B$}
+			\RightLabel{L$\to$}
+			\BinaryInfC{$A\to B, A\Rightarrow B$}
+			\DisplayProof
+		\end{center}
+	\end{example}
+
+	\noindent We now recall some important properties of the given systems:
+   
+		
 	\begin{theorem}[subformula property]
 		Any formula that appears in a derivation is a subformula of a forumla that occurs in the root sequent.
 	\end{theorem}
@@ -135,7 +194,7 @@
 
 
 	This means that we may assume that all proofs are free of these rules, but in constructing new proofs we may apply them. We exclude them from our calculus to keep it simple for proofs and because cut destroys the subformula property.
-	
+
 	\section{The Translation Procedure}
 	
 	\begin{definition}
@@ -244,31 +303,31 @@
 	\end{proof}
 
 	\begin{definition}
-		A sequent $A_1,\dots,A_n\Rightarrow B$ is \textit{implicational} if $B$ is atomic and each $A_i$ is of the form either $C\to (D\to E)$, $(C\to D)\to E$, $C\to D$ or $C$ for some atomic $C, D, E$.
+		A sequent $\Gamma\Rightarrow \Delta$ is \textit{implicational} if each formula $A$ in $\Gamma$ is of the form $C_A\to (D_A\to E_A)$, $(C_A\to D_A)\to E_A$, $C_A\to D_A$ or $C_A$ for some atomic $C_A, D_A, E_A$ and each formula $B$ in $\Delta$ is of the form $C_B$ or $C_B\to D_B$ for some atomic $C_B, D_B$.
 	\end{definition}
 
-	The first result is that for every sequent there is some equiprovable implicational sequent. This transformation is not strictly necessary for what follows, but it makes the arguments and procedure considerably simpler. It is reminiscent of the definitions of connectors in second order logic.
+	While at first this might seems quite restrictive we can give a translation procedure that transforms every sequent into an equiprovable implicational sequent - even one containing a single atom in the succedent - so in some sense this is a normal form for intuitionistic sequents. One nice property of implicational sequents is that their proofs consist of implicational sequents and contain only the rules Ax, L$\bot$, L$\to$ and R$\to$
 	
-	Consider the following rules, where $X$ is not atomic, $N$ is a new atom:
+	The translation steps are reminiscent of the definitions of connectors in second order logic. Consider the following rules, where $X$ is not atomic, $N$ is a new atom:
 	\begin{center}
-		\begin{tabular}{lcl}
-			$\Delta\Rightarrow \Gamma, A, B$&$\rightsquigarrow$&$\Delta\Rightarrow\Gamma, A\vee B$\\
-			$\Delta\Rightarrow A\to B$&$\rightsquigarrow$&$\Delta, A\Rightarrow B$\\
-			$\Delta\Rightarrow A\vee B$&$\rightsquigarrow$&$\Delta, (A\vee B)\to N\Rightarrow N$\\
-			$\Delta\Rightarrow A\wedge B$&$\rightsquigarrow$&$\Delta,(A\wedge B)\to N\Rightarrow N$\\
+		\begin{tabular}{clcl}
+			(1)&$\Gamma\Rightarrow \Gamma, A, B$&$\rightsquigarrow$&$\Gamma\Rightarrow\Gamma, A\vee B$\\
+			(2)&$\Gamma\Rightarrow A\to B$&$\rightsquigarrow$&$\Gamma, A\Rightarrow B$\\
+			(3)&$\Gamma\Rightarrow A\vee B$&$\rightsquigarrow$&$\Gamma, (A\vee B)\to N\Rightarrow N$\\
+			(4)&$\Gamma\Rightarrow A\wedge B$&$\rightsquigarrow$&$\Gamma,(A\wedge B)\to N\Rightarrow N$\\
 			
-			$\Delta, A\wedge B\Rightarrow C$&$\rightsquigarrow$&$\Delta, A, B\Rightarrow C$\\
-			$\Delta, A\vee B\Rightarrow C$&$\rightsquigarrow$&$\Delta, (A\to C)\to (B\to C)\to N\Rightarrow  N$\\
-			$\Delta, (A\wedge B)\to C\Rightarrow D$&$\rightsquigarrow$&$\Delta, A\to (B\to C)\Rightarrow D$\\
-			$\Delta, (A\vee B)\to C\Rightarrow D$&$\rightsquigarrow$&$\Delta, A\to C, B\to C\Rightarrow D$\\
-			$\Delta, A\to (B\vee C)\Rightarrow D$&$\rightsquigarrow$&$\Delta, A\to (B\to D)\to (C\to D)\to N\Rightarrow N$\\
-			$\Delta, A\to (B\wedge C)\Rightarrow D$&$\rightsquigarrow$&$\Delta, A\to B, A\to C\Rightarrow D$\\
-			$\Delta, X\to A\to B\Rightarrow C$&$\rightsquigarrow$&$\Delta, X\to N, N\to (A\to B)\Rightarrow C$\\
-			$\Delta, A\to X\to B\Rightarrow C$&$\rightsquigarrow$&$\Delta, X\to N, A\to (N\to B)\Rightarrow C$\\
-			$\Delta, A\to B\to X\Rightarrow C$&$\rightsquigarrow$&$\Delta, N\to X, A\to (B\to N)\Rightarrow C$\\
-			$\Delta, (X\to A)\to B\Rightarrow C$&$\rightsquigarrow$&$\Delta, N\to X, (N\to A)\to B\Rightarrow C$\\
-			$\Delta, (A\to X)\to B\Rightarrow C$&$\rightsquigarrow$&$\Delta, X\to N, (A\to N)\to B\Rightarrow C$\\
-			$\Delta, (A\to B)\to X\Rightarrow C$&$\rightsquigarrow$&$\Delta, N\to X, (A\to B)\to N\Rightarrow C$\\
+			(5)&$\Gamma, A\wedge B\Rightarrow C$&$\rightsquigarrow$&$\Gamma, A, B\Rightarrow C$\\
+			(6)&$\Gamma, A\vee B\Rightarrow C$&$\rightsquigarrow$&$\Gamma, (A\to C)\to (B\to C)\to N\Rightarrow  N$\\
+			(7)&$\Gamma, (A\wedge B)\to C\Rightarrow D$&$\rightsquigarrow$&$\Gamma, A\to (B\to C)\Rightarrow D$\\
+			(8)&$\Gamma, (A\vee B)\to C\Rightarrow D$&$\rightsquigarrow$&$\Gamma, A\to C, B\to C\Rightarrow D$\\
+			(9)&$\Gamma, A\to (B\wedge C)\Rightarrow D$&$\rightsquigarrow$&$\Gamma, A\to B, A\to C\Rightarrow D$\\
+			(10)&$\Gamma, A\to (B\vee C)\Rightarrow D$&$\rightsquigarrow$&$\Gamma, A\to (B\to D)\to (C\to D)\to N\Rightarrow N$\\
+			(11)&$\Gamma, X\to A\to B\Rightarrow C$&$\rightsquigarrow$&$\Gamma, X\to N, N\to (A\to B)\Rightarrow C$\\
+			(12)&$\Gamma, A\to X\to B\Rightarrow C$&$\rightsquigarrow$&$\Gamma, X\to N, A\to (N\to B)\Rightarrow C$\\
+			(13)&$\Gamma, A\to B\to X\Rightarrow C$&$\rightsquigarrow$&$\Gamma, N\to X, A\to (B\to N)\Rightarrow C$\\
+			(14)&$\Gamma, (X\to A)\to B\Rightarrow C$&$\rightsquigarrow$&$\Gamma, N\to X, (N\to A)\to B\Rightarrow C$\\
+			(15)&$\Gamma, (A\to X)\to B\Rightarrow C$&$\rightsquigarrow$&$\Gamma, X\to N, (A\to N)\to B\Rightarrow C$\\
+			(16)&$\Gamma, (A\to B)\to X\Rightarrow C$&$\rightsquigarrow$&$\Gamma, N\to X, (A\to B)\to N\Rightarrow C$\\
 		\end{tabular}
 	\end{center}
 
@@ -292,60 +351,159 @@
 		
 		There are three things to check: 1. There is an applicable transformation for every non-implicational sequent. 2. The translation procedure terminates on every input. 3. The sequents involved in every transformation are equiprovable.
 		
-		1. Suppose $\Gamma\Rightarrow\Delta$ is not implicational. Then the succedent is not a single atom, or there is a formula in the antecedent that is not of the form $(C\to D)\to E, C\to (D\to E), C\to D$ or $D$ for some atoms $C, D, E$. In the former case one of transformations 1-4 is applicable. In the latter case one of the other rules is.
+		1. Suppose $\Gamma\Rightarrow\Delta$ is not implicational. Then the succedent is not a single atom, or there is a formula in the antecedent that is not of the form $(C\to D)\to E, C\to (D\to E), C\to D$ or $D$ for some atoms $C, D, E$. If the succedent is not a single atom one of transformations (1)-(4) is applicable. If it is but the antecedent contains a formula which is not an implication (5) or (6) are. If that formula is an implication but one of its arguments is not then (7)-(10) are applicable. Finally if it is an implication of implications but the involved formulas are not atomic one of the rules (11)-(16) applies.
 
-		2. Define the complexity $c(\varphi)$ of a formula as $c(A) = 0$ for atoms $A$, $c(A\circ B) = c(A) + c(B) + 1$ for $\circ\in\{\wedge,\vee,\to\}$. We can use $c$ to define a partial order $\succ$ on finite multi-sets of formulas, i.e. have $\emptyset\not \succ\Delta$ and $\Gamma\succ\emptyset$ for $\Gamma$ non-empty and for both $\Gamma,\Delta$ non-empty have\begin{align*}
-			\Gamma \succ\Delta:\Longleftrightarrow&\max_\Gamma c > \max_\Delta c\text{ or }\\&\max_\Delta c =\max_\Gamma c\text{ and }\Gamma - \argmax_\Gamma c \succ\Delta - \argmax_\Delta c.
-		\end{align*} $\succ$ is well-founded: Suppose towards contradiction that there is an infinite chain $$\Gamma_0^{(0)} \succ \Gamma_1^{(0)} \succ\dots\succ\Gamma_n^{(0)}\succ\dots$$Then every $\Gamma_i^{(0)}$ must be non-empty and $$\max_{\Gamma_0^{(0)}}c \geq \max_{\Gamma_1^{(0)}}c \geq\dots \geq \max_{\Gamma_n^{(0)}}c \geq\dots$$ and since $\mathbb{N}$ is well-ordered this chain must become stationary, i.e. there is $N_0$ such that $\max_{\Gamma_i^{(0)}}c = \max_{\Gamma_{N_0}^{(0)}}c$ for $i\geq N_0$ and $\max_{\Gamma_i^{(0)}}c>\max_{\Gamma_{N_0}^{(0)}}c$ for $i<N_0$. In particular for $i\geq N_0$ we have $\Gamma_i^{(0)}-\argmax_{\Gamma_i^{(0)}}c >_c \Gamma_{i+1}^{(0)}-\argmax_{\Gamma_{i+1}^{(0)}}c$, thus we obtain a second chain $$\Gamma_0^{(1)} \succ\Gamma_1^{(1)} \succ\dots\succ\Gamma_n^{(1)}\succ\dots$$ with $$\Gamma_i^{(1)} = \Gamma_{N+i}^{(0)} - \argmax_{\Gamma_{N+i}^{(0)}}c.$$We can repeat this construction to obtain an sequence $N_0, N_1,\dots$ Note that $$ \max_{\Gamma_{N_i}^{(i)}}c\geq \max_{\Gamma_{0}^{(i+1)}}c\geq \max_{\Gamma_{N_{i+1}}^{(i+1)}}c$$where the last is even a strict inequality if $N_{i+1} > 0$. Observe that $\Gamma_{N_0+\dots+N_i}^{(0)}$ by construction must contain at least $i+1$ formulas, i.e. $N_0,N_1,\dots$ cannot become constant 0. Consider a subsequence $N_{\alpha(0)},N_{\alpha(1)},\dots$ that does not contain a zero. Then we have $$\max_{\Gamma_{N_{\alpha(0)}}^{({\alpha(0)})}}c > \max_{\Gamma_{N_{\alpha(1)}}^{({\alpha(1)})}}c>\dots >\max_{\Gamma_{N_{\alpha(n)}}^{({\alpha(n)})}}c>\dots$$ which is an infinite decreasing chain, but $\mathbb{N}$ is a well-order. $\lightning$
-	
+		2. We proceed by defining a well-founded order on the set of sequents $\mathcal S$ and showing that each of the transformations is reductive. Define the complexity $c(\varphi)$ of a formula as usual as $c(A) = 0$ for atoms $A$ and $c(A\circ B) = c(A) + c(B) + 1$ for $\circ\in\{\wedge,\vee,\to\}$. $c$ induces a partial order $<_c$ on formulas. We can extend this to a ordering $<_{DM}$ on finite multisets of formulas $\mathcal M$, also knows as the Dershowitz-Manna ordering as follows:
 		
-	 	We can now use $\succ$ to define a partial order $\gg$ on the set of sequents as follows: $$\Gamma\Rightarrow\Delta \gg \Gamma'\Rightarrow\Delta'$$ iff
-		\begin{enumerate}
-			\item $|\Delta| > |\Delta'|$ 
-			\item not 1 and $\Delta \succ \Delta'$
-			\item not 1, 2 and the number of occurrences of $\wedge$ in $\Gamma$ is higher than in $\Gamma' $.
-			\item not 1 - 3 and the number of occurrences of $\vee$ in $\Gamma$ is higher than in $\Gamma' $.
-			\item not 1 - 4 and $\Gamma \succ\Gamma' $.
+		$M <_{DM}N$ iff there exist $X, Y\in\mathcal{M}$ such that
+		\begin{itemize}
+			\item $X\subseteq N$ is non-empty,
+			\item $M = (N \setminus X) \cup Y$,
+			\item for all $y\in Y$ there exists $x\in X$ such that $y <_S x$.
+		\end{itemize}
+		Since $<_c$ is well-founded so is $<_{DM}$~\cite{Dershowitz-Manna_1979}. Now consider the lexicographic order $\ll$ on $\mathcal{S}^5$ induced by the following orders:
+		\begin{enumerate}[(i)]
+			\item $(\Gamma\Rightarrow\Delta)\ll(\Gamma'\Rightarrow\Delta')$ iff $|\Delta| < |\Delta'|$ 
+			\item $(\Gamma\Rightarrow\Delta)\ll(\Gamma'\Rightarrow\Delta')$ iff $\Delta <_{DM} \Delta'$
+			\item $(\Gamma\Rightarrow\Delta)\ll(\Gamma'\Rightarrow\Delta')$ iff the number of occurrences of $\wedge$ in $\Gamma$ is lower than in $\Gamma' $.
+			\item $(\Gamma\Rightarrow\Delta)\ll(\Gamma'\Rightarrow\Delta')$ iff the number of occurrences of $\vee$ in $\Gamma$ is lower than in $\Gamma' $.
+			\item $(\Gamma\Rightarrow\Delta)\ll(\Gamma'\Rightarrow\Delta')$ iff $\Gamma <_{DM}\Gamma $.
 		\end{enumerate}
-		Since each of 1 - 5 is well-founded, $\gg$ is well-founded, i.e. for each set we can obtain a minimal element by considering first a minimal subset with regard to 1, then to 2 and so on.
-		
-		Now every transformation is reductive with regard to $\gg$. Therefore iteratively applying transformations creates a descending chain. Since every descending chain in a well-founded order is finite this proves termination.
+		Then the diagonal of $\ll$ is our desired order $<$. Since each involved order is well-founded so is $\ll$ and therefore also $<$. Now every transformation is reductive with regard to $<$, i.e. (1) is reductive w.r.t (i), (2)-(4) are reductive w.r.t. (ii), (5), (7), (9) are reductive w.r.t (iii), (6), (8), (10) w.r.t 4 (iv) and (11) - (16) w.r.t. (v) and non are increasing with any of the higher orders. This proves termination.
 		 
-		3. For most cases equiprovability follows from Lemmas \ref{ep1} and \ref{ep2}, e.g. consider $$\Delta, A\to (B\wedge C)\Rightarrow D\indent\rightsquigarrow\indent\Delta, A\to B, A\to C\Rightarrow D$$Then we have
+		3. For most cases equiprovability follows from Lemmas \ref{ep1} and \ref{ep2}, e.g. consider $$\Gamma, A\to (B\wedge C)\Rightarrow D\indent\rightsquigarrow\indent\Gamma, A\to B, A\to C\Rightarrow D$$Then we have
 		\begin{align*}
-			\Delta, A\to (B\wedge C)\Rightarrow D&\overset{\ref{ep1}.1}{\sim_p}\Delta, (A\to B)\wedge (A\to C)\Rightarrow D\\&\overset{\ref{ep2}.3}{\sim_p}\Delta, A\to B, A\to C\Rightarrow D
+			\Gamma, A\to (B\wedge C)\Rightarrow D&\overset{\ref{ep1}.1}{\sim_p}\Gamma, (A\to B)\wedge (A\to C)\Rightarrow D\\&\overset{\ref{ep2}.3}{\sim_p}\Gamma, A\to B, A\to C\Rightarrow D
 		\end{align*}
 		
 		Some cases require simple applications of cut using intuitionistic tautologies, e.g. for
-		$$\Delta, A\vee B\Rightarrow C\indent\rightsquigarrow\indent\Delta, (A\to C)\to (B\to C)\to N\Rightarrow  N$$
+		$$\Gamma, A\vee B\Rightarrow C\indent\rightsquigarrow\indent\Gamma, (A\to C)\to (B\to C)\to N\Rightarrow  N$$
 		we have 
 		\begin{align*}
-			\Delta, A\vee B\Rightarrow C&\overset{\star}{\sim_p}\Delta\Rightarrow (A\vee B)\to C\\&\overset{\ref{ep2}.3}{\sim_p}\Delta\Rightarrow (A\to C)\wedge(B\to C)\\&\overset{\ref{ep2}.2}{\sim_p} \Delta, ((A\to C)\wedge (B\to C))\to N\Rightarrow N\\&\overset{\ref{ep1}.1}{\sim_p}\Delta, (A\to C)\to(B\to C)\to N\Rightarrow N.
+			\Gamma, A\vee B\Rightarrow C&\overset{\star}{\sim_p}\Gamma\Rightarrow (A\vee B)\to C\\&\overset{\ref{ep2}.3}{\sim_p}\Gamma\Rightarrow (A\to C)\wedge(B\to C)\\&\overset{\ref{ep2}.2}{\sim_p} \Gamma, ((A\to C)\wedge (B\to C))\to N\Rightarrow N\\&\overset{\ref{ep1}.1}{\sim_p}\Gamma, (A\to C)\to(B\to C)\to N\Rightarrow N.
 		\end{align*}
 		Where one direction of $\star$ is trivial and the other is obtained via cut with $$A\vee B, (A\vee B)\to C\Rightarrow C$$
 		
 		For the last 6 rules one direction in obtained via cut and the other one by substituting all occurrences of $N$ in a proof with $X$.
 	\end{proof}
 	
-	For each atom $A$ consider a new atom $A'$ and a special atom $\omega = \bot'$. Have $\top' = \top$. Fix some implicational sequent $S := \Delta\Rightarrow C$ for now. Let $\mathcal{A}$ be the set of atoms occurring in $S$. Then define 
+	This reduces our task to embedding just the implicational sequents from intuitionistic into classical logic. And we shall immediately present this embedding, even though showing its correctness will bee a bit involved:
+	
+	 Consider some implicational sequent $S := \Gamma\Rightarrow \Delta$. Let $\{(C_i\to D_i)\to E_i\}_{i\in I}$ be an enumeration of sequents of that form occurring in $\Gamma$ and $\{C_j\to D_j\}_{j\in J}$ of such sequents in $\Delta$, and let $i = j$ iff. For each atom $A\neq\bot$ occurring in $S$ and $i\in I\cup J$ define a new atom $A^{(i)}$ with the stipulation that $A^{(i)} = A^{(j)}$ if $C^{(i)} = C^{(j)}$ and $D^{(i)} = D^{(j)}$. Furthermore have $\bot^{(i)} = \bot$. We call all such $A^{(i)}$ primed. Then define 
 	\begin{align*}
-		\Delta' = &\{A\to A', \omega\to A'\:|\:A\in\mathcal{A}\}
-		\\&\cup \{(A'\to B')\to C\:|\: (A\to B)\to C\in\Delta\}
-		\\&\cup \{A'\to (B'\to C'), A\to(B\to C)\:|\: A\to (B\to C)\in\Delta\}
-		\\&\cup \{A'\to B', A\to B\:|\: A\to (B\to C)\in\Delta\}
+		\Gamma' = &\: (\Gamma\setminus\{(C_{i}\to D_i)\to E_i\:|\:i\in I\})
+		\\&\cup \{(C_{i}^{(i)}\to D_i^{(i)})\to E_i\:|\:i\in I\}
+		\\&\cup \{A_i^{(i)}\to B_i^{(i)}\:|\: A, B\text{ atomic}, A\to B\in\Gamma, i\in I\cup J\}
+		\\&\cup \{C^{(i)}\to (D^{(i)}\to E^{(i)})\:|\: C, D, E\text{ atomic}, C\to (D\to E)\in\Gamma, i\in I\cup J\}
+		\\&\cup \{D_i\to D_i^{(i)}\:|\:i\in I\cup J\}
 	\end{align*}
-and have $$S' := \Delta' \Rightarrow C$$
+as well as
+\begin{align*}
+	\Delta' = &\:(\Delta\setminus\{C_{j}\to D_j\:|\:j\in J\})
+	\\&\cup \{C_j^{(j)}\to D_j^{(j)}\:|\: C, D\text{ atomic}, C\to D\in\Delta, j\in J\}
+\end{align*}
+and have $$S' := \Gamma' \Rightarrow \Delta' $$
 
+	
+	We prove that $S$ is intuitionistically valid iff $S'$ is classically valid by first showing that $S$ and $S'$ are equiprovable and then that $S'$ is provable intuitionistically iff it is classically provable.
+	
 	\begin{lemma}
-		An implicational sequent $S$ is intuitionistically provable if and only if $S'$ is classically provable
+		Any implicational sequent $S$ is equiprovable with $S'$.
 	\end{lemma}
 	
-	\begin{proof}[Proofsketch]
+	\begin{proof}
 		
-		$\Rightarrow$ the classical proof can be obtained by appropriate renaming of atoms and weakening. It will still be intuitionistically sound.
+		Suppose $S'$ is provable. Consider the proof obtained by replacing every occurrence of primed atom with its regular version, then a number of contractions and cuts with sequents of the form $\Rightarrow A\to A$ yields a proof of $S$. The proof of the other direction is much more involved.
 		
-		$\Leftarrow$ Rename all variables $A'$ to $A$ and rewrite the R$\to$ rules. At the end apply a number of cuts to remove the $A\to A,\bot\to A$.
+		Suppose $S$ is provable. We show that $S'$ is provable by induction on the height of the proof of $S$. If the proof of $S$ consists of a single Ax/L$\bot$ then $S'$ can also be proven by a single Ax/L$\bot$. Suppose that last rule in the proof of $S$ is $L\to$, i.e. it ends in
 		
+		\begin{center}
+			\AxiomC{$A\to B, \Gamma\Rightarrow\Delta, A$}
+			\AxiomC{$B, \Gamma\Rightarrow\Delta$}
+			\RightLabel{L$\to$}
+			\BinaryInfC{$A\to B, \Gamma\Rightarrow \Delta$}
+			\DisplayProof
+		\end{center}
+		
+		There are three cases:
+		
+		1. $A, B$ are atoms. By induction hypothesis $A\to B, (A^{(i)}\to B^{(i)})_{i\in I}, \Gamma' \Rightarrow \Delta', A$ and $B,\Gamma' \Rightarrow \Delta'$ are provable and thus by weakening also $B, (A^{(i)}\to B^{(i)})_{i\in I}, \Gamma' \Rightarrow \Delta'$ and we have
+		\begin{center}
+			\AxiomC{$A\to B, \{A^{(i)}\to B^{(i)}\}_{i\in I},\Gamma' \Rightarrow\Delta' , A$}
+			\AxiomC{$B, \{A^{(i)}\to B^{(i)}\}_{i\in I}, \Gamma' \Rightarrow\Delta' $}
+			\RightLabel{L$\to$}
+			\BinaryInfC{$A\to B, \{A^{(i)}\to B^{(i)}\}_{i\in I}, \Gamma' \Rightarrow \Delta' $}
+			\DisplayProof
+		\end{center}
+		so $S'$ is indeed provable.
+		
+		2. $A$ atomic, $B = C\to D$ with $C, D$ atomic. Again by induction hypothesis we obtain that $A\to (C\to D), \{A^{(i)}\to(C^{(i)}\to D^{(i)})\}_{i\in I}, \Gamma'\Rightarrow \Delta', A$ and $C\to D, \{C^{(i)}\to D^{(i)}\}_{i\in I}, \Gamma'\Rightarrow\Delta'$ are provable. Since $\Gamma'$ contains $A\to A^{(i)}$ a cut followed by a contraction gives that $A\to (C\to D), \{A^{(i)}\to(C^{(i)}\to D^{(i)})\}_{i\in I}, \Gamma'\Rightarrow\Delta', A^{(i)}$ is provable for each $i$ and a cut with $C\to D\Rightarrow A\to (C\to D)$ gives that $C\to D, \{A^{(i)}\to(C^{(i)}\to D^{(i)})\}_{i\in I}, \Gamma'\Rightarrow\Delta', A^{(i)}$ is provable. Then a number of cuts with $C^{(i)}\to D^{(i)}\Rightarrow A^{(i)}\to (C^{(i)}\to D^{(i)})$ gives for each $j\in I=\{1,\dots,n\}$ (w.l.o.g. since $I$ was just chosen as just some arbitrary finite index set) $$C\to D, \{A^{(i)}\to(C^{(i)}\to D^{(i)})\}_{i\leq j}, \{C^{(i)}\to D^{(i)}\}_{i> j}, \Gamma'\Rightarrow\Delta', A^{(i)}$$ Note that for each $j$ we have
+		
+		\begin{center}
+			\hspace*{-.7cm}
+			\AxiomC{$\stackanchor{$\{A^{(i)}\to(C^{(i)}\to D^{(i)})\}_{i\leq j},$}{$C\to D,\{C^{(i)}\to D^{(i)}\}_{i> j},$} \Gamma'\Rightarrow\Delta', A^{(j)}$}
+			\AxiomC{$\stackanchor{$\{A^{(i)}\to(C^{(i)}\to D^{(i)})\}_{i< j},$}{$C\to D,\{C^{(i)}\to D^{(i)}\}_{i\geq j}$}\Gamma'\Rightarrow\Delta'$}
+			\RightLabel{L$\to$}
+			\BinaryInfC{$\{A^{(i)}\to(C^{(i)}\to D^{(i)})\}_{i< j+1},C\to D,\{C^{(i)}\to D^{(i)}\}_{i\geq j+1},\Gamma'\Rightarrow\Delta'$}
+			\DisplayProof
+		\end{center}
+		and we have already established the right argument for $j=0$ and the left argument for every $j\in I$. Therefore applying the above iteratively $n$ times we obtain $C\to D, \{A^{(i)}\to(C^{(i)}\to D^{(i)})\}_{i\in I}\Gamma'\Rightarrow\Delta'$ and finally 
+		\begin{center}
+			\AxiomC{$\stackanchor{$A\to (C\to D),\Gamma',$}{$\{A^{(i)}\to(C^{(i)}\to D^{(i)})\}_{i\in I},$} \Rightarrow \Delta', A$}
+			\AxiomC{$\stackanchor{$C\to D, \Gamma',$}{$\{A^{(i)}\to(C^{(i)}\to D^{(i)})\}_{i\in I}$}\Rightarrow \Delta' $}
+			\RightLabel{L$\to$}
+			\BinaryInfC{$A\to (C\to D), \{A^{(i)}\to(C^{(i)}\to D^{(i)})\}_{i\in I}, \Gamma' \Rightarrow \Delta' $}
+			\DisplayProof
+		\end{center}
+		which shows that $S'$ is indeed provable.
+		
+		3. $A = C\to D$  with $C, D$ atomic, $B$ atomic. Then by induction hypothesis $(C^{(i)}\to D^{(i)})\to B, \Gamma'\Rightarrow\Delta', C^{(j)}\to D^{(j)}$ and $B, \Gamma'\Rightarrow\Delta'$ are provable, where $C^{(i)} = C^{(j)}$ and $D^{(i)} = D^{(j)}$ so a single application of L$\to$ gives us $S'$.
+		
+		Finally suppose the last rule of the proof is R$\to$, i.e.
+		
+		\begin{center}
+			\AxiomC{$A,\Gamma\Rightarrow B$}
+			\RightLabel{R$\to$}
+			\UnaryInfC{$\Gamma\Rightarrow \Delta, A\to B$}
+			\DisplayProof
+		\end{center}
+		Then $A, B$ are atoms. Let $i$ be some new index. Let $\Gamma''$ be $\Gamma$ where every non-primed atom $X$ has been renamed to $X^{(i)}$. Then $A^{(i)}, \Gamma''\Rightarrow B^{(i)}$ is provable and thus so is $\bigwedge\Gamma''\Rightarrow A^{(i)}\to B^{(i)}$. Since $\Gamma'\Rightarrow \bigwedge\Gamma''$ is a tautology a single cut yields that $S'$ is provable.
+	\end{proof}
+
+
+	\begin{lemma}
+		Let $S$ be an implicational sequent such that $S'$ is provable classically. Then $S'$ is provable intuitionistically.
+	\end{lemma}
+
+	\begin{proof}
+		We proceed by induction on the proof height of the classical proof of $S'$. If the last rule is Ax or L$\bot$ (or L$\to$) the proof is already intuitionistically valid (or it follows directly from the induction hypothesis). Otherwise the proof ends in $n$ applications of R$\to$ where $n$ is chosen maximally, i.e.
+		\begin{center}
+			\AxiomC{}
+			\RightLabel{K}
+			\UnaryInfC{$A_1^{(1)},\dots, A_n^{(n)},\Gamma'\Rightarrow\Delta', B_1^{(1)},\dots B_n^{(n)}$}
+			\RightLabel{R$\to$}
+			\UnaryInfC{\vdots}
+			\RightLabel{R$\to$}
+			\UnaryInfC{$\Gamma'\Rightarrow\Delta', A_1^{(1)}\to B_1^{(1)},\dots, A_n^{(n)}\to B_n^{(n)}$}
+			\DisplayProof
+		\end{center}
+		with $\text{K }\neq\text{ R}\to$. If K $=$ L$\bot$ we have $\bot\in\Delta'$ and therefore we immediately have
+		\begin{center}
+			\AxiomC{}
+			\RightLabel{L$\bot$}
+			\UnaryInfC{$\Gamma'\Rightarrow\Delta', A_1^{(1)}\to B_1^{(1)},\dots, A_n^{(n)}\to B_n^{(n)}$}
+			\DisplayProof
+		\end{center}
+	For K $=$ Ax observe that the atomic formulas in $\Delta'$ and $\Gamma'$ are not primed. Therefore the tautology in Ax must be between some $A_k^{(k)}$ and $B_l^{(l)}$ or some formulas in $\Gamma'$ and $\Delta'$. In the latter case we just need a single application of $S'$. In the former if $k = l$ we get the intuitionistic proof
+	\begin{center}
+		\AxiomC{}
+		\RightLabel{Ax}
+		\UnaryInfC{$A_k^{(k)},\Gamma'\Rightarrow\Delta', B_k^{(k)}$}
+		\RightLabel{R$\to$}
+		\UnaryInfC{$\Gamma'\Rightarrow\Delta', A_1^{(1)}\to B_1^{(1)},\dots, A_n^{(n)}\to B_n^{(n)}$}
+		\DisplayProof
+	\end{center}
+	otherwise $k\neq l$ but $A^{(k)} = B^{(l)}$ can only be the case if $A^{(k)} = A^{(l)} = B^{(k)} = B^{(l)}$ and the above proof works thee same.
 	\end{proof}
 
 	\begin{theorem}
