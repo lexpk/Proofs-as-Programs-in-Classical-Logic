@@ -387,136 +387,172 @@
 		For the last 6 rules one direction in obtained via cut and the other one by substituting all occurrences of $N$ in a proof with $X$.
 	\end{proof}
 	
-	This reduces our task to embedding just the implicational sequents from intuitionistic into classical logic. And we shall immediately present this embedding, even though showing its correctness will bee a bit involved:
+	This reduces our task to embedding just the implicational sequents from intuitionistic into classical logic. The basic idea is as follows: When intuitionistically proving a sequent via R$\to$ 
 	
-	 Consider some implicational sequent $S := \Gamma\Rightarrow \Delta$. Let $\{(C_i\to D_i)\to E_i\}_{i\in I}$ be an enumeration of sequents of that form occurring in $\Gamma$ and $\{C_j\to D_j\}_{j\in J}$ of such sequents in $\Delta$, and let $i = j$ iff. For each atom $A\neq\bot$ occurring in $S$ and $i\in I\cup J$ define a new atom $A^{(i)}$ with the stipulation that $A^{(i)} = A^{(j)}$ if $C^{(i)} = C^{(j)}$ and $D^{(i)} = D^{(j)}$. Furthermore have $\bot^{(i)} = \bot$. We call all such $A^{(i)}$ primed. Then define 
-	\begin{align*}
-		\Gamma' = &\: (\Gamma\setminus\{(C_{i}\to D_i)\to E_i\:|\:i\in I\})
-		\\&\cup \{(C_{i}^{(i)}\to D_i^{(i)})\to E_i\:|\:i\in I\}
-		\\&\cup \{A_i^{(i)}\to B_i^{(i)}\:|\: A, B\text{ atomic}, A\to B\in\Gamma, i\in I\cup J\}
-		\\&\cup \{C^{(i)}\to (D^{(i)}\to E^{(i)})\:|\: C, D, E\text{ atomic}, C\to (D\to E)\in\Gamma, i\in I\cup J\}
-		\\&\cup \{D_i\to D_i^{(i)}\:|\:i\in I\cup J\}
-	\end{align*}
-as well as
-\begin{align*}
-	\Delta' = &\:(\Delta\setminus\{C_{j}\to D_j\:|\:j\in J\})
-	\\&\cup \{C_j^{(j)}\to D_j^{(j)}\:|\: C, D\text{ atomic}, C\to D\in\Delta, j\in J\}
-\end{align*}
-and have $$S' := \Gamma' \Rightarrow \Delta' $$
-
-	
-	We prove that $S$ is intuitionistically valid iff $S'$ is classically valid by first showing that $S$ and $S'$ are equiprovable and then that $S'$ is provable intuitionistically iff it is classically provable.
-	
-	\begin{lemma}
-		Any implicational sequent $S$ is equiprovable with $S'$.
-	\end{lemma}
-	
-	\begin{proof}
-		
-		Suppose $S'$ is provable. Consider the proof obtained by replacing every occurrence of primed atom with its regular version, then a number of contractions and cuts with sequents of the form $\Rightarrow A\to A$ yields a proof of $S$. The proof of the other direction is much more involved.
-		
-		Suppose $S$ is provable. We show that $S'$ is provable by induction on the height of the proof of $S$. If the proof of $S$ consists of a single Ax/L$\bot$ then $S'$ can also be proven by a single Ax/L$\bot$. Suppose that last rule in the proof of $S$ is $L\to$, i.e. it ends in
-		
-		\begin{center}
-			\AxiomC{$A\to B, \Gamma\Rightarrow\Delta, A$}
-			\AxiomC{$B, \Gamma\Rightarrow\Delta$}
-			\RightLabel{L$\to$}
-			\BinaryInfC{$A\to B, \Gamma\Rightarrow \Delta$}
-			\DisplayProof
-		\end{center}
-		
-		There are three cases:
-		
-		1. $A, B$ are atoms. By induction hypothesis $A\to B, (A^{(i)}\to B^{(i)})_{i\in I}, \Gamma' \Rightarrow \Delta', A$ and $B,\Gamma' \Rightarrow \Delta'$ are provable and thus by weakening also $B, (A^{(i)}\to B^{(i)})_{i\in I}, \Gamma' \Rightarrow \Delta'$ and we have
-		\begin{center}
-			\AxiomC{$A\to B, \{A^{(i)}\to B^{(i)}\}_{i\in I},\Gamma' \Rightarrow\Delta' , A$}
-			\AxiomC{$B, \{A^{(i)}\to B^{(i)}\}_{i\in I}, \Gamma' \Rightarrow\Delta' $}
-			\RightLabel{L$\to$}
-			\BinaryInfC{$A\to B, \{A^{(i)}\to B^{(i)}\}_{i\in I}, \Gamma' \Rightarrow \Delta' $}
-			\DisplayProof
-		\end{center}
-		so $S'$ is indeed provable.
-		
-		2. $A$ atomic, $B = C\to D$ with $C, D$ atomic. Again by induction hypothesis we obtain that $A\to (C\to D), \{A^{(i)}\to(C^{(i)}\to D^{(i)})\}_{i\in I}, \Gamma'\Rightarrow \Delta', A$ and $C\to D, \{C^{(i)}\to D^{(i)}\}_{i\in I}, \Gamma'\Rightarrow\Delta'$ are provable. Since $\Gamma'$ contains $A\to A^{(i)}$ a cut followed by a contraction gives that $A\to (C\to D), \{A^{(i)}\to(C^{(i)}\to D^{(i)})\}_{i\in I}, \Gamma'\Rightarrow\Delta', A^{(i)}$ is provable for each $i$ and a cut with $C\to D\Rightarrow A\to (C\to D)$ gives that $C\to D, \{A^{(i)}\to(C^{(i)}\to D^{(i)})\}_{i\in I}, \Gamma'\Rightarrow\Delta', A^{(i)}$ is provable. Then a number of cuts with $C^{(i)}\to D^{(i)}\Rightarrow A^{(i)}\to (C^{(i)}\to D^{(i)})$ gives for each $j\in I=\{1,\dots,n\}$ (w.l.o.g. since $I$ was just chosen as just some arbitrary finite index set) $$C\to D, \{A^{(i)}\to(C^{(i)}\to D^{(i)})\}_{i\leq j}, \{C^{(i)}\to D^{(i)}\}_{i> j}, \Gamma'\Rightarrow\Delta', A^{(i)}$$ Note that for each $j$ we have
-		
-		\begin{center}
-			\hspace*{-.7cm}
-			\AxiomC{$\stackanchor{$\{A^{(i)}\to(C^{(i)}\to D^{(i)})\}_{i\leq j},$}{$C\to D,\{C^{(i)}\to D^{(i)}\}_{i> j},$} \Gamma'\Rightarrow\Delta', A^{(j)}$}
-			\AxiomC{$\stackanchor{$\{A^{(i)}\to(C^{(i)}\to D^{(i)})\}_{i< j},$}{$C\to D,\{C^{(i)}\to D^{(i)}\}_{i\geq j}$}\Gamma'\Rightarrow\Delta'$}
-			\RightLabel{L$\to$}
-			\BinaryInfC{$\{A^{(i)}\to(C^{(i)}\to D^{(i)})\}_{i< j+1},C\to D,\{C^{(i)}\to D^{(i)}\}_{i\geq j+1},\Gamma'\Rightarrow\Delta'$}
-			\DisplayProof
-		\end{center}
-		and we have already established the right argument for $j=0$ and the left argument for every $j\in I$. Therefore applying the above iteratively $n$ times we obtain $C\to D, \{A^{(i)}\to(C^{(i)}\to D^{(i)})\}_{i\in I}\Gamma'\Rightarrow\Delta'$ and finally 
-		\begin{center}
-			\AxiomC{$\stackanchor{$A\to (C\to D),\Gamma',$}{$\{A^{(i)}\to(C^{(i)}\to D^{(i)})\}_{i\in I},$} \Rightarrow \Delta', A$}
-			\AxiomC{$\stackanchor{$C\to D, \Gamma',$}{$\{A^{(i)}\to(C^{(i)}\to D^{(i)})\}_{i\in I}$}\Rightarrow \Delta' $}
-			\RightLabel{L$\to$}
-			\BinaryInfC{$A\to (C\to D), \{A^{(i)}\to(C^{(i)}\to D^{(i)})\}_{i\in I}, \Gamma' \Rightarrow \Delta' $}
-			\DisplayProof
-		\end{center}
-		which shows that $S'$ is indeed provable.
-		
-		3. $A = C\to D$  with $C, D$ atomic, $B$ atomic. Then by induction hypothesis $(C^{(i)}\to D^{(i)})\to B, \Gamma'\Rightarrow\Delta', C^{(j)}\to D^{(j)}$ and $B, \Gamma'\Rightarrow\Delta'$ are provable, where $C^{(i)} = C^{(j)}$ and $D^{(i)} = D^{(j)}$ so a single application of L$\to$ gives us $S'$.
-		
-		Finally suppose the last rule of the proof is R$\to$, i.e.
-		
-		\begin{center}
-			\AxiomC{$A,\Gamma\Rightarrow B$}
-			\RightLabel{R$\to$}
-			\UnaryInfC{$\Gamma\Rightarrow \Delta, A\to B$}
-			\DisplayProof
-		\end{center}
-		Then $A, B$ are atoms. Let $i$ be some new index. Let $\Gamma''$ be $\Gamma$ where every non-primed atom $X$ has been renamed to $X^{(i)}$. Then $A^{(i)}, \Gamma''\Rightarrow B^{(i)}$ is provable and thus so is $\bigwedge\Gamma''\Rightarrow A^{(i)}\to B^{(i)}$. Since $\Gamma'\Rightarrow \bigwedge\Gamma''$ is a tautology a single cut yields that $S'$ is provable.
-	\end{proof}
-
-
-	\begin{lemma}
-		Let $S$ be an implicational sequent such that $S'$ is provable classically. Then $S'$ is provable intuitionistically.
-	\end{lemma}
-
-	\begin{proof}
-		We proceed by induction on the proof height of the classical proof of $S'$. If the last rule is Ax or L$\bot$ (or L$\to$) the proof is already intuitionistically valid (or it follows directly from the induction hypothesis). Otherwise the proof ends in $n$ applications of R$\to$ where $n$ is chosen maximally, i.e.
-		\begin{center}
-			\AxiomC{}
-			\RightLabel{K}
-			\UnaryInfC{$A_1^{(1)},\dots, A_n^{(n)},\Gamma'\Rightarrow\Delta', B_1^{(1)},\dots B_n^{(n)}$}
-			\RightLabel{R$\to$}
-			\UnaryInfC{\vdots}
-			\RightLabel{R$\to$}
-			\UnaryInfC{$\Gamma'\Rightarrow\Delta', A_1^{(1)}\to B_1^{(1)},\dots, A_n^{(n)}\to B_n^{(n)}$}
-			\DisplayProof
-		\end{center}
-		with $\text{K }\neq\text{ R}\to$. If K $=$ L$\bot$ we have $\bot\in\Delta'$ and therefore we immediately have
-		\begin{center}
-			\AxiomC{}
-			\RightLabel{L$\bot$}
-			\UnaryInfC{$\Gamma'\Rightarrow\Delta', A_1^{(1)}\to B_1^{(1)},\dots, A_n^{(n)}\to B_n^{(n)}$}
-			\DisplayProof
-		\end{center}
-	For K $=$ Ax observe that the atomic formulas in $\Delta'$ and $\Gamma'$ are not primed. Therefore the tautology in Ax must be between some $A_k^{(k)}$ and $B_l^{(l)}$ or some formulas in $\Gamma'$ and $\Delta'$. In the latter case we just need a single application of $S'$. In the former if $k = l$ we get the intuitionistic proof
 	\begin{center}
-		\AxiomC{}
-		\RightLabel{Ax}
-		\UnaryInfC{$A_k^{(k)},\Gamma'\Rightarrow\Delta', B_k^{(k)}$}
+		\AxiomC{$A,\Gamma\Rightarrow B$}
 		\RightLabel{R$\to$}
-		\UnaryInfC{$\Gamma'\Rightarrow\Delta', A_1^{(1)}\to B_1^{(1)},\dots, A_n^{(n)}\to B_n^{(n)}$}
+		\UnaryInfC{$\Gamma\Rightarrow \Delta, A\to B$}
 		\DisplayProof
 	\end{center}
-	otherwise $k\neq l$ but $A^{(k)} = B^{(l)}$ can only be the case if $A^{(k)} = A^{(l)} = B^{(k)} = B^{(l)}$ and the above proof works thee same.
-	\end{proof}
+	
+	the formulas in $\Delta$ may not play a role in the derivation of $A, \Gamma\Rightarrow B$ whereas in classical logic they can
+	
+	\begin{center}
+		\AxiomC{$A,\Gamma\Rightarrow \Delta, B$}
+		\RightLabel{R$\to$}
+		\UnaryInfC{$\Gamma\Rightarrow \Delta, A\to B$}
+		\DisplayProof
+	\end{center}
 
+	We resolve this dichotomy by using a modified formula $A'\to B'$ and a modified antecedent $\Gamma'$ such that the formulas in $\Delta$ are useless for proving $A', \Gamma'\Rightarrow B'$. Furthermore for an implicational formula we know all possible ways R$\to$ can be applied, that is in deriving formulas of type $C\to D$ in the succedent and more indirectly $(C\to D)\to E$ in the antecedent. An additional complication arises due to the possibility that multiple R$\to$ are nested. Taking all these points into consideration we define the following:
+	
+	\begin{definition}\label{translation}
+		Suppose we are given an implicational sequent $\Gamma\to\Delta$ of the form $$\stackanchor{$\{(C_i\to D_i)\to E_i\}_{i\in I}, \{C_j\}_{j\in J},$}{$\{C_k\to D_k\}_{k\in K},\{C_l\to(D_l\to E_l)\}_{l\in L}$}\Rightarrow \{C_m\}_{m\in M}, \{C_n\to D_n\}_{n\in N}$$
+		
+		Let $\mathcal{A}$ denote the atoms in the sequent. For each $A\in\mathcal{A}-\{\bot\}$ and $S\subseteq I\cup N$ introduce a new atom $A^{S}$, which is a variant of $A$ for the subproof before the applications of R$\to$ associated with $S$. Have $\bot^S = \bot$ in the following:
+		\begin{align*}
+			\Gamma' = &\:\{(C_i^{S\cup \{i\}}\to D_i^{S\cup\{i\}})\to E_i^{S}\:|\: S\subset I\cup N - i\}
+			\\&\cup \{C_{j}^S\:|\:j\in J, S\subset I\cup N\}
+			\\&\cup \{C_{k}^S\to D_k^S\:|\:k\in K, S\subset I\cup N\}
+			\\&\cup \{C_l^S\to(D_l^S\to E_l^S)\:|\: l\in L, S\subset I\cup N\}
+			\\&\cup \{A^S\to A^{S\cup \{i\}}\:|\:A\in\mathcal{A}, S\subsetneq I\cup N, i\in I\cup N - S\}\\
+			\Delta' = &\:\{C_m^\emptyset\:|\:m\in M\}\cup \{C_n^{\{n\}}\to D_n^{\{n\}}\:|\: n\in N\}
+		\end{align*}
+	\end{definition}
+
+	We claim that the sequent $\Gamma'\to\Delta'$ is classically provable iff $\Gamma\to\Delta$ is intuitionistically provable. Note that the blowup of the sequent can be quite large, i.e. $O(2^{|I| + |N|})$. We will see that this will be far more manageable in the first-order case where we can do encodings via terms. Before proving our claim we shall examine some examples. 
+	\begin{example}
+		Consider \begin{enumerate}
+			\item $(A\to \bot)\to \bot\Rightarrow A$
+			\item $\Rightarrow A\to B, B\to A$
+			\item $(A\to B)\to C, A\to B\Rightarrow C$
+			\item $N\to (A\to B), (A\to B)\to C, (N\to C)\to D\Rightarrow D$ 
+		\end{enumerate}
+	which have the translated versions, where the sets $S$ have been encoded as natural numbers,
+	\begin{enumerate}
+		\item $(A^1\to \bot)\to \bot, A^0\to A^1\Rightarrow A^0$
+		\item $A^0\to A^1, A^1\to A^3, B^0\to B^1, B^1\to B^3\Rightarrow A^1\to B^1, B^2\to A^2$
+		\item $\stackanchor{$(A^1\to B^1)\to C^0, A^0\to B^0, A^1\to B^1$}{$A^0\to A^1, B^0\to B^1, C^0\to C^1$}\Rightarrow C^0$
+		\item $\stackanchor{$\{N^i\to (A^i\to B^i)\:|\:i\},(A^1\to B^1)\to C^0, (A^3\to B^3)\to C^2$}{$(N^2\to C^2)\to D^0, (N^3\to C^3)\to D^1, \{X^0\to X^i, X^i\to X^3\:|\:i, X\}$}\Rightarrow D^0$ 
+	\end{enumerate}
+	We can see that the sequents have become quite a lot more complex. As we would expect the first two, which stem from non-intuitionistic tautologies, are not provable. In the first case it boils down to not being able to prove $A_0$ from $A_1$. In the second to not being able to prove $A^2$ from $A^1$ or $B^2$ from $B^1$ ($A^3/B^3$ would be provable!).
+	
+	The third example features a minimal intuitionistically valid sequent which requires an application or R$\to$. It remains valid,  as $$(A^1\to B^1)\to C^0, A^1\to B^1\Rightarrow C^0$$ is provable. The final sequent is more involved requiring applications of R$\to$. Let's look at the proof of the modified version (with some implicit weakenings):
+	\begin{center}
+		\hspace*{-2cm}
+		\AxiomC{}
+		\RightLabel{Ax}
+		\UnaryInfC{$N^3\to N^3$}
+		\AxiomC{}
+		\RightLabel{Ax}
+		\UnaryInfC{$N^2\to N^2$}
+		\RightLabel{L$\to$}
+		\BinaryInfC{$N^2\to N^3, N^2\Rightarrow N^3$}
+		\AxiomC{}
+		\RightLabel{Ax}
+		\UnaryInfC{$A^3\to B^3\Rightarrow A^3\to B^3$}
+		\RightLabel{L$\to$}
+		\BinaryInfC{$N^2\to N^3, N^3\to (A^3\to B^3), N^2\Rightarrow A^3\to B^3$}
+		\AxiomC{}
+		\RightLabel{Ax}
+		\UnaryInfC{$C^2\Rightarrow C^2$}
+		\RightLabel{L$\to$}
+		\BinaryInfC{$N^2\to N^3, N^3\to (A^3\to B^3), (A^3\to B^3)\to C^2, N^2\Rightarrow C^2$}
+		\RightLabel{R$\to$}
+		\UnaryInfC{$N^2\to N^3, N^3\to (A^3\to B^3), (A^3\to B^3)\to C^2\Rightarrow N^2\to C^2$}
+		\AxiomC{}
+		\RightLabel{Ax}
+		\UnaryInfC{$D^0\Rightarrow D^0$}
+		\RightLabel{L$\to$}
+		\BinaryInfC{$N^2\to N^3, N^3\to (A^3\to B^3), (A^3\to B^3)\to C^2, (N^2\to C^2)\to D^0\Rightarrow D^0$}
+		\DisplayProof
+	\end{center}
+	We can see that above R$\to$ as applied to $N^2\to C^2$ we only see atoms indexed with $2$ and $3$.
+	\end{example}
+	
+	We now proceed to show that this is indeed a valid embedding of implicational sequents into classical logic. To that end we first show that $\Gamma\to\Delta$ and $\Gamma'\to\Delta'$ are equiprovable and then that the existence of a classical proof implies the existence of an intuitionistic proof (the other direction is trivial).
+	
+	\begin{lemma}
+		Let $\Gamma\to\Delta$ be an implicational sequent. Then $\Gamma\to\Delta$ and $\Gamma'\to\Delta'$ are equiprovable.
+	\end{lemma}
+
+	\begin{proof}
+		We adopt the notation from~\ref{translation}. Suppose $\Gamma'\to\Delta'$ are provable. Consider some proof and rename each atom $A^S$ to $A$. Each formula in the root sequent is then either part of $\Gamma\to\Delta$ or an intuitionistic tautology. Thus modulo some contractions and simple cuts we obtain a valid proof of $\Gamma\to\Delta$. The other direction is much more involved.
+		
+		Suppose we have a valid proof of $\Gamma\to\Delta$. We proceed by induction on the proof height. If the proof consists of a single Ax/L$\bot$ we can prove $\Gamma'\to\Delta'$ by Ax/L$\bot$ as well. Suppose the last rule is L$\to$:
+		\begin{center}
+			\AxiomC{$\Gamma\Rightarrow\Delta, A$}
+			\AxiomC{$B, \Gamma\setminus\{A\to B\}\Rightarrow\Delta$}
+			\RightLabel{L$\to$}
+			\BinaryInfC{$\Gamma\Rightarrow\Delta$}
+			\DisplayProof
+		\end{center}
+		with $A\to B\in\Gamma$. There are 3 cases:
+		
+		1. $A$ and $B$ are both atoms. Then by induction hypothesis $\Gamma'\Rightarrow\Delta', A^\emptyset$ and $\{B^S|S\subset I\cup N\}\cup \Gamma'\setminus\{A^S\to B^S|S\}\Rightarrow\Delta'$, i.e. $\{B^S|S\}\cup \Gamma'\Rightarrow\Delta'$ after weakening, are provable. Observe that for any $S\subset I\cup N$ $$\{A^T\to A^{T\cup \{i\}}\:|\:T\subsetneq S, i\in S - T\}, A^\emptyset, A^S\to B^S\Rightarrow B^S$$ is valid and $\{A^T\to A^{T\cup \{i\}}\:|\:T\subsetneq S, i\in S - T\}\subset\Gamma'$, $A^S\to B^S\in\Gamma$, i.e. we can prove $\Gamma'\Rightarrow\Delta', B^S$ via cut and weakening. From this and $\{B^S|S\}\cup \Gamma'\Rightarrow\Delta'$ we can obtain $\Gamma'\to\Delta'$ via $2^{|I| + |N|}$ cuts. (We don't really need cuts, but this is conceptually simpler and generalizes better to 2. and 3.)
+		
+		2. $B = C\to D$ where $A, C, D$ are atoms. By induction hypothesis $\Gamma'\Rightarrow\Delta', A^\emptyset$ and $\{C^S\to D^S|S\}\cup \Gamma'\Rightarrow\Delta'$ are provable. The argument is then analogous to 1 but instead of $A^S\to B^S$ we use $A^S\to(C^S\to D^S)$.
+		
+		3. $A = C\to D$ where $B, C, D$ are atoms. Let $i\in I$ be the index of $A\to B$, i.e. $A\to B = (C_i\to D_i)\to E_i$. Then by induction hypothesis $\Gamma'\to\Delta', C^{\{i\}}\to D^{\{i\}}$ and $\{B^S|S\}\cup \Gamma'\Rightarrow\Delta'$ are provable. Similarly to 1 observe that for any $S\subset I\cup N$ $$\{B^T\to B^{T\cup \{j\}}\:|\:T\subsetneq S, j\in S - T\}, C^{\{i\}}\to D^{\{i\}}, (C^{\{i\}}\to D^{\{i\}})\to B^\emptyset\Rightarrow B^S$$
+		is valid and we have $\{B^T\to B^{T\cup \{j\}}\:|\:T\subsetneq S, j\in S - T\}\subseteq \Gamma'$ and also $(C^{\{i\}}\to D^{\{i\}})\to B^\emptyset\in\Gamma'$. The rest is analogous.
+		
+		Finally suppose the last rule of the proof of $\Gamma\to\Delta$ is R$\to$:
+		\begin{center}
+			\AxiomC{$\Gamma, A\Rightarrow B$}
+			\RightLabel{R$\to$}
+			\UnaryInfC{$\Gamma\Rightarrow\Delta$}
+			\DisplayProof
+		\end{center}
+		with $A\to B\in\Delta$. Let $i$ be the index of $A\to B$. Let $\Gamma''$ be $\Gamma'$ in which each formula containing some $X^S$ with $i\notin S$ is deleted evey remaining atom $X^S$ is replaced by $X^{S - i}$. Then by induction hypothesis $$\Gamma'', \{A^S\:|\:S\subseteq I\cup N - i\}\to B^\emptyset$$ is provable. Now rename every atom $X^S$ in the proof of this sequent with $X^{S\cup\{i\}}$ and perform left weakening using the formulas in $\Gamma'$ that contain some $X^S$ where $i\notin S$. This gives us a proof of $\Gamma', \{A^{S\cup\{i\}}S\subset I\cup N - i\}\to B^{\{i\}}$. Finally observe that for all $S\subset I\cup N - i$ $$\{A^{T\cup\{i\}}\to A^{T\cup \{i, j\}}\:|\:T\subsetneq S, j\in S - T\}, A^{\{i\}}\Rightarrow A^{S\cup\{i\}}$$ is valid and $\{A^{T\cup\{i\}}\to A^{T\cup \{i, j\}}\:|\:T\subsetneq S, j\in S - T\}\subset\Gamma'$. Therefore using cut and weakening we obtain $\Gamma', A^{\{i\}}\Rightarrow B^{\{i\}}$ and via R$\to$ and weakening $\Gamma'\Rightarrow\Delta'$.
+	\end{proof}
+		
+	For the following lemma we first need a technical result:
+	\begin{lemma}
+		Let $\Gamma\Rightarrow\Delta$ be a provable implicational sequent. Then there exists $B\in\Delta\cup\{\bot\}$ such that $\Gamma\Rightarrow B$ is provable.
+	\end{lemma}
+
+	\begin{proof}
+		By induction on the proof height. If it consists of a single Ax, L$\bot$ or the last rule is R$\to$ the claim is clear. Suppose it ends in L$\to$
+		\begin{center}
+			\AxiomC{$\Gamma\Rightarrow\Delta, A$}
+			\AxiomC{$B, \Gamma\setminus\{A\to B\}\Rightarrow\Delta$}
+			\RightLabel{L$\to$}
+			\BinaryInfC{$\Gamma\Rightarrow\Delta$}
+			\DisplayProof
+		\end{center}
+		
+		We apply the induction hypothesis to the first argument. If $\Gamma\Rightarrow B_\Delta$ is valid for some $B_\Delta\in\Delta\cup\{\bot\}$ we are done so suppose $\Gamma\Rightarrow A$. But then applying the induction hypothesis to the second argument we get
+		\begin{center}
+			\AxiomC{$\Gamma\Rightarrow A$}
+			\AxiomC{$B, \Gamma\setminus\{A\to B\}\Rightarrow B_\Delta$}
+			\RightLabel{L$\to$}
+			\BinaryInfC{$\Gamma\Rightarrow B_\Delta$}
+			\DisplayProof
+		\end{center}
+	\end{proof}
+		
+	\begin{lemma}
+		Let $\Gamma\to\Delta$ be an implicational sequent. Suppose $\Gamma'\to\Delta'$ is classically provable. Then $\Gamma'\to\Delta'$ is intuitionistically provable.
+	\end{lemma}
+	
+	\begin{proof}
+		Again we use the terminology from ~\ref{translation} and proceed by the induction on the number of R$\to$ in the proof of $\Gamma'\to\Delta'$ that have non-empty set of side formulas $\Delta$. If there are no such R$\to$ the proof is already intuitionistically valid. Suppose otherwise, i.e. the proof contains
+		\begin{center}
+			\AxiomC{$\Gamma', A^{\{i\}}\Rightarrow \Delta'-(A^{\{i\}}\to B^{\{i\}}), B^{\{i\}}$}
+			\RightLabel{R$\to$}
+			\UnaryInfC{$\Gamma'\to\Delta'$}
+			\DisplayProof
+		\end{center}
+		for some atomic $A, B$ and $i\in N$ with $\Delta - (A^{\{i\}}\to B^{\{i\}}) \neq\emptyset$. Consider $\overline\Gamma', \overline\Delta'$ obtained from $\Gamma', \Delta'$ by renaming every atom $X^S$ to $X^{S - i}$. Then this renaming applied to the proof produces one of $\overline\Gamma', A^\emptyset\Rightarrow\overline\Delta' - (A^\emptyset\to B^\emptyset), B^\emptyset$, i.e. after weakening  $$(\Gamma\cup\{A\})'\Rightarrow(\Delta\cup\{B\} - (A\to B))'$$ which by inductions hypothesis is intuitionistically valid.
+	\end{proof}
+	
+	
+	
 	\begin{theorem}
 		A sequent $S$ in intuitionistically provable if and only if $S^\circ_\to$ is classically provable.
 	\end{theorem}
 
-	\begin{example}
-		Consider Pierce's law $P := (A\to B)\to A\Rightarrow A$. This is a classic non-intuitionistic tautology. Note that it is already implicational. $P'$ is $$(A'\to B')\to A, A\to A', B\to B', \omega\to A', \omega\to B'\Rightarrow A$$ As proven this sequent is not classically valid, $A = B = B' = \omega = 0$, $A' = 1$  provides a countermodel.
-		
-		If we add $A\to B$ to the hypothesis set $P'$ is $$(A'\to B')\to A, A'\to B', A\to B, A\to A', B\to B', \omega\to A', \omega\to B'\Rightarrow A$$ which is classically and intuitionistically valid. Argueing in BHK terms, we can provide a terms of type $A'\to B'$ to $(A'\to B')\to A$ in order to obtain a term of type $A$, which is what is needed.
-	\end{example}
-
-	Intuitively the primed atoms may only be used in implications, i.e. as arguments to formulas of type $(A\to B)\to C$ but never as proper atoms, i.e. as arguments to $A\to B$.
 	
 	\bibliographystyle{plain}
 	\bibliography{references}
