@@ -473,7 +473,7 @@
 	
 	We now proceed to show that this is indeed a valid embedding of implicational sequents into classical logic. To that end we first show that $\Gamma\to\Delta$ and $\Gamma'\to\Delta'$ are equiprovable and then that the existence of a classical proof implies the existence of an intuitionistic proof (the other direction is trivial).
 	
-	\begin{lemma}
+	\begin{lemma}\label{equi}
 		Let $\Gamma\to\Delta$ be an implicational sequent. Then $\Gamma\to\Delta$ and $\Gamma'\to\Delta'$ are equiprovable.
 	\end{lemma}
 
@@ -513,6 +513,7 @@
 	\end{lemma}
 
 	\begin{proof}
+		
 		By induction on the proof height. If it consists of a single Ax, L$\bot$ or the last rule is R$\to$ the claim is clear. Suppose it ends in L$\to$
 		\begin{center}
 			\AxiomC{$\Gamma\Rightarrow\Delta, A$}
@@ -532,25 +533,171 @@
 		\end{center}
 	\end{proof}
 		
-	\begin{lemma}
+	\begin{lemma}\label{classical}
 		Let $\Gamma\to\Delta$ be an implicational sequent. Suppose $\Gamma'\to\Delta'$ is classically provable. Then $\Gamma'\to\Delta'$ is intuitionistically provable.
 	\end{lemma}
 	
 	\begin{proof}
-		Again we use the terminology from ~\ref{translation} and proceed by the induction on the number of R$\to$ in the proof of $\Gamma'\to\Delta'$ that have non-empty set of side formulas $\Delta$. If there are no such R$\to$ the proof is already intuitionistically valid. Suppose otherwise, i.e. the proof contains
+		We adopt again the notation from~\ref{translation}. Suppose we have a classical proof of $\Gamma'\to\Delta'$. We give a transformation into an intuitionistic proof.
+		
+		First observe that we can move applications of R$\to$ downward the proof tree, as long as the resulting right implication is not an active formula, i.e. $\Gamma\to\Delta, A\to B$ is replaced with $A, \Gamma\to \Delta, B$:
 		\begin{center}
-			\AxiomC{$\Gamma', A^{\{i\}}\Rightarrow \Delta'-(A^{\{i\}}\to B^{\{i\}}), B^{\{i\}}$}
+			\AxiomC{$A, C,\Gamma\Rightarrow\Delta, B, D$}
 			\RightLabel{R$\to$}
-			\UnaryInfC{$\Gamma'\to\Delta'$}
+			\UnaryInfC{$C,\Gamma\Rightarrow\Delta, A\to B, D$}
+			\RightLabel{R$\to$}
+			\UnaryInfC{$\Gamma\Rightarrow\Delta, A\to B, C\to D$}
+			\DisplayProof
+			
+			$\downarrow$
+			
+			\AxiomC{$A, C,\Gamma\Rightarrow\Delta, B, D$}
+			\RightLabel{R$\to$}
+			\UnaryInfC{$A,\Gamma\Rightarrow\Delta, B, C\to D$}
+			\RightLabel{R$\to$}
+			\UnaryInfC{$\Gamma\Rightarrow\Delta, A\to B, C\to D$}
+			\DisplayProof
+			
+			\AxiomC{$C\to D, A,\Gamma\Rightarrow\Delta, B, D$}
+			\RightLabel{R$\to$}
+			\UnaryInfC{$ C\to D,\Gamma\Rightarrow\Delta, A\to B, D$}
+			\AxiomC{$A, D,\Gamma\Rightarrow\Delta, B$}
+			\RightLabel{R$\to$}
+			\UnaryInfC{$D,\Gamma\Rightarrow\Delta, A\to B$}
+			\RightLabel{L$\to$}
+			\BinaryInfC{$ C\to D,\Gamma\Rightarrow\Delta, A\to B$}
+			\DisplayProof
+			
+			$\downarrow$
+			
+			\AxiomC{$C\to D, A, \Gamma\Rightarrow\Delta, B, D$}
+			\AxiomC{$A, D,\Gamma\Rightarrow\Delta, B$}
+			\RightLabel{L$\to$}
+			\BinaryInfC{$ C\to D, A,\Gamma\Rightarrow\Delta, B$}
+			\RightLabel{R$\to$}
+			\UnaryInfC{$C\to D,\Gamma\Rightarrow\Delta, A\to B$}
 			\DisplayProof
 		\end{center}
-		for some atomic $A, B$ and $i\in N$ with $\Delta - (A^{\{i\}}\to B^{\{i\}}) \neq\emptyset$. Consider $\overline\Gamma', \overline\Delta'$ obtained from $\Gamma', \Delta'$ by renaming every atom $X^S$ to $X^{S - i}$. Then this renaming applied to the proof produces one of $\overline\Gamma', A^\emptyset\Rightarrow\overline\Delta' - (A^\emptyset\to B^\emptyset), B^\emptyset$, i.e. after weakening  $$(\Gamma\cup\{A\})'\Rightarrow(\Delta\cup\{B\} - (A\to B))'$$ which by inductions hypothesis is intuitionistically valid.
+		Note that in the L$\to$ case it is not a problem if $A\to B$ was not introduced via R$\to$ in one of the branches but via Ax, we then just have to modify Ax accordingly.
+		
+		Next consider the case where R$\to$ is followed by L$\to$ where the derived sequent is active, in that case we can move both rules downward: 
+		\begin{center}
+			\AxiomC{$(A\to B)\to C, A, D, \Gamma\Rightarrow\Delta, B, E$}
+			\RightLabel{R$\to$}
+			\UnaryInfC{$(A\to B)\to C, D, \Gamma\Rightarrow\Delta, A\to B, E$}
+			\AxiomC{$C, D,\Gamma\Rightarrow\Delta, E$}
+			\RightLabel{L$\to$}
+			\BinaryInfC{$(A\to B)\to C, D, \Gamma\Rightarrow\Delta, E$}
+			\RightLabel{R$\to$}
+			\UnaryInfC{$(A\to B)\to C, \Gamma\Rightarrow\Delta, D\to E$}
+			\DisplayProof
+			
+			$\downarrow$
+			
+			\AxiomC{$(A\to B)\to C, A, D, \Gamma\Rightarrow\Delta, B, E$}
+			\RightLabel{R$\to$}
+			\UnaryInfC{$(A\to B)\to C, A, \Gamma\Rightarrow\Delta, B, D\to E$}
+			\RightLabel{R$\to$}
+			\UnaryInfC{$(A\to B)\to C, \Gamma\Rightarrow\Delta, A\to B, D\to E$}
+			\AxiomC{$C, D,\Gamma\Rightarrow\Delta, E$}
+			\RightLabel{R$\to$}
+			\UnaryInfC{$C, \Gamma\Rightarrow\Delta, D\to E$}
+			\RightLabel{L$\to$}
+			\BinaryInfC{$(A\to B)\to C, \Gamma\Rightarrow\Delta, D\to E$}
+			\DisplayProof			
+		\end{center}
+		and analogously for L$\to$.
+		\begin{center}
+			\hspace*{-4cm}
+			{\footnotesize
+			\AxiomC{$(A\to B)\to C, A, D\to E, \Gamma\Rightarrow\Delta, B, D$}
+			\RightLabel{R$\to$}
+			\UnaryInfC{$(A\to B)\to C, D\to E, \Gamma\Rightarrow\Delta, A\to B, D$}
+			\AxiomC{$C, D\to E,\Gamma\Rightarrow\Delta, D$}
+			\RightLabel{L$\to$}
+			\BinaryInfC{$(A\to B)\to C, D\to E, \Gamma\Rightarrow\Delta, D$}
+			\AxiomC{$(A\to B)\to C, A, E, \Gamma\Rightarrow\Delta, B$}
+			\RightLabel{R$\to$}
+			\UnaryInfC{$(A\to B)\to C, E, \Gamma\Rightarrow\Delta, A\to B$}
+			\AxiomC{$C, E,\Gamma\Rightarrow\Delta$}
+			\RightLabel{L$\to$}
+			\BinaryInfC{$(A\to B)\to C, E, \Gamma\Rightarrow\Delta$}
+			\RightLabel{L$\to$}
+			\BinaryInfC{$(A\to B)\to C, D\to E, \Gamma\Rightarrow\Delta$}
+			\DisplayProof
+		}
+			
+			$\downarrow$
+			
+			\hspace*{-3cm}
+			{\footnotesize
+				\AxiomC{$(A\to B)\to C, A, D\to E, \Gamma\Rightarrow\Delta, B, D$}
+				\AxiomC{$(A\to B)\to C, A, E, \Gamma\Rightarrow\Delta, B$}
+				\RightLabel{L$\to$}
+				\BinaryInfC{$(A\to B)\to C, A, D\to E, \Gamma\Rightarrow\Delta, B$}
+				\RightLabel{R$\to$}
+				\UnaryInfC{$(A\to B)\to C, D\to E, \Gamma\Rightarrow\Delta, A\to B$}
+				\AxiomC{$C, D\to E,\Gamma\Rightarrow\Delta, D$}
+				\AxiomC{$C, E,\Gamma\Rightarrow\Delta$}
+				\RightLabel{L$\to$}
+				\BinaryInfC{$C, D\to E, \Gamma\Rightarrow\Delta$}
+				\RightLabel{L$\to$}
+				\BinaryInfC{$(A\to B)\to C, D\to E, \Gamma\Rightarrow\Delta$}
+				\DisplayProof
+			}	
+		\end{center}
+		where the same remark as before applies. This allows us to move the applications of R$\to$
+		\begin{center}
+			\AxiomC{$C^S, \Gamma\Rightarrow \Delta, D^S$}
+			\RightLabel{R$\to$}
+			\UnaryInfC{$\Gamma\Rightarrow \Delta, C^S\to D^S$}
+			\DisplayProof
+		\end{center}
+		such that
+		\begin{enumerate}[i.]
+			\item no application of R$\to$ below this one with corresponding $S'$ has $S'\supsetneq S$.
+			\item if $S\neq\{i\}$ with $i\in N$ then R$\to$ is directly followed by L$\to$ where the derived application is active, i.e.
+			\begin{center}
+				\AxiomC{$(C^{S\cup\{i\}}\to D^{S\cup\{i\}})\to E^S, C^{S\cup\{i\}}, \Gamma\Rightarrow \Delta, D^{S\cup\{i\}}$}
+				\RightLabel{R$\to$}
+				\UnaryInfC{$(C^{S\cup\{i\}}\to D^{S\cup\{i\}})\to E^S,\Gamma\Rightarrow \Delta, C^{S\cup\{i\}}\to D^{S\cup\{i\}}$}
+				\AxiomC{$\Gamma, E^S\Rightarrow \Delta$}
+				\RightLabel{L$\to$}
+				\BinaryInfC{$(C^{S\cup\{i\}}\to D^{S\cup\{i\}})\to E^S,\Gamma\Rightarrow \Delta$}
+				\DisplayProof
+			\end{center}
+		\end{enumerate}
+	
+		We now proceed by induction on the number of R$\to$ in this transformed proof. There are three cases
+		
+		1. There are no R$\to$ left, then we are done as the proof is already intuitionistically valid.
+		
+		2. The last rule is R$\to$, i.e. of the form 
+		\begin{center}
+			\AxiomC{$C^{\{i\}}, \Gamma\Rightarrow \Delta, D^{\{i\}}$}
+			\RightLabel{R$\to$}
+			\UnaryInfC{$\Gamma\Rightarrow \Delta, C^{\{i\}}\to D^{\{i\}}$}
+			\DisplayProof
+		\end{center}
+		for some $i\in N$. If $C^{\{i\}}, \Gamma\Rightarrow D^{\{i\}}$ perform a renaming in the above proof to one of $\{C^S|S\}, \Gamma\Rightarrow D$. Then by induction hypothesis we obtain an intuitionistic proof of that and reverting the transformation we obtain one of $C^{\{i\}}, \Gamma\Rightarrow D^{\{i\}}$. But then we can apply R$\to$ to obtain $\Gamma\Rightarrow \Delta, C^{\{i\}}\to D^{\{i\}}$. Otherwise $\Gamma\Rightarrow\Delta$ and we are done by weakening.
+		
+		3. The last two rules are of the form
+		\begin{center}
+			\AxiomC{$(C^{S\cup\{i\}}\to D^{S\cup\{i\}})\to E^S, C^{S\cup\{i\}}, \Gamma\Rightarrow \Delta, D^{S\cup\{i\}}$}
+			\RightLabel{R$\to$}
+			\UnaryInfC{$(C^{S\cup\{i\}}\to D^{S\cup\{i\}})\to E^S,\Gamma\Rightarrow \Delta, C^{S\cup\{i\}}\to D^{S\cup\{i\}}$}
+			\AxiomC{$\Gamma, E^S\Rightarrow \Delta$}
+			\RightLabel{L$\to$}
+			\BinaryInfC{$(C^{S\cup\{i\}}\to D^{S\cup\{i\}})\to E^S,\Gamma\Rightarrow \Delta$}
+			\DisplayProof
+		\end{center}
+		then again if $C^{S\cup\{i\}}, \Gamma\Rightarrow D^{S\cup\{i\}}$ is provable perform a renaming to obtain one of $\{C^S|S\}, \Gamma\Rightarrow D$, apply the induction hypothesis, and revert the renaming to obtain an intuitionistically valid proof of $(C^{S\cup\{i\}}\to D^{S\cup\{i\}})\to E^S, C^{S\cup\{i\}}, \Gamma\Rightarrow D^{S\cup\{i\}}$ which we can then use in the above. Otherwise we again obtain that $\Gamma\to\Delta$ is provable on which we just need to perform weakening.
 	\end{proof}
 	
-	
+	From~\ref{equi} and~\ref{classical} we finally obtain the result
 	
 	\begin{theorem}
-		A sequent $S$ in intuitionistically provable if and only if $S^\circ_\to$ is classically provable.
+		A sequent $S$ in intuitionistically provable if and only if $S'_\to$ is classically provable.
 	\end{theorem}
 
 	
