@@ -62,18 +62,10 @@
 	 	$\psi$ is a \textit{subformula} of $\varphi$ if it is the label of some node of $T(\varphi)$.
 	 \end{definition}
 	 
-	 
-	 \begin{example}
-	 	Consider the formula $((A\wedge B)\to A) \to (B\vee A)$. Then its syntax tree is
-	 	\begin{center}
-	 		\tikz[scale=1, baseline=-5mm, thick]{\Tree [.\node[draw]{$((A\to B)\to A)\to (B\vee A)$}; [.\node[draw]{$(A\to B)\to A$}; [.\node[draw]{$A\to B$}; [.\node[draw]{$A$}; ] [.\node[draw]{$B$}; ] ] [.\node[draw]{$A$}; ] ] [.\node[draw]{$B\vee A$}; [.\node[draw]{$B$}; ] [.\node[draw]{$A$};] ] ]}
-	 	\end{center}
-	 \end{example}
- 
  	We are now ready to introduce our calculi for intuitionistic and classical logic:
 	
 	\begin{definition}
-			A \textit{sequent} $A\Rightarrow B$ consists of two multisets of formulas $A, B$. The position of $A_i$ in $A_1,\dots, A_n\Rightarrow B_1,\dots, B_m$ is $0i$ and that of $B_i$ is $1i$. A formula $\varphi$ occurs at $p = (ji, p')$ if $\varphi$ occurs at $p'$ in $A_i$ if $j=0$ and in $B_i$ if $j=1$. The following rules make up our classical calculus $\mathbf{GC}$, corresponding roughly to the propositional fragment of \textbf{G3c} from~\cite{basicprooftheory}:\\
+			A \textit{sequent} $\Gamma\Rightarrow \Delta$ consists of two multisets of formulas $\Gamma, \Delta$. The following rules make up our classical calculus $\mathbf{GCp}$, corresponding roughly to the propositional fragment of \textbf{G3c} from~\cite{basicprooftheory}:\\
 		\begin{center}
 			\begin{tabular}{lll}
 				\AxiomC{\hphantom{x}}
@@ -118,20 +110,20 @@
 			\end{tabular}
 		\end{center}
 		
-		To obtain our intuitionistic calculus \textbf{GI} (corresponding to \textbf{m-G3i} from~\cite{basicprooftheory}) substitute R$\to$ with
+		To obtain our intuitionistic calculus \textbf{GIp} (corresponding to \textbf{m-G3i} from~\cite{basicprooftheory}) substitute R$\to$ with
 		\begin{center}
 			\AxiomC{$A, \Gamma\Rightarrow B$}
-			\RightLabel{R$\to'$}
+			\RightLabel{R$\to$}
 			\UnaryInfC{$\Gamma\Rightarrow\Delta, A\to B$}
 			\DisplayProof
 		\end{center}
 	
-		A \textit{proof} of a formula $\varphi$ in a calculus $\mathbf{G}$ is a labelled binary rooted tree in which every node is labelled with a pair of the name of a rule in $\mathbf{G}$, its rule, and a sequent, its sequent, such that
+		A \textit{proof} of a formula $\varphi$ in a calculus $\mathbf{G}$ is a labelled binary rooted tree in which every node is labelled with a sequent such that
 		\begin{itemize}
-			\item Every leaf is labelled with (Ax, $A,\Gamma\Rightarrow\Delta, A$) or (L$\bot$, $\bot, \Gamma\Rightarrow\Delta$) for some formula $A$, multi-sets of formulas $\Gamma,\Delta$.
-			\item The sequent of an interior node can be derived from sequents of its child nodes according to its rule.
+			\item Every leaf is labelled in accordance to Ax or L$\bot$.
+			\item The sequent of an interior node can be derived from sequents of its child nodes according to one of the rules.
 		\end{itemize}
-		We usually present a proof directly as a sequence of applications of rules rather than in a more usual tree presentation. Note that we implicitly permute the antecedent and succedent, i.e. we implicitly may apply a number of exchange rules at any point in the proof. 
+		We usually present a proof directly as a sequence of applications of rules rather than in a more usual tree presentation.
 	\end{definition}
 
 	\begin{example}
@@ -471,7 +463,7 @@
 	We can see that above R$\to$ as applied to $N^2\to C^2$ we only see atoms indexed with $2$ and $3$.
 	\end{example}
 	
-	We now proceed to show that this is indeed a valid embedding of implicational sequents into classical logic. To that end we first show that $\Gamma\to\Delta$ and $\Gamma'\to\Delta'$ are equiprovable and then that the existence of a classical proof implies the existence of an intuitionistic proof (the other direction is trivial).
+	We now proceed to show that this is indeed a valid embedding of implicational sequents into classical logic. To that end we first show that $\Gamma\to\Delta$ and $\Gamma'\to\Delta'$ are equiprovable and then that the existence of a classical proof of $\Gamma'\to\Delta'$ implies the existence of an intuitionistic proof of $\Gamma'\to\Delta'$ (the other direction is trivial).
 	
 	\begin{lemma}\label{equi}
 		Let $\Gamma\to\Delta$ be an implicational sequent. Then $\Gamma\to\Delta$ and $\Gamma'\to\Delta'$ are equiprovable.
@@ -679,7 +671,7 @@
 			\UnaryInfC{$\Gamma\Rightarrow \Delta, C^{\{i\}}\to D^{\{i\}}$}
 			\DisplayProof
 		\end{center}
-		for some $i\in N$. If $C^{\{i\}}, \Gamma\Rightarrow D^{\{i\}}$ perform a renaming in the above proof to one of $\{C^S|S\}, \Gamma\Rightarrow D$. Then by induction hypothesis we obtain an intuitionistic proof of that and reverting the transformation we obtain one of $C^{\{i\}}, \Gamma\Rightarrow D^{\{i\}}$. But then we can apply R$\to$ to obtain $\Gamma\Rightarrow \Delta, C^{\{i\}}\to D^{\{i\}}$. Otherwise $\Gamma\Rightarrow\Delta$ and we are done by weakening.
+		for some $i\in N$. If $C^{\{i\}}, \Gamma\Rightarrow D^{\{i\}}$ is provable perform a renaming in its proof to one of $\{C^S|S\}, \Gamma\Rightarrow D$. Then by induction hypothesis we obtain an intuitionistic proof of that and reverting the transformation we obtain one of $C^{\{i\}}, \Gamma\Rightarrow D^{\{i\}}$. But then we can apply R$\to$ to obtain $\Gamma\Rightarrow \Delta, C^{\{i\}}\to D^{\{i\}}$. Otherwise $\Gamma\Rightarrow\Delta$ and we are done by weakening.
 		
 		3. The last two rules are of the form
 		\begin{center}
@@ -700,7 +692,101 @@
 		A sequent $S$ in intuitionistically provable if and only if $S'_\to$ is classically provable.
 	\end{theorem}
 
+
+	\section{First-order logic}
 	
+	Let us first introduce the calculi and recapitulate some facts. First we need to introduce our term language
+	\begin{definition}
+		A \textit{Signature} consists of
+		\begin{enumerate}
+			\item a finite set $S_f$ of function symbols $f_1, \dots, f_n$
+			\item a finite set $S_R$ of relation symbols $R_1,\dots, R_m$
+			\item  a function ar$: S_f\cup S_R\to \mathbb{N}$ assigning to each symbol its arity (possibly 0).
+		\end{enumerate}
+	\end{definition}
+	
+	\noindent Usually the signature we be implicit and contain a binary relation symbol $=$ for equality. If explicitly stated we denote it by $$\{f_1/\text{ar}(f_1),\dots,f_n/\text{ar}(f_n), R_1/\text{ar}(R_1).\dots,R_m/\text{ar}(R_m)\}.$$
+	Fix a countably infinite collection of free variables $a, b, c\dots$ and bound variables $x, y, z\dots$.
+	Note that the following definitions could be simplified by not distinguishing between bound and free variables. However this has some other drawbacks and in particular when defining a sequent calculus for first-order logic having disjoint sets of bound and free variables is convenient.
+	
+	\begin{definition}
+		A \textit{Semiterm} is one of the following
+		\begin{enumerate}
+			\item A bound or free variable
+			\item $f(t_1, \dots, t_n)$ given semiterms $t_1,\dots,t_n$ and an $n$-ary function symbol $f$.
+		\end{enumerate}
+		A \textit{Term} is defined as above but without allowing bound variables. We denote the set of bound variables as $\mathcal{V}_b$, of free variables as $\mathcal{V}_f$ and the set of terms as $\mathcal{T}$.
+	\end{definition}
+	
+	\begin{definition}
+		A \textit{Semiformula} is one of the following
+		\begin{enumerate}
+			\item $R(t_1, \dots, t_n), t_1 = t_2, \bot, \top$ given semiterms $t_1,\dots,t_n$ and an $n$-ary function symbol $R$.
+			\item $\forall x A, \exists x A, A\wedge B, A\vee B, A\to B$ given Semiformulas $A, B$ and a bound variable $x$.
+		\end{enumerate}
+		A \textit{Formula} is semiformula in which every occurrence of a bound variable is guarded by a quantifier. A formula created by the first rule is called \textit{atomic}.
+	\end{definition}
+	
+	\begin{definition}
+		A \textit{Substitution} is a function $\sigma: \mathcal{V}_\text{f}\to\mathcal{T}$. For a semiterm $t$ we define $t\sigma$ as follows:
+		\begin{itemize}
+			\item $x\sigma = x$ for $x\in \mathcal{V}_b$
+			\item $a\sigma = \sigma(a)$ for $a\in \mathcal{V}_f$
+			\item $f(t_1,\dots,t_n)\sigma = f(t_1\sigma,\dots,t_n\sigma)$ for an $n$-ary function symbol $f$ and terms $t_1,\dots,t_n$.
+		\end{itemize}
+		Analogously we define $F\sigma$ for formulas $F$. Given free variables $a_1,\dots,a_n$ and terms $t_1,\dots,t_n$ we define a special substitution $[t_1/a_1,\dots,t_n/a_n]$ as $$\sigma(a) = \begin{cases}
+			t_i & \text{if } a = a_i \text{ for } i \in \{1\dots n\}\\
+			a & \text{else}
+		\end{cases}$$this notion can be naturally extended where $a_i$ are arbitrary terms.
+	\end{definition}
+	
+	We now extend our calculi from the previous section to be able to reason about terms. We obtain roughly calculi G3c and m-G3i from~\cite{basicprooftheory}. 
+	\begin{definition}
+	Obtain \textbf{GC} by extending \textbf{GCp} by following quantifier and equality rules:\\
+	
+	\begin{tabular}{lll}
+		\AxiomC{$A[t/x], \Gamma\Rightarrow\Delta$}
+		\RightLabel{L$\forall$}
+		\UnaryInfC{$\forall xA, \Gamma\Rightarrow \Delta$}
+		\DisplayProof&
+		\AxiomC{$\Gamma\Rightarrow\Delta, A[a/x]$}
+		\RightLabel{R$\forall$}
+		\UnaryInfC{$\Gamma\Rightarrow \Delta, \forall xA$}
+		\DisplayProof&
+		\\&&\\
+		\AxiomC{$A[a/x], \Gamma\Rightarrow\Delta$}
+		\RightLabel{L$\exists$}
+		\UnaryInfC{$\exists xA, \Gamma\Rightarrow \Delta$}
+		\DisplayProof&
+		\AxiomC{$\Gamma\Rightarrow\Delta, A[t/x]$}
+		\RightLabel{R$\exists$}
+		\UnaryInfC{$\Gamma\Rightarrow \Delta, \exists xA$}
+		\DisplayProof&
+		\\&&\\
+		\AxiomC{$t = t, \Gamma\Rightarrow \Delta$}
+		\RightLabel{Ref}
+		\UnaryInfC{$\Gamma\Rightarrow \Delta$}
+		\DisplayProof&
+		\AxiomC{$s = t, P[s/x], P[t/x], \Gamma\Rightarrow \Delta$}
+		\RightLabel{Ref}
+		\UnaryInfC{$s = t, P[s/x],\Gamma\Rightarrow \Delta$}
+		\DisplayProof&
+		\\&&\\
+	\end{tabular}
+
+	where in R$\forall$ and L$\exists$ $a$ is a free variable not occurring in the sequent otherwise. Again for \textbf{GI} we modify R$\to$ as before and R$\forall$ to
+	\begin{center}
+		\AxiomC{$\Gamma\Rightarrow A[a/x]$}
+		\RightLabel{R$\forall_1$}
+		\UnaryInfC{$\Gamma\Rightarrow\Delta, \forall xA$}
+		\DisplayProof
+	\end{center}
+	\end{definition}
+
+	All theorems for cut elimination etc. from the previous section apply.
+	
+	
+
 	\bibliographystyle{plain}
 	\bibliography{references}
 	
