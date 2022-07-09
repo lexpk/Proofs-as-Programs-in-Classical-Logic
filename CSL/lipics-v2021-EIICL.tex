@@ -131,10 +131,10 @@ All in all this leaves us with the following:
 Examining the proof of the above theorem we will be able to notice that due to its tree form the constructed Kripke frame lends itself as an interpretation for a certain quantified boolean formula. We can show that this QBF is satisfiable if and only if there exists a counter-model for our original formula.
 
 \begin{theorem}
-	Let $\mathcal S$ be as above. There is an effective procedure that produces a QBF $\varphi^Q$ of size $\mathcal O(|\mathcal S|\cdot|\mathcal F_\to| + |\mathcal F_\to|^3)$ with $2\cdot |\mathcal F_\to|-1$ quantifier alternations such that $\varphi$ is intuitionistically if and only if $\varphi^Q$ is not satisfiable. Fixing $N\in\mathbb N$ deciding intuitionistic validity for formulas $\bigwedge \mathcal S\to P$ where $\mathcal S$ is as above and $|\mathcal F_\to| = N$ is therefore in $\Sigma_{2N-1}$.
+	Let $\mathcal S$ be as above. There is an effective procedure that produces a QBF $\varphi^Q$ of size $\mathcal O(|\mathcal S|\cdot|\mathcal F_\to| + |\mathcal F_\to|^3)$ with $2\cdot |\mathcal F_\to|-1$ quantifier alternations such that $\varphi$ is intuitionistically valid if and only if $\varphi^Q$ is not satisfiable. Fixing $N\in\mathbb N$ deciding intuitionistic validity for formulas $\bigwedge \mathcal S\to P$ where $\mathcal S$ is as above and $|\mathcal F_\to| = N$ is therefore in $\Sigma_{2N-1}$.
 \end{theorem}
 
-We then move to the first-order case. Here things are a bit more involved but the underlying approach is the same. First we again perform a Tseytin-like transformation. Here the non-classical content in encapsulated by formulas of type $(A\to B)\to C$ and $\forall xA\to B$.
+We then move to the first-order case. Here things are a bit more involved but the underlying approach is the same. First we again perform a Tseytin-like transformation. Here the non-classical content is encapsulated by formulas of type $(A\to B)\to C$ and $\forall xA\to B$.
 
 \begin{theorem}
 	For every predicate formula $\varphi$ there exists an effective procedure that yields an atom $P$ and a set $\mathcal S$ of formulas $\psi$ of the forms
