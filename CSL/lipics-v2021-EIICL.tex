@@ -34,7 +34,7 @@
 
 \authorrunning{A. Pluska and F. Zuleger} %TODO mandatory. First: Use abbreviated first/middle names. Second (only in severe cases): Use first author plus 'et al.'
 
-\Copyright{Jane Open Access and Joan R. Public} %TODO mandatory, please use full first names. LIPIcs license is "CC-BY";  http://creativecommons.org/licenses/by/3.0/
+\Copyright{Alexander Pluska and Florian Zuleger} %TODO mandatory, please use full first names. LIPIcs license is "CC-BY";  http://creativecommons.org/licenses/by/3.0/
 
 \ccsdesc[100]{\textcolor{red}{Theory of Computation Logic Constructive Mathematics}} %TODO mandatory: Please choose ACM 2012 classifications from https://dl.acm.org/ccs/ccs_flat.cfm 
 
@@ -75,19 +75,102 @@
 
 %TODO mandatory: add short abstract of the document
 \begin{abstract}
-The famous double negation translation~\cite{glivenko1929quelques, godel1933intuitionistischen} establishes an embedding from classical into intuitionistic logic. Curiously the reverse direction has not been covered in literature, perhaps because going from the more expressive logic to the less expressive one necessitates a much more involved encoding. We present an embedding from intuitionistic to classical logic, both in the propositional and first-order case, as well as an embedding of intuitionistic propositional logic into quantified boolean formulas. 
-Furthermore in the propositional case we establish a parameter that bounds the proof complexity of intuitionistic formulas. In general validity of intuitionistic propositional logic is \verb+PSPACE+-complete~\cite{statman1979intuitionistic} but this gives us a finer-grained result. In this process we also present a Tseytin-like translation that preserves intuitionistic validity and reduces formulas to a normal form.
-Finally in the first order-case we hope that our translation allows the use state-of-the-art theorem provers for classical first-order logic such as Vampire~\cite{kovacs2013first} for checking intuitionistic validity and program synthesis. 
+The famous double negation translation~\cite{glivenko1929quelques, godel1933intuitionistischen} establishes an embedding from classical into intuitionistic logic. Curiously the reverse direction has not been covered in literature. We present an effective embedding from intuitionistic to classical logic, both in the propositional and first-order case, as well as an effective embedding of intuitionistic propositional logic into quantified boolean formulas. 
+Furthermore in the propositional case we establish a parameter that bounds the proof complexity of intuitionistic formulas. In this process we also present a Tseytin-like translation that preserves intuitionistic validity and reduces formulas to a normal form. The key notion used in the proofs is the existence of counter-models - an analogon to the satisfiability of the negation in classical logic, which is not equivalent to invalidity in the intuitionistic case.  We hope that this will allow leveraging the tremendous recent progress in automated reasoning in classical logic for checking intuitionistic validity, for which there has not been much progress in recent decades.
 \end{abstract}
 
 \section{Introduction}
 
-Most state-of-the-art first-order theorem provers leverage classical logic~\cite{kovacs2013first, schulz2002brainiac, korovin2008iprover}. Besides historic reasons a main advantage of classical logic over intuitionistic logic is the existence of convenient normal forms which enable reasoning techniques such as superposition and resolution. However there are also some drawbacks of this approach, in particular the non-constructiveness of classical logic poses a problem in synthesis-related tasks. On the other hand the Curry-Howard correspondence makes program extraction from intuitionistic proofs trivial~\cite{howard1980formulae} but automated deduction for intuitionistic logic is notoriously difficult. 
+Most state-of-the-art first-order theorem provers use classical logic~\cite{kovacs2013first, schulz2002brainiac, korovin2008iprover}. Besides historic reasons a main advantage of classical logic over intuitionistic logic is the existence of convenient normal forms which enable reasoning techniques such as superposition and resolution. However there are also some drawbacks to this approach, in particular the non-constructiveness of classical logic poses a problem in synthesis-related tasks.
 
-There are different approaches for program extraction using classical provers. The first is simply to examine under which circumstances classical validity entails intuitionistic validity. Most famously this holds for $\Pi_2$-formulas in Peano Arithmetic~\cite{friedman1978classically}. There are also other circumstances under which this entailment holds~\cite{schwichtenberg}, however this approach cannot encapsulate the general case. Another popular approach is to equip classical proofs with operational semantics~\cite{Control1, Parigot1}. In this case we necessarily lose realizability at least of $\exists$ and $\vee$, which - one could argue - is why we want a program in the first place.
+Several approaches for program extraction from classical proofs exist in literature. The first is simply to examine under which circumstances classical validity entails intuitionistic validity and therefore constructiveness. Most famously this holds for $\Pi_2$-formulas in Peano Arithmetic~\cite{friedman1978classically}. There are also other circumstances under which this entailment holds~\cite{schwichtenberg}, however this approach cannot encapsulate the general case. Another popular approach is to equip classical proofs with operational semantics~\cite{Control1, Parigot1}. In this case we necessarily lose realizability at least of $\exists$ and $\vee$, which - one could argue - is why we want a program in the first place.
 
-We examine a new direction, i.e. for each formula $\varphi$ giving a translation $\varphi^\#$ such that $\varphi$ is intuitionistically valid if and only if $\varphi^\#$ is classically valid. We shall start with the simpler case of propositional formulas. The process will be divided into three steps. The first is a first-order encoding of intuitionistic Kripke semantics, which gives an obvious but unsatisfactory embedding. We then discuss how some of the quantifiers can be eliminated via Herbrandization and give a Tseytin-like transformation that exposes a parameter bounding the proof complexity of the propositional formula. This finally allows us to eliminate all remaining quantifiers and we end up with a propositional formula. Since validity of intuitionistic logic is \verb+PSPACE+-complete while for classical logic it only \verb+coNP+-complete as one could expect there is a blow-up which is exponential in the parameter that we previously isolated.
-Instead of targetting classical propositional logic at the last step we give an alternate translation to QBF, which is linear in the size of our complexity parameter. For predicate formulas the process is a bit more involved in that we also need to respect the constructive content of quantifiers. In particular the different semantics of the $\forall$-quantifier proves challenging. After dealing with this, we are able to utilize a quite similar process as in the propositional case.
+Intuitionistic logic~\cite{sep-logic-intuitionistic} is a non-classical logic in which the law of excluded middle ($A\vee \neg A$) is not a theorem. A key motivation for studying intuitionistic logic is the Curry-Howard correspondence~\cite{howard1980formulae} which allows an effective bi-interpretation of proofs and programs.
+
+One aspect that makes intuitionistic validity more difficult than classical validity is that it is not dual to satisfiability, i.e. unsatisfiability of $\neg\varphi$ is not sufficient for validity of $\varphi$. In fact intuitionistic satisfiability is equivalent to classical satisfiability and thus \verb+NP+-complete, while validity for intuitionistic logic is \verb+PSPACE+-complete~\cite{statman1979intuitionistic}. In classical logic this duality is the foundation of methods like resolution, tableaux~\cite{fitting2012first} and forms the backbone of most automated theorem provers. There is however a obvious dual notion to intuitionistic validity in the existence of Kripke counter-models, a standard semantics for intuitionistic logic~\cite{sep-logic-intuitionistic}. We will show that for each formula $\varphi$, if there exists a counter-model then there is one with fixed geometry completely determined by the structure of $\varphi$. This key observation will allow us to give a complete and effective embedding of intuitionistic logic into classical logic, i.e. for each formula $\varphi$ we give a formula $\varphi^\#$ that is classically valid if and only if $\varphi$ is intuitionistically valid, as well as an effective procedure to translate counter-models of the formulas. Intuitionistic validity can then be established using a classical prover by
+\begin{itemize}
+	\item performing our translation on the input formula $\varphi$ to obtain $\varphi^\#$
+	\item checking the classical validity of $\varphi^\#$ with the prover resulting in a proof or counter-model
+	\item translating the proof/counter-model of $\varphi^\#$ to a (intuitionistic) proof/counter-model of $\varphi$.
+\end{itemize}
+
+
+
+\section{Overview}
+
+We shall now give an overview of the main results and highlight the key arguments. Recall that our goal is to give an effective translation procedure that, for a given formula $\varphi$, yields a formula $\varphi^\#$ such that $\varphi$ is intuitionistically valid if and only if $\varphi^\#$ is classically valid. We start with the predicate case. The key arguments are the same as in the first-order case while it is technically simpler and less cluttered and therefore more clear.
+
+Before performing the main transformation we propose a preprocessing to a simpler form. A popular pre-processing step in classical automated reasoning is the Tseytin transformation~\cite{tseitin1983complexity}. It gives an equisatisfiable sentence in conjunctive normal form. Eliminating all implications is not possible in intuitionistic logic since $A\to B$ is not equivalent to $\neg A\vee B$. Still we propose a similar transformation. A nice feature will be that the non-classical content will be encapsulated in formulas of type $(A\to B)\to C$, i.e. if there are no such formulas in the transformed formula then the classical validity of the original formula immediately implies intuitionistic validity.
+
+\begin{theorem}
+	For every propositional formula $\varphi$ there exists an effective procedure that yields an atom $P$ and a set of $\mathcal S$ of formulas $\psi$ of one of the forms
+	$$A_\psi\to (B_\psi\wedge C_\psi), (A_\psi\wedge B_\psi)\to C_\psi, A_\psi\to (B_\psi\vee C_\psi), (A_\psi\vee B_\psi)\to C_\psi, (A_\psi\to B_\psi)\to C_\psi$$for atomic $A_\psi, B_\psi, C_\psi$ such that $\varphi$ is intuitionistically valid if and only if $\bigwedge\mathcal S\to P$ is intuitionistically valid. The size of $\mathcal S$ and time complexity of the transformation are linear in the input size.
+\end{theorem}
+
+The main transformation then proceeds in three steps.
+
+First we encode as a first-order sentence that the considered formula holds in every Kripke frame. Since Kripke frames for propositional logic over a fixed alphabet of propostional variables form a first-order theory this is rather straightforward.
+
+Next we eliminate some quantifiers via Herbrandization. The only quantifiers eliminated occur in formulas derived from formulas of type $(A\to B)\to C$.
+
+This leaves us with a formula with only weak $\forall$-quantifiers. We can then argue that if there is a counter-model for the resulting formula then there is a counter-model with a certain Kripke frame completely determined by the number of formulas of type $(A\to B)\to C$. This allows us to eliminate the remaining quantifiers by simply enumerating the worlds in that Kripke model.
+
+All in all this leaves us with the following:
+
+\begin{theorem}
+	Let $\mathcal S$ be as above. Let $\mathcal F_\to\subseteq\mathcal S$ denote formulas $\psi$ of the form $(A_\psi\to B_\psi)\to C_\psi$ and $\Lambda$ denote the set of sequences without repetition over $\mathcal F_\to$. For each atom $A$ and $k\in\Lambda$ consider a new atom $A^k$. Obtain $\mathcal S^\#$ by including formulas as follows
+	\begin{itemize}
+		\item $A^k\to A^{k\psi}$ for each atom $A$ occurring in $\mathcal S$, $k\in\Lambda$ and $\psi\in\mathcal F_\to$ not occurring in $k$.
+		\item $A_\psi^k\to (B_\psi^k\circ C_\psi^k)$ for each $\circ\in\{\wedge,\vee\}$, $A_\psi\to (B_\psi\circ C_\psi)\in\mathcal S$, $k\in\Lambda$.
+		\item $(A_\psi^k\circ B_\psi^k)\to C^k$ for each $\circ\in\{\wedge,\vee\}$, $A_\psi\to (B_\psi\circ C_\psi)\in\mathcal S$, $k\in\Lambda$.
+		\item $(A^{k\psi}\to B^{k\psi})\to C^k$ for $\psi = (A_\psi\to B_\psi)\to C_\psi\in\mathcal S$, $k\in\Lambda$ if $\psi$ does not occurr in $k$.
+	\end{itemize}
+	Then $\bigwedge S\to P$ is intuitionistically valid iff $\bigwedge S^\#\to P^\epsilon$ is classically valid, where $\epsilon$ denotes the empty sequence. The size of $\mathcal S^\#$ is in $\mathcal O(|\mathcal S|\cdot2^{|\mathcal F_\to|\cdot\log(|\mathcal F_\to|)})$. Futhermore there is an effective procedure for translating counter-models between the sentences.
+\end{theorem}
+
+Examining the proof of the above theorem we will be able to notice that due to its tree form the constructed Kripke frame lends itself as an interpretation for a certain quantified boolean formula. We can show that this QBF is satisfiable if and only if there exists a counter-model for our original formula.
+
+\begin{theorem}
+	Let $\mathcal S$ be as above. There is an effective procedure that produces a QBF $\varphi^Q$ of size $\mathcal O(|\mathcal S|\cdot|\mathcal F_\to| + |\mathcal F_\to|^3)$ with $2\cdot |\mathcal F_\to|-1$ quantifier alternations such that $\varphi$ is intuitionistically if and only if $\varphi^Q$ is not satisfiable. Fixing $N\in\mathbb N$ deciding intuitionistic validity for formulas $\bigwedge \mathcal S\to P$ where $\mathcal S$ is as above and $|\mathcal F_\to| = N$ is therefore in $\Sigma_{2N-1}$.
+\end{theorem}
+
+We then move to the first-order case. Here things are a bit more involved but the underlying approach is the same. First we again perform a Tseytin-like transformation. Here the non-classical content in encapsulated by formulas of type $(A\to B)\to C$ and $\forall xA\to B$.
+
+\begin{theorem}
+	For every predicate formula $\varphi$ there exists an effective procedure that yields an atom $P$ and a set $\mathcal S$ of formulas $\psi$ of the forms
+	$$\forall \vec z_\psi(A_\psi(\vec a_\psi)\to (B_\psi(\vec b_\psi)\wedge C_\psi(\vec c_\psi))), \forall \vec z_\psi((A_\psi(\vec a_\psi)\wedge B_\psi(\vec b_\psi))\to C_\psi(\vec c_\psi)),$$$$\forall \vec z_\psi(A_\psi(\vec a_\psi)\to (B_\psi(\vec b_\psi)\vee C_\psi(\vec c_\psi))),
+	\forall \vec z_\psi((A_\psi(\vec a_\psi)\vee B_\psi(\vec b_\psi))\to C_\psi(\vec c_\psi)),$$$$ \forall \vec z_\psi((A_\psi(\vec a_\psi)\to B_\psi(\vec b_\psi))\to C_\psi(\vec c_\psi)),\forall \vec z_\psi(\forall xA(\vec a_\psi)\to B_\psi(\vec b_\psi)),$$$$ \forall \vec z_\psi(A_\psi(\vec a_\psi)\to\forall xB_\psi(b_\psi)), \forall \vec z_\psi(\exists xA_\psi(\vec a_\psi)\to B_\psi(\vec b_\psi)), \forall \vec z_\psi(A_\psi(\vec a_\psi)\to\exists xB_\psi(b_\psi))$$for atomic $A_\psi, B_\psi, C_\psi$ and vectors of variables $\vec z_\psi, \vec a_\psi, \vec b_\psi, \vec c_\psi$ such that $\varphi$ is intuitionistically valid if and only if $\bigwedge\mathcal S\to P$ is intuitionistically valid. The size of $\mathcal S$ and time complexity of the transformation are linear in the input size.
+\end{theorem}
+
+We then proceed quite similarly to the propositional case. Note however that one difficulty arises from the fact that our (classical) domain will now contain on the one hand worlds in the Kripke frame but on the other hand also proper domain elements. We resolve this apparent conflict by introducing a special binary predicate $E$, inspired by~\cite{iemhoff2010eskolemization}, encoding which domain elements exists at which world. In particular $E(x, u)$ entails that $x$ represents a domain element and $u$ a world.
+
+The Herbrandization is completely analogous the the propositional case.
+
+The real difference arises in the final step: While we can also establish a universal Kripke Frame that is parametrized only by the formulas of type $(A\to B)\to C$ and $\forall xA\to B$, it is possibly countably infinite. This is not surprising since certain intuitionistically invalid formulas like the double negation shift $\forall x\neg\neg A(x)\to \neg\neg\forall x A(x)$ don't have finite counter-models. Therefore we are not able to eliminate the weak $\forall$-quantifiers associated with the Kripke semantics. However since we started in first-order logic to begin with this is perhaps not a big deal.
+
+We end up with the following translation:
+
+\begin{theorem}
+	Let $\mathcal S$ be as above and $\mathcal F_\to\subseteq\mathcal S$ contain formulas of the form $\forall \vec t((A(\vec z_A)\to B(\vec z_B))\to C(\vec z_C))$ and $\mathcal F_\forall\subseteq\mathcal S$ the formulas of the form $\forall \vec z(\forall xA(\vec z_A)\to B(\vec z_B))$. Let $\mathcal F = \mathcal F_\to\cup\mathcal F_\forall$. For every $n$-ary atomic relation $R$ define a new $n+1$-ary relation $R^\#$. For every $\psi\in\mathcal F$ define a new function symbol $f_\psi$. Consider a new binary relation symbol $E$ and define $\vec E(\vec x, u) := \bigwedge\{E(x, u)\:|\:x\in\vec x\}$. Obtain $\mathcal S^\#$ by including formulas as follows:
+	\begin{itemize}
+		\item $\forall \vec z_\psi\forall u(\vec E(\vec z_\psi, u)\to (A_\psi^\#(\vec a_\psi, u)\to (B_\psi^\#(\vec b_\psi, u)\circ C_\psi^\#(\vec c_\psi, u))))$\\for each $\circ\in\{\wedge, \vee\}, \psi = \forall \vec z_\psi(A_\psi(\vec a_\psi)\to (B_\psi(\vec b_\psi)\circ C_\psi(\vec c_\psi)))\in\mathcal S$
+		\item $\forall \vec z_\psi\forall u(\vec E(\vec z_\psi, u)\to (A_\psi^\#(\vec a_\psi, u)\circ B_\psi^\#(\vec b_\psi, u))\to C_\psi^\#(\vec c_\psi, u))$\\for each $\circ\in\{\wedge, \vee\}, \psi = \forall \vec z_\psi((A_\psi(\vec a_\psi)\circ B_\psi(\vec b_\psi))\to C_\psi(\vec c_\psi))\in\mathcal S$
+		\item $\forall \vec z_\psi\forall u(\vec E(\vec z_\psi, u)\to(A_\psi^\#(\vec a_\psi, f_\psi(\vec z_\psi, u))\to B_\psi^\#(\vec b_\psi, f_\psi(\vec z_\psi, u)))\to C_\psi^\#(\vec c_\psi, u))$ for each $\psi = \forall \vec z_\psi((A_\psi(\vec a_\psi)\to B_\psi(\vec b_\psi))\to C_\psi(\vec c_\psi))\in\mathcal S$
+		\item  $\forall \vec z_\psi\forall u(\vec E(\vec z_\psi, u)\to \forall x(E(x, f_\psi(\vec z_\psi, u))\to A_\psi^\#(\vec a_\psi, f_\psi(\vec z_\psi, u)))\to B^\#(\vec b_\psi, u))$\\for each $\forall \vec z_\psi(\forall xA_\psi(\vec a_\psi)\to B_\psi(\vec t_B))\in\mathcal S$.
+		\item $\forall \vec z_\psi\forall u(\vec E(\vec z_\psi, u)\to A^\#_\psi(\vec a_\psi, u)\to \forall x(E(x, u)\to B^\#_\psi(\vec b_\psi, u)))$\\for each $\forall \vec t(A_\psi(\vec a_\psi)\to \forall xB_\psi(\vec b_\psi))\in\mathcal S$.
+		\item $\forall \vec z_\psi\forall u(\vec E(\vec z_\psi, u)\to \exists x(E(x, u)\wedge A^\#_\psi(\vec z_\psi, u))\to B^\#_\psi(\vec b_\psi))$\\for each $\forall \vec z_\psi(\exists xA_\psi(\vec a_\psi)\to B_\psi(\vec b_\psi))\in\mathcal S$
+		\item $\forall \vec z_\psi\forall u(\vec E(\vec z_\psi, u)\to A^\#_\psi(\vec b_\psi)\to \exists x(E(x, u)\wedge B^\#_\psi(\vec b_\psi, u)))$\\for each $\forall \vec z_\psi(A_\psi(\vec a_\psi)\to \exists xB_\psi(\vec b_\psi))\in\mathcal S$
+	\end{itemize}
+	Then $\bigwedge S\to P$ is intuitionistically iff $\mathcal E\to \bigwedge\mathcal S^\#\to P^\#(s)$ is classically valid, where $s$ is a new constant symbol and
+	\begin{align*}
+		\mathcal E := &\exists xE(x, s)\wedge \forall x\forall y\forall z(\neg(E(x, z)\wedge E(z, y)))\wedge\\
+		& \bigwedge\{\forall x\forall u((E(x, u)\to E(x, f_\psi(u)))\:|\:\psi\in\mathcal F\}\wedge\\
+		& \bigwedge\{\forall\vec z\forall u(\vec E(\vec z, u)\to E(f(\vec z), u))\:|\:\text{$f$ is an $n$-ary function symbol in original signature}\}
+	\end{align*}
+	The size of the obtained formula is linear in the input. However a $|\mathcal F| + 1$ new function symbols and the new binary predicate $E$ were introduced and each $n$-ary relation symbol has been extended to a $n+1$-ary relation symbol.
+\end{theorem}
+
+These results provide an effective framework for using classical provers to check intuitionistic validity. First experiments with the Vampire theorem prover show promise.
 
 
 \section{IPC to CQC}
