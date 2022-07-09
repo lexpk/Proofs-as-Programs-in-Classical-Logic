@@ -1,6 +1,6 @@
 
 \documentclass[a4paper,UKenglish,cleveref, autoref, thm-restate]{lipics-v2021}
-%This is a template for producing LIPIcs articles. 
+%This is a template for producing LIPIcs articles.
 %See lipics-v2021-authors-guidelines.pdf for further information.
 %for A4 paper format use option "a4paper", for US-letter use option "letterpaper"
 %for british hyphenation rules use option "UKenglish", for american hyphenation rules use option "USenglish"
@@ -24,7 +24,7 @@
 
 \bibliographystyle{plainurl}% the mandatory bibstyle
 
-\title{Embedding intuitionistic into classical logic} %TODO Please add
+\title{Embedding Intuitionistic into Classical Logic} %TODO Please add
 
 %\titlerunning{Dummy short title} %TODO optional, please use if title is longer than one line
 
@@ -36,7 +36,7 @@
 
 \Copyright{Alexander Pluska and Florian Zuleger} %TODO mandatory, please use full first names. LIPIcs license is "CC-BY";  http://creativecommons.org/licenses/by/3.0/
 
-\ccsdesc[100]{\textcolor{red}{Theory of Computation Logic Constructive Mathematics}} %TODO mandatory: Please choose ACM 2012 classifications from https://dl.acm.org/ccs/ccs_flat.cfm 
+\ccsdesc[100]{\textcolor{red}{Theory of Computation Logic Constructive Mathematics}} %TODO mandatory: Please choose ACM 2012 classifications from https://dl.acm.org/ccs/ccs_flat.cfm
 
 \keywords{Intuitionistic Logic, Automated Reasoning, Proof Theory} %TODO mandatory; please add comma-separated list of keywords
 
@@ -75,8 +75,13 @@
 
 %TODO mandatory: add short abstract of the document
 \begin{abstract}
-The famous double negation translation~\cite{glivenko1929quelques, godel1933intuitionistischen} establishes an embedding from classical into intuitionistic logic. Curiously the reverse direction has not been covered in literature. We present an effective embedding from intuitionistic to classical logic, both in the propositional and first-order case, as well as an effective embedding of intuitionistic propositional logic into quantified boolean formulas. 
-Furthermore in the propositional case we establish a parameter that bounds the proof complexity of intuitionistic formulas. In this process we also present a Tseytin-like translation that preserves intuitionistic validity and reduces formulas to a normal form. The key notion used in the proofs is the existence of counter-models - an analogon to the satisfiability of the negation in classical logic, which is not equivalent to invalidity in the intuitionistic case.  We hope that this will allow leveraging the tremendous recent progress in automated reasoning in classical logic for checking intuitionistic validity, for which there has not been much progress in recent decades.
+The famous double negation translation~\cite{glivenko1929quelques, godel1933intuitionistischen} establishes an embedding from classical into intuitionistic logic. Curiously the reverse direction has not been covered in literature. We present an effective embedding from intuitionistic into classical logic, both in the propositional and first-order case, as well as an effective embedding of intuitionistic propositional logic into quantified boolean formulas.
+Furthermore, in the propositional case we establish a parameter that bounds the proof complexity of intuitionistic formulas. As part of our construction, we also present a Tseytin-like translation that preserves intuitionistic validity and reduces formulas to a normal form. 
+
+%The key notion used in the proofs is the existence of counter-models - an analogon to the satisfiability of the negation in classical logic, which is not equivalent to invalidity in the intuitionistic case.  We hope that this will allow leveraging the tremendous recent progress in automated reasoning in classical logic for checking intuitionistic validity, for which there has not been much progress in recent decades.
+
+
+We hope that our embeddings of classical into intuitionistic logic will allow leveraging the tremendous progress in automated reasoning in classical logic for checking intuitionistic validity, for which there has not been much progress in recent decades. Crucially, our constructions support the transfer of counter-models to validity, which is important to model checking applications, where the output of counter-examples is an appreciated feature.
 \end{abstract}
 
 \section{Introduction}
@@ -275,8 +280,8 @@ Now trying to apply Herbrandization to arbitrary formulas presents us with quite
 
 \begin{lemma}The following are true for both classical and intuitionistic semantics:
 	\begin{itemize}
-		\item $\bigwedge S^+(\varphi)\wedge P_\varphi\models\varphi$. 
-		\item $\bigwedge S^-(\varphi)\wedge \varphi\models P_\varphi$. 
+		\item $\bigwedge S^+(\varphi)\wedge P_\varphi\models\varphi$.
+		\item $\bigwedge S^-(\varphi)\wedge \varphi\models P_\varphi$.
 	\end{itemize}
 \end{lemma}
 
@@ -323,7 +328,7 @@ Then from the previous three Lemmas we get
 \begin{corollary}\label{equivalid}
 	In both intuitionistic and classical logic
 	\begin{itemize}
-		\item $\varphi$ is satisfiable iff $\mathcal \bigwedge S^+(\varphi)\wedge P_\varphi(\vec t_\varphi)$ is. 
+		\item $\varphi$ is satisfiable iff $\mathcal \bigwedge S^+(\varphi)\wedge P_\varphi(\vec t_\varphi)$ is.
 		\item $\varphi$ is valid iff $\bigwedge\mathcal S^-(\varphi)\to P_\varphi(\vec t_\varphi)$ is.
 	\end{itemize}
 \end{corollary}
@@ -347,7 +352,7 @@ where $s$ is some new constant term and each $\psi\in\mathcal S'$ is of one of t
 $$\hspace*{-2mm}\forall k(s\preceq k\to A_\psi(k)\to (B_\psi(k)\wedge C_\psi(k))), \forall k(s\preceq k\to (A_\psi(k)\wedge (B_\psi(k))\to C_\psi(k)))$$
 $$\hspace*{-2mm}\forall k(s\preceq k\to A_\psi(k)\to (B_\psi(k)\vee C_\psi(k))), \forall k(s\preceq k\to (A_\psi(k)\vee (B_\psi(k))\to C_\psi(k)))$$
 $$\forall k(s\preceq k\to (k\preceq f_\psi(k) \to A_\psi(f_\psi(k))\to B_\psi(f_\psi(k)))\to C_\psi(k))$$
-and $f$ is a new function symbol for each introduced formula of that form. Now if $(M, I)$ is a counter-model then we have a counter-model $(M',I')$ where $$M' = \{m\in M|s\preceq m\}$$ and 
+and $f$ is a new function symbol for each introduced formula of that form. Now if $(M, I)$ is a counter-model then we have a counter-model $(M',I')$ where $$M' = \{m\in M|s\preceq m\}$$ and
 $$f_\psi^{I'}(u) = \begin{cases}
 	f^I_\psi(u)&\text{ iff $u\preceq f^{I}_\psi(u)$}\\
 	u&\text{ else}
@@ -389,7 +394,7 @@ We now argue that if a counter-model exists for $\varphi^\circ$ then a bounded c
 	2. If $C_\psi^I(u)$ is true then $C_\psi^I(w)$ is also true and we are done. So suppose $A_\psi^I(u)\to B_\psi^I(u)$ is false, i.e. $A_\psi^I(u)$ true and $B_\psi^I(u)$ false. Then due to the persistency condition $A_\psi^I(w)$ is also true. Again if $C_\psi^I(w)$ is true we are done. Otherwise we know that $B^I(f^I_\psi(w))$ must be false, since $(A^I_\psi(f^I_\psi(w))\to B^I(f^I_\psi(w)))\to C^I_\psi(w)$ and $A^I_\psi(f^I_\psi(w))$ hold. But then due to persistency so is $B^I_\psi(w)$ and we have that $\psi$ is fulfilled at $w$.
 \end{proof}
 
-Essentially what fulfilment of $\psi$ at $u$ tells us is that having $f_\psi(w) = w$ for all $w\geq u$ works. 
+Essentially what fulfilment of $\psi$ at $u$ tells us is that having $f_\psi(w) = w$ for all $w\geq u$ works.
 With this lemma in hand showing that $(M_T, I_T)$ is a counter-model to $\varphi^\circ$ is a straightforward check of definitions.
 
 \begin{corollary}
@@ -411,7 +416,7 @@ With this lemma in hand showing that $(M_T, I_T)$ is a counter-model to $\varphi
 	\end{center}
 	\vspace*{-.3cm}where at each node the true propositions are indicated.\pagebreak
 	
-	There is a corresponding classical counter-model $\mathcal M = (M, I)$ to $\varphi^\circ$ with $M = \{u, u_l, u_r\}$, $A^{I}(l) = D^I(l) = B^I(r) = C^I(r) = 1$ and $0$ else. 
+	There is a corresponding classical counter-model $\mathcal M = (M, I)$ to $\varphi^\circ$ with $M = \{u, u_l, u_r\}$, $A^{I}(l) = D^I(l) = B^I(r) = C^I(r) = 1$ and $0$ else.
 	
 	Denoting $\psi_1 := (A\to B)\to C$ and $\psi_2 := (A\to B)\to C$ this corresponds to a counter-model $\mathcal M_T = (M_T, I_T)$ of $\varphi^\circ$ with $M_T = \{\epsilon, \psi_1, \psi_2, \psi_1\psi_2, \psi_2\psi_1\}$ and interpretation as presented below
 	\begin{center}
@@ -522,7 +527,7 @@ Since we have not discussed QBF in detail the above argument might be a bit diff
 
 \begin{example}
 	Consider the formula $\varphi = (((A\to B)\to C)\wedge((B\to A)\to C))\to C$, which is a non-intuitionistic tautology. Its associated QBF is $$\varphi^Q = \exists A^0B^0C^0\forall F_{\psi_1}^1F_{\psi_2}^1 \exists A^1B^1C^1\forall F_{\psi_1}^2F_{\psi_2}^2 \exists A^2B^2C^2\psi'$$where $\psi_1 := (A\to B)\to C, \psi_2 = (B\to A)\to C$ and $$\psi' = \bigwedge\left\{\begin{matrix}
-		F^1_{\psi_1}\vee F^1_{\psi_2}, \neg(F^1_{\psi_1}\wedge F^1_{\psi_2}), F^2_{\psi_1}\vee F^2_{\psi_2},\neg(F^2_{\psi_1}\wedge F^2_{\psi_2}),\\F^1_{\psi_1}\to\neg F^2_{\psi_1},F^1_{\psi_2}\to\neg F^2_{\psi_2}, A^0\to A^1,A^1\to A^2, 
+		F^1_{\psi_1}\vee F^1_{\psi_2}, \neg(F^1_{\psi_1}\wedge F^1_{\psi_2}), F^2_{\psi_1}\vee F^2_{\psi_2},\neg(F^2_{\psi_1}\wedge F^2_{\psi_2}),\\F^1_{\psi_1}\to\neg F^2_{\psi_1},F^1_{\psi_2}\to\neg F^2_{\psi_2}, A^0\to A^1,A^1\to A^2,
 		\\B^0\to B^1, B^1\to B^2, C^0\to C^1, C^1\to C^2,\neg C^0, \\
 		F^1_{\psi_1}\to (A^1\to B^1)\to C^0, F^1_{\psi_2}\to(B^1\to A^1)\to C^0\\
 		F^2_{\psi_1}\to (A^2\to B^2)\to C^1, F^2_{\psi_2}\to(B^2\to A^2)\to C^1
@@ -532,7 +537,7 @@ Since we have not discussed QBF in detail the above argument might be a bit diff
 		\item First have $P^\epsilon = 0$ for each propositional variable $P$.
 		\item For $P^{\psi_1}$ we consider what happens when we choose $F^1_{\psi_1}$ to be true, i.e. we have $A^{\psi_1} = C^{\psi_1} = 1$ and $0$ for all other propositional variables.
 		\item For $P^{\psi_2}$ we consider what happens when we choose $F^1_{\psi_2}$ to be true, i.e. we have $B^{\psi_1} = C^{\psi_1} = 1$ and $0$ for all other propositional variables.
-		\item Finally for $P^{\psi_1\psi_2} = P^{\psi_2\psi_1} = 1$ for all propositional variables $P$ as $P^2$ is true regardless of choice for the $F^i_\psi$. 
+		\item Finally for $P^{\psi_1\psi_2} = P^{\psi_2\psi_1} = 1$ for all propositional variables $P$ as $P^2$ is true regardless of choice for the $F^i_\psi$.
 	\end{itemize}
 \end{example}	
 
@@ -560,7 +565,7 @@ First let us note how we axiomatize $E$ and $W$. For a vector $\vec x = x_1\dots
 \end{align*}
 The one possible problem in this encoding is that we have a global interpretation of function symbols, i.e. in an intuitionistic model we could have worlds $u, v$ such that $f^{I_u}\neq f^{I_v}$. However this is not a problem: We can take as the domain of our classical model equivalence classes $\{[(x, u)]\:|\: x\in M_u\}$ under the relation $(x, u)\sim (y, v)$ iff $x = y$ and there exists $w$ comparable with $u, v$ such that $x\in w$ and interpret $f^I([x, u]) = [f^{I_u}(x), u]$. Then our classical translation only forces functions to be equal on arguments on which they must be equal anyway. So the Kripke model does in fact not afford us any additional generality.
 
-As before we need to axiomatize $\preceq$. For each $n$-ary relation symbol consider $P$ a new $n+1$ ary relation symbol $P^\#$.  The only difference in that for persistence we may require additional quantification. 
+As before we need to axiomatize $\preceq$. For each $n$-ary relation symbol consider $P$ a new $n+1$ ary relation symbol $P^\#$.  The only difference in that for persistence we may require additional quantification.
 \begin{align*}
 	K(\varphi) = & \forall k(k\preceq k)\wedge \forall k\forall l((k\preceq l\wedge l\preceq k)\to l = k)\wedge\\
 	& \forall k\forall l\forall m((k\preceq l\wedge l\preceq m)\to k\preceq m)\wedge\\
