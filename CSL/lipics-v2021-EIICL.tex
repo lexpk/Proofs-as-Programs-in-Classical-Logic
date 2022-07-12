@@ -166,11 +166,11 @@ We end up with the following translation:
 		\item $\forall \vec z_\psi\forall u(\vec E(\vec z_\psi, u)\to \exists x(E(x, u)\wedge A^\#_\psi(\vec z_\psi, u))\to B^\#_\psi(\vec b_\psi))$\\for each $\forall \vec z_\psi(\exists xA_\psi(\vec a_\psi)\to B_\psi(\vec b_\psi))\in\mathcal S$
 		\item $\forall \vec z_\psi\forall u(\vec E(\vec z_\psi, u)\to A^\#_\psi(\vec b_\psi)\to \exists x(E(x, u)\wedge B^\#_\psi(\vec b_\psi, u)))$\\for each $\forall \vec z_\psi(A_\psi(\vec a_\psi)\to \exists xB_\psi(\vec b_\psi))\in\mathcal S$
 	\end{itemize}
-	Then $\bigwedge S\to P$ is intuitionistically iff $K\to \bigwedge\mathcal S^\#\to P^\#(s)$ is classically valid, where $s$ is a new constant symbol and
+	Then $\bigwedge S\to P$ is intuitionistically iff $\exists xE(x, s)\to K\to \bigwedge\mathcal S^\#\to P^\#(s)$ is classically valid, where $s$ is a new constant symbol, $\Sigma$ is the original signature and
 	\begin{align*}
-		K := &\exists xE(x, s)\wedge \forall x\forall y\forall z(\neg(E(x, z)\wedge E(z, y)))\wedge\\
-		& \bigwedge\{\forall x\forall u((E(x, u)\to E(x, f_\psi(u)))\:|\:\psi\in\mathcal F\}\wedge\\
-		& \bigwedge\{\forall\vec z\forall u(\vec E(\vec z, u)\to E(f(\vec z), u))\:|\:\text{$f$ is an $n$-ary function symbol in original signature}\}
+		K := &\:\bigwedge\{\forall x\forall u((E(x, u)\to E(x, f_\psi(u)))\:|\:\psi\in\mathcal F\}\wedge\\
+		&\:\forall u\left(\exists xE(x, u)\to \bigwedge\{\forall\vec z(\vec E(\vec z, u)\to E(f(\vec z), u))\:|\:\text{$f$ is a function symbol in $\Sigma$}\}\right)\wedge\\
+		&\:\bigwedge\{\forall\vec z_1\forall \vec z_2\forall u(A^\#(\vec z_1, u)\to A^\#(\vec z_1, f_\psi(\vec z_2, u)))\:|\:\text{$\psi\in\mathcal F$, $A$ is a relation symbol in $\Sigma$}\}
 	\end{align*}
 	The size of the obtained formula is linear in the input. However a $|\mathcal F| + 1$ new function symbols and the new binary predicate $E$ were introduced and each $n$-ary relation symbol has been extended to a $n+1$-ary relation symbol.
 \end{theorem}
