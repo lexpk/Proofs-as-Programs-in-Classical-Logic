@@ -570,9 +570,12 @@ Obtain $\mathcal S^\#$ by including the formulas
 
 \section{IPC to QBF}
 
-It is well known that a polynomial time translation between QBF and IPC must exists, since both problems are PSPACE complete~\cite{garey1979computers, statman1979intuitionistic}. However giving an explicit translation from IPC to QBF can still be useful as good solvers exists for QBF but for IPC not so much. The translation from the last section will serve as a useful tool for this. We will not explain the semantics of QBF in depth. Intuitively just think that the interpretation of existentially quantified variables may depend on variables quantified above them.
+It is known that a polynomial time translation between QBF and IPC must exist, since both problems are PSPACE complete~\cite{garey1979computers, statman1979intuitionistic}. 
+However, giving an explicit translation from IPC to QBF still promises to be useful, allowing to leverage the progress in QBF solving.
+The translation from the last section will serve as starting point for developing the translation in this section.
+For lack of space, we do not define the semantics of QBF in this paper and refer the reader to standard sources e.g.~\cite{series/faia/2009-185}.
 
-Fix some set $\mathcal S$ of formulas $\psi$ of the form $$A\to (B\wedge C), (A\wedge B)\to C, A\to (B\vee C), (A\vee B)\to C, (A\to B)\to C$$and$$\varphi = \bigwedge \mathcal S\to P$$
+Fix some set $\mathcal S$ of formulas $\psi$ of the form $$A\to (B\wedge C), (A\wedge B)\to C, A\to (B\vee C), (A\vee B)\to C, (A\to B)\to C$$and$$\varphi = \bigwedge \mathcal S\to P,$$
 and denote with $\mathcal F_\to$ the set of formulas of the form $(A\to B)\to C$. We will now formulate a QBF that expresses that $\varphi$ has an intuitionistic counter-model. The idea how to get a linear-size formula is: Instead of expressing validity at every node of $\mathcal M_T$ - which was done in the CPC translation - we express that on each path in $\mathcal M_T$ the nodes satisfy all conditions for $\mathcal M_T$ being a counter-model. The universally quantified variables $F_\psi$ in the next definition handle the branching, i.e. express which path is considered.
 
 \begin{definition}
@@ -610,7 +613,10 @@ and denote with $\mathcal F_\to$ the set of formulas of the form $(A\to B)\to C$
 	$\varphi$ is not intuitionistically valid iff $\varphi^Q$ is a satisfiable QBF.
 \end{lemma}
 \begin{proof}
-	Suppose $\varphi$ is not intuitionistically valid, i.e. there exists a counter-model $\mathcal M$ for $\mathcal S^\#\to P^\epsilon$. For each atom $A$ interpret $A^0$ such as $\mathcal M$ interprets $A^\epsilon$. Suppose we are given interpretations of all atoms $A^i$ for $i < n$ and a sequence with no repetitions $\psi_1\dots\psi_{n-1}$ over $\mathcal F_\to$ such that $\psi_i$ is exactly the $\psi\in\mathcal F_\to$ for which $F_{\psi}^i$ is true and $A^i$ is interpreted as $A^{\psi_1\dots\psi_i}$ is in $\mathcal M$.
+\todo{The proof contains some old notation at several places.}
+\todo{Also the proof could be beautified a bit.}
+Suppose $\varphi$ is not intuitionistically valid, i.e. there exists a counter-model $\mathcal M$ for $\mathcal S^\#\to P^\epsilon$.
+For each atom $A$ interpret $A^0$ such as $\mathcal M$ interprets $A^\epsilon$. Suppose we are given interpretations of all atoms $A^i$ for $i < n$ and a sequence with no repetitions $\psi_1\dots\psi_{n-1}$ over $\mathcal F_\to$ such that $\psi_i$ is exactly the $\psi\in\mathcal F_\to$ for which $F_{\psi}^i$ is true and $A^i$ is interpreted as $A^{\psi_1\dots\psi_i}$ is in $\mathcal M$.
 	
 	Let the $F^{n}_\psi$ be arbitrarily interpreted (since they are $\forall$-quantified). If not exactly one is interpreted as true then valid$(n)$ fails, i.e. have $\psi_n\in\mathcal F_\to$ the only element with $F^n_{\psi_n} = 1$. If $F^i_{\psi_n} = 1$ for some $i < n$ then valid$(n)$ also fails, so we may assume that $\psi_1\dots\psi_n$ is a sequence with no repetitions. Interpret the atoms $A^n$ as $\mathcal M$ interprets $A^{\psi_1\dots\psi_n}$. Continue this construction until $n  = |\mathcal F_\to|$. Then from $\mathcal M$ being a counter-example to $\mathcal S^\#\to P$ it directly follows that this interpretation satisfies $\varphi^Q$.
 	
@@ -618,9 +624,8 @@ and denote with $\mathcal F_\to$ the set of formulas of the form $(A\to B)\to C$
 	Again we proceed iteratively. Interpret $A^\epsilon$ such as $A^0$ is interpreted in some satisfying interpretation of $\varphi^Q$. Suppose we are given a sequence $\psi_1\dots \psi_{n-1}$ such that for $i<n$ having $A^i = A^{\psi_0\dots\psi_{n-1}}$ is part of a satisfying interpretation of $\varphi^Q$ in which $F^i_\psi$ is chosen true iff $\psi = \psi_i$. Let $\psi_n\in\mathcal F_\to$. Consider some interpretation of the $A^n$ that are part of a satisfying assignment where $F^n_\psi$ is true iff $\psi = \psi_n$ and all variables quantified above are chosen as before. Have $A^{\psi_0\dots\psi_n} = A^n$ for each propositional variable $A$. From the definitions it directly follows that construction yields a counter-model for $\varphi^\#$.
 \end{proof}
 
-Since we have not discussed QBF in detail the above argument might be a bit difficult to follow, in particular the second part, but is simple in essence. We shall demonstrate with help of a example.
-
 \begin{example}
+\todo{I think this example is a candidate for the appendix.}
 	Consider the formula $\varphi = (((A\to B)\to C)\wedge((B\to A)\to C))\to C$, which is a non-intuitionistic tautology. Its associated QBF is $$\varphi^Q = \exists A^0B^0C^0\forall F_{\psi_1}^1F_{\psi_2}^1 \exists A^1B^1C^1\forall F_{\psi_1}^2F_{\psi_2}^2 \exists A^2B^2C^2\psi'$$where $\psi_1 := (A\to B)\to C, \psi_2 = (B\to A)\to C$ and $$\psi' = \bigwedge\left\{\begin{matrix}
 		F^1_{\psi_1}\vee F^1_{\psi_2}, \neg(F^1_{\psi_1}\wedge F^1_{\psi_2}), F^2_{\psi_1}\vee F^2_{\psi_2},\neg(F^2_{\psi_1}\wedge F^2_{\psi_2}),\\F^1_{\psi_1}\to\neg F^2_{\psi_1},F^1_{\psi_2}\to\neg F^2_{\psi_2}, A^0\to A^1,A^1\to A^2,
 		\\B^0\to B^1, B^1\to B^2, C^0\to C^1, C^1\to C^2,\neg C^0, \\
@@ -636,11 +641,13 @@ Since we have not discussed QBF in detail the above argument might be a bit diff
 	\end{itemize}
 \end{example}	
 
-Note that the last set of existentially quantified variables is superfluous because there is only one assignment which even has the chance to falsify $\varphi^Q$, namely that which assigns $1$ to the only $F_\psi^n$ such that $F_\psi^i = 0$ for all $i < n$. That is in our final formula we can replace $F_\psi^n$ with $\bigwedge\{\neg F_\psi^i\:|\:i < n\}$ and remove that quantification over $F_\psi^i$. With that we get the following:
+Note that the last set of existentially\todo{universally?} quantified variables can be avoided because there is only one assignment that has the chance to falsify $\varphi^Q$, namely the assignment that assigns $1$ to the single $F_\psi^n$ such that $F_\psi^i = 0$ for all $i < n$. Hence, in our final formula we can replace every $F_\psi^n$ with $\bigwedge\{\neg F_\psi^i\:|\:i < n\}$ and remove that quantification over $F_\psi^n$. With that we get the following:
 
 \begin{corollary}
-	Let $N$-INTINVALID be the problem of deciding if a formula $\bigwedge \mathcal S\to P$ as above with $|\mathcal F_\to|\leq N$ is not intuitionistically valid. Then $N$-INTINVALID is in $\Sigma_{2N-1}^P$. The dual problem $N$-INTVALID is in $\Pi_{2N-1}^P$.
+	Let $N$-\textbf{IntInvalid} be the problem of deciding if a formula $\bigwedge \mathcal S\to P$ as above with $|\mathcal F_\to|\leq N$ is not intuitionistically valid. Then $N$-\textbf{IntInvalid} is in $\Sigma_{2N-1}^P$. The dual problem $N$-\textbf{IntValid} is in $\Pi_{2N-1}^P$.
 \end{corollary}
+
+\todo{The size analysis of the QBF reduction should be stated in some theorem in this section}
 
 \section{CQC to IQC}
 
@@ -719,7 +726,8 @@ is classically valid where $s$ is a new constant symbol. This was obvious in the
 \begin{proof}
 	We proceed by translation of counter-examples. Suppose first we have a counter-example $\mathcal M = (M, I)$ to $\varphi^\circ$. As a Kripke frame $(W, \leq)$ take all $ W = \{m\in M\:|\:\text{ World}^I(m)\}$ let $\leq$ be $\preceq^I$ restricted to $W$. Then let $M_u = \{m\in M\:|\: E(m, u)\}$ and let $f^{I_u}$ be $f^I$ restricted to $M_u$ and $A^{I_u}(\vec x): \Leftrightarrow A^\#(\vec x, u)$. It is then a straightforward check of definitions that this defines a Kripke counter-model to $\varphi$.
 	
-	The other direction is a bit more involved. Suppose we have a Kripke counter-model to $\varphi$ with Frame $(W, \preceq)$ and family of $\Sigma$-structures $(M_w, I_w)_{w\in W}$. In particular since it is a counter-model there exists $w_0\in W$ with $w_0\not\models\varphi$. Let $W_0 = \{w\in W\:|\: w\geq w_0\}$ and define an equivalence relation $\sim$ on $\{(x, u)\:|\:u\in W_0, x\in M_u\}$ via $(x, u)\sim (y, w)$ iff $x = y$ and there exists $v\in W_0$ comparable with both $u, w$ such that $x\in v$ and denote the equivalence class of $(x, u)$ with $[x, u]$. Let $M = W_0\cup \{[x, u]\:|\:u\in W_0, x\in M_u\}$ and extend $\sim$ by having $[w] = \{w\}$ for $w\in W_0$. Now have
+	The other direction is a bit more involved. Suppose we have a Kripke counter-model to $\varphi$ with Frame \todo{frame? Also make sure frame is defined} $(W, \preceq)$ and family of $\Sigma$-structures $(M_w, I_w)_{w\in W}$. In particular since it is a counter-model there exists $w_0\in W$ with $w_0\not\models\varphi$. Let $W_0 = \{w\in W\:|\: w\geq w_0\}$ and define an equivalence relation $\sim$ on $\{(x, u)\:|\:u\in W_0, x\in M_u\}$ via $(x, u)\sim (y, w)$ iff $x = y$ and there exists $v\in W_0$ comparable with both $u, w$ such that $x\in v$ and denote the equivalence class of $(x, u)$ with $[x, u]$. Let $M = W_0\cup \{[x, u]\:|\:u\in W_0, x\in M_u\}$ and extend $\sim$ by having $[w] = \{w\}$ for $w\in W_0$ \todo{why is the later needed? I don't think it is used}. 
+Now have
 	\begin{itemize}
 		\item $s^I = w_0$.
 		\item $E^I(m, w)$ iff $w\in W_0$ and $m \sim [x, w]$ for some $x\in M_w$.
@@ -750,7 +758,15 @@ $$\forall \vec z\forall u(s\preceq u\to\vec E(\vec z, u)\to \forall w(u\preceq w
 and in each other formula in $\mathcal S^\circ$ removing the $s\preceq u$ to obtain $\mathcal S^\#$ from $\mathcal S^\circ$. Then the previous formulas are equivalid to
 $$\varphi^\circ= \forall u(s\preceq u)\to \bigwedge\{\forall \vec t\forall u(u\preceq f(\vec z, u))\:|\:\psi\in\mathcal F\}\to K(\varphi)\to\bigwedge\mathcal S^\#\to P^\#$$
 As in the previous section we can define a tree-counter model for this.
+\todo[inline]{Important: Why can't we have Theorem~\ref{thm:fo-reduction} directly, without Def.~\ref{def:fo-fulfilled} and Lemma~\ref{thm:fo-countermodel-reduction}? They don't seem to be needed.
+However, Lemma~\ref{thm:fo-countermodel-reduction} could still be used as in the propositional case to eliminate the function symbols for the implications at the cost of introducing additional predicates. 
+One could also add the idempotence as axioms in order to aid the solver. 
+We could mentioned that as a justification for Lemma~\ref{thm:fo-countermodel-reduction}.
+}
+
 \begin{definition}
+\label{def:fo-fulfilled}
+\todo{this definition still uses variables $t$, please use a different letter}
 	Suppose we are given a counter-model $\mathcal M = (M, I)$ for $\varphi^\circ$. For $\psi = \forall\vec t\psi'\in\mathcal F_\to$ we say that is it \textit{fulfilled} at $u\in M$ with $\vec a\in M^n$ iff $(A_\psi^I(\vec t_A, u)\to B_\psi^I(\vec t_B, u))[\vec a/\vec t]$ is false or $C_\psi^I(\vec t_C, u)[\vec a/\vec t]$ is true.
 	For $\psi = \forall\vec t\psi'\in\mathcal F_\forall$ we say that it is \textit{fulfilled} at $u\in M$ with $\vec a\in M^n$ iff there is $a\in M_u$ such that $A^{I[a/x]}_\psi(\vec t_A)[\vec a/\vec t]$ is false or $B_\psi^I(\vec t_B)[\vec a/\vec t]$ is true. For $\psi\in\mathcal F$ define $$g_{\vec a, \psi} : M\to M, u\mapsto\begin{cases}
 		u, &\text{ if $\psi$ is fulfilled in $u$ with $\vec a$,}\\
@@ -758,7 +774,7 @@ As in the previous section we can define a tree-counter model for this.
 	\end{cases}$$		
 	Define a $\mathcal M_T = (M_T, I_T)$ as follows:
 	\begin{itemize}
-		\item $M_T$ are the sequences on $\{ \vec t, \psi\:|\:\psi\in \mathcal F, \vec t\in M^n\}$ without repetition of elements $\vec t,\psi$ with $\psi\in\mathcal F_\to$ and without immediate repetition of elements $\vec t,\psi$ with $\psi\in\mathcal F_\forall$.
+		\item $M_T$ are the sequences on $\{ \vec t, \psi\:|\:\psi\in \mathcal F, \vec t\in M^n\}$ without repetition of elements $\vec t,\psi$ with $\psi\in\mathcal F_\to$ and without immediate repetition of elements $\vec t,\psi$ with $\psi\in\mathcal F_\forall$. \todo{do you mean sequences of pairs here? Then it is probably better to use brackets as in $(\vec t, \psi)$}
 		\item Interpret $\preceq$ as the prefix-order.
 		\item Have $$f_\psi^{I_T}(x_1\dots x_n) = \begin{cases}
 			x_1\dots x_n,&\text{if $x=x_n$,}\\
@@ -769,6 +785,7 @@ As in the previous section we can define a tree-counter model for this.
 \end{definition}
 
 \begin{lemma}
+\label{thm:fo-countermodel-reduction}
 	Let $\mathcal M = (M, I)$ be a counter-model to $\mathcal \varphi^\circ$.
 	\begin{enumerate}
 		\item $\psi$ is fulfilled at $f_\psi^I(\vec a, u)$ with $\vec a$ for all $u\in M, \psi\in\mathcal F$, $\vec a\in M^n$.
@@ -821,11 +838,13 @@ However Part 2 of this Lemma does not hold for $\psi\in\mathcal F_\forall$, beca
 	If $\mathcal M$ is a counter-model to $\varphi^\circ$ then so is $\mathcal M_T$.
 \end{corollary}
 
-Even if we don't have the nice finiteness of the propositional case we have still reduced the model complexity in that we know that considering worlds of the form $$f_{\psi_1}(\vec t_1, f_{\psi_2}(\vec t_2, \dots f_{\psi_n}(\vec t_n, s)\dots))$$ is sufficient. In particular this allows us to completely eliminate $\preceq$ from the formula, that is we remove the PO-encoding from $K(\varphi)$ and replace $\forall u\forall w\forall x((E(x, u)\wedge u\preceq w)\to E(x, w))$ with $\bigwedge\{\forall \vec z\forall u(E(x, u)\to E(x, f_\psi(\vec z, u)))\:|\:\psi\in\mathcal F_\to\}$ and analogously for persistency to obtain $K$. Define
+Even if we don't have the nice finiteness of the propositional case we have still reduced the model complexity in that we know that considering worlds of the form $$f_{\psi_1}(\vec t_1, f_{\psi_2}(\vec t_2, \dots f_{\psi_n}(\vec t_n, s)\dots))$$ is sufficient. In particular this allows us to completely eliminate $\preceq$ from the formula, that is we remove the PO-encoding \todo{PO-encoding used for the first time, say PartialOrder?}
+from $K(\varphi)$ and replace $\forall u\forall w\forall x((E(x, u)\wedge u\preceq w)\to E(x, w))$ with $\bigwedge\{\forall \vec z\forall u(E(x, u)\to E(x, f_\psi(\vec z, u)))\:|\:\psi\in\mathcal F_\to\}$ and analogously for persistency to obtain $K$. Define
 
 $$\varphi^{\#} = K\to \bigwedge S^\#\to P^\#$$
 then we have
 \begin{theorem}
+\label{thm:fo-reduction}
 	$\varphi$ is intuitionistically valid iff $\varphi^\#$ is classically valid.
 \end{theorem}
 The complete translation is summarised in Theorem~\ref{fullFOtranslation}.
