@@ -157,27 +157,10 @@ The Herbrandization is completely analogous the the propositional case.
 
 The real difference arises in the final step: While we can also establish a universal Kripke Frame that is parametrized only by the formulas of type $(A\to B)\to C$ and $\forall xA\to B$, it is possibly countably infinite. This is not surprising since certain intuitionistically invalid formulas like the double negation shift $\forall x\neg\neg A(x)\to \neg\neg\forall x A(x)$ don't have finite counter-models. Therefore we are not able to eliminate the weak $\forall$-quantifiers associated with the Kripke semantics. However since we started in first-order logic to begin with this is perhaps not a big deal.
 
-We end up with the following translation:
-
-\begin{theorem}\label{fullFOtranslation}
-	Let $\mathcal S$ be as above and $\mathcal F_\to\subseteq\mathcal S$ contain formulas of the form $\forall \vec t((A(\vec z_A)\to B(\vec z_B))\to C(\vec z_C))$ and $\mathcal F_\forall\subseteq\mathcal S$ the formulas of the form $\forall \vec z(\forall xA(\vec z_A)\to B(\vec z_B))$. Let $\mathcal F = \mathcal F_\to\cup\mathcal F_\forall$. For every $n$-ary atomic relation $R$ define a new $n+1$-ary relation $R^\#$. For every $\psi\in\mathcal F$ define a new function symbol $f_\psi$. Consider a new binary relation symbol $E$ and define $\vec E(\vec x, u) := \bigwedge\{E(x, u)\:|\:x\in\vec x\}$. Obtain $\mathcal S^\#$ by including formulas as follows:
-	\begin{itemize}
-		\item $\forall \vec z\forall u(\vec E(\vec z, u)\to (A^\#(\vec a, u)\to (B^\#(\vec b, u)\circ C^\#(\vec c, u))))$\\for each $\circ\in\{\wedge, \vee\}, \psi = \forall \vec z(A(\vec a)\to (B(\vec b)\circ C(\vec c)))\in\mathcal S$
-		\item $\forall \vec z\forall u(\vec E(\vec z, u)\to (A^\#(\vec a, u)\circ B^\#(\vec b, u))\to C^\#(\vec c, u))$\\for each $\circ\in\{\wedge, \vee\}, \psi = \forall \vec z((A(\vec a)\circ B(\vec b))\to C(\vec c))\in\mathcal S$
-		\item $\forall \vec z\forall u(\vec E(\vec z, u)\to(A^\#(\vec a, f(\vec z, u))\to B^\#(\vec b, f(\vec z, u)))\to C^\#(\vec c, u))$ for each $\psi = \forall \vec z((A(\vec a)\to B(\vec b))\to C(\vec c))\in\mathcal S$
-		\item  $\forall \vec z\forall u(\vec E(\vec z, u)\to \forall x(E(x, f(\vec z, u))\to A^\#(\vec a, f(\vec z, u)))\to B^\#(\vec b, u))$\\for each $\forall \vec z(\forall xA(\vec a)\to B(\vec t_B))\in\mathcal S$.
-		\item $\forall \vec z\forall u(\vec E(\vec z, u)\to A^\#(\vec a, u)\to \forall x(E(x, u)\to B^\#(\vec b, u)))$\\for each $\forall \vec t(A(\vec a)\to \forall xB(\vec b))\in\mathcal S$.
-		\item $\forall \vec z\forall u(\vec E(\vec z, u)\to \exists x(E(x, u)\wedge A^\#(\vec z, u))\to B^\#(\vec b))$\\for each $\forall \vec z(\exists xA(\vec a)\to B(\vec b))\in\mathcal S$
-		\item $\forall \vec z\forall u(\vec E(\vec z, u)\to A^\#(\vec b)\to \exists x(E(x, u)\wedge B^\#(\vec b, u)))$\\for each $\forall \vec z(A(\vec a)\to \exists xB(\vec b))\in\mathcal S$
-	\end{itemize}
-	Then $\bigwedge S\to P$ is intuitionistically iff $\exists xE(x, s)\to K\to \bigwedge\mathcal S^\#\to P^\#(s)$ is classically valid, where $s$ is a new constant symbol, $\Sigma$ is the original signature and
-	\begin{align*}
-		K := &\:\bigwedge\{\forall x\forall u((E(x, u)\to E(x, f_\psi(u)))\:|\:\psi\in\mathcal F\}\wedge\\
-		&\:\forall u\left(\exists xE(x, u)\to \bigwedge\{\forall\vec z(\vec E(\vec z, u)\to E(f(\vec z), u))\:|\:\text{$f$ is a function symbol in $\Sigma$}\}\right)\wedge\\
-		&\:\bigwedge\{\forall\vec z_1\forall \vec z_2\forall u(A^\#(\vec z_1, u)\to A^\#(\vec z_1, f_\psi(\vec z_2, u)))\:|\:\text{$\psi\in\mathcal F$, $A$ is a relation symbol in $\Sigma$}\}
-	\end{align*}
-	The size of the obtained formula is linear in the input. However a $|\mathcal F| + 1$ new function symbols and the new binary predicate $E$ were introduced and each $n$-ary relation symbol has been extended to a $n+1$-ary relation symbol.
+\begin{theorem}
+	There exists a linear-time procedure that gives for every first-order formula $\varphi$ a formula $\varphi^\#$ such that $\varphi$ is intuitionistically valid if and only if $\varphi^\#$ is classically valid. The size of $\varphi^\#$ is in linear in the size of $|\varphi|$, however for each $n$-ary relation symbol in $\varphi$ there is a corresponding $n+1$-ary relation symbol in $\varphi^\#$ and furthermore $\varphi$ contains a new binary predicate $E$ as well as a number of new function symbols. Furthermore there is an effective translation between intuitionistic counter-models of $\varphi$ and classical counter-models of $\varphi^\#$.
 \end{theorem}
+The complete translation is stated in Theorem~\ref{fullFOtranslation}.
 
 These results provide an effective framework for using classical provers to check intuitionistic validity. First experiments with the Vampire theorem prover show promise.
 
@@ -195,7 +178,7 @@ Before proceeding towards the results let us quickly fix our notation and recapi
 		\item $v\models A$ iff $v(A) = 1$ for each propositional variable $A$.
 		\item $v\models \varphi\wedge\psi$ iff $v\models\varphi$ and $v\models\psi$.
 		\item $v\models\varphi\vee\psi$ iff $v\models\varphi$ or $v\models\psi$.
-		\item $v\models\varphi\to \psi$ iff $v\not\models\varphi$ and $v\models\psi$.
+		\item $v\models\varphi\to \psi$ iff $v\not\models\varphi$ or $v\models\psi$.
 	\end{itemize}
 	$v$ is a \textbf{model} for $\varphi$ if $v\models\varphi$. If every valuation is a model for $\varphi$ then we say $\varphi$ is \emph{valid}. We denote the set of valid formulas with \emph{CPC}.
 \end{definition}
@@ -414,26 +397,26 @@ Then from the previous three Lemmas we get
 	\end{itemize}
 \end{corollary}
 
-\section{IPC to CPC}
+\section{IPC to simplified CQC}
 
-We are now ready to put everything together. Recall that our goal is for a formula to give a modified formula that is valid classically iff the original formula is valid intuitionistically. As a first step we perform the normalization from the last section, i.e. instead of $\varphi$ we consider $$\varphi' = \bigwedge \mathcal S^-(\varphi)\to P_\varphi$$
+We are now ready to put these two reduction together with our embedding f. Let $\varphi$ be some propositional formula. As a first step we perform the normalization from the last section, i.e. instead of $\varphi$ we consider $$\varphi' = \bigwedge \mathcal S^-(\varphi)\to P_\varphi$$
 
 Recall that since $\varphi$ is quantifier-free each formula $\psi\in\mathcal S^-(\varphi)$ is of one of the forms
-$$A_\psi\to (B_\psi\wedge C_\psi), (A_\psi\wedge B_\psi)\to C_\psi, A_\psi\to (B_\psi\vee C_\psi), (A_\psi\vee B_\psi)\to C_\psi, (A_\psi\to B_\psi)\to C_\psi$$
+$$A\to (B\wedge C), (A\wedge B)\to C, A\to (B\vee C), (A\vee B)\to C, (A\to B)\to C$$
 
 where we can treat $A\to B$ as a special case $A\to (B\wedge B)$. We then apply the transformation to CQC, leading to a formula
 $$\varphi'' = K(\varphi')\to\bigwedge  \mathcal S\to P_\varphi(u)$$
 where $u$ is some new free variable and each $\psi\in\mathcal S$ is of one of the forms
-$$\hspace*{-2mm}\forall k(u\preceq k\to A(k)\to (B_\psi(k)\wedge C_\psi(k))), \forall k(u\preceq k\to (A_\psi(k)\wedge (B_\psi(k))\to C_\psi(k)))$$
-$$\hspace*{-2mm}\forall k(u\preceq k\to A(k)\to (B_\psi(k)\vee C_\psi(k))), \forall k(u\preceq k\to (A_\psi(k)\vee B_\psi(k))\to C_\psi(k))$$
-$$\forall k(u\preceq k\to (\forall l(k\preceq l \to A_\psi(l)\to B_\psi(l))\to C_\psi(k)))$$
+$$\hspace*{-2mm}\forall k(u\preceq k\to A(k)\to (B(k)\wedge C(k))), \forall k(u\preceq k\to (A(k)\wedge (B(k))\to C(k)))$$
+$$\hspace*{-2mm}\forall k(u\preceq k\to A(k)\to (B(k)\vee C(k))), \forall k(u\preceq k\to (A(k)\vee B(k))\to C(k))$$
+$$\forall k(u\preceq k\to (\forall l(k\preceq l \to A(l)\to B(l))\to C(k)))$$
 with each $P(x)$ possibly being $\bot$. Applying Herbrandization we obtain a formula
 $$\varphi''' = K(\varphi')\to \bigwedge \mathcal S'\to P_\varphi(s)$$
 where $s$ is some new constant term and each $\psi\in\mathcal S'$ is of one of the forms
-$$\hspace*{-2mm}\forall k(s\preceq k\to A_\psi(k)\to (B_\psi(k)\wedge C_\psi(k))), \forall k(s\preceq k\to (A_\psi(k)\wedge (B_\psi(k))\to C_\psi(k)))$$
-$$\hspace*{-2mm}\forall k(s\preceq k\to A_\psi(k)\to (B_\psi(k)\vee C_\psi(k))), \forall k(s\preceq k\to (A_\psi(k)\vee (B_\psi(k))\to C_\psi(k)))$$
-$$\forall k(s\preceq k\to (k\preceq f_\psi(k) \to A_\psi(f_\psi(k))\to B_\psi(f_\psi(k)))\to C_\psi(k))$$
-and $f$ is a new function symbol for each introduced formula of that form. Now if $(M, I)$ is a counter-model then we have a counter-model $(M',I')$ where $$M' = \{m\in M|s\preceq m\}$$ and
+$$\hspace*{-2mm}\forall k(s\preceq k\to A(k)\to (B(k)\wedge C(k))), \forall k(s\preceq k\to (A(k)\wedge (B(k))\to C(k)))$$
+$$\hspace*{-2mm}\forall k(s\preceq k\to A(k)\to (B(k)\vee C(k))), \forall k(s\preceq k\to (A(k)\vee (B(k))\to C(k)))$$
+$$\forall k(s\preceq k\to (k\preceq f_\psi(k) \to A(f_\psi(k))\to B(f_\psi(k)))\to C(k))$$
+and $f_\psi$ is a new function symbol for each introduced formula of that form. Now if $(M, I)$ is a counter-model then we have a counter-model $(M',I')$ where $$M' = \{m\in M|s\preceq m\}$$ and
 $$f_\psi^{I'}(u) = \begin{cases}
 	f^I_\psi(u)&\text{ iff $u\preceq f^{I}_\psi(u)$}\\
 	u&\text{ else}
@@ -442,6 +425,11 @@ $$\forall k(A_\psi(k)\to (B_\psi(k)\wedge C_\psi(k))), \forall k((A_\psi(k)\wedg
 $$\forall k(A_\psi(k)\to (B_\psi(k)\vee C_\psi(k))), \forall k((A_\psi(k)\vee B_\psi(k))\to C_\psi(k))$$
 $$\forall k((A_\psi(f_\psi(k))\to B_\psi(f_\psi(k)))\to C_\psi(k))$$
 and $\mathcal F_\to$ denotes the set of formulas of the last kind.
+
+This is as far as the first-order encoding can be simplified. What remains is the elimination of the remaining weak $\forall$-quantifiers.
+
+
+\section{IPC to CPC}
 
 We now argue that if a counter-model exists for $\varphi^\circ$ then a bounded counter-model exists, allowing us to return to the propositional case.
 
@@ -470,9 +458,9 @@ We now argue that if a counter-model exists for $\varphi^\circ$ then a bounded c
 \end{lemma}
 
 \begin{proof}
-	1. If $C_\psi^I(u)$ is true then we are done due to persistency. Otherwise we know that $(A_\psi^I(f_\psi^I(u))\to B_\psi^I(f_\psi^I(u)))\to C_\psi^I(f_\psi^I(u))$ holds, so $A_\psi^I(f_\psi^I(u))\to B_\psi^I(f_\psi^I(u))$ must be true.
+	1. If $C^I(u)$ is true then we are done due to persistency. Otherwise we know that $(A^I(f_\psi^I(u))\to B^I(f_\psi^I(u)))\to C^I(f_\psi^I(u))$ holds, so $A^I(f_\psi^I(u))\to B^I(f_\psi^I(u))$ must be true.
 	
-	2. If $C_\psi^I(u)$ is true then $C_\psi^I(w)$ is also true and we are done. So suppose $A_\psi^I(u)\to B_\psi^I(u)$ is false, i.e. $A_\psi^I(u)$ true and $B_\psi^I(u)$ false. Then due to the persistency condition $A_\psi^I(w)$ is also true. Again if $C_\psi^I(w)$ is true we are done. Otherwise we know that $B^I(f^I_\psi(w))$ must be false, since $(A^I_\psi(f^I_\psi(w))\to B^I(f^I_\psi(w)))\to C^I_\psi(w)$ and $A^I_\psi(f^I_\psi(w))$ hold. But then due to persistency so is $B^I_\psi(w)$ and we have that $\psi$ is fulfilled at $w$.
+	2. If $C^I(u)$ is true then $C^I(w)$ is also true and we are done. So suppose $A^I(u)\to B^I(u)$ is false, i.e. $A^I(u)$ true and $B^I(u)$ false. Then due to the persistency condition $A^I(w)$ is also true. Again if $C^I(w)$ is true we are done. Otherwise we know that $B^I(f^I(w))$ must be false, since $(A^I(f^I_\psi(w))\to B^I(f^I_\psi(w)))\to C^I(w)$ and $A^I(f^I_\psi(w))$ hold. But then due to persistency so is $B^I(w)$ and we have that $\psi$ is fulfilled at $w$.
 \end{proof}
 
 Essentially what fulfilment of $\psi$ at $u$ tells us is that having $f_\psi(w) = w$ for all $w\geq u$ works.
@@ -527,13 +515,13 @@ So we know that $\varphi^\circ$ is valid iff it is valid for structures that hav
 
 \begin{definition}
 	Suppose $\mathcal S$ is a set of formulas $\psi$ of the form
-	$$A_\psi\to (B_\psi\wedge C_\psi), (A_\psi\wedge B_\psi)\to C_\psi, A_\psi\to (B_\psi\vee C_\psi),(A_\psi\vee B_\psi)\to C_\psi, (A_\psi\to B_\psi)\to C_\psi$$
+	$$A\to (B\wedge C), (A\wedge B)\to C, A\to (B\vee C),(A\vee B)\to C, (A\to B)\to C$$
 	Let $\mathcal F_\to$ be the set of formulas of the form $(A\to B)\to C$ and $\Lambda$ the set of sequences without repetition over $\mathcal F_\to$. For each atom $A$ occurring in $\mathcal S$ and $k\in \mathcal F_\to$ consider a new atom $A^{k}$, which will correspond to $A^{I_F}(k)$ from the previous definition. Obtain $\mathcal S^\#$ by including the formulas
 	\begin{itemize}
 		\item $A^k\to A^{k\psi}$ for each $A$ occurring in $\mathcal S$, $k\in\Lambda$ and $\psi\in\mathcal F_\to$ not occurring in $k$.
-		\item $A^k_\psi\to (B^k_\psi\circ C^k_\psi)$ for each $\circ\in\{\wedge,\vee\}$, $A_\psi\to (B_\psi\circ C_\psi)\in\mathcal S$, $k\in\Lambda$.
-		\item $(A^k_\psi\circ B^k_\psi)\to C^k_\psi$ for each $\circ\in\{\wedge,\vee\}$, $A_\psi\to (B_\psi\circ C_\psi)\in\mathcal S$, $k\in\Lambda$.
-		\item $(A^{k\psi}_\psi\to B^{k\psi}_\psi)\to C^k_\psi$ for $(A_\psi\to B_\psi)\to C_\psi\in\mathcal S$, $k\in\Lambda$ if $\psi$ does not occurr in $k$.
+		\item $A^k\to (B^k\circ C^k)$ for each $\circ\in\{\wedge,\vee\}$, $A\to (B\circ C)\in\mathcal S$, $k\in\Lambda$.
+		\item $(A^k\circ B^k)\to C^k$ for each $\circ\in\{\wedge,\vee\}$, $A\to (B\circ C)\in\mathcal S$, $k\in\Lambda$.
+		\item $(A^{k\psi}\to B^{k\psi})\to C^k$ for $(A\to B)\to C\in\mathcal S$, $k\in\Lambda$ if $\psi$ does not occurr in $k$.
 	\end{itemize}
 \end{definition}
 
@@ -557,7 +545,7 @@ So we know that $\varphi^\circ$ is valid iff it is valid for structures that hav
 
 It is well known that a polynomial time translation between QBF and IPC must exists, since both problems are PSPACE complete~\cite{garey1979computers, statman1979intuitionistic}. However giving an explicit translation from IPC to QBF can still be useful as good solvers exists for QBF but for IPC not so much. The translation from the last section will serve as a useful tool for this. We will not explain the semantics of QBF in depth. Intuitively just think that the interpretation of existentially quantified variables may depend on variables quantified above them.
 
-Fix some set $\mathcal S$ of formulas $\psi$ of the form $$A_\psi\to (B_\psi\wedge C_\psi), (A_\psi\wedge B_\psi)\to C_\psi, A_\psi\to (B_\psi\vee C_\psi), (A_\psi\vee B_\psi)\to C_\psi, (A_\psi\to B_\psi)\to C_\psi$$and$$\varphi = \bigwedge \mathcal S\to P$$
+Fix some set $\mathcal S$ of formulas $\psi$ of the form $$A\to (B\wedge C), (A\wedge B)\to C, A\to (B\vee C), (A\vee B)\to C, (A\to B)\to C$$and$$\varphi = \bigwedge \mathcal S\to P$$
 and denote with $\mathcal F_\to$ the set of formulas of the form $(A\to B)\to C$. We will now formulate a QBF that expresses that $\varphi$ has an intuitionistic counter-model. The idea how to get a linear-size formula is: Instead of expressing validity at every node of $\mathcal M_T$ - which was done in the CPC translation - we express that on each path in $\mathcal M_T$ the nodes satisfy all conditions for $\mathcal M_T$ being a counter-model. The universally quantified variables $F_\psi$ in the next definition handle the branching, i.e. express which path is considered.
 
 \begin{definition}
@@ -636,7 +624,33 @@ First of all recall that due to Lemma~\ref{equivalid} it is sufficient to consid
 
 $$\forall \vec z(A(\vec a)\to (B(\vec b)\wedge C(\vec c))), \forall \vec z((A(\vec a)\wedge B(\vec b))\to C(\vec c)),$$$$ \forall \vec z(A(\vec a)\to (B(\vec b)\vee C(\vec c))),
 \forall \vec z((A(\vec a)\vee B(\vec b))\to C(\vec c)),$$$$ \forall \vec z((A(\vec a)\to B(\vec b))\to C(\vec c)),\forall \vec z(\forall xA(\vec a)\to B(\vec b)),$$$$ \forall \vec z(A(\vec a)\to\forall xB(b)), \forall \vec z(\exists xA(\vec a)\to B(\vec b)), \forall \vec z(A(\vec a)\to\exists xB(b))$$	
-As in the propositional case we will now encode the Kripke Semantics, this time not only the relation $\preceq$ but also $E$ has to be axiomatized. For that we use the following predicates:
+
+The complete result that we will show is as follows:
+\begin{theorem}\label{fullFOtranslation}
+	Let $\mathcal S$ be as above and $\mathcal F_\to\subseteq\mathcal S$ contain the formulas of the form $\forall \vec t((A(\vec z_A)\to B(\vec z_B))\to C(\vec z_C))$ and $\mathcal F_\forall\subseteq\mathcal S$ the formulas of the form $\forall \vec z(\forall xA(\vec z_A)\to B(\vec z_B))$. Let $\mathcal F = \mathcal F_\to\cup\mathcal F_\forall$. For every $n$-ary atomic relation $R$ define a new $n+1$-ary relation $R^\#$. For every $\psi\in\mathcal F$ define a new function symbol $f_\psi$. Consider a new binary relation symbol $E$ and define $\vec E(\vec x, u) := \bigwedge\{E(x, u)\:|\:x\in\vec x\}$. Obtain $\mathcal S^\#$ by including formulas as follows:
+	\begin{itemize}
+		\item $\forall \vec z\forall u(\vec E(\vec z, u)\to (A^\#(\vec a, u)\to (B^\#(\vec b, u)\circ C^\#(\vec c, u))))$\\for each $\circ\in\{\wedge, \vee\}, \psi = \forall \vec z(A(\vec a)\to (B(\vec b)\circ C(\vec c)))\in\mathcal S$
+		\item $\forall \vec z\forall u(\vec E(\vec z, u)\to (A^\#(\vec a, u)\circ B^\#(\vec b, u))\to C^\#(\vec c, u))$\\for each $\circ\in\{\wedge, \vee\}, \psi = \forall \vec z((A(\vec a)\circ B(\vec b))\to C(\vec c))\in\mathcal S$
+		\item $\forall \vec z\forall u(\vec E(\vec z, u)\to(A^\#(\vec a, f(\vec z, u))\to B^\#(\vec b, f(\vec z, u)))\to C^\#(\vec c, u))$ for each $\psi = \forall \vec z((A(\vec a)\to B(\vec b))\to C(\vec c))\in\mathcal S$
+		\item  $\forall \vec z\forall u(\vec E(\vec z, u)\to \forall x(E(x, f(\vec z, u))\to A^\#(\vec a, f(\vec z, u)))\to B^\#(\vec b, u))$\\for each $\forall \vec z(\forall xA(\vec a)\to B(\vec t_B))\in\mathcal S$.
+		\item $\forall \vec z\forall u(\vec E(\vec z, u)\to A^\#(\vec a, u)\to \forall x(E(x, u)\to B^\#(\vec b, u)))$\\for each $\forall \vec t(A(\vec a)\to \forall xB(\vec b))\in\mathcal S$.
+		\item $\forall \vec z\forall u(\vec E(\vec z, u)\to \exists x(E(x, u)\wedge A^\#(\vec z, u))\to B^\#(\vec b))$\\for each $\forall \vec z(\exists xA(\vec a)\to B(\vec b))\in\mathcal S$
+		\item $\forall \vec z\forall u(\vec E(\vec z, u)\to A^\#(\vec b)\to \exists x(E(x, u)\wedge B^\#(\vec b, u)))$\\for each $\forall \vec z(A(\vec a)\to \exists xB(\vec b))\in\mathcal S$
+	\end{itemize}
+	Then $\bigwedge S\to P$ is intuitionistically iff $\exists xE(x, s)\to K\to \bigwedge\mathcal S^\#\to P^\#(s)$ is classically valid, where $s$ is a new constant symbol, $\Sigma$ is the original signature and
+	\begin{align*}
+		K := &\:\bigwedge\{\forall x\forall u((E(x, u)\to E(x, f_\psi(u)))\:|\:\psi\in\mathcal F\}\wedge\\
+		&\:\forall u\left(\exists xE(x, u)\to \bigwedge\{\forall\vec z(\vec E(\vec z, u)\to E(f(\vec z), u))\:|\:\text{$f$ is a function symbol in $\Sigma$}\}\right)\wedge\\
+		&\:\bigwedge\{\forall\vec z_1\forall \vec z_2\forall u(A^\#(\vec z_1, u)\to A^\#(\vec z_1, f_\psi(\vec z_2, u)))\:|\:\text{$\psi\in\mathcal F$, $A$ is a relation symbol in $\Sigma$}\}
+	\end{align*}
+	The size of the obtained formula is linear in the input. However a $|\mathcal F| + 1$ new function symbols and the new binary predicate $E$ were introduced and each $n$-ary relation symbol has been extended to a $n+1$-ary relation symbol.
+\end{theorem}
+
+It is not possible to completely eliminate worlds from the domain as in the propositional case, since counter-models possibly must be infinite. We will see why that is in more detail later.
+
+\subsection{Encoding Kripke Semantics}
+
+As in the propositional case we must encode the Kripke Semantics, this time not only the relation $\preceq$ but also $E$ has to be axiomatized. For that we use the following predicates:
 \begin{itemize}
 	\item PartialOrder($\preceq$) encoding that $\preceq$ is a partial order.
 	\item DomainSubset$(u, w)$ encoding that the domain at $u$ is a subset of that at $w$.
@@ -701,11 +715,13 @@ is classically valid where $s$ is a new constant symbol. This was obvious in the
 	$$((A^{I_u}(\vec a)\to B^{I_u}(\vec b))\to C^{I_u}(\vec c))[\vec z/z_1\dots z_n]$$in our original Kripke counter-model. The other cases are analogous.
 \end{proof}
 
-We proceed now as in the previous section. Denote the set of formulas $\psi\in\mathcal S$ of the form $\forall\vec z((A(\vec a)\to B(\vec b))\to C(\vec c))$ with $\mathcal F_\to$ and of the form $\forall \vec z(\forall xA(\vec a)\to B(\vec b))$ with $\mathcal F_\forall$. Let $\mathcal F = \mathcal F_\to\cup\mathcal F_\forall$. For each  $\psi\in\mathcal F$ consider a new function symbol $f$. As before we may assume that $s$ is a least element and eliminate the quantification over $w$ by replacing formulas
+\subsection*{Reducing the encoding}
+
+As in the predicate case we now show the existence of a canonical counter-model, if a counter-model exists. Denote the set of formulas $\psi\in\mathcal S$ of the form $\forall\vec z((A(\vec a)\to B(\vec b))\to C(\vec c))$ with $\mathcal F_\to$ and of the form $\forall \vec z(\forall xA(\vec a)\to B(\vec b))$ with $\mathcal F_\forall$. Let $\mathcal F = \mathcal F_\to\cup\mathcal F_\forall$. For each  $\psi\in\mathcal F$ consider a new function symbol $f_\psi$. As before we may assume that $s$ is a least element and eliminate the quantification over $w$ by replacing formulas
 $$\forall \vec z\forall u(s\preceq u\to\vec E(\vec z, u)\to \forall w(u\preceq w\to A^\#(\vec a, w)\to B^\#(\vec b, w))\to C^\#(\vec c, u))$$ with
-$$\forall \vec z\forall u(\vec E(\vec z, u)\to (A^\#(\vec a, f(\vec z, u))\to B^\#(\vec b, f(\vec z, u)))\to C^\#(\vec c, u))$$ and
-$$\forall \vec z\forall u(s\preceq u\to\vec E(\vec z, u)\to \forall w(u\preceq w\to \forall x(E(x, w)\to A^\#(\vec a, w)))\to B^\#(\vec b, u))$$ with $$\forall \vec z\forall u(\vec E(\vec z, u)\to (\forall x(E(x, f(\vec z, u))\to A^\#(\vec a, f(\vec z, u))))\to B^\#(\vec b, u))$$
-and in each other formula in $\mathcal S^\circ$ remove the $s\preceq u$ to obtain $\mathcal S^\#$ from $\mathcal S^\circ$. Then the previous formulas are equivalid to
+$$\forall \vec z\forall u(\vec E(\vec z, u)\to (A^\#(\vec a, f_\psi(\vec z, u))\to B^\#(\vec b, f_\psi(\vec z, u)))\to C^\#(\vec c, u))$$ and
+$$\forall \vec z\forall u(s\preceq u\to\vec E(\vec z, u)\to \forall w(u\preceq w\to \forall x(E(x, w)\to A^\#(\vec a, w)))\to B^\#(\vec b, u))$$ with $$\forall \vec z\forall u(\vec E(\vec z, u)\to (\forall x(E(x, f_\psi(\vec z, u))\to A^\#(\vec a, f_\psi(\vec z, u))))\to B^\#(\vec b, u))$$
+and in each other formula in $\mathcal S^\circ$ removing the $s\preceq u$ to obtain $\mathcal S^\#$ from $\mathcal S^\circ$. Then the previous formulas are equivalid to
 $$\varphi^\circ= \forall u(s\preceq u)\to \bigwedge\{\forall \vec t\forall u(u\preceq f(\vec z, u))\:|\:\psi\in\mathcal F\}\to K(\varphi)\to\bigwedge\mathcal S^\#\to P^\#$$
 As in the previous section we can define a tree-counter model for this.
 \begin{definition}
@@ -740,7 +756,7 @@ As in the previous section we can define a tree-counter model for this.
 	1. Let $\psi\in\mathcal F_\forall$. If $B^I_\psi(\vec b, u)[\vec a/\vec t]$ holds then we are done due to persistency. Otherwise there is $a$ with $E^I(a, f^I_\psi(\vec a, u))$ such that $A^{I[a/x]}_\psi(\vec t_A, f^I_\psi(\vec a, u))$ is false. So $\psi$ is fulfilled at $f^I_\psi(\vec a, u)$ with $\vec a$.
 \end{proof}
 
-Part 2 of this Lemma does not hold for $\psi\in\mathcal F_\forall$, because even if for all $x$ with $E(x, v$) we have $A(x, v)$ there could be some term $t$ with $\neg E(t, v)$ and $w$ with $v\preceq w$ such that $E(t, w)$ and $\neg A(t, w)$. This is why we must consider sequences that have repetitions of such formulas:
+However Part 2 of this Lemma does not hold for $\psi\in\mathcal F_\forall$, because even if for all $x$ with $E(x, v$) we have $A(x, v)$ there could be some term $t$ with $\neg E(t, v)$ and $w$ with $v\preceq w$ such that $E(t, w)$ and $\neg A(t, w)$. This is why we must consider sequences that have repetitions of such formulas:
 
 \begin{example}
 	Consider the $\varphi = \neg(\neg \forall xA(x)\vee\neg \forall xB(x))$. There is a counter-model
