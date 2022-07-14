@@ -715,7 +715,7 @@ is classically valid where $s$ is a new constant symbol. This was obvious in the
 	$$((A^{I_u}(\vec a)\to B^{I_u}(\vec b))\to C^{I_u}(\vec c))[\vec z/z_1\dots z_n]$$in our original Kripke counter-model. The other cases are analogous.
 \end{proof}
 
-\subsection*{Reducing the encoding}
+\subsection{Reducing the encoding}
 
 As in the predicate case we now show the existence of a canonical counter-model, if a counter-model exists. Denote the set of formulas $\psi\in\mathcal S$ of the form $\forall\vec z((A(\vec a)\to B(\vec b))\to C(\vec c))$ with $\mathcal F_\to$ and of the form $\forall \vec z(\forall xA(\vec a)\to B(\vec b))$ with $\mathcal F_\forall$. Let $\mathcal F = \mathcal F_\to\cup\mathcal F_\forall$. For each  $\psi\in\mathcal F$ consider a new function symbol $f_\psi$. As before we may assume that $s$ is a least element and eliminate the quantification over $w$ by replacing formulas
 $$\forall \vec z\forall u(s\preceq u\to\vec E(\vec z, u)\to \forall w(u\preceq w\to A^\#(\vec a, w)\to B^\#(\vec b, w))\to C^\#(\vec c, u))$$ with
