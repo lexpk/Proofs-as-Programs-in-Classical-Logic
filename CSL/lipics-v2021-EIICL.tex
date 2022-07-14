@@ -20,6 +20,8 @@
 \usetikzlibrary{arrows.meta}
 \usetikzlibrary{arrows,shapes,quotes}
 
+\usepackage{todonotes}
+
 %\graphicspath{{./graphics/}}%helpful if your graphic files are in another directory
 
 \bibliographystyle{plainurl}% the mandatory bibstyle
@@ -76,7 +78,7 @@
 %TODO mandatory: add short abstract of the document
 \begin{abstract}
 The famous double negation translation~\cite{glivenko1929quelques, godel1933intuitionistischen} establishes an embedding from classical into intuitionistic logic. Curiously the reverse direction has not been covered in literature. We present an effective embedding from intuitionistic into classical logic, both in the propositional and first-order case, as well as an effective embedding of intuitionistic propositional logic into quantified boolean formulas.
-Furthermore, in the propositional case we establish a parameter that bounds the proof complexity of intuitionistic formulas. As part of our construction, we also present a Tseytin-like translation that preserves intuitionistic validity and reduces formulas to a normal form. 
+Furthermore, in the propositional case we establish a parameter that bounds the proof complexity of intuitionistic formulas. As part of our construction, we also present a Tseytin-like translation that preserves intuitionistic validity and reduces formulas to a normal form.
 
 %The key notion used in the proofs is the existence of counter-models - an analogon to the satisfiability of the negation in classical logic, which is not equivalent to invalidity in the intuitionistic case.  We hope that this will allow leveraging the tremendous recent progress in automated reasoning in classical logic for checking intuitionistic validity, for which there has not been much progress in recent decades.
 
@@ -167,12 +169,12 @@ These results provide an effective framework for using classical provers to chec
 
 \section{Preliminaries}
 
-Before proceeding towards the results let us quickly fix our notation and recapitulate the semantics for classical and more importantly intuitionistic logic.
+In this section we fix notation and recall the semantics for classical and intuitionistic logic.
 
 \subsection{Propositional Semantics}
 
 \begin{definition}
-	A \emph{valuation} $v$ is a function that assigns to each propositional variable $A$ a \textbf{truth value} $v(A)\in\{0, 1\}$. We inductively define the model relation $\models$ between $v$ and formulas:
+A \emph{valuation} $v$ maps each propositional variable $A$ to a \emph{truth value} $v(A)\in\{0, 1\}$. We inductively define the model relation $\models$ between $v$ and formulas:
 	\begin{itemize}
 		\item $v\not\models \bot$
 		\item $v\models A$ iff $v(A) = 1$ for each propositional variable $A$.
@@ -180,32 +182,35 @@ Before proceeding towards the results let us quickly fix our notation and recapi
 		\item $v\models\varphi\vee\psi$ iff $v\models\varphi$ or $v\models\psi$.
 		\item $v\models\varphi\to \psi$ iff $v\not\models\varphi$ or $v\models\psi$.
 	\end{itemize}
-	$v$ is a \textbf{model} for $\varphi$ if $v\models\varphi$. If every valuation is a model for $\varphi$ then we say $\varphi$ is \emph{valid}. We denote the set of valid formulas with \emph{CPC}.
+A valuation $v$ is a \emph{model} for $\varphi$ if $v\models\varphi$. If every valuation is a model for $\varphi$ then we say $\varphi$ is \emph{valid}. We denote the set of valid formulas with \emph{CPC}.
+\todo{What does CPC stand for? Introduce abbreviation somewhere like classical predicate ... (CPC).}
 \end{definition}
 
 One notable property of classical logic is that a formula $\varphi$ is valid if and only if its negation $\neg\varphi := \varphi\to\bot$ is not satisfiable, i.e. there does not exist a model for it. The same does not hold true for intuitionistic logic as we shall see.
 
 \begin{definition}
-	A \emph{Kripke structure} $\mathcal K = (W, (v_w)_{w\in W})$ consists of a partially ordered set $W$ of nodes an a family of valuations $(v_w)_{w\in W}$ such that for $u\leq w$ we have $v_u(A)\leq v_u(A)$ for every propositional variable $A$, this is called the \emph{persistency condition}. The model relation between the $v_u$ and formulas $\varphi$ is defined as before, except in the case of implications, i.e. have
+\todo{We later also use the notion `Kripke frame', we  might introduce it here.}
+\todo{Note that I have replaced `nodes' by `worlds' here.}
+A \emph{Kripke structure} $\mathcal K = (W, (v_w)_{w\in W})$ consists of a partially ordered set $W$ of \emph{worlds} and a family of valuations $(v_w)_{w\in W}$ such that $v_u(A)\leq v_u(A)$ for all $u\leq w$ and propositional variables $A$ (this is called the \emph{persistency condition}).
+The model relation between the $v_u$ and formulas $\varphi$ is defined as before, except in the case of implications, where we set
 	\begin{itemize}
 		\item $v_u\models\varphi\to \psi$ if for all $w\geq u$ we have $w\not\models\varphi$ or $u\models\psi$.
 	\end{itemize}
-	We say that $\varphi$ is satisfied at a node $u$ if $v_u\models\varphi$ and write $u\models\varphi$. If a formula is satisfied at every node then $\mathcal K$ is a \textbf{model} for $\varphi$. A formula is valid if every Kripke structure is a model of it. We denote the set of valid formulas with IPC.
+We say that $\varphi$ is satisfied at a world $u$ if $v_u\models\varphi$ and write $u\models\varphi$. If a formula is satisfied at every world then $\mathcal K$ is a \emph{model} for $\varphi$. A formula is valid if every Kripke structure is a model of it. We denote the set of valid formulas with IPC.
+\todo{introduce abbreviation}
 \end{definition}
-There are many classical tautologies which are not intuitionistically valid
+There are many classical tautologies which are not intuitionistically valid:
 \begin{example}\label{LEMcounterexample}
-	Consider the famous law of excluded middle $A\vee\neg A$. Recall that $\neg A := A\to \bot$. As a counter-model consider a Kripke structure with two nodes $u\leq w$ and $v_u(A) = 0, v_w(A) = 1$. Then $u\not\models A$ and $u\not\models \neg A$, i.e. $u\not\models A\vee\neg A$. 
+Consider the famous law of excluded middle $A\vee\neg A$. Recall that $\neg A := A\to \bot$. As a counter-model consider a Kripke structure with two nodes $u\leq w$ and $v_u(A) = 0, v_w(A) = 1$. Then $u\not\models A$ and $u\not\models \neg A$, i.e. $u\not\models A\vee\neg A$.
 \end{example}
-In classical logic a proven strategy for showing that a formula valid is to consider its negation and show that it is not satisfiable. This is insufficient for intuitionistic logic, e.g. $A\vee\neg A$ is not a intuitionistic tautology but its negation is not satisfiable either.
-
-
+In classical logic a proven strategy for showing that a formula valid is to consider its negation and show that it is not satisfiable. This is insufficient for intuitionistic logic, e.g. $A\vee\neg A$ is not an intuitionistic tautology but its negation is not satisfiable either.
 
 \subsection{Predicate Semantics}
 
-We now give account of the more involved semantics of first-order logic
+We now recall the semantics of first-order logic:
 
 \begin{definition}
-	Let $\Sigma$ be a signature. A $\Sigma$-structure $\mathcal{M}$ consists of a non-empty set $M$, the domain of $\mathcal{M}$, and a function $I$ that assigns
+Let $\Sigma$ be a signature. A $\Sigma$-structure $\mathcal{M}$ consists of a non-empty set $M$, the \emph{domain} of $\mathcal{M}$, and an \emph{interpretation} $I$ that assigns
 	\begin{itemize}
 		\item to each $n$-ary function symbol $f$ a $n$-ary function $f^I: M^n\to M$.
 		\item to each $n$-ary relation symbol $R$ a $n$-ary relation $R^I\subseteq M^n$.
@@ -257,6 +262,7 @@ In addition to the propositional tautologies there are now sentences involving q
 Consider for instance the classical tautology $\varphi$ $$\neg\forall x A(x)\to \exists x \neg A(x)$$Analogous remarks with regard to validity and satisfiability hold as in the propositional case.
 
 \subsection{Skolemization and Herbrandization}
+
 An important step in the embedding will be the elimination of quantifiers via Herbrandization. In this process we introduce free variables and also additional function symbols to the signature. Whenever we speak of a new free variable what is meant is a free variable that does not occur in any of the considered formulas. Whenever a new function symbol is introduced we implicitly extend the signature by some not previously contained symbol.
 
 \begin{definition}
@@ -271,15 +277,16 @@ An important step in the embedding will be the elimination of quantifiers via He
 	Let $\varphi^S = (\exists x_1\dots\exists x_n \varphi[x_1/a_1\dots x_n/a_n])^S_\emptyset$ and $\varphi^H = (\forall x_1\dots\forall x_n \varphi[x_1/a_1\dots x_n/a_n])^H_\emptyset$ where $a_1,\dots,a_n$ are the free variables occurring in $\varphi$.
 \end{definition}
 
-\begin{theorem}For every formula $\varphi$
+\begin{theorem}
+\label{thm:herbrand-skolem}
+For every formula $\varphi$
 	\begin{itemize}
 		\item $\varphi$ and $\varphi^S$ are classically equisatisfiable.
 		\item $\varphi$ and $\varphi^H$ are classically equivalid.
 	\end{itemize}
 \end{theorem}
 
-which follows from Lemmata~\ref{ap1} and~\ref{ap2} in the appendix. We are now ready to present our embedding of intuitionistic into classical logic.
-
+Theorem~\ref{thm:herbrand-skolem} follows from Lemmata~\ref{ap1} and~\ref{ap2} in the appendix. 
 
 
 \section{IPC to CQC}
@@ -618,7 +625,7 @@ Note that the last set of existentially quantified variables is superfluous beca
 
 \section{CQC to IQC}
 
-We now give an analogous transformation for first order logic. However our trick of lifting the sentence to first-order logic to encode the Kripke semantics no longer works in such a straightforward manner, since we already are in first-order logic. However we do it nonetheless! The domain of our classical model will feature on the one hand elements representing worlds in a Kripke frame and on the other hand the domain-elements from the Kripke model. We reconcile these notions by introducing a special binary predicate $E$, first considered in~\cite{baaz2006skolemization} and expanded onto in~\cite{iemhoff2010eskolemization}, where $E(x, u)$ encodes that $x$ is an element of the domain of the world $u$. We fix some signature $\Sigma$ for this section. To encode that some $n$-ary relation $A$ holds at a world $u$ we replace each $n$-ary relation symbol $A$ with a $n+1$-ary relation symbol $A^\#$, interpreting $A^\#(\vec x, u)$ as "$A(\vec x)$ holds at u". Furthermore we write $\vec E(\vec x, u)$ for $\bigwedge\{E(x_i, u)\:|\:x_i\in \vec x\}$. 
+We now give an analogous transformation for first order logic. However our trick of lifting the sentence to first-order logic to encode the Kripke semantics no longer works in such a straightforward manner, since we already are in first-order logic. However we do it nonetheless! The domain of our classical model will feature on the one hand elements representing worlds in a Kripke frame and on the other hand the domain-elements from the Kripke model. We reconcile these notions by introducing a special binary predicate $E$, first considered in~\cite{baaz2006skolemization} and expanded onto in~\cite{iemhoff2010eskolemization}, where $E(x, u)$ encodes that $x$ is an element of the domain of the world $u$. We fix some signature $\Sigma$ for this section. To encode that some $n$-ary relation $A$ holds at a world $u$ we replace each $n$-ary relation symbol $A$ with a $n+1$-ary relation symbol $A^\#$, interpreting $A^\#(\vec x, u)$ as "$A(\vec x)$ holds at u". Furthermore we write $\vec E(\vec x, u)$ for $\bigwedge\{E(x_i, u)\:|\:x_i\in \vec x\}$.
 
 First of all recall that due to Lemma~\ref{equivalid} it is sufficient to consider sentences of the form $\bigwedge\mathcal S\to P$ where all formulas in $\mathcal S$ are of one of the forms
 
@@ -798,7 +805,7 @@ However Part 2 of this Lemma does not hold for $\psi\in\mathcal F_\forall$, beca
 Even if we don't have the nice finiteness of the propositional case we have still reduced the model complexity in that we know that considering worlds of the form $$f_{\psi_1}(\vec t_1, f_{\psi_2}(\vec t_2, \dots f_{\psi_n}(\vec t_n, s)\dots))$$ is sufficient. In particular this allows us to completely eliminate $\preceq$ from the formula, that is we remove the PO-encoding from $K(\varphi)$ and replace $\forall u\forall w\forall x((E(x, u)\wedge u\preceq w)\to E(x, w))$ with $\bigwedge\{\forall \vec z\forall u(E(x, u)\to E(x, f_\psi(\vec z, u)))\:|\:\psi\in\mathcal F_\to\}$ and analogously for persistency to obtain $K$. Define
 
 $$\varphi^{\#} = K\to \bigwedge S^\#\to P^\#$$
-then we have 
+then we have
 \begin{theorem}
 	$\varphi$ is intuitionistically valid iff $\varphi^\#$ is classically valid.
 \end{theorem}
