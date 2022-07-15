@@ -883,11 +883,20 @@ However Lemma~\ref{thm:fo-countermodel-reduction} still enables us to add some a
 
 \section{Conclusion}
 
-We have presented a complete embedding of intuitionistic into classical logic. The transformation saw an exponential blow-up parametrized by $|\mathcal F_\to|$ in the propositional case and a complexity increase reflected by arity-increase of all relations and introduction of new function symbols in the predicate case. A key motivation for our work is the possibility of leveraging classical provers for showing intuitionistic validity. The practical feasibility of our translation is yet to be tested. In particular in the first-order case it is difficult to estimate how the increased complexity of the output formula impacts proof search. Initial tests show promise but we plan on conducting a more thorough evaluation. A key factor that is not yet clear is how large the parameters $|\mathcal F_\to|$ in the propositional case and $|\mathcal F|$ in the predicate case respectively are in practice.
+We have presented embeddings of intuitionistic into classical logic for the propositional and the predicate case.
+The transformation saw an exponential blow-up parameterized by $|\mathcal F_\to|$ in the propositional case and a complexity increase reflected by an arity-increase of one for all relations and the introduction of new function symbols in the predicate case.
+A key motivation for our work is the potential of leveraging classical provers for showing intuitionistic validity.
+%The practical feasibility of our translation is yet to be tested. 
+%In particular in the first-order case it is difficult to estimate how the increased complexity of the output formula impacts proof search.
+Initial tests show promise but we plan on conducting a more thorough evaluation. 
+A key factor yet to be determined is how large the parameters $|\mathcal F_\to|$ in the propositional case and $|\mathcal F|$ in the predicate case are in practice.
 
-The complexity increase fell directly out of our very straightforward construction. We plan to establish better bounds in future work by more intelligently utilizing structural properties of the formula, in particular by using that certain atoms are independent from each other it is possible to construct a smaller counter-example $\mathcal M_T$ in many cases. Besides improving the practical feasibility of our approach we hope that this will allow us to also give a new translation from QBF to IPC respecting complexity considerations and shine more light on the link between intuitionistic logic and the polynomial hierarchy.
+The above mentioned complexity considerations are direct consequences of our straightforward constructions.
+We plan to establish better bounds in future work by utilizing structural properties of the input formula, in particular by constructing smaller counter-examples $\mathcal M_T$ in case certain atoms are independent from each other.
+On the theoretical side, we also hope to give a new translation from QBF to IPC that improves our understanding of the relationship between intuitionistic propositional logic and the polynomial hierarchy.
 
-We hope that this work will provide a foundation for a new practical approach to automated reasoning for intuitionistic logic, a problem that has not seen much progress in recent times.
+%We hope that this work will provide a foundation for a new practical approach to automated reasoning for intuitionistic logic, a problem that has not seen much progress in recent times.
+\todo{can you add a few sentences on proof translations, which is an important goal because it allows program extraction using the curry-howard correspondence?}
 
 
 \bibliography{lipics-v2021-EIICL}
