@@ -182,22 +182,18 @@ A \emph{valuation} $v$ maps each propositional variable $A$ to a \emph{truth val
 		\item $v\models\varphi\vee\psi$ iff $v\models\varphi$ or $v\models\psi$.
 		\item $v\models\varphi\to \psi$ iff $v\not\models\varphi$ or $v\models\psi$.
 	\end{itemize}
-A valuation $v$ is a \emph{model} for $\varphi$ if $v\models\varphi$. If every valuation is a model for $\varphi$ then we say $\varphi$ is \emph{valid}. We denote the set of valid formulas with \emph{CPC}.
-\todo{What does CPC stand for? Introduce abbreviation somewhere like classical predicate ... (CPC).}
+A valuation $v$ is a \emph{model} for $\varphi$ if $v\models\varphi$. If every valuation is a model for $\varphi$ then we say $\varphi$ is \emph{valid}. We denote the set of valid formulas with \emph{CPC} (Classical Propositional Calculus).
 \end{definition}
 
 One notable property of classical logic is that a formula $\varphi$ is valid if and only if its negation $\neg\varphi := \varphi\to\bot$ is not satisfiable, i.e. there does not exist a model for it. The same does not hold true for intuitionistic logic as we shall see.
 
 \begin{definition}
-\todo{We later also use the notion `Kripke frame', we  might introduce it here.}
-\todo{Note that I have replaced `nodes' by `worlds' here.}
 A \emph{Kripke structure} $\mathcal K = (W, (v_w)_{w\in W})$ consists of a partially ordered set $W$ of \emph{worlds} and a family of valuations $(v_w)_{w\in W}$ such that $v_u(A)\leq v_u(A)$ for all $u\leq w$ and propositional variables $A$ (this is called the \emph{persistency condition}).
 The model relation between the $v_u$ and formulas $\varphi$ is defined as before, except in the case of implications, where we set
 	\begin{itemize}
 		\item $v_u\models\varphi\to \psi$ if for all $w\geq u$ we have $w\not\models\varphi$ or $u\models\psi$.
 	\end{itemize}
-We say that $\varphi$ is satisfied at a world $u$ if $v_u\models\varphi$ and write $u\models\varphi$. If a formula is satisfied at every world then $\mathcal K$ is a \emph{model} for $\varphi$. A formula is valid if every Kripke structure is a model of it. We denote the set of valid formulas with IPC.
-\todo{introduce abbreviation}
+We say that $\varphi$ is satisfied at a world $u$ if $v_u\models\varphi$ and write $u\models\varphi$. If a formula is satisfied at every world then $\mathcal K$ is a \emph{model} for $\varphi$. A formula is valid if every Kripke structure is a model of it. We denote the set of valid formulas with \emph{IPC} (Intuitionistic Propositional Calculus).
 \end{definition}
 There are many classical tautologies which are not intuitionistically valid:
 \begin{example}\label{LEMcounterexample}
@@ -235,11 +231,11 @@ Let $\Sigma$ be a signature. A $\Sigma$-structure $\mathcal{M}$ consists of a no
 		\item $\mathcal M, v\models\exists x\varphi$ iff there exists $m\in M$ such that $\mathcal M, v[m/a]\models\varphi[a/x]$ where a is a free variable that does not occur in $\varphi$.
 		\item $\mathcal M, v\models\forall x\varphi$ iff for all $m\in M$ we have $\mathcal M, v[m/a]\models\varphi[a/x]$ where a is a free variable that does not occur in $\varphi$.
 	\end{itemize}
-	$\mathcal{M}$ satisfies $\varphi$ if $\mathcal M, v\models\varphi$ for every $v$. We denote the set of valid formulas with CQC.
+	$\mathcal{M}$ satisfies $\varphi$ if $\mathcal M, v\models\varphi$ for every $v$. A formula is valid if every $\Sigma$-structure satisfies it. We denote the set of valid formulas with \emph{CQC} (Classical Quantified Calculus).
 \end{definition}
 
 \begin{definition}
-	A $\Sigma$-\emph{Kripke structure} $\mathcal{K}$ is a partially ordered set $W$ and a family of $\Sigma$-structures $(\mathcal{M}_w)_{w\in W}$ such that for $u\leq w$
+	A $\Sigma$-\emph{Kripke structure} $\mathcal{K}$ is a partially ordered set $W$, its (Kripke) \emph{Frame}, and a family of $\Sigma$-structures $(\mathcal{M}_w)_{w\in W}$ such that for $u\leq w$
 	\begin{itemize}
 		\item $M_u\subseteq M_w$.
 		\item $f^{I_w}|_{M_u} = f^{I_u}$.\footnote{Here $f|_M$ denotes the restriction of $f$ to $M$}
@@ -248,7 +244,7 @@ Let $\Sigma$ be a signature. A $\Sigma$-structure $\mathcal{M}$ consists of a no
 	Then we define a model relation between worlds $u\in W$ and variable assignments $v$ (targeting $M_u$) and formulas $\varphi$ as follows:
 	\begin{itemize}
 		\item $u, v\not\models\bot$
-		\item $u, v\models R(t_1,\dots,t_n)$ iff $(t_1^{I_u, v},\dots,t_n^{I_u, v})\in R^{I_u}$.
+		\item $u, v\models R(t_1,\dots,t_n)$ iff $\mathcal M_u, v\models R(t_1,\dots,t_n)$.
 		\item $u, v\models s = t$ iff $s^{I_u, v} = t^{I_u, v}$.
 		\item $u, v\models \varphi\wedge \psi$ iff $u, v\models\varphi$ and $u, v\models\psi$.
 		\item $u, v\models \varphi\vee\psi$ iff $u, v\models\varphi$ or $u, v\models\psi$.
@@ -256,7 +252,7 @@ Let $\Sigma$ be a signature. A $\Sigma$-structure $\mathcal{M}$ consists of a no
 		\item $u, v\models\exists x\varphi$ iff there exists $m\in M_u$ such that $u, v[m/a]\models\varphi[a/x]$ where a is a free variable that does not occur in $\varphi$.
 		\item $u, v\models\forall x\varphi$ iff for every $w\geq u$ and $m\in M_w$ we have $w, v[m/a]\models\varphi[a/x]$ where a is a free variable that does not occur in $\varphi$.
 	\end{itemize}
-	$\mathcal{K}$ satisfies $\varphi$ if $u, v\models\varphi$ holds for every world $u$ and variable assignment $v$. We denote the set of valid formulas with IQC.
+	$\mathcal{K}$ satisfies $\varphi$ if $u, v\models\varphi$ holds for every world $u$ and variable assignment $v$. A formula is valid if it is satisfied in eveery $\Sigma$-Kripke structure, it is valid for some Frame (write $W\models\varphi$) if it is satisfied in every Krike structure with that Frame. We denote the set of valid formulas with \emph{IQC} (Intuitionistic Quantified Calculus).
 \end{definition}
 In addition to the propositional tautologies there are now sentences involving quantifiers which are classically valid but not intuitionistically, e.g., $\neg\forall x A(x)\to \exists x \neg A(x)$.
 Analogous remarks with regard to validity and satisfiability hold as in the propositional case.
@@ -336,8 +332,7 @@ and indeed $\varphi^{C}$ admits a counter model with domain $\{u, u'\}$ where $u
 
 \section{Equivalid normalization}
 
-Of course transforming a propositional formula into a predicate formula is somewhat unsatisfying. As a first step we want to apply Herbrandization. Now trying to apply it to arbitrary formulas presents us with quite a leap in complexity, leading to nested expressions that will make arguments more complicated. We therefore propose a Tseytin-like transformation that produces a formula of a more manageable syntactic form. A similar translation was proposed in~\cite{statman1979intuitionistic}.
-\todo{what has been done in the previous work? just the propositional case? just classical logic? did you find a citation for the full Tseytin-like transformation somewhere? If this is new we might add it to the intro.}
+Of course transforming a propositional formula into a predicate formula is somewhat unsatisfying. As a first step towards obtaining a propositional formula we want to apply Herbrandization. Now trying to apply it to arbitrary formulas presents us with quite a leap in complexity, leading to nested expressions that will make arguments more complicated. We therefore propose a Tseytin-like transformation that produces a formula of a more manageable syntactic form. In fact our translation is often given as a first step in the Tseytin transformation after which the individual formulas are then converted to CNF, so it is well known, but we are not aware of work that uses just this step as a stand-alone. A similar translation for intuitionistic logic was also proposed in~\cite{statman1979intuitionistic}.
 
 \begin{definition}
 	Let $\varphi$ be some formula. For each sub(semi)formula $\psi$ of $\varphi$ consider some new $n$-ary relation symbol $P_\psi$ where $n$ is the number of variables occurring in $\psi$ that is not quantified within $\psi$. We denote those variables with $\vec z_\psi$ in some arbitrary but fixed order. We inductively define clause sets $\mathcal S^+(\varphi)$ and $\mathcal S^-(\varphi)$ as follows:
@@ -398,8 +393,7 @@ The above definitions are motivated by the following results which follow direct
 	$$\mathcal M\models \varphi\text{ iff }S(\mathcal M, \varphi)\models P_\varphi$$
 \end{lemma}
 
-Then from the previous three Lemmas we get
-\todo{as a general rule, I like to finish sentences with a proper grammatical ending, here `:'}
+Then from the previous three Lemmas we get:
 
 \begin{corollary}\label{equivalid}
 	In both intuitionistic and classical logic
@@ -411,8 +405,7 @@ Then from the previous three Lemmas we get
 
 \section{IPC to simplified CQC}
 
-We are now ready to put these two reduction together with our embedding f. Let $\varphi$ be some propositional formula. As a first step we perform the normalization from the last section, i.e. instead of $\varphi$ we consider $$\varphi' = \bigwedge \mathcal S^-(\varphi)\to P_\varphi$$
-\todo{here the previous sentence did not finish with a proper grammatical ending as well, I would add `.' after $P_\varphi$}
+We are now ready to put these two reduction together with our embedding f. Let $\varphi$ be some propositional formula. As a first step we perform the normalization from the last section, i.e. instead of $\varphi$ we consider $$\varphi' = \bigwedge \mathcal S^-(\varphi)\to P_\varphi.$$
 
 Recall that since $\varphi$ is quantifier-free each formula $\psi\in\mathcal S^-(\varphi)$ is of one of the forms
 $$A\to (B\wedge C), (A\wedge B)\to C, A\to (B\vee C), (A\vee B)\to C, (A\to B)\to C,$$
@@ -437,9 +430,6 @@ $$\forall k(A(k)\to (B(k)\wedge C(k))), \forall k((A(k)\wedge B(k))\to C(k))$$
 $$\forall k(A(k)\to (B(k)\vee C(k))), \forall k((A(k)\vee B_\psi(k))\to C(k))$$
 $$\forall k((A(f_\psi(k))\to B(f_\psi(k)))\to C(k))$$
 and $\mathcal F_\to$ denotes the set of formulas of the last kind.
-
-This is as far as the first-order encoding can be simplified. What remains is the elimination of the remaining weak $\forall$-quantifiers.
-\todo{delete the last two sentences?}
 
 \section{IPC to CPC}
 
@@ -471,7 +461,6 @@ We say $\psi\in\mathcal F_\to$ is \emph{fulfilled} at $u\in M$ iff $A_\psi^I(u)\
 \end{lemma}
 
 \begin{proof}
-\todo{I corrected the proof, please check again.}
 
 	1. If $C^I(u)$ is true then we are done due to persistency. Otherwise $C^I(u)$ is false.
 Because $(A^I(f_\psi^I(u))\to B^I(f_\psi^I(u)))\to C^I(u)$ holds, then $A^I(f_\psi^I(u))\to B^I(f_\psi^I(u))$ must be false.
@@ -481,18 +470,21 @@ Because $(A^I(f_\psi^I(u))\to B^I(f_\psi^I(u)))\to C^I(u)$ holds, then $A^I(f_\p
 If $C^I(w)$ is true, we are done. 
 Otherwise $C^I(w)$ is false.
 Due to persistency $C^I(u)$ is also false.
-Because $(A^I(f_\psi^I(u))\to B^I(f_\psi^I(u)))\to C^I(u)$ holds, then $A^I(f_\psi^I(u))\to B^I(f_\psi^I(u))$ must be false, i.e. $A^I(u)$ is true and $B^I(u)$ is false. Then $A^I(w)$ and $A^I(f^I_\psi(w))$ is also true due to persistency.
+Because $\psi$ is fulfilled at $u$, $A^I(u)\to B^I(u)$ must be false, i.e. $A^I(u)$ is true and $B^I(u)$ is false. Then $A^I(w)$ and $A^I(f^I_\psi(w))$ are also true due to persistency.
 Because $(A^I(f^I_\psi(w))\to B^I(f^I_\psi(w)))\to C^I(w)$ holds, we now get that  $B^I(f^I(w))$ must be false.
 But then due to persistency so is $B^I(w)$ and we have that $\psi$ is fulfilled at $w$.
 \end{proof}
 
-Essentially what fulfilment of $\psi$ at $u$ tells us is that having $f_\psi(w) = w$ for all $w\geq u$ works.
-\todo{what is meant by `having $f_\psi(w) = w$ for all $w\geq u$ works`'? Reformulate the sentence.}
+Essentially what this tells us is that for every $u$ at which $\psi$ is fulfilled, in particular each $u$ in the image of $f_\psi$, we may add the assumption that $f_\psi(w) = w$ for all $w\geq u$ without changing the validity of $\psi$.
 With this lemma in hand showing that $(M_T, I_T)$ is a counter-model to $\varphi^\circ$ is a straightforward check of definitions.
 
 \begin{corollary}
 	If $\mathcal M$ is a counter-model to $\varphi^\circ$ then so is $\mathcal M_T$.
 \end{corollary}
+
+\begin{remark}
+	It is well known that Kripke Frames which are trees are complete with regard to intuitionistic logic. Our contribution is giving an explicit geometry that depends only on the structure of the considered formula.
+\end{remark}
 
 \begin{example}
 	Consider
@@ -511,7 +503,7 @@ With this lemma in hand showing that $(M_T, I_T)$ is a counter-model to $\varphi
 %	
 There is a corresponding classical counter-model $\mathcal M = (M, I)$ to $\varphi^\circ$ with $M = \{u, u_l, u_r\}$, $A^{I}(l) = D^I(l) = B^I(r) = C^I(r) = 1$ and $0$ else.
 %
-Denoting $\psi_1 := (A\to B)\to C$ and $\psi_2 := (A\to B)\to C$ \todo{I guess this should be $\psi_2 := (B\to A)\to D$}, this corresponds to a transformed counter-model $\mathcal M_T = (M_T, I_T)$ of $\varphi^\circ$ with $M_T = \{\epsilon, \psi_1, \psi_2, \psi_1\psi_2, \psi_2\psi_1\}$ and interpretation as presented below:
+Denoting $\psi_1 := (A\to B)\to C$ and $\psi_2 := (A\to B)\to D$, this corresponds to a transformed counter-model $\mathcal M_T = (M_T, I_T)$ of $\varphi^\circ$ with $M_T = \{\epsilon, \psi_1, \psi_2, \psi_1\psi_2, \psi_2\psi_1\}$ and interpretation as presented below:
 	\begin{center}
 		\begin{tikzpicture}[squarednode/.style={rectangle, draw, very thick, minimum size=5mm}]
 			\node (center) {};
@@ -540,9 +532,7 @@ So we know that $\varphi^\circ$ is valid iff it is valid for structures that hav
 \begin{definition}
 	Suppose $\mathcal S$ is a set of formulas $\psi$ of the form
 	$$A\to (B\wedge C), (A\wedge B)\to C, A\to (B\vee C),(A\vee B)\to C, (A\to B)\to C$$
-	Let $\mathcal F_\to$ be the set of formulas of the form $(A\to B)\to C$ and $\Lambda$ the set of sequences without repetition over $\mathcal F_\to$. For each atom $A$ occurring in $\mathcal S$ and $k\in \mathcal F_\to$, consider a new atom $A^{k}$, which will correspond to $A^{I_F}(k)$ from the previous definition.
-\todo{$A^{I_F}(k)$ does not exist anymore. I guess it is from a previous version?}
-\todo{As a general rule, I would remove explanations from definitions, and do remarks after the definition}
+	Let $\mathcal F_\to$ be the set of formulas of the form $(A\to B)\to C$ and $\Lambda$ the set of sequences without repetition over $\mathcal F_\to$. For each atom $A$ occurring in $\mathcal S$ and $k\in \mathcal F_\to$, consider a new atom $A^{k}$.
 Obtain $\mathcal S^\#$ by including the formulas
 	\begin{itemize}
 		\item $A^k\to A^{k\psi}$ for each $A$ occurring in $\mathcal S$, $k\in\Lambda$ and $\psi\in\mathcal F_\to$ not occurring in $k$.
@@ -553,7 +543,7 @@ Obtain $\mathcal S^\#$ by including the formulas
 \end{definition}
 
 \begin{theorem}
-	$$\mathcal S\models_C P\text{ iff }\mathcal S^\#\models_I P^\emptyset$$
+	$\bigwedge\mathcal S\to P$ is intuitionistically valid iff $\bigwedge\mathcal S^\#\to P^\emptyset$ is classically valid.
 \end{theorem}
 
 \begin{example}
@@ -592,10 +582,10 @@ and denote with $\mathcal F_\to$ the set of formulas of the form $(A\to B)\to C$
 	for leafs and $$\varphi^Q = \varphi_0^Q = \exists \vec X^0\forall \vec F^0\left(\neg P^0\wedge \text{\normalfont Sat}_{\mathcal S}(0)\wedge(\text{\normalfont Valid}(0)\to \varphi_1^Q)\right)$$for the root.
 	Example encodings of the above formulas would be
 	\begin{align*}
-		\text{\normalfont Valid}(n) = &\left(\bigvee \{\mathcal F^n_\psi\:|\:\psi\in\mathcal F_\to\}\right)\wedge\left(\bigwedge \{\neg(F^n_{\psi_1}\wedge F^n_{\psi_1})\:|\:\psi_1\neq\psi_2\in\mathcal F_\to\}\right)\wedge\\&\wedge\left(\bigwedge\left\{\bigwedge\{F^i_\psi\to\neg F^n_\psi\:|\:i < n\}\:|\:\psi\in\mathcal F_\to\right\}\right)\\
+		\text{\normalfont Valid}(n) = &\left(\bigvee \{\mathcal F^n_\psi\:|\:\psi\in\mathcal F_\to\}\right)\wedge\left(\bigwedge \{\neg(F^n_{\psi_1}\wedge F^n_{\psi_1})\:|\:\psi_1\neq\psi_2\in\mathcal F_\to\}\right)\wedge\\&\left(\bigwedge\left\{\bigwedge\{F^i_\psi\to\neg F^n_\psi\:|\:i < n\}\:|\:\psi\in\mathcal F_\to\right\}\right)\\
 		\text{\normalfont Persistent}(n) = & \bigwedge\{X^{n-1}\to X^n\:|\: X \text{ prop. variable with }X^{n-1}\in\vec X^{n-1}, X^n \in\vec X^{n}\}\\
 		\text{\normalfont Sat}_{\mathcal S}(n) = &\bigwedge\left\{(A^n\circ B^n)\to C^n\:|\:(A\circ B)\to C\in \mathcal S\setminus\mathcal F_\to\right\}\wedge\\
-		&\bigwedge\left\{A^n\to (B^n\circ C^n)\:|\:A\to (B\to C)\in \mathcal S\setminus\mathcal F_\to\right\}\\
+		&\bigwedge\left\{A^n\to (B^n\circ C^n)\:|\:A\to (B\circ C)\in \mathcal S\setminus\mathcal F_\to\right\}\\
 		\text{\normalfont Sat}_{\mathcal F_\to}(n) = & \bigwedge\{F^{n-1}_\psi\to (A^n\to B^n)\to C^{n-1}\:|\:\psi = (A\to B)\to C\in\mathcal F_\to\}
 	\end{align*}
 \end{definition}
@@ -615,7 +605,7 @@ and denote with $\mathcal F_\to$ the set of formulas of the form $(A\to B)\to C$
 \begin{proof}
 \todo{The proof contains some old notation at several places.}
 \todo{Also the proof could be beautified a bit.}
-Suppose $\varphi$ is not intuitionistically valid, i.e. there exists a counter-model $\mathcal M$ for $\mathcal S^\#\to P^\epsilon$.
+Suppose $\varphi$ is not intuitionistically valid, i.e. there exists a classical counter-model $\mathcal M$ for $\bigwedge\mathcal S^\#\to P^\epsilon$.
 For each atom $A$ interpret $A^0$ such as $\mathcal M$ interprets $A^\epsilon$. Suppose we are given interpretations of all atoms $A^i$ for $i < n$ and a sequence with no repetitions $\psi_1\dots\psi_{n-1}$ over $\mathcal F_\to$ such that $\psi_i$ is exactly the $\psi\in\mathcal F_\to$ for which $F_{\psi}^i$ is true and $A^i$ is interpreted as $A^{\psi_1\dots\psi_i}$ is in $\mathcal M$.
 	
 	Let the $F^{n}_\psi$ be arbitrarily interpreted (since they are $\forall$-quantified). If not exactly one is interpreted as true then valid$(n)$ fails, i.e. have $\psi_n\in\mathcal F_\to$ the only element with $F^n_{\psi_n} = 1$. If $F^i_{\psi_n} = 1$ for some $i < n$ then valid$(n)$ also fails, so we may assume that $\psi_1\dots\psi_n$ is a sequence with no repetitions. Interpret the atoms $A^n$ as $\mathcal M$ interprets $A^{\psi_1\dots\psi_n}$. Continue this construction until $n  = |\mathcal F_\to|$. Then from $\mathcal M$ being a counter-example to $\mathcal S^\#\to P$ it directly follows that this interpretation satisfies $\varphi^Q$.
@@ -625,7 +615,6 @@ For each atom $A$ interpret $A^0$ such as $\mathcal M$ interprets $A^\epsilon$. 
 \end{proof}
 
 \begin{example}
-\todo{I think this example is a candidate for the appendix.}
 	Consider the formula $\varphi = (((A\to B)\to C)\wedge((B\to A)\to C))\to C$, which is a non-intuitionistic tautology. Its associated QBF is $$\varphi^Q = \exists A^0B^0C^0\forall F_{\psi_1}^1F_{\psi_2}^1 \exists A^1B^1C^1\forall F_{\psi_1}^2F_{\psi_2}^2 \exists A^2B^2C^2\psi'$$where $\psi_1 := (A\to B)\to C, \psi_2 = (B\to A)\to C$ and $$\psi' = \bigwedge\left\{\begin{matrix}
 		F^1_{\psi_1}\vee F^1_{\psi_2}, \neg(F^1_{\psi_1}\wedge F^1_{\psi_2}), F^2_{\psi_1}\vee F^2_{\psi_2},\neg(F^2_{\psi_1}\wedge F^2_{\psi_2}),\\F^1_{\psi_1}\to\neg F^2_{\psi_1},F^1_{\psi_2}\to\neg F^2_{\psi_2}, A^0\to A^1,A^1\to A^2,
 		\\B^0\to B^1, B^1\to B^2, C^0\to C^1, C^1\to C^2,\neg C^0, \\
@@ -641,13 +630,17 @@ For each atom $A$ interpret $A^0$ such as $\mathcal M$ interprets $A^\epsilon$. 
 	\end{itemize}
 \end{example}	
 
-Note that the last set of existentially\todo{universally?} quantified variables can be avoided because there is only one assignment that has the chance to falsify $\varphi^Q$, namely the assignment that assigns $1$ to the single $F_\psi^n$ such that $F_\psi^i = 0$ for all $i < n$. Hence, in our final formula we can replace every $F_\psi^n$ with $\bigwedge\{\neg F_\psi^i\:|\:i < n\}$ and remove that quantification over $F_\psi^n$. With that we get the following:
+A simple counting argument shows that for each $n < |\mathcal F_\to|$ we have $|\text{Valid}(n)|\in \mathcal O(|\mathcal F_\to|^2)$, $|\text{Persistent}(n)|, |\text{Sat}_{\mathcal S}(n)|\in \mathcal O(|\varphi|)$ and $|\text{Sat}_{\mathcal F_\to}(n)|\in \mathcal O(|\mathcal F_\to|)$ so overall we get
+\begin{lemma}
+	The size of $\varphi^Q$ is in $\mathcal O(|\varphi|\cdot|\mathcal F_\to| + |\mathcal F_\to|^3)$.
+\end{lemma}
+
+Note that the last set of universally quantified variables can be avoided because there is only one assignment that has the chance to falsify $\varphi^Q$, namely the assignment that assigns $1$ to the single $F_\psi^n$ such that $F_\psi^i = 0$ for all $i < n$. Hence, in our final formula we can replace every $F_\psi^n$ with $\bigwedge\{\neg F_\psi^i\:|\:i < n\}$ and remove that quantification over $F_\psi^n$. With that we get the following:
 
 \begin{corollary}
 	Let $N$-\textbf{IntInvalid} be the problem of deciding if a formula $\bigwedge \mathcal S\to P$ as above with $|\mathcal F_\to|\leq N$ is not intuitionistically valid. Then $N$-\textbf{IntInvalid} is in $\Sigma_{2N-1}^P$. The dual problem $N$-\textbf{IntValid} is in $\Pi_{2N-1}^P$.
 \end{corollary}
 
-\todo{The size analysis of the QBF reduction should be stated in some theorem in this section}
 
 \section{CQC to IQC}
 
@@ -726,7 +719,7 @@ is classically valid where $s$ is a new constant symbol. This was obvious in the
 \begin{proof}
 	We proceed by translation of counter-examples. Suppose first we have a counter-example $\mathcal M = (M, I)$ to $\varphi^\circ$. As a Kripke frame $(W, \leq)$ take all $ W = \{m\in M\:|\:\text{ World}^I(m)\}$ let $\leq$ be $\preceq^I$ restricted to $W$. Then let $M_u = \{m\in M\:|\: E(m, u)\}$ and let $f^{I_u}$ be $f^I$ restricted to $M_u$ and $A^{I_u}(\vec x): \Leftrightarrow A^\#(\vec x, u)$. It is then a straightforward check of definitions that this defines a Kripke counter-model to $\varphi$.
 	
-	The other direction is a bit more involved. Suppose we have a Kripke counter-model to $\varphi$ with Frame \todo{frame? Also make sure frame is defined} $(W, \preceq)$ and family of $\Sigma$-structures $(M_w, I_w)_{w\in W}$. In particular since it is a counter-model there exists $w_0\in W$ with $w_0\not\models\varphi$. Let $W_0 = \{w\in W\:|\: w\geq w_0\}$ and define an equivalence relation $\sim$ on $\{(x, u)\:|\:u\in W_0, x\in M_u\}$ via $(x, u)\sim (y, w)$ iff $x = y$ and there exists $v\in W_0$ comparable with both $u, w$ such that $x\in v$ and denote the equivalence class of $(x, u)$ with $[x, u]$. Let $M = W_0\cup \{[x, u]\:|\:u\in W_0, x\in M_u\}$ and extend $\sim$ by having $[w] = \{w\}$ for $w\in W_0$ \todo{why is the later needed? I don't think it is used}. 
+	The other direction is a bit more involved. Suppose we have a Kripke counter-model to $\varphi$ with Frame $(W, \preceq)$ and family of $\Sigma$-structures $(M_w, I_w)_{w\in W}$. In particular since it is a counter-model there exists $w_0\in W$ with $w_0\not\models\varphi$. Let $W_0 = \{w\in W\:|\: w\geq w_0\}$ and define an equivalence relation $\sim$ on $\{(x, u)\:|\:u\in W_0, x\in M_u\}$ via $(x, u)\sim (y, w)$ iff $x = y$ and there exists $v\in W_0$ comparable with both $u, w$ such that $x\in v$ and denote the equivalence class of $(x, u)$ with $[x, u]$. Let $M = W_0\cup \{[x, u]\:|\:u\in W_0, x\in M_u\}$. 
 Now have
 	\begin{itemize}
 		\item $s^I = w_0$.
@@ -756,32 +749,39 @@ $$\forall \vec z\forall u(s\preceq u\to\vec E(\vec z, u)\to \forall w(u\preceq w
 $$\forall \vec z\forall u(\vec E(\vec z, u)\to (A^\#(\vec a, f_\psi(\vec z, u))\to B^\#(\vec b, f_\psi(\vec z, u)))\to C^\#(\vec c, u))$$ and
 $$\forall \vec z\forall u(s\preceq u\to\vec E(\vec z, u)\to \forall w(u\preceq w\to \forall x(E(x, w)\to A^\#(\vec a, w)))\to B^\#(\vec b, u))$$ with $$\forall \vec z\forall u(\vec E(\vec z, u)\to (\forall x(E(x, f_\psi(\vec z, u))\to A^\#(\vec a, f_\psi(\vec z, u))))\to B^\#(\vec b, u))$$
 and in each other formula in $\mathcal S^\circ$ removing the $s\preceq u$ to obtain $\mathcal S^\#$ from $\mathcal S^\circ$. Then the previous formulas are equivalid to
-$$\varphi^\circ= \forall u(s\preceq u)\to \bigwedge\{\forall \vec t\forall u(u\preceq f(\vec z, u))\:|\:\psi\in\mathcal F\}\to K(\varphi)\to\bigwedge\mathcal S^\#\to P^\#$$
-As in the previous section we can define a tree-counter model for this.
-\todo[inline]{Important: Why can't we have Theorem~\ref{thm:fo-reduction} directly, without Def.~\ref{def:fo-fulfilled} and Lemma~\ref{thm:fo-countermodel-reduction}? They don't seem to be needed.
-However, Lemma~\ref{thm:fo-countermodel-reduction} could still be used as in the propositional case to eliminate the function symbols for the implications at the cost of introducing additional predicates. 
-One could also add the idempotence as axioms in order to aid the solver. 
-We could mentioned that as a justification for Lemma~\ref{thm:fo-countermodel-reduction}.
-}
+$$\varphi^\circ= \forall u(s\preceq u)\to \bigwedge\{\forall \vec t\forall u(u\preceq f(\vec z, u))\:|\:\psi\in\mathcal F\}\to K(\varphi)\to\bigwedge\mathcal S^\#\to P^\#(s)$$
+As in the previous section we can define a tree counter-model for this.
+
+\begin{definition}
+	Suppose we are given a counter-model $\mathcal M = (M, I)$ for $\varphi^\circ$. Define $\mathcal M_T = (M_T, I_T)$ as follows:
+	\begin{itemize}
+		\item $M_T$ are the sequences on $\{(\vec z, \psi)\:|\:\psi\in \mathcal F, \vec z\in M^n\}$.
+		\item Interpret $\preceq$ as the prefix-order.
+		\item Have $$f_\psi^{I_T}(\vec z, (\vec z_1, \psi_1)\dots (\vec z_n, \psi_n)) = (\vec z_1, \psi_1)\dots (\vec z_n, \psi_n)(\vec z, \psi)$$
+		\item For propositional variables $P$ have $$P^{I_T}((\vec z_1, \psi_1)\dots (\vec z_n, \psi_n)) = P^I(f_{\psi_n}(\vec z_n, \dots(f_{\psi_1}(\vec z_1, s^I))\dots))$$
+	\end{itemize}
+\end{definition}
+
+\begin{lemma}
+	If $\mathcal M$ is a counter-model to $\varphi^\circ$ then so is $\mathcal M_T$.
+\end{lemma}
+
+Even if we don't have the nice finiteness of the propositional case we have still reduced the model complexity in that we know that considering worlds of the form $$f_{\psi_1}(\vec z_1, f_{\psi_2}(\vec z_2, \dots f_{\psi_n}(\vec z_n, s)\dots))$$ is sufficient. In particular this allows us to completely eliminate $\preceq$ from the formula, that is we remove the PartialOrder$(\preceq)$
+from $K(\varphi)$ and replace $\forall u\forall w\forall x((E(x, u)\wedge u\preceq w)\to E(x, w))$ with $\bigwedge\{\forall \vec z\forall u(E(x, u)\to E(x, f_\psi(\vec z, u)))\:|\:\psi\in\mathcal F_\to\}$ and analogously for persistency to obtain $K$. Define
+
+$$\varphi^{\#} = K\to \bigwedge S^\#\to P^\#$$
+then we have
+\begin{theorem}
+	\label{thm:fo-reduction}
+	$\varphi$ is intuitionistically valid iff $\varphi^\#$ is classically valid.
+\end{theorem}
+The complete translation is summarised in Theorem~\ref{fullFOtranslation}. Let us understand why a further reduction as in the propositional case is impossible.
+
 
 \begin{definition}
 \label{def:fo-fulfilled}
-\todo{this definition still uses variables $t$, please use a different letter}
-	Suppose we are given a counter-model $\mathcal M = (M, I)$ for $\varphi^\circ$. For $\psi = \forall\vec t\psi'\in\mathcal F_\to$ we say that is it \textit{fulfilled} at $u\in M$ with $\vec a\in M^n$ iff $(A_\psi^I(\vec t_A, u)\to B_\psi^I(\vec t_B, u))[\vec a/\vec t]$ is false or $C_\psi^I(\vec t_C, u)[\vec a/\vec t]$ is true.
-	For $\psi = \forall\vec t\psi'\in\mathcal F_\forall$ we say that it is \textit{fulfilled} at $u\in M$ with $\vec a\in M^n$ iff there is $a\in M_u$ such that $A^{I[a/x]}_\psi(\vec t_A)[\vec a/\vec t]$ is false or $B_\psi^I(\vec t_B)[\vec a/\vec t]$ is true. For $\psi\in\mathcal F$ define $$g_{\vec a, \psi} : M\to M, u\mapsto\begin{cases}
-		u, &\text{ if $\psi$ is fulfilled in $u$ with $\vec a$,}\\
-		f^I_\psi(\vec a, u), &\text{ else.}		
-	\end{cases}$$		
-	Define a $\mathcal M_T = (M_T, I_T)$ as follows:
-	\begin{itemize}
-		\item $M_T$ are the sequences on $\{ \vec t, \psi\:|\:\psi\in \mathcal F, \vec t\in M^n\}$ without repetition of elements $\vec t,\psi$ with $\psi\in\mathcal F_\to$ and without immediate repetition of elements $\vec t,\psi$ with $\psi\in\mathcal F_\forall$. \todo{do you mean sequences of pairs here? Then it is probably better to use brackets as in $(\vec t, \psi)$}
-		\item Interpret $\preceq$ as the prefix-order.
-		\item Have $$f_\psi^{I_T}(x_1\dots x_n) = \begin{cases}
-			x_1\dots x_n,&\text{if $x=x_n$,}\\
-			x_1\dots x_nx,&\text{else.}			
-		\end{cases}$$
-		\item For propositional variables $P$ have $$P^{I_T}(x_1\dots x_n) = P^I(g_{x_n}(\dots(g_{x_1}(s^I))\dots))$$
-	\end{itemize}
+	Suppose we are given a counter-model $\mathcal M = (M, I)$ for $\varphi^\circ$. For $\psi = \forall\vec z\psi'\in\mathcal F_\to$ we say that it is \textit{fulfilled} at $u\in M$ with $\vec m\in M^n$ iff $(A_\psi^I(\vec a, u)\to B_\psi^I(\vec b, u))[\vec m/\vec z]$ is false or $C_\psi^I(\vec c, u)[\vec m/\vec z]$ is true.
+	For $\psi = \forall\vec z\psi'\in\mathcal F_\forall$ we say that it is \textit{fulfilled} at $u\in M$ with $\vec m\in M^n$ iff there is $m\in M$ with $E^{I}(m, u)$ such that $A^{I[m/x]}_\psi(\vec a)[\vec m/\vec z]$ is false or $B_\psi^I(\vec b)[\vec m/\vec z]$ is true.
 \end{definition}
 
 \begin{lemma}
@@ -799,7 +799,7 @@ We could mentioned that as a justification for Lemma~\ref{thm:fo-countermodel-re
 	1. Let $\psi\in\mathcal F_\forall$. If $B^I_\psi(\vec b, u)[\vec a/\vec t]$ holds then we are done due to persistency. Otherwise there is $a$ with $E^I(a, f^I_\psi(\vec a, u))$ such that $A^{I[a/x]}_\psi(\vec t_A, f^I_\psi(\vec a, u))$ is false. So $\psi$ is fulfilled at $f^I_\psi(\vec a, u)$ with $\vec a$.
 \end{proof}
 
-However Part 2 of this Lemma does not hold for $\psi\in\mathcal F_\forall$, because even if for all $x$ with $E(x, v$) we have $A(x, v)$ there could be some term $t$ with $\neg E(t, v)$ and $w$ with $v\preceq w$ such that $E(t, w)$ and $\neg A(t, w)$. This is why we must consider sequences that have repetitions of such formulas:
+However Part 2 of this Lemma fails for $\psi\in\mathcal F_\forall$, because even if for all $x$ with $E(x, v$) we have $A(x, v)$ there could be some term $y$ with $\neg E(y, v)$ and $w$ with $v\preceq w$ such that $E(y, w)$ and $\neg A(y, w)$. This is why we must consider sequences that have repetitions:
 
 \begin{example}
 	Consider the $\varphi = \neg(\neg \forall xA(x)\vee\neg \forall xB(x))$. There is a counter-model
@@ -833,40 +833,7 @@ However Part 2 of this Lemma does not hold for $\psi\in\mathcal F_\forall$, beca
 	where at each node the elements that exist at it are indicated. For black ones both $A$ and $B$ hold, for red ones only $B$, for blue ones only $A$. Furthermore red arrows indicate $f_{\neg \forall xA(x)}$ and blue arrows $f_{\neg \forall xB(x)}$. Note that applying $f_{\neg \forall xA(x)}$ we must always reach the left column and $f_{\neg \forall xB(x)}$ we must always reach the right column. Therefore applying $f_{\neg \forall xA(x)}\circ f_{\neg \forall xB(x)}$ we can never remain stationary. This is in contrast to the propositional case.
 \end{example}
 
-
-\begin{corollary}
-	If $\mathcal M$ is a counter-model to $\varphi^\circ$ then so is $\mathcal M_T$.
-\end{corollary}
-
-Even if we don't have the nice finiteness of the propositional case we have still reduced the model complexity in that we know that considering worlds of the form $$f_{\psi_1}(\vec t_1, f_{\psi_2}(\vec t_2, \dots f_{\psi_n}(\vec t_n, s)\dots))$$ is sufficient. In particular this allows us to completely eliminate $\preceq$ from the formula, that is we remove the PO-encoding \todo{PO-encoding used for the first time, say PartialOrder?}
-from $K(\varphi)$ and replace $\forall u\forall w\forall x((E(x, u)\wedge u\preceq w)\to E(x, w))$ with $\bigwedge\{\forall \vec z\forall u(E(x, u)\to E(x, f_\psi(\vec z, u)))\:|\:\psi\in\mathcal F_\to\}$ and analogously for persistency to obtain $K$. Define
-
-$$\varphi^{\#} = K\to \bigwedge S^\#\to P^\#$$
-then we have
-\begin{theorem}
-\label{thm:fo-reduction}
-	$\varphi$ is intuitionistically valid iff $\varphi^\#$ is classically valid.
-\end{theorem}
-The complete translation is summarised in Theorem~\ref{fullFOtranslation}.
-
-\begin{example}
-	Consider the double negation shift (DNS)
-	$$\varphi = \forall x\neg\neg A(x)\to \neg\neg\forall x A(x)$$
-	which is a famous non-intuitionistic tautology. We get
-	\begin{align*}
-		\mathcal S = & \{(P_{\forall x\neg\neg A(x)}\to P_{\neg\neg\forall xA(x)})\to P_\varphi, P_{\forall x\neg\neg A(x)}\to \forall xP_{\neg\neg A(x)}(x)\}\cup\\
-		& \{\forall t((P_{\neg\neg A(x)}(t)\wedge P_{\neg A(x)}(t))\to \bot), \forall t((A(t)\to \bot)\to P_{\neg A(x)})(t)\}\cup\\
-		& \{(P_{\neg\forall xA(x)}\to \bot)\to P_{\neg\neg\forall xA(x)}, (P_{\neg\forall xA(x)}\wedge P_{\forall xA(x)})\to \bot\}\cup\\
-		&\{\forall xA(x)\to P_{\forall xA(x)}\}
-	\end{align*}
-	and thus, denoting $\psi_1 = (P_{\neg\forall xA(x)}\to \bot)\to P_{\neg\neg\forall xA(x)}$ and $\psi_2 = \forall xA(x)\to P_{\forall xA(x)}$, we have
-	\begin{align*}
-		\mathcal S^\# = & \{\forall u(P_{\forall x\neg\neg A(x)}(u)\to P_{\neg\neg\forall xA(x)}(u))\to P_\varphi(u)\}\cup\\& \{\forall u(P_{\forall x\neg\neg A(x)}(u)\to \forall xP_{\neg\neg A(x)}(x, u)\}\cup\\
-		& \{\forall t, u((P_{\neg\neg A(x)}(t, u)\wedge P_{\neg A(x)}(t, u))\to \bot)\}\\& \{\forall t, u((A(t, u)\to \bot)\to P_{\neg A(x)}(t, u))\}\cup\\
-		& \{\forall u((P_{\neg\forall xA(x)}(f_{\psi_1}(u))\to \bot)\to P_{\neg\neg\forall xA(x)}(u))\}\\& \{\forall u((P_{\neg\forall xA(x)}(u)\wedge P_{\forall xA(x)}(u))\to \bot)\}\cup\\
-		&\{\forall u(\forall xA(x, f_{\psi_2}(u))\to P_{\forall xA(x)}(u))\}
-	\end{align*}
-\end{example}
+However Lemma~\ref{thm:fo-countermodel-reduction} still enables us to add some additional axioms which could help guide proof search. In particular we may assume that $f_\psi(w) = w$ if $\exists u(w = f_\psi(u))$ for $\psi\in\mathcal F_\forall$, i.e. $f_\psi$ is idempotent, and  $f_\psi(w) = w$ if $\exists u(w \geq f_\psi(u))$ for each $\psi\in\mathcal F_\to$, which is even stronger than idempotence. How adding these properties as assumption helps with proof search has to be examined. We have left them out of our translation for now for the sake of simplicity.
 
 \section{Conclusion}
 
