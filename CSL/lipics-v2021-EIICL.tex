@@ -88,22 +88,45 @@ We hope that our embeddings of classical into intuitionistic logic will allow le
 
 \section{Introduction}
 
-Constructive mathematics refers to a flavour of mathematics in which existence of an object can only be established by explicit construction, as opposed to classical mathematics where existence can be shown implicitly, e.g. by assuming non-existence and deriving a contradiction. Besides the philosophical issues that one may take with classical mathematics, most prominently advocated by Brouwer~\cite{brouwer1907over} and Bishop~\cite{bishop1967foundations}, there is a particular motivation for studying constructive mathematics from the perspective of computer science in that intuitionistic proofs correspond directly to computer programs, which is expressed in the Curry-Howard-Isomorphism~\cite{howard1980formulae}. The formalism usually associated with constructive mathematics is intuitionistic logic, which essentially differentiates itself from classical logic by the fact that the law of excluded middle $A\vee\neg A$ and the double negation shift $\forall x\neg\neg P(x)\to\neg\neg\forall xP(x)$ are not valid.
 
-Comparing benchmarks for classical and intuitionistic automated theorem proving, e.g. TPTP~\cite{casc} and ILTP~\cite{iltp}, we see that classical provers currently have a far better success rate. Furthermore all the most popular first-order provers~\cite{kovacs2013first, schulz2002brainiac, korovin2008iprover} utilize classical logic. This difference can be partially explained by fundamental differences between the logics. First of all determining intuitionistic validity is computationally harder, i.e. in the propositional case intuitionistic validity is \verb+PSPACE+-complete~\cite{statman1979intuitionistic} whereas classical validity is \verb+coNP+-complete~\cite{cook1971complexity}. A further advantage of classical logic is the existence of calculi that are particularly suitable for automation like superposition~\cite{bachmair2001resolution} which rely on the existence of convenient normal forms such as CNF and the duality between validity and satisfiability, i.e. to show validity they show unsatisfiability of the negation. While some kind of normal form is of course be obtainable for intuitionistic logic, albeit more complex, crucially the duality does not hold, e.g. $\neg(A\vee \neg A)$ is not satisfiable while $A\vee\neg A$ is also not a theorem. Therefore most dedicated intuitionistic theorem provers~\cite{mclaughlin2009efficient, tammet1996resolution} use the naive inverse method, i.e. directly constructing a cut-free proof from the theorem by applying the inverse of rules from some proof calculus, enhanced by search strategies such as focussing and polarization. This approach generally leads to a much more complex search and is therefore difficult to implement efficiently. Finally in contrast to intuitionistic provers a tremendous amount of work has been put into optimizing provers for classical logic, this is particularly true for the propositional case, i.e. SAT-solvers.
+Constructive mathematics refers to a flavour of mathematics in which the existence of an object can only be established by explicit construction, as opposed to classical mathematics where existence can be shown implicitly, e.g. by assuming non-existence and deriving a contradiction.
+The formalism usually associated with constructive mathematics is intuitionistic logic, which essentially differentiates itself from classical logic by the fact that the law of excluded middle $A\vee\neg A$ and the double negation shift $\forall x\neg\neg P(x)\to\neg\neg\forall xP(x)$ are not valid.
+Besides philosophical considerations, most prominently advocated by Brouwer~\cite{brouwer1907over} and Bishop~\cite{bishop1967foundations}, there is a particular motivation for studying constructive mathematics from the perspective of computer science in that proofs in  intuitionistic logic directly correspond to computer programs --- as expressed in famous Curry-Howard correspondence~\cite{howard1980formulae}.
 
-With this work we want to open the path for leveraging the progress that has been made in classical theorem proving for intuitionistic logic. To that end we give an embedding from intuitionistic logic into classical logic. That is we give an effective procedure that gives for each formula $\varphi$ we a modified formula $\varphi^\#$ such that $\varphi$ is intuitionistically valid if and only if $\varphi^\#$ is classically valid. Interestingly the reverse direction, the famous double negation translation, is a long established translation that goes back to Glivenko~\cite{glivenko1929quelques} in the propositional case and G\"odel~\cite{godel1933intuitionistischen} and Gentzen~\cite{gentzen1936widerspruchsfreiheit} in the first-order case. In the propositional case it is particularly simple: $\varphi$ is classically valid if and only if $\neg\neg\varphi$ is intuitionistically valid. Intuitively the translation collapses for each subformula $\psi$ the truth values of $\psi$ and $\neg\neg\psi$, which are classically but not intuitionistically equivalent. This gives us a first idea why the reverse direction is perhaps more difficult: We need to expand the truth values of $\psi$ and $\neg\neg\psi$, i.e. if they both occur in $\varphi$ we must have a way to (classically) assign different truth values to their respective counterparts in $\varphi^\#$. In particular this necessitates the introduction of new propositional variables, which already marks a big difference to the double negation translation.
+The interest in intuitionistic logic has lead to the development of a number of automated theorem proving systems for propositional as well as for predicate logic and a collection of benchmarks problems (see e.g. the
+ILTP library website~\cite{iltp}).
+However, progress in automated theorem proving for intuitionistic logic has been slow whereas reasoners for classical logic have made tremendous progress, see e.g. the TPTP~\cite{casc} and SAT~\cite{satc} competitions.
+%, e.g., the first-order provers~\cite{kovacs2013first, schulz2002brainiac, korovin2008iprover}
+%Comparing benchmarks for classical and intuitionistic automated theorem proving, e.g. TPTP~\cite{casc} and , we see that classical provers currently have a far better success rate. Furthermore all the most popular first-order utilize classical logic.
+This difference can be partially explained by fundamental differences between the logics.
+First of all, determining intuitionistic validity is computationally harder, i.e. in the propositional case intuitionistic validity is \verb+PSPACE+-complete~\cite{statman1979intuitionistic} whereas classical validity is \verb+coNP+-complete~\cite{cook1971complexity}.
+A further advantage of classical logic is the existence of calculi that are particularly suitable for automation such as superposition~\cite{bachmair2001resolution}, which rely on the existence of convenient normal forms such as CNF, and the duality between validity and satisfiability, i.e. to show the validity of a formula it suffices to show the unsatisfiability of the negated formula.
+While some (albeit more complex) normal forms also exist  for intuitionistic logic, crucially the duality between validity and satisfiability of the negation does not hold.
+Therefore most dedicated intuitionistic theorem provers~\cite{mclaughlin2009efficient, tammet1996resolution} use the naive inverse method, i.e. directly search for a cut-free proof by applying the rules from some proof calculus inversely, enhanced by search strategies such as focussing and polarization. This approach generally leads to a much more complex search and is therefore difficult to implement efficiently.
+Finally we add that in contrast to intuitionistic provers a tremendous amount of work has been put into optimizing provers for classical logic, in particular for the propositional case, i.e. SAT-solvers.
 
-In addition to the translation of formulas we give an effective translation of counter-models, i.e. for each intuitionistic counter-model for $\varphi$ we give a classical counter-model for $\varphi^\#$ and vice versa. In fact the existence of counter-models is a key notion. For classical logic it just corresponds to the satisfiability of the negation but for intuitionistic logic it forms a proper dual to validity, while satisfiability of the negation is not necessary for invalidity and would therefore not form a proper dual. Transforming and reducing counter-models to a normal form is also what ultimately enables our translation.
+With this work we want to open a path for leveraging the progress in classical theorem proving for intuitionistic logic.
+To this end we give an embedding from intuitionistic logic into classical logic. That is, we give an effective procedure that returns for each formula $\varphi$ a modified formula $\varphi^\#$ such that $\varphi$ is intuitionistically valid if and only if $\varphi^\#$ is classically valid.
+Interestingly, the reverse direction, the famous double-negation translation, has long been established and goes back to Glivenko~\cite{glivenko1929quelques} in the propositional case, and to G\"odel~\cite{godel1933intuitionistischen} and Gentzen~\cite{gentzen1936widerspruchsfreiheit} in the first-order case. In the propositional case it is particularly simple: $\varphi$ is classically valid if and only if $\neg\neg\varphi$ is intuitionistically valid. Intuitively the translation collapses for each subformula $\psi$ of $\varphi$ the truth values of $\psi$ and $\neg\neg\psi$, which are classically but not intuitionistically equivalent. This gives us a first idea why the reverse direction is perhaps more difficult: We need to expand the truth values of $\psi$ and $\neg\neg\psi$, i.e. if they both occur in $\varphi$ we must have a way to (classically) assign different truth values to their respective counterparts in $\varphi^\#$. In particular, this necessitates the introduction of new propositional variables in our procedure, which already marks a big difference to the double negation translation.
+%
+In addition to the translation of formulas we give an effective translation of counter-models, i.e. for each intuitionistic counter-model of $\varphi$ we can effectively construct a classical counter-model of $\varphi^\#$ and vice versa.
+We note that the existence of counter-models is a key notion, which forms a proper dual to validity --- whereas the satisfiability of the negation is not necessary for invalidity (in contrast to classical logic, where it is a proper dual to validity).
+Transforming and reducing counter-models to a normal form is also what ultimately enables our translation.
 
-Finally we should mention that approaches to obtain constructive content from classical proofs exist in literature, however they are insufficient in our view. The first is simply to examine under which circumstances classical validity entails intuitionistic validity and therefore constructiveness. Most famously this holds for $\Pi_2$-formulas in Peano Arithmetic~\cite{friedman1978classically}. There are also other circumstances under which this entailment holds~\cite{schwichtenberg}, however this approach cannot encapsulate the general case. Another popular approach is to equip classical proofs with operational semantics~\cite{Control1, Parigot1}. In this case we necessarily lose realizability at least of $\exists$ and $\vee$, which - one could argue - is why we want a program in the first place.
-
-Our work suggests a new approach for obtaining a constructive proof using a classical prover, that is
+In summary, our work suggests a new approach for obtaining a constructive proof using a classical prover, that is
 \begin{itemize}
 	\item performing our translation on the input formula $\varphi$ to obtain $\varphi^\#$,
 	\item checking the classical validity of $\varphi^\#$ with the prover resulting in a proof or counter-model,
 	\item translating the proof/counter-model of $\varphi^\#$ to a (intuitionistic) proof/counter-model of $\varphi$.
 \end{itemize}
+
+\textbf{Related Work.}
+Several approaches to obtain constructive content from classical proofs have been studied in the literature.
+An important direction is to examine under which circumstances classical validity entails intuitionistic validity and therefore constructiveness.
+This entailment has most famously been established for $\Pi_2$-formulas in Peano Arithmetic~\cite{friedman1978classically}.
+Further circumstances under which this entailment holds have been identified in~\cite{schwichtenberg}, however this approach cannot encapsulate the general case.\todo{can you elaborate a few words on ``further circumstances'' and ``the general case''}
+Another popular approach is to equip classical proofs with operational semantics~\cite{Control1, Parigot1}.
+In this case we necessarily lose realizability at least of $\exists$ and $\vee$, which --- one could argue --- is why we want a program in the first place.\todo{as the curry-howard correspondence is only mentioned in passing now, we should adapt the last part of sentence}
 
 
 
@@ -259,9 +282,9 @@ Analogous remarks with regard to validity and satisfiability hold as in the prop
 
 \subsection{Skolemization and Herbrandization}
 
-An important step in the embedding will be the elimination of quantifiers via Herbrandization. 
-In this process we introduce fresh variables and add additional function symbols to the signature. 
-A fresh variable is any variable that does not occur in any of the considered formulas. 
+An important step in the embedding will be the elimination of quantifiers via Herbrandization.
+In this process we introduce fresh variables and add additional function symbols to the signature.
+A fresh variable is any variable that does not occur in any of the considered formulas.
 Whenever we add function symbol we implicitly extend the signature by some not previously contained symbol.
 
 \begin{definition}
@@ -285,7 +308,7 @@ For every formula $\varphi$
 	\end{itemize}
 \end{theorem}
 
-Theorem~\ref{thm:herbrand-skolem} follows from Lemmata~\ref{ap1} and~\ref{ap2} stated in the appendix. 
+Theorem~\ref{thm:herbrand-skolem} follows from Lemmata~\ref{ap1} and~\ref{ap2} stated in the appendix.
 
 
 \section{IPC to CQC}
@@ -467,7 +490,7 @@ Because $(A^I(f_\psi^I(u))\to B^I(f_\psi^I(u)))\to C^I(u)$ holds, then $A^I(f_\p
 
 
 	2. Let $w$ be some element with $w\geq u$.
-If $C^I(w)$ is true, we are done. 
+If $C^I(w)$ is true, we are done.
 Otherwise $C^I(w)$ is false.
 Due to persistency $C^I(u)$ is also false.
 Because $\psi$ is fulfilled at $u$, $A^I(u)\to B^I(u)$ must be false, i.e. $A^I(u)$ is true and $B^I(u)$ is false. Then $A^I(w)$ and $A^I(f^I_\psi(w))$ are also true due to persistency.
@@ -560,7 +583,7 @@ Obtain $\mathcal S^\#$ by including the formulas
 
 \section{IPC to QBF}
 
-It is known that a polynomial time translation between QBF and IPC must exist, since both problems are PSPACE complete~\cite{garey1979computers, statman1979intuitionistic}. 
+It is known that a polynomial time translation between QBF and IPC must exist, since both problems are PSPACE complete~\cite{garey1979computers, statman1979intuitionistic}.
 However, giving an explicit translation from IPC to QBF still promises to be useful, allowing to leverage the progress in QBF solving.
 The translation from the last section will serve as starting point for developing the translation in this section.
 For lack of space, we do not define the semantics of QBF in this paper and refer the reader to standard sources e.g.~\cite{series/faia/2009-185}.
@@ -719,7 +742,7 @@ is classically valid where $s$ is a new constant symbol. This was obvious in the
 \begin{proof}
 	We proceed by translation of counter-examples. Suppose first we have a counter-example $\mathcal M = (M, I)$ to $\varphi^\circ$. As a Kripke frame $(W, \leq)$ take all $ W = \{m\in M\:|\:\text{ World}^I(m)\}$ let $\leq$ be $\preceq^I$ restricted to $W$. Then let $M_u = \{m\in M\:|\: E(m, u)\}$ and let $f^{I_u}$ be $f^I$ restricted to $M_u$ and $A^{I_u}(\vec x): \Leftrightarrow A^\#(\vec x, u)$. It is then a straightforward check of definitions that this defines a Kripke counter-model to $\varphi$.
 	
-	The other direction is a bit more involved. Suppose we have a Kripke counter-model to $\varphi$ with Frame $(W, \preceq)$ and family of $\Sigma$-structures $(M_w, I_w)_{w\in W}$. In particular since it is a counter-model there exists $w_0\in W$ with $w_0\not\models\varphi$. Let $W_0 = \{w\in W\:|\: w\geq w_0\}$ and define an equivalence relation $\sim$ on $\{(x, u)\:|\:u\in W_0, x\in M_u\}$ via $(x, u)\sim (y, w)$ iff $x = y$ and there exists $v\in W_0$ comparable with both $u, w$ such that $x\in v$ and denote the equivalence class of $(x, u)$ with $[x, u]$. Let $M = W_0\cup \{[x, u]\:|\:u\in W_0, x\in M_u\}$. 
+	The other direction is a bit more involved. Suppose we have a Kripke counter-model to $\varphi$ with Frame $(W, \preceq)$ and family of $\Sigma$-structures $(M_w, I_w)_{w\in W}$. In particular since it is a counter-model there exists $w_0\in W$ with $w_0\not\models\varphi$. Let $W_0 = \{w\in W\:|\: w\geq w_0\}$ and define an equivalence relation $\sim$ on $\{(x, u)\:|\:u\in W_0, x\in M_u\}$ via $(x, u)\sim (y, w)$ iff $x = y$ and there exists $v\in W_0$ comparable with both $u, w$ such that $x\in v$ and denote the equivalence class of $(x, u)$ with $[x, u]$. Let $M = W_0\cup \{[x, u]\:|\:u\in W_0, x\in M_u\}$.
 Now have
 	\begin{itemize}
 		\item $s^I = w_0$.
