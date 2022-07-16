@@ -371,11 +371,11 @@ $\mathcal S^+(Qx\varphi(x)) = \{P_{Qx\varphi}(\vec z_{Qx\varphi})\to QxP_{\varph
 \end{lemma}
 
 It is straight-forward to extend structures to the additional symbols such that the formulas $S^+(\varphi)\cup\mathcal S^-(\varphi)$ are satisfied, i.e. for each structure $\mathcal M$ and formula $\varphi$ we can define a structure $\mathcal S(\mathcal M, \varphi)$, whose exact definition can be found in the appendix as Definition~\ref{def:transf-structure}, such that:
-\begin{lemma}
+\begin{lemma}\label{thm:struct1}
 For every formula $\varphi$ and structure $\mathcal M$, we have that	$\mathcal S(\mathcal M, \varphi)\models\mathcal S^+(\varphi)\cup S^-(\varphi)$.
 \end{lemma}
 
-\begin{lemma}
+\begin{lemma}\label{thm:struct2}
 	For every structure $\mathcal M$,
 	$\mathcal M\models \varphi$ if and only if $S(\mathcal M, \varphi)\models P_\varphi$.
 \end{lemma}
@@ -770,10 +770,10 @@ Suppose $\mathcal M, v\models\chi$. Then, for all $m\in M$ we have that $\mathca
 \end{proof}
 
 \begin{lemma}\label{ap2}
-	For every structure $\mathcal M$ and $\{t_1\dots t_n\} = T$ that contains all free variables in $\chi$ and variable assignment $v$
+	For every structure $\mathcal M$ and $\{z_1\dots z_n\} = Z$ that contains all free variables in $\chi$ and variable assignment $v$
 	\begin{itemize}
-		\item if $\mathcal M, v\models\varphi^S_T$ then $\mathcal M, v\models \varphi$
-		\item if $\mathcal M, v\not\models\varphi^H_T$ then $\mathcal M, v\not\models\varphi$.
+		\item if $\mathcal M, v\models\varphi^S_Z$ then $\mathcal M, v\models \varphi$
+		\item if $\mathcal M, v\not\models\varphi^H_Z$ then $\mathcal M, v\not\models\varphi$.
 	\end{itemize}
 \end{lemma}
 
@@ -782,11 +782,11 @@ Suppose $\mathcal M, v\models\chi$. Then, for all $m\in M$ we have that $\mathca
 	
 	For atoms the claims are clear. We distinguish 5 cases.
 	
-	1. $\chi = \varphi\to\psi$. Suppose $\mathcal M, v\models\chi^S_T$, i.e. $\mathcal M, v\not\models\varphi^H_T$ or $\mathcal M, v\models\psi^S_T$. By induction hypothesis $\mathcal M, v\not\models \varphi$ or $\mathcal M, v\models\psi$, i.e. $\mathcal M, v\models \chi$. On the other hand suppose $\mathcal M, v\not\models\chi^H_T$, i.e. $\mathcal M, v\models\varphi^S_T$ and $\mathcal M, v\not\models\varphi^H_T$. Again by induction hypothesis $\mathcal M,v\models\varphi$ and $\mathcal M, v\not\models \varphi$, so $\mathcal M, v\not\models\chi$.
+	1. $\chi = \varphi\to\psi$. Suppose $\mathcal M, v\models\chi^S_Z$, i.e. $\mathcal M, v\not\models\varphi^H_Z$ or $\mathcal M, v\models\psi^S_Z$. By induction hypothesis $\mathcal M, v\not\models \varphi$ or $\mathcal M, v\models\psi$, i.e. $\mathcal M, v\models \chi$. On the other hand suppose $\mathcal M, v\not\models\chi^H_Z$, i.e. $\mathcal M, v\models\varphi^S_T$ and $\mathcal M, v\not\models\varphi^H_Z$. Again by induction hypothesis $\mathcal M,v\models\varphi$ and $\mathcal M, v\not\models \varphi$, so $\mathcal M, v\not\models\chi$.
 	
 	2. + 3. Conjunctions and Disjunctions are dealt with analogously.
 	
-	4. $\chi = \forall x\varphi$.  Suppose $\mathcal M, v\models\chi^S_T$, i.e. for all $m\in M$ we have $\mathcal M, v[m/a]\models \chi[a/x]^S_{T\cup\{a\}}$ and by induction hypothesis $\mathcal M, v[m/a]\models \chi[a/x]$. Then it follows that $\mathcal M, v\models\varphi$. On the other hand suppose $\mathcal M, v\not\models\chi^H_T$, i.e. there exists $m\in M$ such that $\mathcal M, v[m/a]\not\models\chi[a/x]^H_{T\cup \{a\}}$, then by induction hypothesis $\mathcal M, v[m/a]\not\models \chi[a/x]$, i.e. $\mathcal M, v\not\models\forall x\chi$.
+	4. $\chi = \forall x\varphi$.  Suppose $\mathcal M, v\models\chi^S_Z$, i.e. for all $m\in M$ we have $\mathcal M, v[m/a]\models \chi[a/x]^S_{Z\cup\{a\}}$ and by induction hypothesis $\mathcal M, v[m/a]\models \chi[a/x]$. Then it follows that $\mathcal M, v\models\varphi$. On the other hand suppose $\mathcal M, v\not\models\chi^H_Z$, i.e. there exists $m\in M$ such that $\mathcal M, v[m/a]\not\models\chi[a/x]^H_{Z\cup \{a\}}$, then by induction hypothesis $\mathcal M, v[m/a]\not\models \chi[a/x]$, i.e. $\mathcal M, v\not\models\forall x\chi$.
 	
 	5. $\chi = \exists x\varphi$.  The argument runs dually to 4.
 \end{proof}
@@ -805,6 +805,8 @@ Suppose $\mathcal M, v\models\chi$. Then, for all $m\in M$ we have that $\mathca
 		P_{\forall x\varphi}^{I_u}(\vec z_{\forall x\varphi}) :\Leftrightarrow P_{\varphi}^{I_w}(\vec z_\varphi) \text{ for all $w\geq u$, $x\in M_w$}\indent P_{\exists x\varphi}^{I_u}(\vec z_{\exists x\varphi}) :\Leftrightarrow P_{\varphi}^{I_u}(\vec z_\varphi) \text{ for some $x\in M_u$}
 	\end{matrix}$$
 \end{definition}
+
+Lemmas~\ref{thm:struct1} and~\ref{thm:struct2} then follow directly by induction on the height of $\varphi$.
 
 \begin{lemma}~\label{thm:prop-countermodel-reduction2}
 	Let $\mathcal M = (M, I)$ be a counter-model to $\mathcal \varphi^\circ$.
