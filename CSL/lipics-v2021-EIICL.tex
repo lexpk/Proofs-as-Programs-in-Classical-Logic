@@ -446,7 +446,7 @@ We say $\psi\in\mathcal F_\to$ is \emph{fulfilled} at $u\in M$ iff $A_\psi^I(u)\
 	Let $\mathcal M = (M, I)$ be a counter-model to $\mathcal \varphi^\circ$.
 	\begin{enumerate}
 		\item $\psi$ is fulfilled at $f_\psi^I(u)$ for all $u\in M, \psi\in\mathcal F_\to$.
-		\item If $\psi$ is fulfilled at some $u\in M$ then $\psi$ is fulfilled at all $w\geq u$.
+		\item If $\psi$ is fulfilled at some $u\in M$ then $\psi$ is fulfilled at all $w\succeq u$.
 	\end{enumerate}
 \end{lemma}
 
@@ -597,7 +597,7 @@ Example encodings of these formulas are as follows:
 	\text{Pesistent}(u, w) = &\:\bigwedge\{\forall\vec z(\vec A^\#(\vec z, u)\to A^\#(\vec z, w))\:|\:\text{$A\in\Sigma$ is a relation symbol}\}
 \end{align*}
 
-Using $E$ we then obtain $\mathcal S^\circ$ analogously to the predicate case by including formulas:
+Using $E$ we then obtain $\mathcal S'$ analogously to the predicate case by including formulas:
 
 \begin{itemize}
 	\item $\forall \vec z\forall u(s\preceq u\to \vec E(\vec z, u)\to (A^\#(\vec a, u)\to (B^\#(\vec b, u)\circ C^\#(\vec c, u))))$\\for each $\circ\in\{\wedge, \vee\}, \psi = \forall \vec z(A(\vec a)\to (B(\vec b)\circ C(\vec c)))\in\mathcal S$
@@ -610,7 +610,7 @@ Using $E$ we then obtain $\mathcal S^\circ$ analogously to the predicate case by
 \end{itemize}
 
 Then $\varphi = \bigwedge\mathcal S\to P$ is intuitionistically valid if and only if
-$$\varphi^\circ= \text{World}(s)\to K(\varphi)\to \bigwedge S^\circ\to P^\#(s)$$
+$$\varphi' = \text{World}(s)\to K(\varphi)\to \bigwedge S'\to P^\#(s)$$
 is classically valid, where $s$ is a new constant symbol. This was obvious in the propositional case but here it is more nuanced. A proof is given in the appendix as Lemma~\ref{lemma:fo-simplification}.
 
 \subsection{Reducing the encoding}
@@ -620,15 +620,14 @@ As in the predicate case we now show the existence of a canonical counter-model 
 	\item $\forall \vec z\forall u(\vec E(\vec z, u)\to (A^\#(\vec a, f_\psi(\vec z, u))\to B^\#(\vec b, f_\psi(\vec z, u)))\to C^\#(\vec c, u))$\\instead of $\forall \vec z\forall u(s\preceq u\to\vec E(\vec z, u)\to \forall w(u\preceq w\to A^\#(\vec a, w)\to B^\#(\vec b, w))\to C^\#(\vec c, u))$,
 	\item $\forall \vec z\forall u(\vec E(\vec z, u)\to (\forall x(E(x, f_\psi(\vec z, u))\to A^\#(\vec a, f_\psi(\vec z, u))))\to B^\#(\vec b, u))$\\instead of $\forall \vec z\forall u(s\preceq u\to\vec E(\vec z, u)\to \forall w(u\preceq w\to \forall x(E(x, w)\to A^\#(\vec a, w)))\to B^\#(\vec b, u))$,
 \end{itemize}
-and by removing removing the $s\preceq u$ for the remaining formulas in $\mathcal S^\circ$.
+and by removing removing the $s\preceq u$ for the remaining formulas in $\mathcal S'$.
 We denote the resulting set of formulas by $\mathcal S^\#$.
 Then, the previous formulas are equivalid to
 $$\varphi^\circ= \forall u(s\preceq u)\to \bigwedge\{\forall \vec t\forall u(u\preceq f(\vec z, u))\:|\:\psi\in\mathcal F\}\to K(\varphi)\to\bigwedge\mathcal S^\#\to P^\#(s).$$
-\todo{we already define $\varphi^\circ$, shouldn't this be some $\varphi^\dagger$? Also the phrase before should be: Then,$\varphi^\circ$ is equivalid to ...?}
 As in the previous section we can define a tree counter-model for this.
 
 \begin{definition}
-	Suppose we are given a counter-model $\mathcal M = (M, I)$ for $\varphi^\circ$. \todo{shouldn't this be $\varphi^\dagger$?} Define $\mathcal M_T = (M_T, I_T)$ as follows:
+	Suppose we are given a counter-model $\mathcal M = (M, I)$ for $\varphi^\circ$. Define $\mathcal M_T = (M_T, I_T)$ as follows:
 	\begin{itemize}
 		\item $M_T$ are the sequences on $\{(\vec z, \psi)\:|\:\psi\in \mathcal F, \vec z\in M^n\}$.
 		\item We interpret $\preceq$ as the prefix-order.
@@ -638,12 +637,12 @@ As in the previous section we can define a tree counter-model for this.
 \end{definition}
 
 \begin{lemma}
-	If $\mathcal M$ is a counter-model to $\varphi^\circ$ \todo{shouldn't this be $\varphi^\dagger$?} then so is $\mathcal M_T$.
+	If $\mathcal M$ is a counter-model to $\varphi^\circ$ then so is $\mathcal M_T$.
 \end{lemma}
 
 Even if we don't have the finiteness property of the propositional case, we have still managed to reduce the complexity of possible counter-models because we know that considering worlds of the form $$f_{\psi_1}(\vec z_1, f_{\psi_2}(\vec z_2, \dots f_{\psi_n}(\vec z_n, s)\dots))$$ is sufficient. 
 In particular, this allows us to completely eliminate $\preceq$ from the formula, that is we remove the PartialOrder$(\preceq)$
-from $K(\varphi)$ and replace $\forall u\forall w\forall x((E(x, u)\wedge u\preceq w)\to E(x, w))$ with $\bigwedge\{\forall \vec z\forall u(E(x, u)\to E(x, f_\psi(\vec z, u)))\:|\:\psi\in\mathcal F_\to\}$ and analogously for persistency to obtain $K$. We set
+from $K(\varphi)$ and replace $\forall u\forall w\forall x((E(x, u)\wedge u\preceq w)\to E(x, w))$ with $\bigwedge\{\forall \vec z\forall u\forall x(E(x, u)\to E(x, f_\psi(\vec z, u)))\:|\:\psi\in\mathcal F_\to\}$ and analogously for persistency to obtain $K$. We set
 
 $$\varphi^{\#} = K\to \bigwedge S^\#\to P^\#.$$
 Then, we obtain the following result:
@@ -881,11 +880,11 @@ We will target the particular calculi used by state-of-the-art provers, e.g. sup
 \end{proof}
 
 \begin{lemma}\label{lemma:fo-simplification}
-	$\varphi$ is intuitionistically valid if and only of $\varphi^\circ$ is classically valid.
+	$\varphi$ is intuitionistically valid if and only of $\varphi'$ is classically valid.
 \end{lemma}
 
 \begin{proof}
-	We proceed by translation of counter-examples. Suppose first we have a counter-example $\mathcal M = (M, I)$ to $\varphi^\circ$. As a Kripke frame $(W, \leq)$ take all $ W = \{m\in M\:|\:\text{ World}^I(m)\}$ let $\leq$ be $\preceq^I$ restricted to $W$. Then let $M_u = \{m\in M\:|\: E(m, u)\}$ and let $f^{I_u}$ be $f^I$ restricted to $M_u$ and $A^{I_u}(\vec x): \Leftrightarrow A^\#(\vec x, u)$. It is then a straightforward check of definitions that this defines a Kripke counter-model to $\varphi$.
+	We proceed by translation of counter-examples. Suppose first we have a counter-example $\mathcal M = (M, I)$ to $\varphi'$. As a Kripke frame $(W, \leq)$ take all $ W = \{m\in M\:|\:\text{ World}^I(m)\}$ let $\leq$ be $\preceq^I$ restricted to $W$. Then let $M_u = \{m\in M\:|\: E(m, u)\}$ and let $f^{I_u}$ be $f^I$ restricted to $M_u$ and $A^{I_u}(\vec x): \Leftrightarrow A^\#(\vec x, u)$. It is then a straightforward check of definitions that this defines a Kripke counter-model to $\varphi$.
 	
 	The other direction is a bit more involved. Suppose we have a Kripke counter-model to $\varphi$ with frame $(W, \preceq)$ and family of $\Sigma$-structures $(M_w, I_w)_{w\in W}$. In particular since it is a counter-model there exists $w_0\in W$ with $w_0\not\models\varphi$. Let $W_0 = \{w\in W\:|\: w\geq w_0\}$ and define an equivalence relation $\sim$ on $\{(x, u)\:|\:u\in W_0, x\in M_u\}$ via $(x, u)\sim (y, w)$ iff $x = y$ and there exists $v\in W_0$ comparable with both $u, w$ such that $x\in v$ and denote the equivalence class of $(x, u)$ with $[x, u]$. Let $M = W_0\cup \{[x, u]\:|\:u\in W_0, x\in M_u\}$.
 	Now have
@@ -901,7 +900,7 @@ We will target the particular calculi used by state-of-the-art provers, e.g. sup
 			\top, & \text{otherwise.}
 		\end{cases}$
 	\end{itemize}
-	One easily verifies that these are well-defined. Let us now briefly check that this indeed defines a counter-model. First of all ${P^\#}^I(s^I)$ is false since $P^{I_{w_0}}$ is. Clearly World$(w_0)$ holds and $K(\varphi)$ is also easily verified. All that remains to show is $M, I\models\bigwedge\mathcal S^\circ$. Consider e.g. the case where $\psi\in\mathcal S$ is of the form
+	One easily verifies that these are well-defined. Let us now briefly check that this indeed defines a counter-model. First of all ${P^\#}^I(s^I)$ is false since $P^{I_{w_0}}$ is. Clearly World$(w_0)$ holds and $K(\varphi)$ is also easily verified. All that remains to show is $M, I\models\bigwedge\mathcal S'$. Consider e.g. the case where $\psi\in\mathcal S$ is of the form
 	$$ \forall \vec z((A(\vec a)\to B(\vec b))\to C(\vec c))$$
 	We have to show that
 	$$M, I\models \forall \vec z\forall u(\vec E(t, u)\to \forall w(u\preceq w\to A^\#(\vec a, w)\to B^\#(\vec b, w))\to C^\#(\vec c, u))$$
