@@ -491,7 +491,7 @@ The translation from the last section will serve as starting point for developin
 For lack of space, we do not define the semantics of QBF in this paper and refer the reader to standard sources e.g.~\cite{series/faia/2009-185}.
 
 Fix some set $\mathcal S$ of formulas of the form $$A\to (B\wedge C), (A\wedge B)\to C, A\to (B\vee C), (A\vee B)\to C, (A\to B)\to C$$and$$\varphi = \bigwedge \mathcal S\to P,$$
-and denote with $\mathcal F_\to$ the set of formulas of the form $(A\to B)\to C$. We will now formulate a QBF that expresses that $\varphi$ has an intuitionistic counter-model. The idea how to get a linear-size formula is: Instead of expressing validity at every node of $\mathcal M_T$ - which was done in the CPC translation - we express that on each path in $\mathcal M_T$ the nodes satisfy all conditions for $\mathcal M_T$ being a counter-model. The universally quantified variables $F_\psi$ in the next definition handle the branching, i.e. express which path is considered.
+and denote with $\mathcal F_\to$ the set of formulas of the form $(A\to B)\to C$. We will now formulate a QBF that expresses that $\varphi$ has an intuitionistic counter-model. The idea how to get a polynomially-sized formula is: Instead of expressing validity at every node of $\mathcal M_T$ --- which was done in the CPC translation --- we express that on each path in $\mathcal M_T$ the nodes satisfy all conditions for $\mathcal M_T$ being a counter-model. The universally quantified variables $F_\psi$ in the next definition handle the branching, i.e. express which path is considered.
 
 \begin{definition}
 	For every propositional variable $X$ occurring in $\mathcal S$ and non-negative integer $n$ consider a new atom $X^n$ and for every formula $\psi\in\mathcal F_\to$ consider a new atom $F_\psi^n$. Let $\vec X^n$ range over all propositional variables $X^n$ and $\vec F^n$ range over all $F_\psi^n$. Define
@@ -502,10 +502,10 @@ and denote with $\mathcal F_\to$ the set of formulas of the form $(A\to B)\to C$
 		\item {\normalfont Sat}$_{\mathcal F_\to}(n)$ encoding that the formula in $\mathcal F_\to$ that is represented by $\vec F^{n-1}$ holds.
 	\end{itemize}
 	Have $k = |\mathcal F_\to|$ and define$$\varphi^Q_{i} = \exists \vec X^i\forall \vec F^i\left(\text{\normalfont Persistent}(i)\wedge \text{\normalfont Sat}_{\mathcal S}(i)\wedge \text{\normalfont Sat}_{\mathcal F_\to}(i)\wedge\left(\text{\normalfont Valid}(i)\to \varphi^Q_{i+1}\right)\right)$$
-	for $0 < i < k$ as well as the special cases
+	for $0 < i < k$, as well as the special cases
 	$$\varphi^Q_{k} = \exists \vec X^k\left(\text{\normalfont Persistent}(k)\wedge \text{\normalfont Sat}_{\mathcal S}(k)\wedge \text{\normalfont Sat}_{\mathcal F_\to}(k)\right)$$
-	for leafs and $$\varphi^Q = \varphi_0^Q = \exists \vec X^0\forall \vec F^0\left(\neg P^0\wedge \text{\normalfont Sat}_{\mathcal S}(0)\wedge(\text{\normalfont Valid}(0)\to \varphi_1^Q)\right)$$for the root.
-	Example encodings of the above formulas would be
+	for leafs, and $$\varphi^Q = \varphi_0^Q = \exists \vec X^0\forall \vec F^0\left(\neg P^0\wedge \text{\normalfont Sat}_{\mathcal S}(0)\wedge(\text{\normalfont Valid}(0)\to \varphi_1^Q)\right)$$for the root.
+	Example encodings of the above formulas are:
 	\begin{align*}
 		\text{\normalfont Valid}(n) = &\left(\bigvee \{\mathcal F^n_\psi\:|\:\psi\in\mathcal F_\to\}\right)\wedge\left(\bigwedge \{\neg(F^n_{\psi_1}\wedge F^n_{\psi_1})\:|\:\psi_1\neq\psi_2\in\mathcal F_\to\}\right)\wedge\\&\left(\bigwedge\left\{\bigwedge\{F^i_\psi\to\neg F^n_\psi\:|\:i < n\}\:|\:\psi\in\mathcal F_\to\right\}\right)\\
 		\text{\normalfont Persistent}(n) = & \bigwedge\{X^{n-1}\to X^n\:|\: X \text{ prop. variable with }X^{n-1}\in\vec X^{n-1}, X^n \in\vec X^{n}\}\\
@@ -516,9 +516,9 @@ and denote with $\mathcal F_\to$ the set of formulas of the form $(A\to B)\to C$
 \end{definition}
 
 \begin{example}
-	With the above encodings for double negation elimination $\varphi = ((A\to \bot)\to \bot)\to A$ we have
+	With the previous encoding for double negation elimination $\varphi = ((A\to \bot)\to \bot)\to A$ we have
 	$$\hspace*{-.3cm}
-	\varphi^Q = \exists A^0\forall F^0\left(\neg A^0\wedge\left(F^0\to \exists A^1\left((A^0\to A^1)\wedge(F_0\to (A^1\to \bot)\to \bot)\right)\right)\right)
+	\varphi^Q = \exists A^0\forall F^0\left(\neg A^0\wedge\left(F^0\to \exists A^1\left((A^0\to A^1)\wedge(F_0\to (A^1\to \bot)\to \bot)\right)\right)\right),
 	$$
 	which is a satisfiable QBF since $A^0 = 0, A^1 = 1$ satisfies it for any $F^0$.
 \end{example}
@@ -527,9 +527,9 @@ and denote with $\mathcal F_\to$ the set of formulas of the form $(A\to B)\to C$
 \begin{lemma}
 	$\varphi$ is not intuitionistically valid iff $\varphi^Q$ is a satisfiable QBF.
 \end{lemma}
-A proof can be found in the appendix as proof~\ref{lemma:QBF}.
+A proof can be found in the appendix as Lemma~\ref{lemma:QBF}.
 
-A simple counting argument shows that for each $n < |\mathcal F_\to|$ we have $|\text{Valid}(n)|\in \mathcal O(|\mathcal F_\to|^2)$, $|\text{Persistent}(n)|, |\text{Sat}_{\mathcal S}(n)|\in \mathcal O(|\varphi|)$ and $|\text{Sat}_{\mathcal F_\to}(n)|\in \mathcal O(|\mathcal F_\to|)$ so overall we get
+A simple counting argument shows that for each $n < |\mathcal F_\to|$ we have $|\text{Valid}(n)|\in \mathcal O(|\mathcal F_\to|^2)$, $|\text{Persistent}(n)|, |\text{Sat}_{\mathcal S}(n)|\in \mathcal O(|\varphi|)$ and $|\text{Sat}_{\mathcal F_\to}(n)|\in \mathcal O(|\mathcal F_\to|)$ so overall we get:
 \begin{lemma}
 	The size of $\varphi^Q$ is in $\mathcal O(|\varphi|\cdot|\mathcal F_\to| + |\mathcal F_\to|^3)$.
 \end{lemma}
@@ -545,10 +545,10 @@ Note that the last set of universally quantified variables can be avoided becaus
 
 We now give an analogous transformation for first order logic. However our trick of lifting the sentence to first-order logic to encode the Kripke semantics no longer works in such a straightforward manner, since we already are in first-order logic. However we do it nonetheless! The domain of our classical model will feature on the one hand elements representing worlds in a Kripke frame and on the other hand the domain-elements from the Kripke model. We reconcile these notions by introducing a special binary predicate $E$, first considered in~\cite{baaz2006skolemization} and expanded onto in~\cite{iemhoff2010eskolemization}, where $E(x, u)$ encodes that $x$ is an element of the domain of the world $u$. We fix some signature $\Sigma$ for this section. To encode that some $n$-ary relation $A$ holds at a world $u$ we replace each $n$-ary relation symbol $A$ with a $n+1$-ary relation symbol $A^\#$, interpreting $A^\#(\vec x, u)$ as "$A(\vec x)$ holds at u". Furthermore we write $\vec E(\vec x, u)$ for $\bigwedge\{E(x_i, u)\:|\:x_i\in \vec x\}$.
 
-First of all recall that due to Lemma~\ref{equivalid} it is sufficient to consider sentences of the form $\bigwedge\mathcal S\to P$ where all formulas in $\mathcal S$ are of one of the forms
+First of all recall, that due to Lemma~\ref{equivalid} it is sufficient to consider sentences of the form $\bigwedge\mathcal S\to P$ where all formulas in $\mathcal S$ are of one of the forms
 \[\begin{matrix}
 	\forall \vec z(A(\vec a)\to (B(\vec b)\wedge C(\vec c)))\indent \forall \vec z((A(\vec a)\wedge B(\vec b))\to C(\vec c))\indent \forall \vec z(A(\vec a)\to (B(\vec b)\vee C(\vec c)))\\
-	\forall \vec z((A(\vec a)\vee B(\vec b))\to C(\vec c))\indent \forall \vec z((A(\vec a)\to B(\vec b))\to C(\vec c))\indent\forall \vec z(\forall xA(\vec a)\to B(\vec b))\\ \forall \vec z(A(\vec a)\to\forall xB(b)), \forall \vec z(\exists xA(\vec a)\to B(\vec b)), \forall \vec z(A(\vec a)\to\exists xB(b))
+	\forall \vec z((A(\vec a)\vee B(\vec b))\to C(\vec c))\indent \forall \vec z((A(\vec a)\to B(\vec b))\to C(\vec c))\indent\forall \vec z(\forall xA(\vec a)\to B(\vec b))\\ \forall \vec z(A(\vec a)\to\forall xB(b)), \forall \vec z(\exists xA(\vec a)\to B(\vec b)), \forall \vec z(A(\vec a)\to\exists xB(b)).
 \end{matrix}\]
 The complete result that we will show is as follows:
 \begin{theorem}\label{fullFOtranslation}
@@ -566,16 +566,16 @@ The complete result that we will show is as follows:
 	\begin{align*}
 		K := &\:\bigwedge\{\forall x\forall u((E(x, u)\to E(x, f_\psi(u)))\:|\:\psi\in\mathcal F\}\wedge\\
 		&\:\forall u\left(\exists xE(x, u)\to \bigwedge\{\forall\vec z(\vec E(\vec z, u)\to E(f(\vec z), u))\:|\:\text{$f$ is a function symbol in $\Sigma$}\}\right)\wedge\\
-		&\:\bigwedge\{\forall\vec z_1\forall \vec z_2\forall u(A^\#(\vec z_1, u)\to A^\#(\vec z_1, f_\psi(\vec z_2, u)))\:|\:\text{$\psi\in\mathcal F$, $A$ is a relation symbol in $\Sigma$}\}
+		&\:\bigwedge\{\forall\vec z_1\forall \vec z_2\forall u(A^\#(\vec z_1, u)\to A^\#(\vec z_1, f_\psi(\vec z_2, u)))\:|\:\text{$\psi\in\mathcal F$, $A$ is a relation symbol in $\Sigma$}\}.
 	\end{align*}
 	The size of the obtained formula is linear in the input. However a $|\mathcal F| + 1$ new function symbols and the new binary predicate $E$ were introduced and each $n$-ary relation symbol has been extended to a $n+1$-ary relation symbol.
 \end{theorem}
 
-It is not possible to completely eliminate worlds from the domain as in the propositional case, since counter-models possibly must be infinite. We will see why that is in more detail later.
+It is not possible to completely eliminate worlds from the domain as in the propositional case, since counter-models can possibly be infinite (as we will see in more detail later).
 
 \subsection{Encoding Kripke Semantics}
 
-As in the propositional case we must encode the Kripke Semantics, this time not only the relation $\preceq$ but also $E$ has to be axiomatized. For that we use the following predicates:
+As in the propositional case we must encode the Kripke Semantics, this time not only the relation $\preceq$, but also $E$ has to be axiomatized. For that we use the following predicates:
 \begin{itemize}
 	\item PartialOrder($\preceq$) encoding that $\preceq$ is a partial order.
 	\item DomainSubset$(u, w)$ encoding that the domain at $u$ is a subset of that at $w$.
@@ -583,12 +583,12 @@ As in the propositional case we must encode the Kripke Semantics, this time not 
 	\item DomainClosed($u$) which encodes that at $u$ the domain is closed under functions, e.g. contains all interpretations of constants.
 	\item Persistent$(u, w)$ which encodes that persistency is satisfied between $u$ and $w$, i.e. for all predicates $A$ and domain elements $x$ with $A(x)$ at $u$ we have $A(x)$ at $w$.
 \end{itemize}
-Then analogously to the predicate case define
+Then, analogously to the propositional case, we define:
 \begin{align*}
 	K(\varphi) = \:& \text{PartialOrder}(\preceq) \wedge \forall u \forall w (u\preceq w\to \text{DomainSubset}(u, w)) \wedge\\
-				 & \forall u(\text{World(u)}\to \text{DomainClosed}(u))\wedge \forall u\forall w (u\preceq w\to \text{Persistent}(u, w))
+				 & \forall u(\text{World(u)}\to \text{DomainClosed}(u))\wedge \forall u\forall w (u\preceq w\to \text{Persistent}(u, w)).
 \end{align*}
-Example encodings could be
+Example encodings of these formulas are as follows:
 \begin{align*}
 	\text{PartialOrder}(\preceq) = &\:\forall u(u\preceq u)\wedge\forall u\forall w(u\preceq w\to w\preceq u\to u = w)\wedge\\&\:\forall u\forall v\forall w(u\preceq v\to v\preceq w\to u\preceq w)\\
 	\text{DomainSubset}(u, w) = &\:\forall z(E(z, u)\to E(z, w))\\
@@ -611,43 +611,47 @@ Using $E$ we then obtain $\mathcal S^\circ$ analogously to the predicate case by
 
 Then $\varphi = \bigwedge\mathcal S\to P$ is intuitionistically valid if and only if
 $$\varphi^\circ= \text{World}(s)\to K(\varphi)\to \bigwedge S^\circ\to P^\#(s)$$
-is classically valid where $s$ is a new constant symbol. This was obvious in the propositional case but here it is more nuanced. A proof is given in the appendix as Lemma~\ref{lemma:fo-simplification}.
+is classically valid, where $s$ is a new constant symbol. This was obvious in the propositional case but here it is more nuanced. A proof is given in the appendix as Lemma~\ref{lemma:fo-simplification}.
 
 \subsection{Reducing the encoding}
 
-As in the predicate case we now show the existence of a canonical counter-model, if a counter-model exists. Denote the set of formulas $\psi\in\mathcal S$ of the form $\forall\vec z((A(\vec a)\to B(\vec b))\to C(\vec c))$ with $\mathcal F_\to$ and of the form $\forall \vec z(\forall xA(\vec a)\to B(\vec b))$ with $\mathcal F_\forall$. Let $\mathcal F = \mathcal F_\to\cup\mathcal F_\forall$. For each  $\psi\in\mathcal F$ consider a new function symbol $f_\psi$. As before we may assume that $s$ is a least element and eliminate the quantification over $w$ by adding formulas
+As in the predicate case we now show the existence of a canonical counter-model (in case such a counter-model exists). Denote the set of formulas $\psi\in\mathcal S$ of the form $\forall\vec z((A(\vec a)\to B(\vec b))\to C(\vec c))$ with $\mathcal F_\to$ and of the form $\forall \vec z(\forall xA(\vec a)\to B(\vec b))$ with $\mathcal F_\forall$. Let $\mathcal F = \mathcal F_\to\cup\mathcal F_\forall$. For each  $\psi\in\mathcal F$ consider a new function symbol $f_\psi$. As before we may assume that $s$ is a least element and we can avoid the quantification over $w$ by considering the formulas
 \begin{itemize}
-	\item $\forall \vec z\forall u(\vec E(\vec z, u)\to (A^\#(\vec a, f_\psi(\vec z, u))\to B^\#(\vec b, f_\psi(\vec z, u)))\to C^\#(\vec c, u))$\\instead of $\forall \vec z\forall u(s\preceq u\to\vec E(\vec z, u)\to \forall w(u\preceq w\to A^\#(\vec a, w)\to B^\#(\vec b, w))\to C^\#(\vec c, u))$
-	\item $\forall \vec z\forall u(\vec E(\vec z, u)\to (\forall x(E(x, f_\psi(\vec z, u))\to A^\#(\vec a, f_\psi(\vec z, u))))\to B^\#(\vec b, u))$\\instead of $\forall \vec z\forall u(s\preceq u\to\vec E(\vec z, u)\to \forall w(u\preceq w\to \forall x(E(x, w)\to A^\#(\vec a, w)))\to B^\#(\vec b, u))$
+	\item $\forall \vec z\forall u(\vec E(\vec z, u)\to (A^\#(\vec a, f_\psi(\vec z, u))\to B^\#(\vec b, f_\psi(\vec z, u)))\to C^\#(\vec c, u))$\\instead of $\forall \vec z\forall u(s\preceq u\to\vec E(\vec z, u)\to \forall w(u\preceq w\to A^\#(\vec a, w)\to B^\#(\vec b, w))\to C^\#(\vec c, u))$,
+	\item $\forall \vec z\forall u(\vec E(\vec z, u)\to (\forall x(E(x, f_\psi(\vec z, u))\to A^\#(\vec a, f_\psi(\vec z, u))))\to B^\#(\vec b, u))$\\instead of $\forall \vec z\forall u(s\preceq u\to\vec E(\vec z, u)\to \forall w(u\preceq w\to \forall x(E(x, w)\to A^\#(\vec a, w)))\to B^\#(\vec b, u))$,
 \end{itemize}
-and in each other formula in $\mathcal S^\circ$ removing the $s\preceq u$ to obtain $\mathcal S^\#$ from $\mathcal S^\circ$. Then the previous formulas are equivalid to
-$$\varphi^\circ= \forall u(s\preceq u)\to \bigwedge\{\forall \vec t\forall u(u\preceq f(\vec z, u))\:|\:\psi\in\mathcal F\}\to K(\varphi)\to\bigwedge\mathcal S^\#\to P^\#(s)$$
+and by removing removing the $s\preceq u$ for the remaining formulas in $\mathcal S^\circ$.
+We denote the resulting set of formulas by $\mathcal S^\#$.
+Then, the previous formulas are equivalid to
+$$\varphi^\circ= \forall u(s\preceq u)\to \bigwedge\{\forall \vec t\forall u(u\preceq f(\vec z, u))\:|\:\psi\in\mathcal F\}\to K(\varphi)\to\bigwedge\mathcal S^\#\to P^\#(s).$$
+\todo{we already define $\varphi^\circ$, shouldn't this be some $\varphi^\dagger$? Also the phrase before should be: Then,$\varphi^\circ$ is equivalid to ...?}
 As in the previous section we can define a tree counter-model for this.
 
 \begin{definition}
-	Suppose we are given a counter-model $\mathcal M = (M, I)$ for $\varphi^\circ$. Define $\mathcal M_T = (M_T, I_T)$ as follows:
+	Suppose we are given a counter-model $\mathcal M = (M, I)$ for $\varphi^\circ$. \todo{shouldn't this be $\varphi^\dagger$?} Define $\mathcal M_T = (M_T, I_T)$ as follows:
 	\begin{itemize}
 		\item $M_T$ are the sequences on $\{(\vec z, \psi)\:|\:\psi\in \mathcal F, \vec z\in M^n\}$.
-		\item Interpret $\preceq$ as the prefix-order.
-		\item Have $$f_\psi^{I_T}(\vec z, (\vec z_1, \psi_1)\dots (\vec z_n, \psi_n)) = (\vec z_1, \psi_1)\dots (\vec z_n, \psi_n)(\vec z, \psi)$$
-		\item For propositional variables $P$ have $$P^{I_T}((\vec z_1, \psi_1)\dots (\vec z_n, \psi_n)) = P^I(f_{\psi_n}(\vec z_n, \dots(f_{\psi_1}(\vec z_1, s^I))\dots))$$
+		\item We interpret $\preceq$ as the prefix-order.
+		\item We set $$f_\psi^{I_T}(\vec z, (\vec z_1, \psi_1)\dots (\vec z_n, \psi_n)) = (\vec z_1, \psi_1)\dots (\vec z_n, \psi_n)(\vec z, \psi).$$
+		\item For propositional variables $P$, we set $$P^{I_T}((\vec z_1, \psi_1)\dots (\vec z_n, \psi_n)) = P^I(f_{\psi_n}(\vec z_n, \dots(f_{\psi_1}(\vec z_1, s^I))\dots)).$$
 	\end{itemize}
 \end{definition}
 
 \begin{lemma}
-	If $\mathcal M$ is a counter-model to $\varphi^\circ$ then so is $\mathcal M_T$.
+	If $\mathcal M$ is a counter-model to $\varphi^\circ$ \todo{shouldn't this be $\varphi^\dagger$?} then so is $\mathcal M_T$.
 \end{lemma}
 
-Even if we don't have the nice finiteness of the propositional case we have still reduced the model complexity in that we know that considering worlds of the form $$f_{\psi_1}(\vec z_1, f_{\psi_2}(\vec z_2, \dots f_{\psi_n}(\vec z_n, s)\dots))$$ is sufficient. In particular this allows us to completely eliminate $\preceq$ from the formula, that is we remove the PartialOrder$(\preceq)$
-from $K(\varphi)$ and replace $\forall u\forall w\forall x((E(x, u)\wedge u\preceq w)\to E(x, w))$ with $\bigwedge\{\forall \vec z\forall u(E(x, u)\to E(x, f_\psi(\vec z, u)))\:|\:\psi\in\mathcal F_\to\}$ and analogously for persistency to obtain $K$. Define
+Even if we don't have the finiteness property of the propositional case, we have still managed to reduce the complexity of possible counter-models because we know that considering worlds of the form $$f_{\psi_1}(\vec z_1, f_{\psi_2}(\vec z_2, \dots f_{\psi_n}(\vec z_n, s)\dots))$$ is sufficient. 
+In particular, this allows us to completely eliminate $\preceq$ from the formula, that is we remove the PartialOrder$(\preceq)$
+from $K(\varphi)$ and replace $\forall u\forall w\forall x((E(x, u)\wedge u\preceq w)\to E(x, w))$ with $\bigwedge\{\forall \vec z\forall u(E(x, u)\to E(x, f_\psi(\vec z, u)))\:|\:\psi\in\mathcal F_\to\}$ and analogously for persistency to obtain $K$. We set
 
-$$\varphi^{\#} = K\to \bigwedge S^\#\to P^\#$$
-then we have
+$$\varphi^{\#} = K\to \bigwedge S^\#\to P^\#.$$
+Then, we obtain the following result:
 \begin{theorem}
 	\label{thm:fo-reduction}
 	$\varphi$ is intuitionistically valid iff $\varphi^\#$ is classically valid.
 \end{theorem}
-The complete translation is summarised in Theorem~\ref{fullFOtranslation}. Let us understand why a further reduction as in the propositional case is impossible.
+The complete translation is summarised in Theorem~\ref{fullFOtranslation} (stated earlier). Let us understand why a further reduction as in the propositional case is impossible.
 
 
 \begin{definition}
@@ -656,7 +660,7 @@ The complete translation is summarised in Theorem~\ref{fullFOtranslation}. Let u
 	For $\psi = \forall\vec z\psi'\in\mathcal F_\forall$ we say it is \emph{fulfilled} at $u\in M$ with $\vec m\in M^n$ iff there is $m\in M$ with $E^{I}(m, u)$ such that $A^{I[m/x]}_\psi(\vec a)[\vec m/\vec z]$ is false or $B_\psi^I(\vec b)[\vec m/\vec z]$ is true.
 \end{definition}
 
-We get an analogous result to lemma~\ref{thm:prop-countermodel-reduction}.
+We get an analogous result to Lemma~\ref{thm:prop-countermodel-reduction}:
 
 \begin{lemma}
 \label{thm:fo-countermodel-reduction}
@@ -667,7 +671,7 @@ We get an analogous result to lemma~\ref{thm:prop-countermodel-reduction}.
 	\end{enumerate}	
 \end{lemma}
 
-However Part 2 of this Lemma fails for $\psi\in\mathcal F_\forall$, because even if for all $x$ with $E(x, v$) we have $A(x, v)$ there could be some term $y$ with $\neg E(y, v)$ and $w$ with $v\preceq w$ such that $E(y, w)$ and $\neg A(y, w)$. This is why we must consider sequences that have repetitions.
+However part 2 of Lemma~\ref{thm:fo-countermodel-reduction} fails for $\psi\in\mathcal F_\forall$, because even if for all $x$ with $E(x, v$), we have $A(x, v)$, there could be some term $y$ with $\neg E(y, v)$ and $w$ with $v\preceq w$ such that $E(y, w)$ and $\neg A(y, w)$. This is why we must consider sequences that have repetitions:
 \begin{wrapfigure}{r}{0.4\textwidth}
 	\begin{center}
 		\begin{tikzpicture}[squarednode/.style={rectangle, draw, very thick, minimum size=5mm}]
@@ -701,11 +705,12 @@ However Part 2 of this Lemma fails for $\psi\in\mathcal F_\forall$, because even
 \end{wrapfigure}
 
 \begin{example}
-	Consider $\varphi = \neg(\neg \forall xA(x)\vee\neg \forall xB(x))$. There is a counter-model as shown in Figure~\ref{fig1}
-	where at each node the elements that exist at it are indicated. For black ones both $A$ and $B$ hold, for red ones only $B$, for blue ones only $A$. Furthermore red arrows indicate $f_{\neg \forall xA(x)}$ and blue arrows $f_{\neg \forall xB(x)}$. Note that applying $f_{\neg \forall xA(x)}$ we must always reach the left column and $f_{\neg \forall xB(x)}$ we must always reach the right column. Therefore applying $f_{\neg \forall xA(x)}\circ f_{\neg \forall xB(x)}$ we can never remain stationary. This is in contrast to the propositional case.
+	Consider $\varphi = \neg(\neg \forall xA(x)\vee\neg \forall xB(x))$. There is a counter-model as shown in Figure~\ref{fig1},
+	where we indicate at each node the elements that exist at it. For black nodes, both $A$ and $B$ hold, for red ones only $B$, for blue ones only $A$. Furthermore, red arrows indicate the functions $f_{\neg \forall xA(x)}$ and blue arrows the functions $f_{\neg \forall xB(x)}$. Note that applying $f_{\neg \forall xA(x)}$ we always reach the left column and applying $f_{\neg \forall xB(x)}$ we always reach the right column. Therefore applying $f_{\neg \forall xA(x)}\circ f_{\neg \forall xB(x)}$ we never remain stationary. This is in contrast to the propositional case.
 \end{example}
 
-However Lemma~\ref{thm:fo-countermodel-reduction} still enables us to add some additional axioms which could help guide proof search. In particular we may assume that $f_\psi(w) = w$ if $\exists u(w = f_\psi(u))$ for $\psi\in\mathcal F_\forall$, i.e. $f_\psi$ is idempotent, and  $f_\psi(w) = w$ if $\exists u(w \geq f_\psi(u))$ for each $\psi\in\mathcal F_\to$, which is even stronger than idempotence. How adding these properties as assumption helps with proof search has to be examined.
+Let us add that Lemma~\ref{thm:fo-countermodel-reduction} still equips us with additional information that could be used to guide proof search: We could add additional axioms that restrict the interpretation of functions. That is, we may assume that $f_\psi(w) = w$, if $\exists u(w = f_\psi(u))$ for all $\psi\in\mathcal F_\forall$ (i.e. that $f_\psi$ is idempotent), and $f_\psi(w) = w$, if $\exists u(w \geq f_\psi(u))$ for all $\psi\in\mathcal F_\to$ (which is even stronger than idempotence).
+How adding such axioms impacts proof search will need to be evaluated in experiments.
 
 \section{Conclusion}
 
@@ -714,15 +719,15 @@ The transformation saw an exponential blow-up parameterized by $|\mathcal F_\to|
 A key motivation for our work is the potential of leveraging classical provers for showing intuitionistic validity.
 %The practical feasibility of our translation is yet to be tested.
 %In particular in the first-order case it is difficult to estimate how the increased complexity of the output formula impacts proof search.
-Initial tests show promise but we plan on conducting a more thorough evaluation.
+Initial tests show promise but we plan on conducting a more thorough evaluation using state-of-the art automated theorem provers, in particular the Vampire theorem prover~\cite{kovacs2013first}.
 A key factor yet to be determined is how large the parameters $|\mathcal F_\to|$ in the propositional case and $|\mathcal F|$ in the predicate case are in practice.
 
 The above mentioned complexity considerations are direct consequences of our straightforward constructions.
 We plan to establish better bounds in future work by utilizing structural properties of the input formula, in particular by constructing smaller counter-examples $\mathcal M_T$ in case certain atoms are independent from each other.
 On the theoretical side, we also hope to give a new translation from QBF to IPC that improves our understanding of the relationship between intuitionistic propositional logic and the polynomial hierarchy.
 
-As a next step we will benchmark our translation using state-of-the art automated theorem provers, in particular the Vampire theorem prover~\cite{kovacs2013first}. We will have to adapt the counter-model translation to a proof translation for the particular calculus, e.g. superposition in the case of Vampire. Ultimately we hope that this will also open a new path for program extraction via the Curry-Howard Correspondence.
-
+Finally, we plan to complement the counter-model translation presented in this paper by a proof translation.
+We will target the particular calculi used by state-of-the-art provers, e.g. superposition in the case of Vampire. Ultimately we hope that this will also open a new path for program extraction via the Curry-Howard Correspondence.
 
 \bibliography{lipics-v2021-EIICL}
 
