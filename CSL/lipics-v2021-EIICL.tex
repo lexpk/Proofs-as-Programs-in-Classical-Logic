@@ -92,9 +92,9 @@ We hope that our embeddings of classical into intuitionistic logic will allow le
 
 Constructive mathematics refers to a flavour of mathematics in which the existence of an object can only be established by explicit construction, as opposed to classical mathematics where existence can be shown implicitly, e.g. by assuming non-existence and deriving a contradiction.
 The formalism usually associated with constructive mathematics is intuitionistic logic, which essentially differentiates itself from classical logic by the fact that the law of excluded middle $A\vee\neg A$ and the double negation shift $\forall x\neg\neg P(x)\to\neg\neg\forall xP(x)$ are not valid.
-Besides philosophical considerations, most prominently advocated by Brouwer~\cite{brouwer1907over} and Bishop~\cite{bishop1967foundations}, there is a particul<ar motivation for studying constructive mathematics from the perspective of computer science in that proofs in  intuitionistic logic directly correspond to computer programs --- as expressed in famous Curry-Howard correspondence~\cite{howard1980formulae}.
+Besides philosophical considerations, most prominently advocated by Brouwer~\cite{brouwer1907over} and Bishop~\cite{bishop1967foundations}, there is a particular motivation for studying constructive mathematics from the perspective of computer science in that proofs in  intuitionistic logic directly correspond to computer programs --- as expressed in the Curry-Howard correspondence~\cite{howard1980formulae}.
 
-The interest in intuitionistic logic has lead to the development of a number of automated theorem proving systems for propositional as well as for predicate logic and a collection of benchmarks problems (see e.g. the
+The interest in intuitionistic logic has lead to the development of a number of automated theorem proving systems for propositional as well as for predicate logic and a collection of benchmark problems (see e.g. the
 ILTP library website~\cite{iltp}).
 However, progress in automated theorem proving for intuitionistic logic has been slow, whereas reasoners for classical logic have made tremendous progress, see e.g. the TPTP~\cite{casc} and SAT~\cite{satc} competitions.
 %, e.g., the first-order provers~\cite{kovacs2013first, schulz2002brainiac, korovin2008iprover}
@@ -139,7 +139,7 @@ Eliminating all implications, however, is not possible in intuitionistic logic s
 Still we propose a similar transformation.
 A notable feature of our transformation is that all non-classical content is encapsulated in formulas of type $(A\to B)\to C$, i.e. if there are no such formulas in the transformed formula then the classical validity of the transformed formula immediately implies intuitionistic validity.
 
-\begin{theorem}
+\begin{theorem}\label{thm:Tseytin}
 For every propositional formula $\varphi$ there effectively are an atom $P$ and a set of $\mathcal S$ of formulas (over an extended set of propositions) of one of the forms\\
 $\text{ \hspace{1cm}} A\to (B\wedge C), (A\wedge B)\to C, A\to (B\vee C), (A\vee B)\to C, (A\to B)\to C,$\\
 for atomic $A, B, C$, such that $\varphi$ is intuitionistically valid if and only if $\bigwedge\mathcal S\to P$ is intuitionistically valid. The time complexity of the transformation is linear in the input size.
@@ -153,13 +153,13 @@ Since Kripke frames for propositional logic over a fixed alphabet of proposition
 2) Next we eliminate some quantifiers via Herbrandization. The only quantifiers eliminated occur in formulas derived from formulas of type $(A\to B)\to C$.
 %
 3) We can then argue that if there is a counter-model for the resulting formula then there is a counter-model with a certain Kripke frame of bounded size completely determined by the number of formulas of type $(A\to B)\to C$.
-This allows us to eliminate the remaining quantifiers by simply enumerating the worlds in that Kripke model.
+This allows us to eliminate the remaining quantifiers by simply enumerating the worlds in that Kripke frame.
 
 Summarizing, we obtain the following result:
 
 \begin{theorem}
 \label{thm:reduction-propositional}
-	Let $\mathcal S$ be as above. Let $\mathcal F_\to\subseteq\mathcal S$ denote formulas $\psi$ of the form $(A\to B)\to C$ and $\Lambda$ denote the set of sequences without repetition over $\mathcal F_\to$. For each atom $A$ and $k\in\Lambda$ consider a new atom $A^k$. Obtain $\mathcal S^\#$ by including the following formulas:
+	Let $\mathcal S$ be as in Theorem~\ref{thm:Tseytin} and $\mathcal F_\to\subseteq\mathcal S$ denote the subset of formulas of the form $(A\to B)\to C$ and $\Lambda$ denote the set of sequences without repetition over $\mathcal F_\to$. For each atom $A$ and $k\in\Lambda$ consider a new atom $A^k$. Obtain $\mathcal S^\#$ by including the following formulas:
 	\begin{itemize}
 		\item $A^k\to A^{k\psi}$ for each atom $A$ occurring in $\mathcal S$, $k\in\Lambda$ and $\psi\in\mathcal F_\to$ not occurring in $k$.
 		\item $A^k\to (B^k\circ C^k)$ for each $\circ\in\{\wedge,\vee\}$, $A\to (B\circ C)\in\mathcal S$, $k\in\Lambda$.
@@ -173,7 +173,7 @@ Instead of explicitly enumerating the worlds of a counter-example of bounded siz
 We can show that this QBF is satisfiable if and only if there exists a counter-model for our original formula:
 
 \begin{theorem}
-	Let $\mathcal S$ be as above. There is an effective procedure that produces a QBF $\varphi^Q$ of size $\mathcal O(|\mathcal S|\cdot|\mathcal F_\to| + |\mathcal F_\to|^3)$ with $2\cdot |\mathcal F_\to|-1$ quantifier alternations such that $\varphi$ is intuitionistically valid if and only if $\varphi^Q$ is not satisfiable. For fixed $N\in\mathbb N$, deciding intuitionistic validity for formulas $\bigwedge \mathcal S\to P$ where $\mathcal S$ is as above and $|\mathcal F_\to| = N$ is therefore in $\Sigma_{2N-1}$.
+	Let $\mathcal S$ be as in Theorem~\ref{thm:Tseytin} and $\mathcal F_\to\subseteq\mathcal S$ denote the subset of formulas of the form $(A\to B)\to C$. There is an effective procedure that produces a QBF $\varphi^Q$ of size $\mathcal O(|\mathcal S|\cdot|\mathcal F_\to| + |\mathcal F_\to|^3)$ with $2\cdot |\mathcal F_\to|-1$ quantifier alternations such that $\varphi$ is intuitionistically valid if and only if $\varphi^Q$ is not satisfiable. For fixed $N\in\mathbb N$, deciding intuitionistic validity for formulas $\bigwedge \mathcal S\to P$ where $\mathcal S$ is as above and $|\mathcal F_\to| = N$ is therefore in $\Sigma_{2N-1}$.
 \end{theorem}
 
 %\begin{theorem}
@@ -189,11 +189,10 @@ The details of this translation are given in Section~\ref{section:tseytin}.
 We then proceed similarly to the propositional case.
 Note however that one difficulty arises from the fact that our (classical) domain will now contain on the one hand worlds in the Kripke frame but on the other hand also proper domain elements.
 We resolve this apparent conflict by introducing a special binary predicate $E$, inspired by~\cite{iemhoff2010eskolemization}, encoding which domain elements exists at which world.
-In particular $E(x, u)$ entails that $x$ represents a domain element and $u$ a world.
 The main transformation then again proceeds in three steps:
 Step 1) and 2) are analogous to the propositional case.
 The real difference arises in step 3):
-While we can also establish the existence of a canonic counter-model whose size only depends on formulas of type $(A\to B)\to C$ and $\forall xA\to B$, the size of this counter-model is countably infinite in general.
+While we can also establish the existence of a canonic counter-model whose frame only depends on formulas of type $(A\to B)\to C$ and $\forall xA\to B$, the size of this counter-model is countably infinite in general.
 This is not surprising since certain intuitionistically invalid formulas like the double negation shift $\forall x\neg\neg A(x)\to \neg\neg\forall x A(x)$ don't have finite counter-models.
 Therefore we are not able to eliminate the $\forall$-quantifiers associated with the Kripke semantics.
 However since our translation targets first-order logic, we believe that the introduction of these quantifiers is acceptable.
@@ -282,14 +281,13 @@ A $\Sigma$-\emph{Kripke structure} $\mathcal{K}$ is a partially ordered set $W$,
 $\varphi$ is valid for some frame (write $W\models\varphi$) if it is satisfied in every Krike structure with that frame. We denote the set of valid formulas with \emph{IQC} (Intuitionistic Quantified Calculus).
 \end{definition}
 In addition to the propositional tautologies there are now sentences involving quantifiers which are classically valid but not intuitionistically, e.g., $\neg\forall x A(x)\to \exists x \neg A(x)$.
-Analogous remarks with regard to validity and satisfiability hold as in the propositional case.
 
 \subsection{Skolemization and Herbrandization}
 
 An important step in the embedding will be the elimination of quantifiers via Herbrandization.
 In this process we introduce fresh variables and add additional function symbols to the signature.
 A fresh variable is any variable that does not occur in any of the considered formulas.
-Whenever we add function symbol we implicitly extend the signature by some not previously contained symbol.
+Whenever we add a function symbol we implicitly extend the signature by some not previously contained symbol.
 
 \begin{definition}
 	For formulas $\varphi$ we define the Skolemization $\varphi^S_Z$ and Herbrandization $\varphi^H_Z$ with respect to $Z$ by simultaneous induction as follows:
@@ -327,12 +325,12 @@ The most obvious approach to embedding intuitionistic into classical logic is to
 		\item $(\varphi\circ\psi)^u = \varphi^u\circ\psi^u$ for $\circ\in\{\wedge, \vee\}$.
 		\item $(\varphi\to \psi)^u = \forall w(u\preceq w\to\varphi^{w}\to\psi^{w})$ where $w$ is some new variable.
 	\end{itemize}
-	Let $K(\varphi)$ encode the Kripke semantics, i.e.
+	Let $K(\varphi)$ encode the theory of Kripke structures, i.e.
 	$$K(\varphi) = \text{\normalfont PartialOrder}(\preceq)\wedge\forall u\forall w(u\preceq w\to \text{\normalfont Persistent}(u, w))$$
 	with e.g.
 	\begin{align*}
 		\text{\normalfont PartialOrder}(\preceq) =&\:\forall u(u\preceq u)\wedge\forall u\forall w(u\preceq w\to w\preceq u\to u = w)\wedge\\&\:\forall u\forall v\forall w(u\preceq v\to v\preceq w\to u\preceq w)\\
-		\text{\normalfont Persistent}(u, w)=&\:\bigwedge \{A(u)\to A(w))\:|\: \text{ $A$ is a propositional variable that occurs in $\varphi$}\}
+		\text{\normalfont Persistent}(u, w)=&\:\bigwedge \{A(u)\to A(w)\:|\: \text{ $A$ is a propositional variable that occurs in $\varphi$}\}
 	\end{align*}
 	Then define
 	$$\varphi^{C} = K(\varphi)\to \varphi^{u}$$
@@ -367,20 +365,20 @@ $\mathcal S^+(Qx\varphi(x)) = \{P_{Qx\varphi}(\vec z_{Qx\varphi})\to QxP_{\varph
 \end{definition}
 
 \begin{lemma}
-	$\bigwedge S^+(\varphi)\wedge P_\varphi\to\varphi$, $\bigwedge S^-(\varphi)\wedge \varphi\to P_\varphi$ hold classically and intuitionistically.
+	$\bigwedge S^+(\varphi)\wedge P_\varphi(\vec z_\varphi)\to\varphi$ and $\bigwedge S^-(\varphi)\wedge \varphi\to P_\varphi(\vec z_\varphi)$ are valid both classically and intuitionistically.
 \end{lemma}
 
 It is straight-forward to extend structures to the additional symbols such that the formulas $S^+(\varphi)\cup\mathcal S^-(\varphi)$ are satisfied, i.e. for each structure $\mathcal M$ and formula $\varphi$ we can define a structure $\mathcal S(\mathcal M, \varphi)$, whose exact definition can be found in the appendix as Definition~\ref{def:transf-structure}, such that:
 \begin{lemma}\label{thm:struct1}
-For every formula $\varphi$ and structure $\mathcal M$, we have that	$\mathcal S(\mathcal M, \varphi)\models\mathcal S^+(\varphi)\cup S^-(\varphi)$.
+For every formula $\varphi$ and structure $\mathcal M$, we have that $\mathcal S(\mathcal M, \varphi)\models\mathcal S^+(\varphi)\cup S^-(\varphi)$.
 \end{lemma}
 
 \begin{lemma}\label{thm:struct2}
 	For every structure $\mathcal M$,
-	$\mathcal M\models \varphi$ if and only if $S(\mathcal M, \varphi)\models P_\varphi$.
+	$\mathcal M\models \varphi$ if and only if $S(\mathcal M, \varphi)\models P_\varphi(\vec z_\varphi)$.
 \end{lemma}
 
-Then from the previous three Lemmas we get:
+Then from the previous three Lemmata we get:
 
 \begin{corollary}\label{equivalid}
 	In both intuitionistic and classical logic
@@ -403,7 +401,7 @@ where $u$ is some new free variable and each $\psi\in\mathcal S$ is of one of th
 $$\begin{matrix}
 	\forall k(u\preceq k\to A(k)\to (B(k)\wedge C(k)))\indent  \forall k(u\preceq k\to (A(k)\wedge (B(k))\to C(k)))\\
 	\forall k(u\preceq k\to A(k)\to (B(k)\vee C(k)))\indent \forall k(u\preceq k\to (A(k)\vee B(k))\to C(k))\\
-	\forall k(u\preceq k\to (\forall l(k\preceq l \to A(l)\to B(l))\to C(k))),
+	\forall k(u\preceq k\to (\forall l(k\preceq l \to A(l)\to B(l)))\to C(k)),
 \end{matrix}$$
 with each $P(x)$ possibly being $\bot$. Applying Herbrandization we obtain a formula
 $$\varphi''' = K(\varphi')\to \bigwedge \mathcal S'\to P_\varphi(s),$$
@@ -468,7 +466,7 @@ So we know that $\varphi^\circ$ is valid iff it is valid for structures that hav
 	x, &\text{ if $\psi$ occurs in $x$,}\\
 	x\psi, &\text{ otherwise.}
 \end{cases}$$
-Now we can replace every $\forall$-quantifier by enumerating all the ground terms, and then replace all distinct ground instances of relations by new propositional variables yielding a CPC formula. This gives us the translation stated in Theorem~\ref{thm:reduction-propositional}.
+Now we can replace every $\forall$-quantifier by enumerating all the ground terms, and then replace all distinct ground instances of relations by new propositional variables yielding a propositional formula. This gives us the translation stated in Theorem~\ref{thm:reduction-propositional}.
 %\begin{theorem}
 %	$\bigwedge\mathcal S\to P$ is intuitionistically valid iff $\bigwedge\mathcal S^\#\to P^\emptyset$ is classically valid.
 %\end{theorem}
@@ -476,7 +474,7 @@ Now we can replace every $\forall$-quantifier by enumerating all the ground term
 \begin{example}
 	Let us consider the law of excluded middle $\varphi = A\vee\neg A$. Then we get
 	$$\mathcal S^-(\varphi) = \{(P_A\vee P_{\neg A})\to P_\varphi, A\to P_A, (A\to \bot)\to P_{\neg A}\},$$
-	and we know that $\varphi$ is valid iff $\bigwedge \mathcal S(\varphi)\to P_\varphi$ is valid. Applying the above lemma this is intuitionistically valid iff $\bigwedge\mathcal S^\#\to P^\emptyset_\varphi$ is classically valid, where, setting $\psi = (A\to \bot)\to P_{\neg A}$,
+	and we know that $\varphi$ is valid iff $\bigwedge \mathcal S^-(\varphi)\to P_\varphi$ is valid. Applying the above lemma this is intuitionistically valid iff $\bigwedge\mathcal S^\#\to P^\emptyset_\varphi$ is classically valid, where, setting $\psi = (A\to \bot)\to P_{\neg A}$,
 	\begin{align*}
 		\mathcal S^\# =&\{P_\varphi^\epsilon\to P_\varphi^{\psi}, P_A^\epsilon\to P_A^{\psi},P_{\neg A}^\epsilon\to P_{\neg A}^{\psi},A^\epsilon\to A^{\psi}, (P_A^\epsilon\vee P_{\neg A}^\epsilon)\to P_\varphi^\epsilon, (P_A^{\psi}\vee P_{\neg A}^{\psi})\to P_\varphi^{\psi}\}\cup\\ &\{A^\epsilon\to P_A^\epsilon, P_A^{\psi}\to P_A^{\psi}, (A^{\psi}\to \bot)\to P_{\neg A}^\epsilon, (A^{\psi}\to \bot)\to P_{\neg A}^{\psi}\}.
 	\end{align*}
@@ -543,7 +541,7 @@ Note that the last set of universally quantified variables can be avoided becaus
 
 \section{CQC to IQC}
 
-We now give an analogous transformation for first order logic. However our trick of lifting the sentence to first-order logic to encode the Kripke semantics no longer works in such a straightforward manner, since we already are in first-order logic. However we do it nonetheless! The domain of our classical model will feature on the one hand elements representing worlds in a Kripke frame and on the other hand the domain-elements from the Kripke model. We reconcile these notions by introducing a special binary predicate $E$, first considered in~\cite{baaz2006skolemization} and expanded onto in~\cite{iemhoff2010eskolemization}, where $E(x, u)$ encodes that $x$ is an element of the domain of the world $u$. We fix some signature $\Sigma$ for this section. To encode that some $n$-ary relation $A$ holds at a world $u$ we replace each $n$-ary relation symbol $A$ with a $n+1$-ary relation symbol $A^\#$, interpreting $A^\#(\vec x, u)$ as "$A(\vec x)$ holds at u". Furthermore we write $\vec E(\vec x, u)$ for $\bigwedge\{E(x_i, u)\:|\:x_i\in \vec x\}$.
+We now give an analogous transformation for first order logic. Our trick of lifting the sentence to first-order logic to encode the Kripke semantics no longer works in such a straightforward manner, since we already are in first-order logic. However we do it nonetheless! The domain of our classical model will feature on the one hand elements representing worlds in a Kripke frame and on the other hand the domain-elements from the Kripke model. We reconcile these notions by introducing a special binary predicate $E$, first considered in~\cite{baaz2006skolemization} and expanded onto in~\cite{iemhoff2010eskolemization}, where $E(x, u)$ encodes that $x$ is an element of the domain of the world $u$. We fix some signature $\Sigma$ for this section. To encode that some $n$-ary relation $A$ holds at a world $u$ we replace each $n$-ary relation symbol $A$ with a $n+1$-ary relation symbol $A^\#$, interpreting $A^\#(\vec x, u)$ as "$A(\vec x)$ holds at u". Furthermore we write $\vec E(\vec x, u)$ for $\bigwedge\{E(x_i, u)\:|\:x_i\in \vec x\}$.
 
 First of all recall, that due to Lemma~\ref{equivalid} it is sufficient to consider sentences of the form $\bigwedge\mathcal S\to P$ where all formulas in $\mathcal S$ are of one of the forms
 \[\begin{matrix}
@@ -556,19 +554,19 @@ The complete result that we will show is as follows:
 	\begin{itemize}
 		\item $\forall \vec z\forall u(\vec E(\vec z, u)\to (A^\#(\vec a, u)\to (B^\#(\vec b, u)\circ C^\#(\vec c, u))))$\\for each $\circ\in\{\wedge, \vee\}, \psi = \forall \vec z(A(\vec a)\to (B(\vec b)\circ C(\vec c)))\in\mathcal S$
 		\item $\forall \vec z\forall u(\vec E(\vec z, u)\to (A^\#(\vec a, u)\circ B^\#(\vec b, u))\to C^\#(\vec c, u))$\\for each $\circ\in\{\wedge, \vee\}, \psi = \forall \vec z((A(\vec a)\circ B(\vec b))\to C(\vec c))\in\mathcal S$
-		\item $\forall \vec z\forall u(\vec E(\vec z, u)\to(A^\#(\vec a, f(\vec z, u))\to B^\#(\vec b, f(\vec z, u)))\to C^\#(\vec c, u))$ for each $\psi = \forall \vec z((A(\vec a)\to B(\vec b))\to C(\vec c))\in\mathcal S$
-		\item  $\forall \vec z\forall u(\vec E(\vec z, u)\to \forall x(E(x, f(\vec z, u))\to A^\#(\vec a, f(\vec z, u)))\to B^\#(\vec b, u))$\\for each $\forall \vec z(\forall xA(\vec a)\to B(\vec t_B))\in\mathcal S$.
+		\item $\forall \vec z\forall u(\vec E(\vec z, u)\to(A^\#(\vec a, f_\psi(\vec z, u))\to B^\#(\vec b, f_\psi(\vec z, u)))\to C^\#(\vec c, u))$\\for each $\psi = \forall \vec z((A(\vec a)\to B(\vec b))\to C(\vec c))\in\mathcal S$
+		\item  $\forall \vec z\forall u(\vec E(\vec z, u)\to \forall x(E(x, f_\psi(\vec z, u))\to A^\#(\vec a, f_\psi(\vec z, u)))\to B^\#(\vec b, u))$\\for each $\psi = \forall \vec z(\forall xA(\vec a)\to B(\vec t_B))\in\mathcal S$.
 		\item $\forall \vec z\forall u(\vec E(\vec z, u)\to A^\#(\vec a, u)\to \forall x(E(x, u)\to B^\#(\vec b, u)))$\\for each $\forall \vec t(A(\vec a)\to \forall xB(\vec b))\in\mathcal S$.
 		\item $\forall \vec z\forall u(\vec E(\vec z, u)\to \exists x(E(x, u)\wedge A^\#(\vec z, u))\to B^\#(\vec b))$\\for each $\forall \vec z(\exists xA(\vec a)\to B(\vec b))\in\mathcal S$
 		\item $\forall \vec z\forall u(\vec E(\vec z, u)\to A^\#(\vec b)\to \exists x(E(x, u)\wedge B^\#(\vec b, u)))$\\for each $\forall \vec z(A(\vec a)\to \exists xB(\vec b))\in\mathcal S$
 	\end{itemize}
 	Then $\bigwedge S\to P$ is intuitionistically iff $\exists xE(x, s)\to K\to \bigwedge\mathcal S^\#\to P^\#(s)$ is classically valid, where $s$ is a new constant symbol, $\Sigma$ is the original signature and
 	\begin{align*}
-		K := &\:\bigwedge\{\forall x\forall u((E(x, u)\to E(x, f_\psi(u)))\:|\:\psi\in\mathcal F\}\wedge\\
+		K := &\:\bigwedge\{\forall\vec z\forall x\forall u((E(x, u)\to E(x, f_\psi(\vec z, u)))\:|\:\psi\in\mathcal F\}\wedge\\
 		&\:\forall u\left(\exists xE(x, u)\to \bigwedge\{\forall\vec z(\vec E(\vec z, u)\to E(f(\vec z), u))\:|\:\text{$f$ is a function symbol in $\Sigma$}\}\right)\wedge\\
 		&\:\bigwedge\{\forall\vec z_1\forall \vec z_2\forall u(A^\#(\vec z_1, u)\to A^\#(\vec z_1, f_\psi(\vec z_2, u)))\:|\:\text{$\psi\in\mathcal F$, $A$ is a relation symbol in $\Sigma$}\}.
 	\end{align*}
-	The size of the obtained formula is linear in the input. However a $|\mathcal F| + 1$ new function symbols and the new binary predicate $E$ were introduced and each $n$-ary relation symbol has been extended to a $n+1$-ary relation symbol.
+	The size of the obtained formula is linear in the input. However $|\mathcal F| + 1$ new function symbols and the new binary predicate $E$ were introduced and each $n$-ary relation symbol has been extended to a $n+1$-ary relation symbol.
 \end{theorem}
 
 It is not possible to completely eliminate worlds from the domain as in the propositional case, since counter-models can possibly be infinite (as we will see in more detail later).
@@ -632,7 +630,7 @@ As in the previous section we can define a tree counter-model for this.
 		\item $M_T$ are the sequences on $\{(\vec z, \psi)\:|\:\psi\in \mathcal F, \vec z\in M^n\}$.
 		\item We interpret $\preceq$ as the prefix-order.
 		\item We set $$f_\psi^{I_T}(\vec z, (\vec z_1, \psi_1)\dots (\vec z_n, \psi_n)) = (\vec z_1, \psi_1)\dots (\vec z_n, \psi_n)(\vec z, \psi).$$
-		\item For propositional variables $P$, we set $$P^{I_T}((\vec z_1, \psi_1)\dots (\vec z_n, \psi_n)) = P^I(f_{\psi_n}(\vec z_n, \dots(f_{\psi_1}(\vec z_1, s^I))\dots)).$$
+		\item For relation symbols $R^\#$, we set $${R^\#}^{I_T}(\vec z, (\vec z_1, \psi_1)\dots (\vec z_n, \psi_n)) = {R^\#}^I(\vec z, f_{\psi_n}(\vec z_n, \dots(f_{\psi_1}(\vec z_1, s^I))\dots)).$$
 	\end{itemize}
 \end{definition}
 
@@ -642,7 +640,8 @@ As in the previous section we can define a tree counter-model for this.
 
 Even if we don't have the finiteness property of the propositional case, we have still managed to reduce the complexity of possible counter-models because we know that considering worlds of the form $$f_{\psi_1}(\vec z_1, f_{\psi_2}(\vec z_2, \dots f_{\psi_n}(\vec z_n, s)\dots))$$ is sufficient.
 In particular, this allows us to completely eliminate $\preceq$ from the formula, that is we remove the PartialOrder$(\preceq)$
-from $K(\varphi)$ and replace $\forall u\forall w\forall x((E(x, u)\wedge u\preceq w)\to E(x, w))$ with $\bigwedge\{\forall \vec z\forall u\forall x(E(x, u)\to E(x, f_\psi(\vec z, u)))\:|\:\psi\in\mathcal F_\to\}$ and analogously for persistency to obtain $K$. We set
+from $K(\varphi)$ and adjust DomainSubset$(u, w)$ and Persistent$(u, w)$, e.g. remove quantification over $w$ and the precondition $u\preceq w$ from $K(\varphi)$ and replace DomainSubset$(u, w)$ with
+$$\bigwedge\{\forall \vec z\forall u\forall x(E(x, u)\to E(x, f_\psi(\vec z, u)))\:|\:\psi\in\mathcal F_\to\}$$ and Persistent$(u, w)$ with $$\bigwedge\{\forall\vec z_1\forall\vec z_2\forall u(A(\vec z_1, u)\to A(\vec z_1, f_\psi(\vec z_2, u)))\:|\:\psi\in\mathcal F_\to, \text{$A\in\Sigma$ is a relation symbol}\}.$$ We set
 
 $$\varphi^{\#} = K\to \bigwedge S^\#\to P^\#.$$
 Then, we obtain the following result:
@@ -671,7 +670,9 @@ We get an analogous result to Lemma~\ref{thm:prop-countermodel-reduction}:
 \end{lemma}
 
 However part 2 of Lemma~\ref{thm:fo-countermodel-reduction} fails for $\psi\in\mathcal F_\forall$, because even if for all $x$ with $E(x, v$), we have $A(x, v)$, there could be some term $y$ with $\neg E(y, v)$ and $w$ with $v\preceq w$ such that $E(y, w)$ and $\neg A(y, w)$. This is why we must consider sequences that have repetitions:
-\begin{wrapfigure}{r}{0.4\textwidth}
+
+\begin{wrapfigure}[16]{r}{0.4\textwidth}
+	\vspace{-32pt}
 	\begin{center}
 		\begin{tikzpicture}[squarednode/.style={rectangle, draw, very thick, minimum size=5mm}]
 			\node[squarednode]      (0)   [] {$ $};
@@ -683,29 +684,28 @@ However part 2 of Lemma~\ref{thm:fo-countermodel-reduction} fails for $\psi\in\m
 			\node[squarednode]      (3l)   [above=of 2l] {{1, 2, \color{red}$3$}};
 			\node      (4r)   [above=of 3r] {{$\vdots$}};
 			\node      (4l)   [above=of 3l] {{$\vdots$}};
-			\draw[-{Stealth[length=3mm, width=3mm]}, color=blue] (0.north east) -- (1r.south west);
-			\draw[-{Stealth[length=3mm, width=3mm]}, color=red] (0.north west) -- (1l.south east);
-			\draw[-{Stealth[length=3mm, width=3mm]}, color=blue] (1r.north) -- (2r.south);
-			\draw[-{Stealth[length=3mm, width=3mm]}, color=red] (1l.north) -- (2l.south);
-			\draw[-{Stealth[length=3mm, width=3mm]}, color=blue] (1l.north east) -- (2r.south west);
-			\draw[-{Stealth[length=3mm, width=3mm]}, color=red] (1r.north west) -- (2l.south east);
-			\draw[-{Stealth[length=3mm, width=3mm]}, color=blue] (2r.north) -- (3r.south);
-			\draw[-{Stealth[length=3mm, width=3mm]}, color=red] (2l.north) -- (3l.south);
-			\draw[-{Stealth[length=3mm, width=3mm]}, color=blue] (2l.north east) -- (3r.south west);
-			\draw[-{Stealth[length=3mm, width=3mm]}, color=red] (2r.north west) -- (3l.south east);
-			\draw[-{Stealth[length=3mm, width=3mm]}, color=blue] (3r.north) -- (4r.south);
-			\draw[-{Stealth[length=3mm, width=3mm]}, color=red] (3l.north) -- (4l.south);
-			\draw[-{Stealth[length=3mm, width=3mm]}, color=blue] (3l.north east) -- (4r.south west);
-			\draw[-{Stealth[length=3mm, width=3mm]}, color=red] (3r.north west) -- (4l.south east);
+			\draw[-{Stealth[length=3mm, width=3mm]}, color=black] (0.north east) -- (1r.south west);
+			\draw[-{Stealth[length=3mm, width=3mm]}, color=black] (0.north west) -- (1l.south east);
+			\draw[-{Stealth[length=3mm, width=3mm]}, color=black] (1r.north) -- (2r.south);
+			\draw[-{Stealth[length=3mm, width=3mm]}, color=black] (1l.north) -- (2l.south);
+			\draw[-{Stealth[length=3mm, width=3mm]}, color=black] (1l.north east) -- (2r.south west);
+			\draw[-{Stealth[length=3mm, width=3mm]}, color=black] (1r.north west) -- (2l.south east);
+			\draw[-{Stealth[length=3mm, width=3mm]}, color=black] (2r.north) -- (3r.south);
+			\draw[-{Stealth[length=3mm, width=3mm]}, color=black] (2l.north) -- (3l.south);
+			\draw[-{Stealth[length=3mm, width=3mm]}, color=black] (2l.north east) -- (3r.south west);
+			\draw[-{Stealth[length=3mm, width=3mm]}, color=black] (2r.north west) -- (3l.south east);
+			\draw[-{Stealth[length=3mm, width=3mm]}, color=black] (3r.north) -- (4r.south);
+			\draw[-{Stealth[length=3mm, width=3mm]}, color=black] (3l.north) -- (4l.south);
+			\draw[-{Stealth[length=3mm, width=3mm]}, color=black] (3l.north east) -- (4r.south west);
+			\draw[-{Stealth[length=3mm, width=3mm]}, color=black] (3r.north west) -- (4l.south east);
 		\end{tikzpicture}
 	\end{center}
 	\caption{Counter-model to $\varphi$.}
 	\label{fig1}
 \end{wrapfigure}
-
 \begin{example}
 	Consider $\varphi = \neg(\neg \forall xA(x)\vee\neg \forall xB(x))$. There is a counter-model as shown in Figure~\ref{fig1},
-	where we indicate at each node the elements that exist at it. For black nodes, both $A$ and $B$ hold, for red ones only $B$, for blue ones only $A$. Furthermore, red arrows indicate the functions $f_{\neg \forall xA(x)}$ and blue arrows the functions $f_{\neg \forall xB(x)}$. Note that applying $f_{\neg \forall xA(x)}$ we always reach the left column and applying $f_{\neg \forall xB(x)}$ we always reach the right column. Therefore applying $f_{\neg \forall xA(x)}\circ f_{\neg \forall xB(x)}$ we never remain stationary. This is in contrast to the propositional case.
+	where we indicate at each world the elements that exist at it. For black numbers $n$, both $A(n)$ and $B(n)$ hold at that world, for red ones only $A(n)$, for blue ones only $B(n)$. The arrows indicate the order. $\neg\forall xA(x)$ is not fulfilled at worlds in the left column and $\neg\forall xB(x)$ is not fulfilled at worlds in the right column. In particular applying $f_{\neg \forall xA(x)}$ we must always reach the right column and applying $f_{\neg \forall xB(x)}$ we must always reach the left column. Therefore applying $f_{\neg \forall xA(x)}\circ f_{\neg \forall xB(x)}$ we cannot remain stationary.
 \end{example}
 
 Let us add that Lemma~\ref{thm:fo-countermodel-reduction} still equips us with additional information that could be used to guide proof search: We could add additional axioms that restrict the interpretation of functions. That is, we may assume that $f_\psi(w) = w$, if $\exists u(w = f_\psi(u))$ for all $\psi\in\mathcal F_\forall$ (i.e. that $f_\psi$ is idempotent), and $f_\psi(w) = w$, if $\exists u(w \geq f_\psi(u))$ for all $\psi\in\mathcal F_\to$ (which is even stronger than idempotence).
