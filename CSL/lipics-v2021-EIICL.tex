@@ -302,7 +302,7 @@ Whenever we add function symbol we implicitly extend the signature by some not p
 	\end{itemize}
 	Let $\varphi^S = (\exists x_1\dots\exists x_n \varphi[x_1/a_1\dots x_n/a_n])^S_\emptyset$ and $\varphi^H = (\forall x_1\dots\forall x_n \varphi[x_1/a_1\dots x_n/a_n])^H_\emptyset$ where $a_1,\dots,a_n$ are the free variables occurring in $\varphi$.
 \end{definition}
-\todo{I think with the implicit forall quanitifcation over the free variables in our semantics, now also in the skolem case the free variables should be universally quantified}
+
 \begin{theorem}
 \label{thm:herbrand-skolem}
 For every formula $\varphi$
@@ -749,7 +749,7 @@ Let $\chi$ be a formula and let $\{z_1\dots z_n\} = Z$ contain all free variable
 	
 	Otherwise there are $3$ cases:
 	
-	1. $\chi = \varphi\circ\psi$ for $\circ\in\{\wedge,\vee,\to\}$. By induction hypothesis there exist $\mathcal M_{\varphi, v} = (M, I_{\varphi, v})$ and $\mathcal M_{\psi, v} = (M, I_{\psi, v})$ for $\varphi,\psi$ as stated in the lemma. 
+	1. $\chi = \varphi\circ\psi$ for $\circ\in\{\wedge,\vee,\to\}$. By induction hypothesis there exist $\mathcal M_{\varphi, v} = (M, I_{\varphi, v})$ and $\mathcal M_{\psi, v} = (M, I_{\psi, v})$ for $\varphi,\psi$ as stated in the lemma.
 Then we can define $I_{\chi, v}$ as follows:
 	
 	For every symbol $p$ that occurs in $\varphi^S_Z$ or $\varphi^H_Z$ but not $\psi^S_Z, \psi^H_Z$, we set $p^{I_{\chi, v}} = p^{I_{\varphi, v}}$. For every symbol $p$ that occurs in $\psi^S_Z$ or $\psi^H_Z$ but not $\varphi^S_Z, \varphi^H_Z$, we set $p^{I_{\chi, v}} = p^{I_{\psi, v}}$. Otherwise $p$ already occurs in $\varphi$ so have $p^{I_{\chi, v}} = p^I$.
@@ -876,8 +876,8 @@ Then, $\bigwedge\mathcal S\to P$ has an intuitionistic counter-model. Then by th
 We now define a QBF model iteratively.
 For each atom $A$ interpret $A^0$ such as $\mathcal M$ interprets $A^\epsilon$. Suppose we are given interpretations of all atoms $A^i$ for $i < n$ and a sequence with no repetitions $\psi_1\dots\psi_{n-1}$ over $\mathcal F_\to$ such that $\psi_i$ is exactly the $\psi\in\mathcal F_\to$ for which $F_{\psi}^i$ is true and $A^i$ is interpreted as $A^{\psi_1\dots\psi_i}$  in $\mathcal M$.
 Let the $F^{n}_\psi$ be arbitrarily interpreted (since they are $\forall$-quantified). If not exactly one of the $F^{n}_\psi$ is interpreted as true, then valid$(n)$ fails and the remaining propositions can be chosen arbitrarily. If $F^i_{\psi_n} = 1$ for some $i < n$, then valid$(n)$ also fails and the remaining propositions can be chosen arbitrarily.
-So we may assume that $\psi_1\dots\psi_n$ is a sequence with no repetitions. 
-Interpret the atoms $A^n$ as $\mathcal M$ interprets $A^{\psi_1\dots\psi_n}$. 
+So we may assume that $\psi_1\dots\psi_n$ is a sequence with no repetitions.
+Interpret the atoms $A^n$ as $\mathcal M$ interprets $A^{\psi_1\dots\psi_n}$.
 Continue this construction until $n  = |\mathcal F_\to|$. Then from $\mathcal M$ being a counter-example to $\mathcal S^\#\to P$ it directly follows that this interpretation satisfies $\varphi^Q$.
 	
 	On the other hand suppose $\varphi^Q$ is satisfiable. We construct a counter-example to $\varphi^\#$.
