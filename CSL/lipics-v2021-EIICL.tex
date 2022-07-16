@@ -294,15 +294,15 @@ Whenever we add function symbol we implicitly extend the signature by some not p
 \begin{definition}
 	For formulas $\varphi$ we define the Skolemization $\varphi^S_Z$ and Herbrandization $\varphi^H_Z$ with respect to $Z$ by simultaneous induction as follows:
 	\begin{itemize}
-		\item $A^S_T = A^H_Z = A$ for each atomic $A$.
+		\item $A^S_Z = A^H_Z = A$ for each atomic $A$.
 		\item $(\varphi\circ\psi)^X_Z = \varphi^X_Z\circ\psi^X_Z$ for $\circ\in\{\wedge, \vee\}$, $X\in\{S, H\}$.
 		\item $(\varphi\to\psi)^S_Z = \varphi^H_Z\to \psi^S_Z$\\$(\varphi\to\psi)^H_Z = \varphi^S_Z\to\psi^H_Z$.
-		\item $(\forall x\varphi)^S_Z = \forall x(\varphi[a/x]^S_{T\cup\{a\}}[x/a])$ where $a$ is a new free variable\\$(\forall x\varphi)^H_Z = \varphi[s(z_1,\dots,z_n)/x]^H_Z$ where $s$ is a new function, $\{z_1\dots z_n\} = Z$.
+		\item $(\forall x\varphi)^S_Z = \forall x(\varphi[a/x]^S_{Z\cup\{a\}}[x/a])$ where $a$ is a new free variable\\$(\forall x\varphi)^H_Z = \varphi[s(z_1,\dots,z_n)/x]^H_Z$ where $s$ is a new function, $\{z_1\dots z_n\} = Z$.
 		\item $(\exists x\varphi)^S_Z = \varphi[s(z_1,\dots,z_n)/x]^S_Z$ where $s$ is a new function, $\{z_1\dots z_n\} = Z$\\$(\exists x\varphi)^H_Z = \exists x(\varphi[a/x]^H_{Z\cup\{a\}}[x/a])$ where $a$ is a new free variable.
 	\end{itemize}
 	Let $\varphi^S = (\exists x_1\dots\exists x_n \varphi[x_1/a_1\dots x_n/a_n])^S_\emptyset$ and $\varphi^H = (\forall x_1\dots\forall x_n \varphi[x_1/a_1\dots x_n/a_n])^H_\emptyset$ where $a_1,\dots,a_n$ are the free variables occurring in $\varphi$.
 \end{definition}
-
+\todo{I think with the implicit forall quanitifcation over the free variables in our semantics, now also in the skolem case the free variables should be universally quantified}
 \begin{theorem}
 \label{thm:herbrand-skolem}
 For every formula $\varphi$
@@ -348,32 +348,36 @@ The most obvious approach to embedding intuitionistic into classical logic is to
 \section{Normal form translation}
 \label{section:tseytin}
 
-Of course transforming a propositional formula into a predicate formula is somewhat unsatisfying. As a first step towards obtaining a propositional formula we want to apply Herbrandization. Now trying to apply it to arbitrary formulas presents us with quite a leap in complexity, leading to nested expressions that will make arguments more complicated. We therefore propose a Tseytin-like transformation that produces a formula of a more manageable syntactic form. In fact our translation is often given as a first step in the Tseytin transformation after which the individual formulas are then converted to CNF, so it is well known, but we are not aware of work that uses just this step as a stand-alone. A similar translation for intuitionistic logic was also proposed in~\cite{statman1979intuitionistic}.
+Of course transforming a propositional formula into a predicate formula is somewhat unsatisfying. As a first step towards obtaining a propositional formula we want to apply Herbrandization. Now trying to apply it to arbitrary formulas presents us with quite a leap in complexity, leading to nested expressions that will make arguments more complicated. We therefore propose a Tseytin-like transformation that produces a formula of a more manageable syntactic form. In fact our translation is often presented as the first step in the Tseytin transformation, after which the individual formulas are then converted to CNF.
+Hence, the propositional case of our translation is well known, but we are not aware of any work that uses just this step as a stand-alone. A similar translation for intuitionistic propositional logic was also proposed in~\cite{statman1979intuitionistic}.
 
 \begin{definition}
-	Let $\varphi$ be some formula. For each sub(semi)formula $\psi$ of $\varphi$ consider some new $n$-ary relation symbol $P_\psi$ where $n$ is the number of variables occurring in $\psi$ that is not quantified within $\psi$. We denote those variables with $\vec z_\psi$ in some arbitrary but fixed order. We inductively define clause sets $\mathcal S^+(\varphi)$ and $\mathcal S^-(\varphi)$ as follows:
+Let $\varphi$ be some formula. For each subformula $\psi$ of $\varphi$, consider some new $n$-ary relation symbol $P_\psi$, where $n$ is the number of variables occurring in $\psi$ that is not quantified within $\psi$. We denote those variables with $\vec z_\psi$ in some arbitrary but fixed order. We inductively define clause sets $\mathcal S^+(\varphi)$ and $\mathcal S^-(\varphi)$ as follows:
 	\begin{itemize}
-		\item For every atomic formula $A$\\$\mathcal S^+(A) = \{P_A(\vec z_A)\to A\}$\\$\mathcal S^-(A) = \{A\to P_A(\vec z_A)\}$
-		\item For every conjunction or disjunction $\varphi\circ\psi$ with $\circ\in\{\wedge,\vee\}$\\$\mathcal S^+(\varphi\circ\psi) = \{P_{\varphi\circ\psi}(\vec z_{\varphi\circ\psi})\to P_{\varphi}(\vec z_\varphi)\circ P_{\psi}(\vec z_\psi)\}\cup \mathcal S^+(\varphi)\cup \mathcal S^+(\psi)$\\$\mathcal S^-(\varphi\circ\psi) =\{P_{\varphi}(\vec z_\varphi)\circ P_{\psi}(\vec z_\psi)\to P_{\varphi\circ\psi}(\vec z_{\varphi\circ\psi})\}\cup \mathcal S^-(\varphi)\cup \mathcal S^-(\psi)$
-		\item For every implication $\varphi \to\psi$\\$\mathcal S^+(\varphi\to\psi) = \{(P_{\varphi\to\psi}(\vec z_{\varphi\to\psi})\wedge P_{\varphi}(\vec z_\varphi))\to P_{\psi}(\vec z_\psi)\}\cup \mathcal S^-(\varphi)\cup \mathcal S^+(\psi)$\\$\mathcal S^-(\varphi\to\psi)  = \{(P_{\varphi}(\vec z_\varphi)\to P_{\psi}(\vec z_\psi))\to P_{\varphi\to\psi}(\vec z_{\varphi\to\psi})\}\cup \mathcal S^+(\varphi)\cup \mathcal S^-(\psi)$
-		\item For quantified formulas $Qx\varphi(x)$ with $Q\in \{\forall,\exists\}$\\$\mathcal S^+(Qx\varphi(x)) = \{P_{Qx\varphi}(\vec z_{Qx\varphi})\to QxP_{\varphi}(\vec z_{\varphi})\}\cup \{\forall x\psi\:|\:\psi\in\mathcal S^+(\varphi)\}$\\$\mathcal S^-(Qx\varphi(x))  = \{QxP_{\varphi}(\vec z_{\varphi})\to P_{Qx\varphi}(\vec z_{Qx\varphi})\}\cup \{\forall x\psi\:|\:\psi\in\mathcal S^-(\varphi)\}$
+		\item For every atomic formula $A$:\\
+$\mathcal S^+(A) = \{P_A(\vec z_A)\to A\}$\\$\mathcal S^-(A) = \{A\to P_A(\vec z_A)\}$
+		\item For every conjunction or disjunction $\varphi\circ\psi$ with $\circ\in\{\wedge,\vee\}$:\\
+$\mathcal S^+(\varphi\circ\psi) = \{P_{\varphi\circ\psi}(\vec z_{\varphi\circ\psi})\to P_{\varphi}(\vec z_\varphi)\circ P_{\psi}(\vec z_\psi)\}\cup \mathcal S^+(\varphi)\cup \mathcal S^+(\psi)$\\$\mathcal S^-(\varphi\circ\psi) =\{P_{\varphi}(\vec z_\varphi)\circ P_{\psi}(\vec z_\psi)\to P_{\varphi\circ\psi}(\vec z_{\varphi\circ\psi})\}\cup \mathcal S^-(\varphi)\cup \mathcal S^-(\psi)$
+		\item For every implication $\varphi \to\psi$:\\
+$\mathcal S^+(\varphi\to\psi) = \{(P_{\varphi\to\psi}(\vec z_{\varphi\to\psi})\wedge P_{\varphi}(\vec z_\varphi))\to P_{\psi}(\vec z_\psi)\}\cup \mathcal S^-(\varphi)\cup \mathcal S^+(\psi)$\\$\mathcal S^-(\varphi\to\psi)  = \{(P_{\varphi}(\vec z_\varphi)\to P_{\psi}(\vec z_\psi))\to P_{\varphi\to\psi}(\vec z_{\varphi\to\psi})\}\cup \mathcal S^+(\varphi)\cup \mathcal S^-(\psi)$
+		\item For quantified formulas $Qx\varphi(x)$ with $Q\in \{\forall,\exists\}$:\\
+$\mathcal S^+(Qx\varphi(x)) = \{P_{Qx\varphi}(\vec z_{Qx\varphi})\to QxP_{\varphi}(\vec z_{\varphi})\}\cup \{\forall x\psi\:|\:\psi\in\mathcal S^+(\varphi)\}$\\$\mathcal S^-(Qx\varphi(x))  = \{QxP_{\varphi}(\vec z_{\varphi})\to P_{Qx\varphi}(\vec z_{Qx\varphi})\}\cup \{\forall x\psi\:|\:\psi\in\mathcal S^-(\varphi)\}$
 	\end{itemize}
-	and have $\mathcal S(\varphi) = \mathcal S^+(\varphi)\cup\mathcal S^-(\varphi)$.
+	%We further set $\mathcal S(\varphi) = \mathcal S^+(\varphi)\cup\mathcal S^-(\varphi)$.
 \end{definition}
 
 \begin{lemma}
 	$\bigwedge S^+(\varphi)\wedge P_\varphi\to\varphi$, $\bigwedge S^-(\varphi)\wedge \varphi\to P_\varphi$ hold classically and intuitionistically.
 \end{lemma}
 
-We give a transformation of structures that corresponds to the above, i.e. for each structure $\mathcal M$ and formula $\varphi$ wee can give a structure $\mathcal S(\mathcal M, \varphi)$, the exact definition of which can be found in the appendix as Definition~\ref{def:transf-structure}, such that:
+It is straight-forward to extend structures to the additional symbols such that the formulas $S^+(\varphi)\cup\mathcal S^-(\varphi)$ are satisfied, i.e. for each structure $\mathcal M$ and formula $\varphi$ we can define a structure $\mathcal S(\mathcal M, \varphi)$, whose exact definition can be found in the appendix as Definition~\ref{def:transf-structure}, such that:
 \begin{lemma}
-	For every formula $\varphi$ and structure $\mathcal M$
-	$\mathcal S(\mathcal M, \varphi)\models\mathcal S^+(\varphi)\cup S^-(\varphi)$
+For every formula $\varphi$ and structure $\mathcal M$, we have that	$\mathcal S(\mathcal M, \varphi)\models\mathcal S^+(\varphi)\cup S^-(\varphi)$.
 \end{lemma}
 
 \begin{lemma}
-	For every structure $\mathcal M$
-	$\mathcal M\models \varphi$ if and only if $S(\mathcal M, \varphi)\models P_\varphi$
+	For every structure $\mathcal M$,
+	$\mathcal M\models \varphi$ if and only if $S(\mathcal M, \varphi)\models P_\varphi$.
 \end{lemma}
 
 Then from the previous three Lemmas we get:
@@ -381,14 +385,15 @@ Then from the previous three Lemmas we get:
 \begin{corollary}\label{equivalid}
 	In both intuitionistic and classical logic
 	\begin{itemize}
-		\item $\varphi$ is satisfiable iff $\mathcal \bigwedge S^+(\varphi)\wedge P_\varphi(\vec z_\varphi)$ is.
+		\item $\varphi$ is satisfiable iff $\mathcal \bigwedge S^+(\varphi)\wedge P_\varphi(\vec z_\varphi)$ is, and
 		\item $\varphi$ is valid iff $\bigwedge\mathcal S^-(\varphi)\to P_\varphi(\vec z_\varphi)$ is.
 	\end{itemize}
 \end{corollary}
 
 \section{IPC to simplified CQC}
 
-We are now ready to put these two reduction together with our embedding f. Let $\varphi$ be some propositional formula. As a first step we perform the normalization from the last section, i.e. instead of $\varphi$ we consider $$\varphi' = \bigwedge \mathcal S^-(\varphi)\to P_\varphi.$$
+We are now ready to combine the previously presented reductions. 
+Let $\varphi$ be some propositional formula. As a first step we perform the normalization from the last section, i.e. instead of $\varphi$ we consider $$\varphi' = \bigwedge \mathcal S^-(\varphi)\to P_\varphi.$$
 
 Recall that since $\varphi$ is quantifier-free each formula $\psi\in\mathcal S^-(\varphi)$ is of one of the forms
 $$A\to (B\wedge C), (A\wedge B)\to C, A\to (B\vee C), (A\vee B)\to C, (A\to B)\to C,$$
@@ -398,22 +403,22 @@ where $u$ is some new free variable and each $\psi\in\mathcal S$ is of one of th
 $$\begin{matrix}
 	\forall k(u\preceq k\to A(k)\to (B(k)\wedge C(k)))\indent  \forall k(u\preceq k\to (A(k)\wedge (B(k))\to C(k)))\\
 	\forall k(u\preceq k\to A(k)\to (B(k)\vee C(k)))\indent \forall k(u\preceq k\to (A(k)\vee B(k))\to C(k))\\
-	\forall k(u\preceq k\to (\forall l(k\preceq l \to A(l)\to B(l))\to C(k)))
+	\forall k(u\preceq k\to (\forall l(k\preceq l \to A(l)\to B(l))\to C(k))),
 \end{matrix}$$
 with each $P(x)$ possibly being $\bot$. Applying Herbrandization we obtain a formula
-$$\varphi''' = K(\varphi')\to \bigwedge \mathcal S'\to P_\varphi(s)$$
+$$\varphi''' = K(\varphi')\to \bigwedge \mathcal S'\to P_\varphi(s),$$
 where $s$ is some new constant term and each $\psi\in\mathcal S'$ is of one of the forms
 $$\begin{matrix}
 	\forall k(s\preceq k\to A(k)\to (B(k)\wedge C(k)))\indent \forall k(s\preceq k\to (A(k)\wedge (B(k))\to C(k)))\\
 	\forall k(s\preceq k\to A(k)\to (B(k)\vee C(k)))\indent \forall k(s\preceq k\to (A(k)\vee (B(k))\to C(k)))\\
-	\forall k(s\preceq k\to (k\preceq f_\psi(k) \to A(f_\psi(k))\to B(f_\psi(k)))\to C(k))\\
+	\forall k(s\preceq k\to (k\preceq f_\psi(k) \to A(f_\psi(k))\to B(f_\psi(k)))\to C(k)),\\
 \end{matrix}$$
-and $f_\psi$ is a new function symbol for each introduced formula of that form. Now if $(M, I)$ is a counter-model then we have a counter-model $(M',I')$ where $M' = \{m\in M|s\preceq m\}$ and
-$f_\psi^{I'}(u) = f^I_\psi(u) \text{ iff $u\preceq f^{I}_\psi(u)$ and $f_\psi^{I'}(u) = u$ else.}$ that is where $s$ is a least element and the $f_\psi$ increase their argument. Therefore instead of $\varphi'''$ we may consider a formula $$\varphi^\circ = \forall k(s\preceq k)\to \bigwedge\{\forall k(k\preceq f_\psi(k))\:|\:\psi\in\mathcal F_\to\}\to K(\varphi')\to \bigwedge \mathcal S^\circ\to P_\varphi(s)$$ where each formula $\psi\in\mathcal S^\circ$ is of one of the forms
+and $f_\psi$ is a new function symbol for each introduced formula of that form. Now if $(M, I)$ is a counter-model, then we have a counter-model $(M',I')$ where $M' = \{m\in M|s\preceq m\}$ and
+$f_\psi^{I'}(u) = f^I_\psi(u) \text{ iff $u\preceq f^{I}_\psi(u)$, and $f_\psi^{I'}(u) = u,$ else.}$ That is, where $s$ is the least element and the $f_\psi$ increase their argument. Therefore instead of $\varphi'''$ we may consider a formula $$\varphi^\circ = \forall k(s\preceq k)\to \bigwedge\{\forall k(k\preceq f_\psi(k))\:|\:\psi\in\mathcal F_\to\}\to K(\varphi')\to \bigwedge \mathcal S^\circ\to P_\varphi(s)$$ where each formula $\psi\in\mathcal S^\circ$ is of one of the forms
 $$\begin{matrix}
 	\forall k(A(k)\to (B(k)\wedge C(k)))\indent\forall k((A(k)\wedge B(k))\to C(k))\\
 	\forall k(A(k)\to (B(k)\vee C(k)))\indent\forall k((A(k)\vee B_\psi(k))\to C(k))\\
-	\forall k((A(f_\psi(k))\to B(f_\psi(k)))\to C(k))
+	\forall k((A(f_\psi(k))\to B(f_\psi(k)))\to C(k)),
 \end{matrix}$$
 and $\mathcal F_\to$ denotes the set of formulas of the last kind.
 
@@ -445,7 +450,7 @@ We say $\psi\in\mathcal F_\to$ is \emph{fulfilled} at $u\in M$ iff $A_\psi^I(u)\
 	\end{enumerate}
 \end{lemma}
 
-A proof can be found in the appendix as lemma~\ref{thm:prop-countermodel-reduction2}. Essentially what this tells us is that for every $u$ at which $\psi$ is fulfilled, in particular each $u$ in the image of $f_\psi$, we may add the assumption that $f_\psi(w) = w$ for all $w\geq u$ without changing the validity of $\psi$.
+A proof can be found in the appendix as Lemma~\ref{thm:prop-countermodel-reduction2}. Essentially what this tells us is that for every $u$ at which $\psi$ is fulfilled, in particular for each $u$ in the image of $f_\psi$, we may add the assumption that $f_\psi(w) = w$ for all $w\geq u$ without changing the validity of $\psi$.
 With this lemma in hand showing that $(M_T, I_T)$ is a counter-model to $\varphi^\circ$ is a straightforward check of definitions.
 
 \begin{corollary}\label{cor:prop-tree-model}
@@ -461,20 +466,21 @@ An example of this translation can be found in the appendix as Example~\ref{ex:p
 
 So we know that $\varphi^\circ$ is valid iff it is valid for structures that have as a domain the sequences without repetition over $\mathcal F_\to$, ordered by the prefix-relation and $$s^I = \epsilon, f_\psi^I(x) = \begin{cases}
 	x, &\text{ if $\psi$ occurs in $x$,}\\
-	x, \psi&\text{ otherwise.}
-\end{cases}$$ Now we can replace all $\forall$-quantifiers by enumerating all the ground terms and finally all distinct ground instances of relations by new propositional variables yielding a CPC formula. This gives us the translation stated in Theorem~\ref{thm:reduction-propositional}.
-\begin{theorem}
-	$\bigwedge\mathcal S\to P$ is intuitionistically valid iff $\bigwedge\mathcal S^\#\to P^\emptyset$ is classically valid.
-\end{theorem}
+	x\psi, &\text{ otherwise.}
+\end{cases}$$ 
+Now we can replace every $\forall$-quantifier by enumerating all the ground terms, and then replace all distinct ground instances of relations by new propositional variables yielding a CPC formula. This gives us the translation stated in Theorem~\ref{thm:reduction-propositional}.
+%\begin{theorem}
+%	$\bigwedge\mathcal S\to P$ is intuitionistically valid iff $\bigwedge\mathcal S^\#\to P^\emptyset$ is classically valid.
+%\end{theorem}
 
 \begin{example}
 	Let us consider the law of excluded middle $\varphi = A\vee\neg A$. Then we get
-	$$\mathcal S^-(\varphi) = \{(P_A\vee P_{\neg A})\to P_\varphi, A\to P_A, (A\to \bot)\to P_{\neg A}\}$$
+	$$\mathcal S^-(\varphi) = \{(P_A\vee P_{\neg A})\to P_\varphi, A\to P_A, (A\to \bot)\to P_{\neg A}\},$$
 	and we know that $\varphi$ is valid iff $\bigwedge \mathcal S(\varphi)\to P_\varphi$ is valid. Applying the above lemma this is intuitionistically valid iff $\bigwedge\mathcal S^\#\to P^\emptyset_\varphi$ is classically valid, where, setting $\psi = (A\to \bot)\to P_{\neg A}$,
 	\begin{align*}
-		\mathcal S^\# =&\{P_\varphi^\epsilon\to P_\varphi^{\psi}, P_A^\epsilon\to P_A^{\psi},P_{\neg A}^\epsilon\to P_{\neg A}^{\psi},A^\epsilon\to A^{\psi}, (P_A^\epsilon\vee P_{\neg A}^\epsilon)\to P_\varphi^\epsilon, (P_A^{\psi}\vee P_{\neg A}^{\psi})\to P_\varphi^{\psi}\}\cup\\ &\{A^\epsilon\to P_A^\epsilon, P_A^{\psi}\to P_A^{\psi}, (A^{\psi}\to \bot)\to P_{\neg A}^\epsilon, (A^{\psi}\to \bot)\to P_{\neg A}^{\psi}\}
+		\mathcal S^\# =&\{P_\varphi^\epsilon\to P_\varphi^{\psi}, P_A^\epsilon\to P_A^{\psi},P_{\neg A}^\epsilon\to P_{\neg A}^{\psi},A^\epsilon\to A^{\psi}, (P_A^\epsilon\vee P_{\neg A}^\epsilon)\to P_\varphi^\epsilon, (P_A^{\psi}\vee P_{\neg A}^{\psi})\to P_\varphi^{\psi}\}\cup\\ &\{A^\epsilon\to P_A^\epsilon, P_A^{\psi}\to P_A^{\psi}, (A^{\psi}\to \bot)\to P_{\neg A}^\epsilon, (A^{\psi}\to \bot)\to P_{\neg A}^{\psi}\}.
 	\end{align*}
-	and $P_\varphi^\epsilon  = P_A^\epsilon = P_{\neg A}^\epsilon = A^\epsilon = 0$, $P_{\varphi}^{\psi} = P_A^{\psi} =  P_{\neg A}^{\psi} = A^{\psi} = 1$ defines a counter-model.
+	We now note that $P_\varphi^\epsilon  = P_A^\epsilon = P_{\neg A}^\epsilon = A^\epsilon = 0$, $P_{\varphi}^{\psi} = P_A^{\psi} =  P_{\neg A}^{\psi} = A^{\psi} = 1$ defines a counter-model.
 \end{example}	
 
 \section{IPC to QBF}
