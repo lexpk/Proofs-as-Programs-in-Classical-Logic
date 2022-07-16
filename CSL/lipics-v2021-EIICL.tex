@@ -265,7 +265,7 @@ Let $\Sigma$ be a signature. A $\Sigma$-structure $\mathcal{M}$ consists of a no
 		\item $\mathcal M, v\models\exists x\varphi$ iff there exists $m\in M$ such that $\mathcal M, v[m/a]\models\varphi[a/x]$ where a is a free variable that does not occur in $\varphi$.
 		\item $\mathcal M, v\models\forall x\varphi$ iff for all $m\in M$ we have $\mathcal M, v[m/a]\models\varphi[a/x]$ where a is a free variable that does not occur in $\varphi$.
 	\end{itemize}
-	$\mathcal{M}$ satisfies $\varphi$ if $\mathcal M, v\models\varphi$ for every $v$. A formula is valid if every $\Sigma$-structure satisfies it. We denote the set of valid formulas with \emph{CQC} (Classical Quantified Calculus).
+	$\varphi$ is satisfiable if there exist $\mathcal M, v$  with $\mathcal M, v\models\varphi$. A $\Sigma$-structure $\mathcal M$ satisfies $\varphi$ if $\mathcal M, v\models\varphi$ for every $v$, we write $\mathcal M\models\varphi$. A formula is valid if every $\Sigma$-structure $\mathcal M$ satisfies it. We denote the set of valid formulas with \emph{CQC} (Classical Quantified Calculus).
 \end{definition}
 
 \begin{definition}
