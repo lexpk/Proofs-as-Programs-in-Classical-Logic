@@ -1,8 +1,6 @@
-\documentclass[a4paper,12pt]{report}
+\documentclass[a4paper,11pt]{report}
 
-\title{Embedding intuitionistic into classical logic}
-\author{Alexander Pluska}
-
+\usepackage{setspace}
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{ wasysym }
 \usepackage{ stmaryrd }
@@ -14,9 +12,15 @@
 \usetikzlibrary{arrows.meta}
 \usetikzlibrary{arrows,shapes,quotes}
 \usepackage{stackengine}
-\usepackage{bbold}
 \usepackage{footmisc}
 \usepackage{wrapfig}
+\usepackage[a4paper,top=2.5cm,bottom=3.5cm,left=2.5cm,right=2.5cm,headsep=10pt]{geometry}
+\usepackage[toc,page]{appendix}
+\usepackage{listings}
+\lstset{
+	language=bash,
+	basicstyle=\ttfamily
+}
 
 
 \usepackage{hyperref}% http://ctan.org/pkg/hyperref
@@ -37,20 +41,245 @@
 \theoremstyle{definition}
 \newtheorem{remark}[theorem]{Remark}
 
-\DeclareMathOperator*{\argmax}{arg\,max}
 
 \begin{document}
 	
-	\maketitle
+	\pagenumbering{gobble}
+	\begin{flushright}
+		% https://public.univie.ac.at/en/downloads/logos/
+		\includegraphics[width=7cm]{RZ_Logo_Uni_sw}
+	\end{flushright}	
+	\vskip20mm
+	\begin{center}
+		\huge\textbf{MASTERARBEIT / MASTER'S THESIS}
+		\vskip15mm
+		\normalsize{Titel der Masterarbeit / Title of the Master's Thesis}
+		
+		\LARGE\textbf{``Automated Deduction for Intuitionistic Logic\\via Embedding into Classical Logic''} % Insert title here
+		\vskip15mm
+		\normalsize{verfasst von / submitted by}
+		
+		\Large\textbf{Alexander Pluska, B.Sc.} % Insert your name in this line
+		\vskip15mm
+		\normalsize{angestrebter akademischer Grad / in partial fulfillment of the requirements for the degree of}
+		
+		\Large\textbf{Master of Science (M.Sc.)}
+		
+		\small
+	\end{center}
+	\vskip15mm
+	\begingroup
+	\renewcommand{\arraystretch}{1.2}
+	\begin{flushleft}
+		Wien, 2022 / Vienna 2022 % Insert graduation year in this line
+		\vfill
+		\addtolength{\tabcolsep}{-6pt} 
+		\begin{table}[h!]
+			\begingroup
+			\renewcommand*{\arraystretch}{1.2}
+			%\renewcommand*{\linespacing}{1}
+			\renewcommand\baselinestretch{1}
+			\small
+			\begin{tabular}{p{7cm} p{10cm}}
+				Studienkennzahl lt. Studienblatt / \newline degree programme code as it appears on \newline the student record sheet: &A 066 821 \\
+				Studienrichtung lt. Studienblatt / \newline degree programme as it appears on \newline the student record sheet:& Mathematics \\
+				Betreut von / Supervisor: & Univ.-Prof. Matthias Aschenbrenner \\ % Insert your program/supervisor here
+				Mitbetreut von / Co-Supervisor: & Ass.-Prof. Florian Zuleger \\ 
+			\end{tabular}
+			\endgroup
+		\end{table}
+		\addtolength{\tabcolsep}{6pt} 
+	\end{flushleft}	
+	\endgroup	
 	
-	\begin{abstract}
-		We present an embedding of intuitionistic into classical logic, a quasi-inverse to the famous double-negation translation, i.e. a procedure that for each formula $\varphi$ gives a formula $\varphi_c$ such that $\varphi$ is intuitionistically valid if and only if $\varphi_c$ is classically valid. We consider both the propositional and predicate case. Since many of the more involved results for the more interesting predicate scenario involve similar arguments as in the propositional case we shall develop them simultaneously.
-	\end{abstract}
+	\newpage
+	\
+	\newpage
 	
+	% Some of the code for creating ToC id adapted from the following template:
+	% https://www.sharelatex.com/templates/thesis/university-of-sussex-thesis
+		
+		\
+		\vfill
+		\onehalfspacing
+		\begin{center}
+		\bfseries Abstract		
+		\end{center}
+		The famous double negation translation~\cite{glivenko1929quelques, godel1933intuitionistischen} establishes an embedding from classical into intuitionistic logic. Curiously the reverse direction has not been covered in literature. We present an effective embedding from intuitionistic into classical logic, both in the propositional and first-order case, as well as an effective embedding of intuitionistic propositional logic into quantified boolean formulas.
+		
+		Furthermore we implement a practical system that takes intuitionistic first-order problems as an input and performs our transformation. This allows the use of classical theorem provers for establishing intuitionistic validity. We benchmark our implementation using the vampire theorem prover~\cite{kovacs2013first} on the ILTP problem set~\cite{iltp}.
+		%The key notion used in the proofs is the existence of counter-models - an analogon to the satisfiability of the negation in classical logic, which is not equivalent to invalidity in the intuitionistic case.  We hope that this will allow leveraging the tremendous recent progress in automated reasoning in classical logic for checking intuitionistic validity, for which there has not been much progress in recent decades.
+		
+		Finally we discuss how the generated classical proofs of the transformed problems can be translated to intuitionistic proofs of the original problem. All in all this establishes a novel approach to theorem proving for intuitionistic logic.
+
+	\vspace*{1cm}
+	\begin{center}
+		\bfseries Acknowledgements		
+	\end{center}
+	
+	I want to thank my Matthias for accommodating my particular interests by agreeing to supervise a thesis which lies outside of his main area of research and bearing with the organizational difficulties. I want to thank Florian who graciously agreed to co-supervise a thesis at a different university. He has provided me with a fascinating topic as well as plenty of his time, expertise and thorough feedback. Finally I want to thank my family, in particular my parents Stefania and Cezary, who have instilled in me the joy of learning, provided all the love and help I could ask for and invariably supported me along my journey.
+	
+	{\vfill\null}
+	
+	\newpage
+	\
+	\singlespacing
+	\newgeometry{top=1cm}
 	\tableofcontents
+	\restoregeometry
+
+	\chapter{Introduction}
+	\onehalfspacing
+
+
+	\pagenumbering{arabic}
+	Constructive mathematics refers to a flavour of mathematics in which the existence of an object can only be established by explicit construction, as opposed to classical mathematics where existence can be shown implicitly, e.g. by assuming non-existence and deriving a contradiction.
+	The formalism usually associated with constructive mathematics is intuitionistic logic, which essentially differentiates itself from classical logic by the fact that the law of excluded middle $A\vee\neg A$ and the double negation shift $\forall x\neg\neg P(x)\to\neg\neg\forall xP(x)$ are not valid.
+	Besides philosophical considerations, most prominently advocated by Brouwer~\cite{brouwer1907over} and Bishop~\cite{bishop1967foundations}, there is a particular motivation for studying constructive mathematics from the perspective of computer science in that proofs in  intuitionistic logic directly correspond to computer programs --- as expressed in the Curry-Howard correspondence~\cite{howard1980formulae}.
+	
+	The interest in intuitionistic logic has lead to the development of a number of automated theorem proving systems for propositional as well as for predicate logic and a collection of benchmark problems (see e.g. the
+	ILTP library website~\cite{iltp}).
+	However, progress in automated theorem proving for intuitionistic logic has been slow, whereas reasoners for classical logic have made tremendous progress, see e.g. the TPTP~\cite{casc} and SAT~\cite{satc} competitions.
+	%, e.g., the first-order provers~\cite{kovacs2013first, schulz2002brainiac, korovin2008iprover}
+	%Comparing benchmarks for classical and intuitionistic automated theorem proving, e.g. TPTP~\cite{casc} and , we see that classical provers currently have a far better success rate. Furthermore all the most popular first-order utilize classical logic.
+	This difference can be partially explained by fundamental differences between the logics.
+	First of all, determining intuitionistic validity is computationally harder, i.e. in the propositional case intuitionistic validity is \verb+PSPACE+-complete~\cite{statman1979intuitionistic} whereas classical validity is \verb+coNP+-complete~\cite{cook1971complexity}.
+	A further advantage of classical logic is the existence of calculi that are particularly suitable for automation such as superposition~\cite{bachmair2001resolution}, which rely on the existence of convenient normal forms such as CNF, and the duality between validity and satisfiability, i.e. to show the validity of a formula it suffices to show the unsatisfiability of the negated formula.
+	While some (albeit more complex) normal forms also exist  for intuitionistic logic, crucially the duality between validity and satisfiability of the negation does not hold.
+	Therefore most dedicated intuitionistic theorem provers~\cite{mclaughlin2009efficient, tammet1996resolution} use the naive inverse method, i.e. directly search for a cut-free proof by applying the rules from some proof calculus inversely, enhanced by search strategies such as focussing and polarization. This approach generally leads to a much more complex search and is therefore difficult to implement efficiently.
+	Finally, we add that in contrast to intuitionistic provers a tremendous amount of work has been put into optimizing provers for classical logic, in particular for the propositional case, i.e. SAT-solvers.
+	
+	With this work we want to propose a novel approach for intuitionistic theorem proving that leverages the progress in classical theorem proving, that is for each formula $\varphi$:
+	\begin{itemize}
+		\item Give a formula $\varphi^\#$ that is classically valid if and only if $\varphi$ is intuitionistically valid.
+		\item Use a state-of-the-art classical prover to establish the validity/invalidity of $\varphi^\#$.
+		\item Transform the output proof/counter-model of $\varphi^\#$ to one of $\varphi$.
+	\end{itemize}
+	The most challenging part of this approach is giving the translation of $\varphi$ to $\varphi^\#$.
+	Interestingly, the reverse direction, the famous double-negation translation, has long been established and goes back to Glivenko~\cite{glivenko1929quelques} in the propositional case, and to G\"odel~\cite{godel1933intuitionistischen} and Gentzen~\cite{gentzen1936widerspruchsfreiheit} in the first-order case. In the propositional case it is particularly simple: $\varphi$ is classically valid if and only if $\neg\neg\varphi$ is intuitionistically valid. Intuitively the translation collapses for each subformula $\psi$ of $\varphi$ the truth values of $\psi$ and $\neg\neg\psi$, which are classically but not intuitionistically equivalent. This gives us a first idea why the reverse direction is perhaps more difficult: We need to expand the truth values of $\psi$ and $\neg\neg\psi$, i.e. if they both occur in $\varphi$, we must have a way to (classically) assign different truth values to their respective counterparts in $\varphi^\#$. In particular, this necessitates the introduction of new propositional variables in our procedure, which already marks a big difference to the double negation translation.
+	%
+	While establishing the translation of formulas we also perform an effective translation of counter-models, i.e. for each intuitionistic counter-model of $\varphi$ we effectively construct a classical counter-model of $\varphi^\#$ and vice versa.
+	We note that the existence of counter-models is a key notion that forms a proper dual to validity --- whereas the satisfiability of the negation is not necessary for invalidity (in contrast to classical logic, where it is a proper dual to validity).
+	Transforming and reducing counter-models to a normal form is also what ultimately enables our translation. Apart from a translation of counter-models we also explicitly describe how to equivalently transform classical proofs of $\varphi^\#$ to intuitionistic proofs of $\varphi$, in particular resolution proofs as given by theorem provers like vampire~\cite{Kov_cs_2013}.
+	
+	
+	As a final contribution we implement our translation in the Rust programming language. It takes a first-order problem in the tptp format~\cite{tptp} and outputs the translated problem in the same format. The code is published on github~\cite{implementation}. We then benchmark our implementation using the ILTP problem set~\cite{iltp}, i.e. we translate all problems in the set and then run the vampire theorem prover~\cite{Kov_cs_2013} on the translated problems. Our approach performs on par with most existing approaches for intuitionistic theorem provers, but comes short of the state-of-the art leaders. As there is still a lot of room for optimization this is a hopeful sign.
+	
+	\chapter{Overview}
+
+	The main content is organized in chapters 3-6. Chapter 3 collects prerequisite definitions and serves to fix our notation and recall some important facts. Since this overview already contains some technical results it may be consulted for reference. Chapter 4 is the meat of this thesis. In particular it features a complete description of our embedding of intuitionistic into classical logic as well as proving its correctness. In chapter 5 we present our implementation and benchmark it. Finally in chapter 6 we explicitly describe how to translate the generated proofs and counter-models which in principle directly follows from the results of section 4. 	We shall now for each chapter give an overview of our main results and highlight the key arguments. 
+
+	\section{Embedding Intuitionistic into Classical Logic}
+
+	Recall that our goal in this chapter is to give an effective translation procedure that, for a given formula $\varphi$, yields a formula $\varphi^\#$, such that $\varphi$ is intuitionistically valid if and only if $\varphi^\#$ is classically valid. We start with the propositional case. The key arguments are the same as in the first-order case, while it is technically simpler and less cluttered.
+	
+	Before our main transformation we employ a preprocessing step akin to the Tseytin transformation~\cite{tseitin1983complexity}, which is a popular pre-processing step in classical automated reasoning:
+	It gives an equisatisfiable sentence (over an extended set of propositions) in conjunctive normal form.
+	Eliminating all implications, however, is not possible in intuitionistic logic since $A\to B$ is not equivalent to $\neg A\vee B$.
+	Still we propose a similar transformation.
+	A notable feature of our transformation is that all non-classical content is encapsulated in formulas of type $(A\to B)\to C$, i.e. if there are no such formulas in the transformed formula then the classical validity of the transformed formula immediately implies intuitionistic validity.
+	
+	\begin{theorem}\label{thm:Tseytin}
+		For every propositional formula $\varphi$ there effectively are an atom $P$ and a set of $\mathcal S$ of formulas (over an extended set of propositions) of one of the forms\\
+		$\text{ \hspace{1cm}} A\to (B\wedge C), (A\wedge B)\to C, A\to (B\vee C), (A\vee B)\to C, (A\to B)\to C,$\\
+		for atomic $A, B, C$, such that $\varphi$ is intuitionistically valid if and only if $\bigwedge\mathcal S\to P$ is intuitionistically valid. The time complexity of the transformation is linear in the input size.
+	\end{theorem}
+	
+	The main transformation then proceeds in three steps:
+	%
+	1) We encode as a first-order sentence that the considered formula holds for every Kripke frame.
+	Since Kripke frames for propositional logic over a fixed alphabet of propositional variables form a first-order theory this step is rather straightforward.
+	%
+	2) Next we eliminate some quantifiers via Herbrandization. The only quantifiers eliminated occur in formulas derived from formulas of type $(A\to B)\to C$.
+	%
+	3) We can then argue that if there is a counter-model for the resulting formula then there is a counter-model with a certain Kripke frame of bounded size completely determined by the number of formulas of type $(A\to B)\to C$.
+	This allows us to eliminate the remaining quantifiers by simply enumerating the worlds in that Kripke frame.
+	
+	Summarizing, we obtain the following result:
+	
+	\begin{theorem}
+		\label{thm:reduction-propositional}
+		Let $\mathcal S$ be as in Theorem~\ref{thm:Tseytin} and $\mathcal F_\to\subseteq\mathcal S$ denote the subset of formulas of the form $(A\to B)\to C$ and $\Lambda$ denote the set of sequences without repetition over $\mathcal F_\to$. For each atom $A$ and $k\in\Lambda$ consider a new atom $A^k$. Obtain $\mathcal S^\#$ by including the following formulas:
+		\begin{itemize}
+			\item $A^k\to A^{k\psi}$ for each atom $A$ occurring in $\mathcal S$, $k\in\Lambda$ and $\psi\in\mathcal F_\to$ not occurring in $k$.
+			\item $A^k\to (B^k\circ C^k)$ for each $\circ\in\{\wedge,\vee\}$, $A\to (B\circ C)\in\mathcal S$, $k\in\Lambda$.
+			\item $(A^k\circ B^k)\to C^k$ for each $\circ\in\{\wedge,\vee\}$, $A\to (B\circ C)\in\mathcal S$, $k\in\Lambda$.
+			\item $(A^{k\psi}\to B^{k\psi})\to C^k$ for $\psi = (A\to B)\to C\in\mathcal S$, $k\in\Lambda$ if $\psi$ does not occurr in $k$.
+		\end{itemize}
+		Then, $\bigwedge S\to P$ is intuitionistically valid iff $\bigwedge S^\#\to P^\epsilon$ is classically valid, where $\epsilon$ denotes the empty sequence. The size of $\mathcal S^\#$ is in $\mathcal O(|\mathcal S|\cdot2^{|\mathcal F_\to|\cdot\log(|\mathcal F_\to|)})$. Futhermore, there is an effective procedure for translating counter-models between the sentences.
+	\end{theorem}
+	
+	Instead of explicitly enumerating the worlds of a counter-example of bounded size (as in the reduction stated in the above theorem), we can also do this enumeration implicitly with a quantified boolean formula (QBF).
+	We can show that this QBF is satisfiable if and only if there exists a counter-model for our original formula:
+	
+	\begin{theorem}
+		Let $\mathcal S$ be as in Theorem~\ref{thm:Tseytin} and $\mathcal F_\to\subseteq\mathcal S$ denote the subset of formulas of the form $(A\to B)\to C$. There is an effective procedure that produces a QBF $\varphi^Q$ of size $\mathcal O(|\mathcal S|\cdot|\mathcal F_\to| + |\mathcal F_\to|^3)$ with $2\cdot |\mathcal F_\to|-1$ quantifier alternations such that $\varphi$ is intuitionistically valid if and only if $\varphi^Q$ is not satisfiable. For fixed $N\in\mathbb N$, deciding intuitionistic validity for formulas $\bigwedge \mathcal S\to P$ where $\mathcal S$ is as above and $|\mathcal F_\to| = N$ is therefore in $\Sigma_{2N-1}$.
+	\end{theorem}
+	
+	We then move to the first-order case. Here the construction is a bit more involved but the underlying approach is the same.
+	Again we first perform a Tseytin-like transformation.
+	Here the non-classical content is encapsulated by formulas of type $(A\to B)\to C$ and $\forall xA\to B$.
+	The details of this translation are given in Section~\ref{section:tseytin}.
+	We then proceed similarly to the propositional case.
+	Note however that one difficulty arises from the fact that our (classical) domain will now contain on the one hand worlds in the Kripke frame but on the other hand also proper domain elements.
+	We resolve this apparent conflict by introducing a special binary predicate $E$, inspired by~\cite{iemhoff2010eskolemization}, encoding which domain elements exists at which world.
+	The main transformation then again proceeds in three steps:
+	Step 1) and 2) are analogous to the propositional case.
+	The real difference arises in step 3):
+	While we can also establish the existence of a canonic counter-model whose frame only depends on formulas of type $(A\to B)\to C$ and $\forall xA\to B$, the size of this counter-model is countably infinite in general.
+	This is not surprising since certain intuitionistically invalid formulas like the double negation shift $\forall x\neg\neg A(x)\to \neg\neg\forall x A(x)$ don't have finite counter-models.
+	Therefore we are not able to eliminate the $\forall$-quantifiers associated with the Kripke semantics.
+	However since our translation targets first-order logic, we believe that the introduction of these quantifiers is acceptable.
+	%
+	Summarizing, we obtain the following result:
+	
+	\begin{theorem}
+		\label{thm:reduction-first-order-short}
+		There exists a linear-time procedure that gives for every first-order formula $\varphi$ a formula $\varphi^\#$ such that $\varphi$ is intuitionistically valid if and only if $\varphi^\#$ is classically valid. The size of $\varphi^\#$ is in linear in the size of $\varphi$, however, for each $n$-ary relation symbol in $\varphi$ there is a corresponding $n+1$-ary relation symbol in $\varphi^\#$, and $\varphi$ contains a new binary predicate $E$ as well as a number of new function symbols. Furthermore, there is an effective translation between intuitionistic counter-models of $\varphi$ and classical counter-models of $\varphi^\#$.
+	\end{theorem}
+	A more detailed account of Theorem~\ref{thm:reduction-first-order-short} is given in Theorem~\ref{fullFOtranslation}.
+	
+	\section{Implementation}
+	
+	In this section we describe our system that implements the translation from the previous section. The rust source code can be found online~\cite{implementation}. We then elaborate our benchmarking process which utilizes the ILTP problem set~\cite{iltp} and the vampire theorem prover~\cite{Kov_cs_2013}.
+	
+		
+	\begin{figure}[h]\label{results}
+		$$\begin{matrix}
+			&\text{AGT}&\text{ALG}&\text{COM}&\text{CSR}&\text{GEO}&\text{GRA}&\text{GRP}&\text{HAL}\\
+			\text{Proven}&5&170&0&0&58&3&4&2\\
+			\text{Disproven}&0&0&0&0&0&0&0&\\
+			\text{Timeout}&47&29&3&29&107&74&1&16
+		\end{matrix}$$
+		$$\begin{matrix}
+			&\text{KRS}&\text{LCL}&\text{MGT}&\text{MSC}&\text{NLP}&\text{NUM}&\text{PLA}&\text{PUZ}\\
+			\text{Proven}&0&0&30&1&9&1&9&2\\
+			\text{Disproven}&0&0&0&0&12&0&0&0\\
+			\text{Timeout}&5&9&128&3&69&1&237&82
+		\end{matrix}$$
+		$$\begin{matrix}
+			&\text{SET}&\text{SWC}&\text{SWV}&\text{SYN}&\text{TOP}&\text{GEJ}&\text{GPJ}&\text{SYJ}\\
+			\text{Proven}&0&5&27&1&64&65&54&1\\
+			\text{Disproven}&6&1&297&423&154&108&298&2
+		\end{matrix}$$
+		\caption{Performance on problem sections of the ILTP set.}
+	\end{figure}
+	
+	Our implementation performs similar to existing dedicated provers for intuitionistic logic, but falls short of the state-of-the-art. Since there is still a lot of possible optimizations left for our translation this is a hopeful first sign.
+	
+	\section{Translation of proofs and counter-models}
+	
+	In the final section we give an explicit mechanism how to transform the proofs and counter-models for translated formula $\varphi^\#$ into intuitionistic proofs/counter-models of the original formula $\varphi$. The existence of these transformations is clear from the methodology of chapter~\ref{chapter:eiicl}, however they are hidden in the proofs and here we make them explicit. The two main results are as follows:
+	\begin{theorem}
+		There exists an effective linear time procedure that converts any classical counter-model for a translated formula $\varphi^\#$ into a intuitionistic counter-model for the original formula $\varphi$.
+	\end{theorem}
+	\begin{theorem}
+		There exists an effective linear time procedure that converts any classical proof of a translated formula $\varphi^\#$ into a intuitionistic proof for the original formula $\varphi$.
+	\end{theorem}
+	
+	Given the arguments of Chapter~\ref{chapter:eiicl} the translation of counter-models is more or less just a compilation of proofs. On the other hand the explicit translation of proofs does require some work, since to that point all arguments were semantic and this requires a syntactic viewpoint.
 
 	\chapter{Preliminaries}
-
 	First let us recapitulate the most important definitions and some facts about them. This will serve to fix our notation as well.
 	
 	\section{Syntax}
@@ -79,7 +308,7 @@
 		\begin{itemize}
 			\item a finite set $S_f$ of function symbols $f_1, \dots, f_n$
 			\item a finite set $S_R$ of relation symbols $R_1,\dots, R_m$
-			\item  a function ar$: S_f\cup S_R\to \mathbb{N}$ assigning to each symbol its arity (possibly 0).
+			\item  a function ar$: S_f\cup S_R\to \mathbb{N}$ assigning to each symbol its arity (possibly 0). 
 		\end{itemize}
 	\end{definition}
 	
@@ -370,178 +599,203 @@
 		5. $\chi = \exists x\varphi$.  The argument runs dually to 4.
 	\end{proof}
 	
-	\section{Proof theory}
+	\section{Proof theory}\label{proof-theory}
 	
-	Logical truth can also be approached via syntax rather than semantics. This gives rise to proof theory which will be especially important in the third chapter.
+	Logical truth can also be approached via syntax rather than semantics. This gives rise to proof theory which will be especially important in the final chapter when we establish proof translations.
 		
 	\begin{definition}
-		A \textit{sequent} $\Gamma\vdash \Delta$ consists of two multisets of formulas $\Gamma, \Delta$. The following rules make up our classical calculus $\mathbf{GC}$, corresponding roughly to \textbf{G3c} from~\cite{basicprooftheory}:\\
-		\begin{center}
-			\begin{tabular}{lll}
-				\AxiomC{\hphantom{x}}
-				\RightLabel{Ax ($P$ atomic)}
-				\UnaryInfC{$P,\Gamma\vdash \Delta, P$}
-				\DisplayProof&
-				\AxiomC{\hphantom{x}}
-				\RightLabel{L$\bot$}
-				\UnaryInfC{$\bot,\Gamma\vdash\Delta$}
-				\DisplayProof&
-				\\&&\\
-				\AxiomC{$A, B,\Gamma\vdash\Delta$}
-				\RightLabel{L$\wedge$}
-				\UnaryInfC{$A\wedge B, \Gamma\vdash \Delta$}
-				\DisplayProof&
-				\AxiomC{$\Gamma\vdash\Delta, A$}
-				\AxiomC{$\Gamma\vdash\Delta, B$}
-				\RightLabel{R$\wedge$}
-				\BinaryInfC{$\Gamma\vdash \Delta, A\wedge B$}
-				\DisplayProof&
-				\\&&\\
-				\AxiomC{$A, \Gamma\vdash\Delta$}
-				\AxiomC{$B, \Gamma\vdash\Delta$}
-				\RightLabel{L$\vee$}
-				\BinaryInfC{$A\vee B, \Gamma\vdash \Delta$}
-				\DisplayProof&
-				\AxiomC{$\Gamma\vdash\Delta, A, B$}
-				\RightLabel{R$\vee$}
-				\UnaryInfC{$\Gamma\vdash \Delta, A\vee B$}
-				\DisplayProof&
-				\\&&\\
-				\AxiomC{$\Gamma\vdash\Delta, A$}
-				\AxiomC{$B, \Gamma\vdash\Delta$}
-				\RightLabel{L$\to$}
-				\BinaryInfC{$A\to B, \Gamma\vdash \Delta$}
-				\DisplayProof&
-				\AxiomC{$A,\Gamma\vdash\Delta, B$}
-				\RightLabel{R$\to$}
-				\UnaryInfC{$\Gamma\vdash \Delta, A\to B$}
-				\DisplayProof&
-				\\&&\\
-				\AxiomC{$A[t/x], \Gamma\vdash\Delta$}
-				\RightLabel{L$\forall$}
-				\UnaryInfC{$\forall xA, \Gamma\vdash \Delta$}
-				\DisplayProof&
-				\AxiomC{$\Gamma\vdash\Delta, A[a/x]$}
-				\RightLabel{R$\forall$}
-				\UnaryInfC{$\Gamma\vdash \Delta, \forall xA$}
-				\DisplayProof&
-				\\&&\\
-				\AxiomC{$A[a/x], \Gamma\vdash\Delta$}
-				\RightLabel{L$\exists$}
-				\UnaryInfC{$\exists xA, \Gamma\vdash \Delta$}
-				\DisplayProof&
-				\AxiomC{$\Gamma\vdash\Delta, A[t/x]$}
-				\RightLabel{R$\exists$}
-				\UnaryInfC{$\Gamma\vdash \Delta, \exists xA$}
-				\DisplayProof&
-				\\&&\\
-				\AxiomC{$t = t, \Gamma\vdash \Delta$}
-				\RightLabel{Ref}
-				\UnaryInfC{$\Gamma\vdash \Delta$}
-				\DisplayProof&
-				\AxiomC{$s = t, P[s/x], P[t/x], \Gamma\vdash \Delta$}
-				\RightLabel{Ref}
-				\UnaryInfC{$s = t, P[s/x],\Gamma\vdash \Delta$}
-				\DisplayProof&
-				\\&&\\
-			\end{tabular}
-		\end{center}
-	
-		where in R$\forall$ and L$\exists$ $a$ is a free variable not occurring in the sequent otherwise.
-		The above rules make up the calculus called \textbf{Gc}. It corresponds to \textbf{G3c}$^=$ from~\cite{basicprooftheory}.
-		
-		For intuitionistic logic we remain with a multi-succedent system by adjusting R$\to$ and R$\forall$:\\
-		
-		\begin{center}
-			\AxiomC{$A, \Gamma\vdash B$}
-			\RightLabel{R$\to$}
-			\UnaryInfC{$\Gamma\vdash\Delta, A\to B$}
-			\DisplayProof\hspace{2cm}
-			\AxiomC{$\Gamma\vdash A[a/x]$}
-			\RightLabel{R$\forall$}
-			\UnaryInfC{$\Gamma\vdash\Delta, \forall xA$}
-			\DisplayProof
-		\end{center}
-	
-		We will call the calculus containing this formulas $\mathbf{GI}$ roughly corresponding to $\mathbf{G3i}$ from~\cite{basicprooftheory}. Usually for intuitionistic logic a single-formula succedent system is considered, but we are interested in reducing the difference between the calculi as much as possible.
-		
-		A \textit{proof} of a formula $\varphi$ in a calculus $\mathbf{G}$ is a labelled binary rooted tree in which every node is labelled with a sequent such that
-		\begin{itemize}
-			\item Every leaf is labelled in accordance to Ax or L$\bot$.
-			\item The sequent of an interior node can be derived from sequents of its child nodes according to one of the rules.
-		\end{itemize}
-		We usually present a proof directly as a sequence of applications of rules rather than in a more usual tree presentation. If a sequent $\mathcal S\vdash\mathcal T$ is provable in $\mathbf{GC}$ we write $\mathcal S\vdash_C\mathcal T$, if it is in $\mathbf{GI}$ we write $\mathcal S\vdash_I\mathcal T$.
+		Pairs of multisets of formulas $A = \{A_1,\dots, A_n\}, B = \{B_1,\dots, B_m\}$ form a \textit{Sequent} $A\Rightarrow B$. Usually we will write $A_1,\dots, A_n\Rightarrow B_1,\dots, B_m$, note however that $A$ and $B$ are \textbf{not} to be interpreted as sequences but as multisets.
 	\end{definition}
 	
-	\begin{example}
-		The following is a proof of $(A\to B)\to A\vdash B$:
-		\begin{center}
-			\AxiomC{}
-			\RightLabel{Ax}
-			\UnaryInfC{$A\to B, A\vdash B, A$}
-			\AxiomC{}
-			\RightLabel{Ax}
-			\UnaryInfC{$A, B\vdash B$}
-			\RightLabel{L$\to$}
-			\BinaryInfC{$A\to B, A\vdash B$}
-			\DisplayProof
-		\end{center}
-	\end{example}
+	We define sequent calculi as in~\cite[p.77]{basicprooftheory}. Have following inferences\\
 	
-	\noindent We now recall some important properties of the given systems:
-	
-	
-	\begin{theorem}[subformula property]
-		Any formula that appears in a derivation is a subformula of a forumla that occurs in the root sequent.
-	\end{theorem}
-	
-	We consider the following additional rules, which are not a priori part of our calculus:
 	\begin{center}
+	\begin{tabular}{lll}
+		\AxiomC{\hphantom{x}}
+		\RightLabel{Ax ($P$ atomic)}
+		\UnaryInfC{$P,\Gamma\Rightarrow \Delta, P$}
+		\DisplayProof&
+		\AxiomC{\hphantom{x}}
+		\RightLabel{L$\bot$}
+		\UnaryInfC{$\bot,\Gamma\Rightarrow\Delta$}
+		\DisplayProof&
+		\\&&\\
+		\AxiomC{$A, B,\Gamma\Rightarrow\Delta$}
+		\RightLabel{L$\wedge$}
+		\UnaryInfC{$A\wedge B, \Gamma\Rightarrow \Delta$}
+		\DisplayProof&
+		\AxiomC{$\Gamma\Rightarrow\Delta, A$}
+		\AxiomC{$\Gamma\Rightarrow\Delta, B$}
+		\RightLabel{R$\wedge$}
+		\BinaryInfC{$\Gamma\Rightarrow \Delta, A\wedge B$}
+		\DisplayProof&
+		\\&&\\
+		\AxiomC{$A, \Gamma\Rightarrow\Delta$}
+		\AxiomC{$B, \Gamma\Rightarrow\Delta$}
+		\RightLabel{L$\vee$}
+		\BinaryInfC{$A\vee B, \Gamma\Rightarrow \Delta$}
+		\DisplayProof&
+		\AxiomC{$\Gamma\Rightarrow\Delta, A, B$}
+		\RightLabel{R$\vee$}
+		\UnaryInfC{$\Gamma\Rightarrow \Delta, A\vee B$}
+		\DisplayProof&
+		\\&&\\
+		\AxiomC{$\Gamma\Rightarrow\Delta, A$}
+		\AxiomC{$B, \Gamma\Rightarrow\Delta$}
+		\RightLabel{L$\to$}
+		\BinaryInfC{$A\to B, \Gamma\Rightarrow \Delta$}
+		\DisplayProof&
+		\AxiomC{$A,\Gamma\Rightarrow\Delta, B$}
+		\RightLabel{R$\to$}
+		\UnaryInfC{$\Gamma\Rightarrow \Delta, A\to B$}
+		\DisplayProof&
+		\\&&\\
+		\AxiomC{$A[t/x], \Gamma\Rightarrow\Delta$}
+		\RightLabel{L$\forall$}
+		\UnaryInfC{$\forall xA, \Gamma\Rightarrow \Delta$}
+		\DisplayProof&
+		\AxiomC{$\Gamma\Rightarrow\Delta, A[a/x]$}
+		\RightLabel{R$\forall$}
+		\UnaryInfC{$\Gamma\Rightarrow \Delta, \forall xA$}
+		\DisplayProof&
+		\\&&\\
+		\AxiomC{$A[a/x], \Gamma\Rightarrow\Delta$}
+		\RightLabel{L$\exists$}
+		\UnaryInfC{$\exists xA, \Gamma\Rightarrow \Delta$}
+		\DisplayProof&
+		\AxiomC{$\Gamma\Rightarrow\Delta, A[t/x]$}
+		\RightLabel{R$\exists$}
+		\UnaryInfC{$\Gamma\Rightarrow \Delta, \exists xA$}
+		\DisplayProof&
+		\\&&\\
+	\end{tabular}
+	\end{center}
+	where in R$\forall$ and L$\exists$ $a$ is a free variable not occurring in the sequent otherwise.
+	
+	The above rules make up the calculus for classical logic called \textbf{Gc}. It corresponds to \textbf{G3c} from~\cite{basicprooftheory}.
+	Similarly we can define a calculus \textbf{Gi} for intuitionistic logic corresponding to \textbf{m-G3i}:\\
+	
+		\begin{center}
 		\begin{tabular}{lll}
-			\AxiomC{$\Gamma\vdash\Delta$}
-			\RightLabel{Lweak}
-			\UnaryInfC{$A,\Gamma\vdash \Delta$}
+			\AxiomC{\hphantom{x}}
+			\RightLabel{Ax ($P$ atomic)}
+			\UnaryInfC{$P,\Gamma\Rightarrow \Delta, P$}
 			\DisplayProof&
-			\AxiomC{$\Gamma\vdash\Delta$}
-			\RightLabel{Rweak}
-			\UnaryInfC{$\Gamma\vdash \Delta, A$}
+			\AxiomC{\hphantom{x}}
+			\RightLabel{L$\bot$}
+			\UnaryInfC{$\bot,\Gamma\Rightarrow\Delta$}
 			\DisplayProof&
 			\\&&\\
-			\AxiomC{$A, A,\Gamma\vdash\Delta$}
-			\RightLabel{Lcontr}
-			\UnaryInfC{$A, \Gamma\vdash \Delta$}
+			\AxiomC{$A, B,\Gamma\Rightarrow\Delta$}
+			\RightLabel{L$\wedge$}
+			\UnaryInfC{$A\wedge B, \Gamma\Rightarrow \Delta$}
 			\DisplayProof&
-			\AxiomC{$\Gamma\vdash\Delta, A, A$}
-			\RightLabel{Rcontr}
-			\UnaryInfC{$\Gamma\vdash \Delta, A$}
+			\AxiomC{$\Gamma\Rightarrow\Delta, A$}
+			\AxiomC{$\Gamma\Rightarrow\Delta, B$}
+			\RightLabel{R$\wedge$}
+			\BinaryInfC{$\Gamma\Rightarrow \Delta, A\wedge B$}
+			\DisplayProof&
+			\\&&\\
+			\AxiomC{$A, \Gamma\Rightarrow\Delta$}
+			\AxiomC{$B, \Gamma\Rightarrow\Delta$}
+			\RightLabel{L$\vee$}
+			\BinaryInfC{$A\vee B, \Gamma\Rightarrow \Delta$}
+			\DisplayProof&
+			\AxiomC{$\Gamma\Rightarrow\Delta, A, B$}
+			\RightLabel{R$\vee$}
+			\UnaryInfC{$\Gamma\Rightarrow \Delta, A\vee B$}
+			\DisplayProof&
+			\\&&\\
+			\AxiomC{$A\to B, \Gamma\Rightarrow\Delta, A$}
+			\AxiomC{$B, \Gamma\Rightarrow\Delta$}
+			\RightLabel{L$\to$}
+			\BinaryInfC{$A\to B, \Gamma\Rightarrow \Delta$}
+			\DisplayProof&
+			\AxiomC{$A,\Gamma\Rightarrow B$}
+			\RightLabel{R$\to$}
+			\UnaryInfC{$\Gamma\Rightarrow \Delta, A\to B$}
+			\DisplayProof&
+			\\&&\\
+			\AxiomC{$A[t/x], \Gamma\Rightarrow\Delta$}
+			\RightLabel{L$\forall$}
+			\UnaryInfC{$\forall xA, \Gamma\Rightarrow \Delta$}
+			\DisplayProof&
+			\AxiomC{$\Gamma\Rightarrow A[a/x]$}
+			\RightLabel{R$\forall$}
+			\UnaryInfC{$\Gamma\Rightarrow \forall xA$}
+			\DisplayProof&
+			\\&&\\
+			\AxiomC{$A[a/x], \Gamma\Rightarrow\Delta$}
+			\RightLabel{L$\exists$}
+			\UnaryInfC{$\exists xA, \Gamma\Rightarrow \Delta$}
+			\DisplayProof&
+			\AxiomC{$\Gamma\Rightarrow\Delta, A[t/x]$}
+			\RightLabel{R$\exists$}
+			\UnaryInfC{$\Gamma\Rightarrow \Delta, \exists xA$}
 			\DisplayProof&
 			\\&&\\
 		\end{tabular}
-		
-		\AxiomC{$\Gamma\vdash A, \Delta$}
-		\AxiomC{$\Gamma', A\vdash \Delta'$}
-		\RightLabel{Cut}
-		\BinaryInfC{$\Gamma, \Gamma'\vdash\Delta, \Delta'$}
-		\DisplayProof
 	\end{center}
 	
+	The differences are found in L$\to$, R$\to$ and R$\forall$. Note how in particular the rules for R$\to$ and R$\forall$ allows only a single formula in the succedent.
+
+	\pagebreak
 	
-	The following central result of proof theory will be useful to us in many places:
-	\begin{theorem}[admissibility of cut (and structural rules)]
-		The 5 above rules are admissible in our calculi for classical and intuitionistic logic, i.e. adding them we are not able to prove any additional theorems.
+	\begin{definition}
+		A \textit{Derivation} is a rooted finite labelled tree, in which each leaf is labelled with one of the two axiom rules and each other label is derived from the labels of the successor nodes in accordance to the rules above. All formulas not in $\Gamma$ or $\Delta$ are the \textit{active} formulas of the rule. The label of the root is called \textit{head}. A formula that is the head of a derivation is said to be \textit{derivable}.
+	\end{definition}
+	
+	The following is one of the fundamental results of first-order Logic:
+	
+	\begin{theorem}[Completeness theorem]
+		A sequent $\Phi\Rightarrow \varphi$ is derivable iff $\Phi\models \varphi$.
 	\end{theorem}
 	
+	\begin{example}
+		The following is a \textbf{Gc} proof of the law of excluded middle.\\
+		
+		\begin{center}
+			\AxiomC{}
+			\RightLabel{Ax}
+			\UnaryInfC{$A\Rightarrow\bot, A$}
+			\RightLabel{R$\to$}
+			\UnaryInfC{$\Rightarrow A, A\to\bot$}
+			\RightLabel{R$\vee$}
+			\UnaryInfC{$\Rightarrow A\vee (A\to \bot)$}
+			\DisplayProof
+		\end{center}
 	
-	This means that we may assume that all proofs are free of these rules, but in constructing new proofs we may apply them. We exclude them from our calculus to keep it simple for proofs and because cut destroys the subformula property.
+		Note how this derivation is invalid in \textbf{Gi} since R$\to$ is not applied correctly. However it is possible to prove the double negation of it in \textbf{Gi}:\\
+		
+		\begin{center}
+			\AxiomC{}
+			\RightLabel{Ax}
+			\UnaryInfC{$(A\vee (A\to \bot))\to\bot, A\Rightarrow A, (A\to \bot),\bot$}
+			\RightLabel{R$\vee$}
+			\UnaryInfC{$(A\vee (A\to \bot))\to\bot, A\Rightarrow A\vee (A\to \bot),\bot$}
+			\AxiomC{}
+			\RightLabel{L$\bot$}
+			\UnaryInfC{$\bot\Rightarrow$}
+			\RightLabel{L$\to$}
+			\BinaryInfC{$(A\vee (A\to \bot))\to\bot, A\Rightarrow\bot$}
+			\RightLabel{R$\to$}
+			\UnaryInfC{$(A\vee (A\to \bot))\to\bot\Rightarrow A, A\to \bot$}
+			\RightLabel{R$\vee$}
+			\UnaryInfC{$(A\vee (A\to \bot))\to\bot\Rightarrow A\vee (A\to \bot)$}
+			\AxiomC{}
+			\RightLabel{L$\bot$}
+			\UnaryInfC{$\bot\Rightarrow$}
+			\RightLabel{L$\to$}
+			\BinaryInfC{$(A\vee (A\to \bot))\to\bot\Rightarrow$}
+			\DisplayProof
+		\end{center}
+		
+	\end{example}
 	
-	The semantic and syntactic approach to logic are of course equivalent.
 	
-	\begin{theorem}\label{completeness}[Completeness and Soundness]
-		For sets of formulas $\mathcal S,\mathcal T$ both classically and intuitionistically
-		$$\mathcal S\models\mathcal T \text{ iff }\mathcal S\vdash\mathcal T$$
-	\end{theorem}
 	
-	\chapter{Embedding intuitionistic into classical logic}
+
+	\chapter{Embedding intuitionistic into classical logic}\label{chapter:eiicl}
 	
 	The goal of this section is to give a complete embedding of intuitionistic into classical logic. We shall start with the simpler case of propositional formulas. The process will be divided into three steps. The first is a first-order encoding of intuitionistic semantics, which gives an obvious but unsatisfactory embedding from propositional intuitionistic logic. We then discuss how some of the quantifiers can be eliminated via Herbrandization. As a third part we give a certain normal form that then finally allows us to realize that all quantifiers can be indeed eliminated from the translated formula and we end up with a propositional formula. As a quick note we also give an embedding form IPC to QBF.
 	
@@ -629,12 +883,12 @@
 	
 	\indent Similarly for every $\Sigma$-structure $\mathcal M$ with $\mathcal M\models K(\varphi)$ we could construct a Kripke Frame $\mathcal K(\mathcal M)$ such that $\mathcal M\models \varphi^C$ iff $\mathcal K(\mathcal M)\models \varphi$.
 	
-	\subsection{Normal form transformation}
+	\subsection{Normal form transformation}\label{section:tseytin}
 	
 	Of course transforming a propositional formula into a predicate formula is somewhat unsatisfying. As a first step towards obtaining a propositional formula we want to apply Herbrandization. Now trying to apply it to arbitrary formulas presents us with quite a leap in complexity, leading to nested expressions that will make arguments more complicated. We therefore propose a Tseytin-like transformation that produces a formula of a more manageable syntactic form. In fact our translation is often presented as the first step in the Tseytin transformation, after which the individual formulas are then converted to CNF.
 	Hence, the propositional case of our translation is well known, but we are not aware of any work that uses just this step as a stand-alone. A similar translation for intuitionistic propositional logic was also proposed in~\cite{statman1979intuitionistic}.
 	
-	\begin{definition}
+	\begin{definition}\label{def:tseytin}
 		Let $\varphi$ be some formula. For each subformula $\psi$ of $\varphi$, consider some new $n$-ary relation symbol $P_\psi$, where $n$ is the number of variables occurring in $\psi$ that is not quantified within $\psi$. We denote those variables with $\vec z_\psi$ in some arbitrary but fixed order. We inductively define clause sets $\mathcal S^+(\varphi)$ and $\mathcal S^-(\varphi)$ as follows:
 		\begin{itemize}
 			\item For every atomic formula $A$:\\
@@ -680,7 +934,7 @@
 	
 	Then from the previous three Lemmata we get:
 	
-	\begin{corollary}\label{eequivalid}
+	\begin{corollary}\label{equivalid}
 		In both intuitionistic and classical logic
 		\begin{itemize}
 			\item $\varphi$ is satisfiable iff $\mathcal \bigwedge S^+(\varphi)\wedge P_\varphi(\vec z_\varphi)$ is, and
@@ -883,7 +1137,7 @@
 	\end{definition}
 	
 	\begin{example}
-		With the previous encoding for double negation elimination $\varphi = ((A\to \bot)\to \bot)\to A$ we have
+		With the previous encoding for the double negation elimination $$\varphi = ((A\to \bot)\to \bot)\to A$$ we have
 		$$\hspace*{-.3cm}
 		\varphi^Q = \exists A^0\forall F^0\left(\neg A^0\wedge\left(F^0\to \exists A^1\left((A^0\to A^1)\wedge(F_0\to (A^1\to \bot)\to \bot)\right)\right)\right),
 		$$
@@ -920,14 +1174,14 @@
 		Let $N$-\textbf{IntInvalid} be the problem of deciding if a formula $\bigwedge \mathcal S\to P$ as above with $|\mathcal F_\to|\leq N$ is not intuitionistically valid. Then $N$-\textbf{IntInvalid} is in $\Sigma_{2N-1}^P$. The dual problem $N$-\textbf{IntValid} is in $\Pi_{2N-1}^P$.
 	\end{corollary}
 	
-	\section{CQC to IQC}
+	\section{CQC to IQC}\label{section:CQCIQC}
 	
 	We now give an analogous transformation for first order logic. Our trick of lifting the sentence to first-order logic to encode the Kripke semantics no longer works in such a straightforward manner, since we already are in first-order logic. However we do it nonetheless! The domain of our classical model will feature on the one hand elements representing worlds in a Kripke frame and on the other hand the domain-elements from the Kripke model. We reconcile these notions by introducing a special binary predicate $E$, first considered in~\cite{baaz2006skolemization} and expanded onto in~\cite{iemhoff2010eskolemization}, where $E(x, u)$ encodes that $x$ is an element of the domain of the world $u$. We fix some signature $\Sigma$ for this section. To encode that some $n$-ary relation $A$ holds at a world $u$ we replace each $n$-ary relation symbol $A$ with a $n+1$-ary relation symbol $A^\#$, interpreting $A^\#(\vec x, u)$ as "$A(\vec x)$ holds at u". Furthermore we write $\vec E(\vec x, u)$ for $\bigwedge\{E(x_i, u)\:|\:x_i\in \vec x\}$.
 	
 	First of all recall, that due to Lemma~\ref{equivalid} it is sufficient to consider sentences of the form $\bigwedge\mathcal S\to P$ where all formulas in $\mathcal S$ are of one of the forms
 	\[\begin{matrix}
 		\forall \vec z(A(\vec a)\to (B(\vec b)\wedge C(\vec c)))\indent \forall \vec z((A(\vec a)\wedge B(\vec b))\to C(\vec c))\indent \forall \vec z(A(\vec a)\to (B(\vec b)\vee C(\vec c)))\\
-		\forall \vec z((A(\vec a)\vee B(\vec b))\to C(\vec c))\indent \forall \vec z((A(\vec a)\to B(\vec b))\to C(\vec c))\indent\forall \vec z(\forall xA(\vec a)\to B(\vec b))\\ \forall \vec z(A(\vec a)\to\forall xB(b)), \forall \vec z(\exists xA(\vec a)\to B(\vec b)), \forall \vec z(A(\vec a)\to\exists xB(b)).
+		\forall \vec z((A(\vec a)\vee B(\vec b))\to C(\vec c))\indent \forall \vec z((A(\vec a)\to B(\vec b))\to C(\vec c))\indent\forall \vec z(\forall xA(\vec a)\to B(\vec b))\\ \forall \vec z(A(\vec a)\to\forall xB(\vec b))\indent \forall \vec z(\exists xA(\vec a)\to B(\vec b))\indent\forall \vec z(A(\vec a)\to\exists xB(b)).
 	\end{matrix}\]
 	The complete result that we will show is as follows:
 	\begin{theorem}\label{fullFOtranslation}
@@ -950,7 +1204,20 @@
 		The size of the obtained formula is linear in the input. However $|\mathcal F| + 1$ new function symbols and the new binary predicate $E$ were introduced and each $n$-ary relation symbol has been extended to a $n+1$-ary relation symbol.
 	\end{theorem}
 	
+		
+	\begin{example}
+		Consider the classical tautology $\varphi := \neg\forall x\neg A(x)\to \exists x A(x)$. Setting $\psi := \forall x\neg A(x)$ we have
+		\begin{align*}
+			S^\#(\varphi) = &\{\forall u((P_{\neg\psi}^\#(f_\varphi(u))\to P_{\exists xA(x)}^\#(f_\varphi(u)))\to P_\varphi^\#(u))\}\cup\\
+			 & \{\forall u(\exists x(E(x, u)\wedge A^\#(x, u))\to P_{\exists xA(x)}^\#(u)), \forall u((P_{\neg\psi}^\#(u)\wedge P^\#_\psi(u))\to \bot)\}\cup\\
+			 & \{\forall u(\forall x(E^\#(x,f_\psi(u))\to P^\#_{\neg A(x)}(x, f_\psi(u)))\to P^\#_\psi(u))\}\cup\\&\{ \forall x\forall u(E(x, u)\to (A^\#(x, f_{\neg A(x)(u)})\to \bot)\to P^\#_{\neg A(x)}(x, u))\}
+		\end{align*}
+		And as one might expect we can indeed define a counter-model for $$\exists xE(x, s)\to K\to\bigwedge S^\#\to P^\#(s),$$
+		namely take as a domain $M = \{m, v, w\}$ where $u, w$ represent worlds, and $m$ representing a single domain element. Have $f_\varphi^I(x) = f_\psi^I(x) = f_{\neg A(x)}^I(x) = w$ for all $x\in M$, $E^I(x, y)$ if and only if $x = m$ and $y\in\{u, v\}$ and finally $A^\#(x, y)$ iff $x = m$ and $y = w$.
+	\end{example}
+	
 	It is not possible to completely eliminate worlds from the domain as in the propositional case, since counter-models can possibly be infinite (as we will see in more detail later).
+
 	
 	\subsection{Encoding Kripke Semantics}
 	
@@ -984,8 +1251,8 @@
 		\item $\forall \vec z\forall u(s\preceq u\to\vec E(\vec z, u)\to\forall w(u\preceq w\to A^\#(\vec a, w)\to B^\#(\vec b, w))\to C^\#(\vec c, u))$\\ for each $\psi = \forall \vec z((A(\vec a)\to B(\vec b))\to C(\vec c))\in\mathcal S$
 		\item  $\forall \vec z\forall u(s\preceq u\to\vec E(\vec z, u)\to \forall w(u\preceq w\to \forall x(E(x, w)\to A^\#(\vec a, w)))\to B^\#(\vec b, u))$\\for each $\forall \vec z(\forall xA(\vec a)\to B(\vec t_B))\in\mathcal S$.
 		\item $\forall \vec z\forall u(s\preceq u\to\vec E(\vec z, u)\to A^\#(\vec a, u)\to \forall x(E(x, u)\to B^\#(\vec b, u)))$\\for each $\forall \vec t(A(\vec a)\to \forall xB(\vec b))\in\mathcal S$.
-		\item $\forall \vec z\forall u(s\preceq u\to\vec E(\vec z, u)\to \exists x(E(x, u)\wedge A^\#(\vec z, u))\to B^\#(\vec b))$\\for each $\forall \vec z(\exists xA(\vec a)\to B(\vec b))\in\mathcal S$
-		\item $\forall \vec z\forall u(s\preceq u\to\vec E(\vec z, u)\to A^\#(\vec b)\to \exists x(E(x, u)\wedge B^\#(\vec b, u)))$\\for each $\forall \vec z(A(\vec a)\to \exists xB(\vec b))\in\mathcal S$
+		\item $\forall \vec z\forall u(s\preceq u\to\vec E(\vec z, u)\to \exists x(E(x, u)\wedge A^\#(\vec z, u))\to B^\#(\vec b, u))$\\for each $\forall \vec z(\exists xA(\vec a)\to B(\vec b))\in\mathcal S$
+		\item $\forall \vec z\forall u(s\preceq u\to\vec E(\vec z, u)\to A^\#(\vec b, u)\to \exists x(E(x, u)\wedge B^\#(\vec b, u)))$\\for each $\forall \vec z(A(\vec a)\to \exists xB(\vec b))\in\mathcal S$
 	\end{itemize}
 	
 	Then $\varphi = \bigwedge\mathcal S\to P$ is intuitionistically valid if and only if
@@ -1076,10 +1343,7 @@
 		\end{enumerate}	
 	\end{lemma}
 	
-	However part 2 of Lemma~\ref{thm:fo-countermodel-reduction} fails for $\psi\in\mathcal F_\forall$, because even if for all $x$ with $E(x, v$), we have $A(x, v)$, there could be some term $y$ with $\neg E(y, v)$ and $w$ with $v\preceq w$ such that $E(y, w)$ and $\neg A(y, w)$. This is why we must consider sequences that have repetitions:
-	
 	\begin{wrapfigure}[16]{r}{0.4\textwidth}
-		\vspace{-32pt}
 		\begin{center}
 			\begin{tikzpicture}[squarednode/.style={rectangle, draw, very thick, minimum size=5mm}]
 				\node[squarednode]      (0)   [] {$ $};
@@ -1110,6 +1374,9 @@
 		\caption{Counter-model to $\varphi$.}
 		\label{fig1}
 	\end{wrapfigure}
+	However part 2 of Lemma~\ref{thm:fo-countermodel-reduction} fails for $\psi\in\mathcal F_\forall$, because even if for all $x$ with $E(x, v$), we have $A(x, v)$, there could be some term $y$ with $\neg E(y, v)$ and $w$ with $v\preceq w$ such that $E(y, w)$ and $\neg A(y, w)$. This is why we must consider sequences that have repetitions:
+	
+	
 	\begin{example}
 		Consider $\varphi = \neg(\neg \forall xA(x)\vee\neg \forall xB(x))$. There is a counter-model as shown in Figure~\ref{fig1},
 		where we indicate at each world the elements that exist at it. For black numbers $n$, both $A(n)$ and $B(n)$ hold at that world, for red ones only $A(n)$, for blue ones only $B(n)$. The arrows indicate the order. $\neg\forall xA(x)$ is not fulfilled at worlds in the left column and $\neg\forall xB(x)$ is not fulfilled at worlds in the right column. In particular applying $f_{\neg \forall xA(x)}$ we must always reach the right column and applying $f_{\neg \forall xB(x)}$ we must always reach the left column. Therefore applying $f_{\neg \forall xA(x)}\circ f_{\neg \forall xB(x)}$ we cannot remain stationary.
@@ -1119,12 +1386,926 @@
 	
 	\chapter{Implementation}
 	
+	In this chapter we shall give an overview over our implementation of the described translation in Rust. Rust was a good fit for this endeavour because
+	\begin{itemize}
+		\item There is a great package for parsing files in tptp format~\cite{rust-tptp}.
+		\item Static typing reduced bugs induced by the many syntactically similar expressions that require different translation.
+		\item Rust is blazingly fast.
+	\end{itemize}
+	The implementation spans over 3000 lines of code across the files 
+	\begin{center}\lstinline|normalized_formula.rs, encoding.rs, translation.rs, main.rs|.\end{center}
+	\lstinline|normalized_formula.rs| contains internal data structures representing the atomic formulas as well as normalized formulas as in $\mathcal S$ in Theorem~\ref{fullFOtranslation}. \lstinline|encoding.rs| defines a visitor that traverses the structure of the input file and gives for each encountered subformula the corresponding encoding as in Definition~\ref{def:tseytin}. \lstinline|translation.rs| handles additional included files. Finally \lstinline|main.rs| puts it all together to define a complete translation.
+	
+	\section{Installation}
+	
+	Currently the only available installation option is building the binary from source. The cargo rust complier~\cite{rust} is required for this purpose. The source can be downloaded from github~\url{https://github.com/lexpk/Proofs-as-Programs-in-Classical-Logic/tree/main/Implementation/eiicl}~\cite{implementation}. To build the binary go to the eiicl folder and run
+	\begin{lstlisting}
+	cargo build --bin eiicl
+	\end{lstlisting}
+	The binary can be then found under 
+	\begin{lstlisting}
+	eiicl/target/debug/eiicl
+	\end{lstlisting}
+	
+	\section{Usage}
+	
+	The binary is to be used from the command line. It takes one or two arguments:
+	\begin{itemize}
+		\item The location of the tptp file that is to be translated.
+		\item (Optionally) a location with additional files to be included, per default the current folder.
+	\end{itemize}
+	\begin{example}
+		Suppose the \lstinline|eiicl| binary is in the \$PATH and the current directory contains a file \lstinline|example.p| containing
+		\begin{lstlisting}
+	include('ax1.p').
+		\end{lstlisting}
+		as well as a folder \lstinline|ax| containing a single file \lstinline|ax1.p|.
+	Then running the command
+	\begin{lstlisting}
+ 	eiicl example.p axioms/
+	\end{lstlisting}
+	will output the correct translation.
+	\end{example}
+	Currently the translation does not support free variables, i.e. all free variables are expected to be explicitly quantified.
+	
+	\section{Benchmarking}
+	
+	\begin{figure}[h]\label{results}
+		$$\begin{matrix}
+			&\text{AGT}&\text{ALG}&\text{COM}&\text{CSR}&\text{GEO}&\text{GRA}&\text{GRP}&\text{HAL}\\
+			\text{Proven}&5&170&0&0&58&3&4&2\\
+			\text{Disproven}&0&0&0&0&0&0&0&\\
+			\text{Timeout}&47&29&3&29&107&74&1&16
+		\end{matrix}$$
+		$$\begin{matrix}
+			&\text{KRS}&\text{LCL}&\text{MGT}&\text{MSC}&\text{NLP}&\text{NUM}&\text{PLA}&\text{PUZ}\\
+			\text{Proven}&0&0&30&1&9&1&9&2\\
+			\text{Disproven}&0&0&0&0&12&0&0&0\\
+			\text{Timeout}&5&9&128&3&69&1&237&82
+		\end{matrix}$$
+		$$\begin{matrix}
+			&\text{SET}&\text{SWC}&\text{SWV}&\text{SYN}&\text{TOP}&\text{GEJ}&\text{GPJ}&\text{SYJ}\\
+			\text{Proven}&0&5&27&1&64&65&54&1\\
+			\text{Disproven}&6&1&297&423&154&108&298&2
+		\end{matrix}$$
+		\caption{Performance on problem sections of the ILTP set.}
+	\end{figure}
+	
+	The program was benchmarked on the ILTP problem set~\cite{iltp}, which contains 2480 problems from the TPTP problem set~\cite{tptp}, which is commonly used to benchmark classical provers. The problem \lstinline|SYN007+1.014| was removed from the set as our translation mechanism would generate $>2^{14}$ formulas. For the purpose of the benchmark we report timeout for this problem. Since \lstinline|SYN007+1.014| is rather artificial this is not a big issue for us. For the classical proving part of our benchmark we use the Vampire theorem prover~\cite{Kov_cs_2013}, which is a state-of-the-art prover as evidenced by the CASC competition~\cite{casc}. Then for each problem our system transforms the described transformation and feeds the result to vampire with a time limit of 30 seconds which then reports validity, satisfiability of the negation or a timeout. The benchmark was run on an Intel Core i5-8400 CPU.
+
+	Out of the 2480 problems 511 were proven, 30 were refuted and 2128 resulted in a timeout, which corresponds to frequencies of $19.1\%$, $1.1\%$ and $79.7\%$ respectively. Out of the provers on the ILTP website this only puts it behind \lstinline|ileanCoP| which managed to resolve 690 or $27.1\%$ of the problems with a proof or refutation and ahead of  five other provers. A caveat is that the ILTP benchmarks were run on a slightly less powerful machine but with a timelimit of 600s, which suggests that our result might be even better.
+	
+	The ILTP problem set is divided into 24 separate sections consisting of different kinds of problems, e.g. ALG which are primarily algebraic in nature. The performance on the individual sections can be seen it table~\ref{results}.
+	More detailed results for the individual problems can be found in Apendix~\ref{benchmark-results}.
+	
 	\chapter{Translation of proofs and counter-models}	
 
-
+	Finally we elaborate on how generated proofs and counter-models for $\varphi^\#$ can be explicitly translated in the first-order case.
+	
+	\section{Translation of counter-models}
+	 
+	We will merely have to summarize results here.
+	
+	\begin{definition}
+		Let $\mathcal M = (M, I)$ be a counter-model to $\varphi^\#$. Then define the Kripke structure $\mathcal K(\mathcal M) = (W, (M_w, I_w))_{u\in W})$ as follows:
+		\begin{itemize}
+			\item As the set of worlds $W$ take the term algebra over $s$ and $\{f_{\vec{z}} := u\mapsto f(\vec z, u)\:|\:f\in\mathcal F, \vec z\in M\}$. Let the partial order be induced by the subterm relation.
+			\item At each world $u$ define the universe $M_u := \{m\in M\:|\:E^I(m, u^I)\}$ where $f_{\vec z}(t)^I := f^I(\vec z, t^I)$.
+			\item For each function symbol $f$ have $f^{I_u} := f^I_{M_u}$.
+			\item For each relation symbol $R$ have $R^{I_u}(\vec t) := {R^\#}^I(\vec t, u^I)$
+		\end{itemize}
+	\end{definition}
 		
+	\begin{theorem}
+		If $\mathcal M\not\models\varphi^\#$ then $ \mathcal K(\mathcal M)\not\models\varphi$
+	\end{theorem}
+	
+	This follows directly from the proofs in section~\ref{section:CQCIQC}.
+	
+	\section{Proof translation}
+	
+	
+	We want to transform Resolution proof for $\varphi^\#$ as given by vampire into a \textbf{Gi} proof for $\varphi$. While the results of this section are also clear in principle, there is some additional work to be done in the details. Since syntactic details are of importance here it might be useful to recall preliminary sections~\ref{proof-theory}. We will focus on how to obtain a \textbf{Gi} proof for $\varphi$ from a \textbf{Gc} proof of $\varphi^\#$, which is a much closer calculus. To obtain a \textbf{Gc} proof from a resolution proof one can use a standard method, e.g. as given in~\cite{de2005translation}.
+	Recall that $\varphi^\#$ is of the form $K\to \bigwedge\mathcal S^\#\to P^\#(s)$, which is equivalent to $K,\mathcal S^\#\Rightarrow P^\#(s)$ where each $\psi\in\mathcal S^\#$ is of one of the forms
+	\[\begin{matrix}
+		\forall \vec z\forall u(\vec E(\vec z, u)\to (A^\#(\vec a, u)\to (B^\#(\vec b, u)\wedge C^\#(\vec c, u))))\\\forall \vec z\forall u(\vec E(\vec z, u)\to (A^\#(\vec a, u)\wedge B^\#(\vec b, u))\to C^\#(\vec c, u))\\ \forall \vec z\forall u(\vec E(\vec z, u)\to (A^\#(\vec a, u)\to (B^\#(\vec b, u)\vee C^\#(\vec c, u))))\\
+		\forall \vec z\forall u(\vec E(\vec z, u)\to (A^\#(\vec a, u)\vee B^\#(\vec b, u))\to C^\#(\vec c, u))\\ \forall \vec z\forall u(\vec E(\vec z, u)\to (A^\#(\vec a, f_\psi(\vec z, u))\to B^\#(\vec b, f_\psi(\vec z, u)))\to C^\#(\vec c, u))\\\forall \vec z\forall u(\forall x(E(x, f_\psi(\vec z, u))\to A^\#(\vec a, f_\psi(\vec z, u)))\to B^\#(\vec b, u))\\ \forall \vec z\forall u(\vec E(\vec z, u)\to (A^\#(\vec a, u)\to\forall x(E(x, u)\to B^\#(\vec b, u))))\\ \forall \vec z\forall u(\vec E(\vec z, u)\to (\exists x(E(x, u) \wedge A^\#(\vec a, u))\to B^\#(\vec b, u))\\\forall \vec z\forall u(\vec E(\vec z, u)\to (A^\#(\vec a, u)\to\exists x(E(x, u) \wedge B^\#(b, u))))).
+	\end{matrix}\]
+
+	Suppose now we have a \textbf{Gc} proof $\mathfrak P$ of $\varphi^\#$. Without loss of generality suppose that the rules introducing the left $\forall$ quantifiers are at the end of the proof, i.e. each atom occurring until then will have ground terms in place of $\vec t$ and $u$. This can be achieved by permutation of rules.
+	
+	We can then split the proof into two parts $\mathfrak{A}$ and $\mathfrak{B}$, where in $\mathfrak{A}$ the left $\forall$ quantifiers have not yet been introduced. We can then associate with each formula $\psi$ occurring in $\mathfrak A$ a world $u(\psi)$ which is the ground term that is in the end substituted for $u$. We say that a rule $R$ \textit{features} a world $u$ if $u$ is a subformula of $u(\psi)$ for some active formulas $\psi$.
+	
+	Due to the subformula property we can achieve by another permutation argument that each rule R$\to$ and R$\forall$ is followed by its associated L$\to$ rule, i.e. all rules  R$\to$ and R$\forall$ occurr as
+	
+	\begin{center}
+		\AxiomC{$A^\#(\vec a, f_\psi(\vec z, w)),\Gamma\Rightarrow\Delta, B^\#(\vec b, f_\psi(\vec z, w))$}
+				\RightLabel{R$\to$}
+		\UnaryInfC{$\Gamma\Rightarrow\Delta, A^\#(\vec a, f_\psi(\vec z, w))\to B^\#(\vec b, f_\psi(\vec z, w))$}
+		\AxiomC{$C^\#(\vec c, w), \Gamma\Rightarrow\Delta$}
+		\RightLabel{L$\to$}
+		\BinaryInfC{$(A^\#(\vec a, f_\psi(\vec z, w))\to B^\#(\vec b, f_\psi(\vec z, w)))\to C^\#(\vec c, w), \Gamma\Rightarrow \Delta$}
+		\DisplayProof
+	\end{center}
+
+	\begin{center}
+		\AxiomC{$E(x, f_\psi(\vec z, w)),\Gamma\Rightarrow\Delta, A^\#(\vec b, f_\psi(\vec z, w))$}
+		\RightLabel{R$\to$}
+		\UnaryInfC{$\Gamma\Rightarrow\Delta, E(x, f_\psi(\vec z, w))\to B^\#(\vec a, f_\psi(\vec z, w))$}
+		\RightLabel{R$\forall$}
+		\UnaryInfC{$\Gamma\Rightarrow\Delta, \forall x(E(x, f_\psi(\vec z, w))\to A^\#(\vec a, f_\psi(\vec z, w)))$}
+		\AxiomC{$B^\#(\vec b, w), \Gamma\Rightarrow\Delta$}
+		\RightLabel{L$\to$}
+		\BinaryInfC{$ \forall x(E(x, f_\psi(\vec z, w))\to A^\#(\vec a, f_\psi(\vec z, w)))\to B^\#(\vec b, w), \Gamma\Rightarrow \Delta$}
+		\DisplayProof
+	\end{center}
+	for some ground term $w$.
+	
+	We will now show that $\mathfrak A$ can be transformed into an intuitionistically valid proof by induction on the number of such rules.
+	
+	Consider the last such rule. We must have $\Delta = P^\#(s)$.  W.l.o.g. assume we are in the first case.  Now consider the (possibly invalid) subproof above this rule R$\to$ consisting only of formulas that contain $f_\psi(\vec z, w)$ and rules that feature $f_\psi(\vec z, w)$.
+	\begin{itemize}
+		\item If this proof contains a valid proof of $$A^\#(\vec a, f_\psi(\vec z, w)),\Gamma\Rightarrow B^\#(\vec b, f_\psi(\vec z, w))$$ then, substituting $s$ for $f_\psi(\vec z, w)$, using the induction hypothesis we obtain an intuitionistic proof. But then applying the induction hypothesis also on the right branch of L$\to$ above we directly obtain an intuitionistic proof of $$(A^\#(\vec a, f_\psi(\vec z, w))\to B^\#(\vec b, f_\psi(\vec z, w)))\to C^\#(\vec c, w), \Gamma\Rightarrow \Delta.$$
+		\item  On the other hand suppose the subproof does not contain a valid proof of 
+		$$A^\#(\vec a, f_\psi(\vec z, w)),\Gamma\Rightarrow B^\#(\vec b, f_\psi(\vec z, w)).$$Then removing all formulas containing $f_\psi(\vec z, w)$ and all rules featuring it and then adding missing redundant formulas in the axioms yields a valid classical proof of $$(A^\#(\vec a, f_\psi(\vec z, w))\to B^\#(\vec b, f_\psi(\vec z, w)))\to C^\#(\vec c, w), \Gamma\Rightarrow \Delta.$$ But then, since we removed one R$\to$ formula, we also obtain an intuitionistic proof via the induction hypothesis.
+	\end{itemize}
+
+	This gives us the following result
+	\begin{theorem}
+		There is an effective linear time procedure that transforms a classical proof of $\varphi^\#$ into a intuitionistic proof of $\varphi$.
+	\end{theorem}
+	\begin{example}
+		Consider the intuitionistic theorem $$\varphi = \bigwedge\{(A\to A)\to B, (A\to B)\to B\}\to B.$$
+		which is translated to
+		\[
+			\varphi^\# = \exists xE(x, s)\to \bigwedge\left\lbrace
+			\begin{matrix}
+				\forall z\forall u(E(z, u)\to (E(z, f(u))\wedge E(z, g(u))))\\
+				\forall u(A^\#(u)\to  (A^\#(f(u))\wedge A^\#(g(u))))\\
+				\forall z\forall u(P^\#(z, u)\to (P^\#(z, f(u))\wedge P^\#(z, g(u))))\\
+				\forall u((A^\#(f(u))\to A^\#(f(u)))\to B^\#(u))\\
+				\forall u(A^\#(g(u))\to B^\#(x, g(u)))\to B^\#(u))
+			\end{matrix}\right\rbrace 
+			\to B^\#(s)
+		\]
+			For this example we shall consider the simplified but still valid alternative
+			\[
+			\varphi^\# = \bigwedge\left\lbrace
+			\begin{matrix}
+				\forall u((A^\#(f(u))\to A^\#(f(u)))\to B^\#(u))\\
+				\forall u(A^\#(g(u))\to B^\#(g(u)))\to B^\#(u))
+			\end{matrix}\right\rbrace 
+			\to B^\#(s)
+			\]
+			
+			For this we obtain the following proof:
+			\begin{center}
+				\AxiomC{}
+				\RightLabel{Ax}
+				\UnaryInfC{$\substack{A^\#(g(s)),\\A^\#(f(s))}
+					\Rightarrow \substack{B^\#(g(s))),\\ B^\#(s), A^\#(f(s))}$}
+				\RightLabel{R$\to$}
+				\UnaryInfC{$A^\#(s, g(s))
+					\Rightarrow \substack{B^\#(g(s))), B^\#(s),\\A^\#(f(s))\to A^\#(f(s))}$}
+				\AxiomC{}
+				\RightLabel{Ax}
+				\UnaryInfC{$B^\#(s), A^\#(g(s))
+					\Rightarrow \substack{B^\#(g(s))),\\ B^\#(s)}$}
+				\RightLabel{L$\to$}
+				\BinaryInfC{$(A^\#(f(s))\to A^\#(f(s)))\to B^\#(s), A^\#(g(s))
+					\Rightarrow B^\#(g(s)), B^\#(s)$}
+				\RightLabel{L$\forall$}
+				\UnaryInfC{$\forall u((A^\#(f(u))\to A^\#(f(u)))\to B^\#(u)), A^\#(g(s))
+					\Rightarrow B^\#(g(s)), B^\#(s)$}
+				\RightLabel{R$\to$}
+					\UnaryInfC{$\forall u((A^\#(f(u))\to A^\#(f(u)))\to B^\#(u))
+						\Rightarrow A^\#(g(s))\to B^\#(g(s)), B^\#(s)$}
+				\AxiomC{\vdots}
+				\RightLabel{L$\to$}
+				\BinaryInfC{$\substack{\forall u((A^\#(f(u))\to A^\#(f(u)))\to B^\#(u))\\
+						A^\#(g(s))\to B^\#(g(s)))\to B^\#(s)}\Rightarrow B^\#(s)$}
+				\RightLabel{L$\forall$}
+				\UnaryInfC{$\substack{\forall u((A^\#(f(u))\to A^\#(f(u)))\to B^\#(u))\\
+						\forall u(\forall x(A^\#(g(u))\to B^\#(g(u)))\to B^\#(u))}\Rightarrow B^\#(s)$}
+					\DisplayProof
+			\end{center}
+			First we push all the L$\forall$ rules to the bottom and group L$\to$ with R$\to$/R$\forall$:
+		\begin{center}
+			\AxiomC{}
+			\RightLabel{Ax}
+			\UnaryInfC{$\substack{A^\#(g(s)),\\A^\#(f(s))}
+				\Rightarrow \substack{B^\#(g(s))),\\ B^\#(s), A^\#(f(s))}$}
+			\RightLabel{R$\to$}
+			\UnaryInfC{$A^\#(s, g(s))
+				\Rightarrow \substack{B^\#(g(s))), B^\#(s),\\A^\#(f(s))\to A^\#(f(s))}$}
+			\AxiomC{}
+			\RightLabel{Ax}
+			\UnaryInfC{$B^\#(s), A^\#(g(s))
+				\Rightarrow \substack{B^\#(g(s))),\\ B^\#(s)}$}
+			\RightLabel{L$\to$}
+			\BinaryInfC{$(A^\#(f(s))\to A^\#(f(s))\to B^\#(s)), A^\#(g(s))
+				\Rightarrow B^\#(g(s)), B^\#(s)$}
+			\RightLabel{R$\to$}
+			\UnaryInfC{$(A^\#(f(s))\to A^\#(f(s))\to B^\#(s))
+				\Rightarrow A^\#(g(s))\to B^\#(g(s)), B^\#(s)$}
+			\AxiomC{\vdots}
+			\RightLabel{L$\to$}
+			\BinaryInfC{$\substack{(A^\#(f(s))\to A^\#(f(s))\to B^\#(s))\\
+					A^\#(g(s))\to B^\#(s, g(s)))\to B^\#(s)}\Rightarrow B^\#(s)$}
+			\RightLabel{L$\forall$}
+			\UnaryInfC{$\substack{(A^\#(f(s))\to A^\#(f(s))\to B^\#(s))\\
+					A^\#(g(s))\to B^\#(g(s)))\to B^\#(s)}\Rightarrow B^\#(s)$}
+			\RightLabel{L$\forall$}
+			\UnaryInfC{$\substack{\forall u((A^\#(f(u))\to A^\#(f(u)))\to B^\#(u))\\
+					\forall u(\forall x(A^\#(g(u))\to B^\#(g(u)))\to B^\#(u))}\Rightarrow B^\#(s)$}
+			\DisplayProof
+		\end{center}
+	
+		Next we consider the subproof spanned by formulas containing $g(s)$ and rules featuring $g(s)$ above the last R$\to$ rule. But there are no rules featuring $g(s)$, i.e. we obtain an invalid proof.
+		\begin{center}
+			\AxiomC{}
+			\UnaryInfC{$A^\#(g(s))
+				\Rightarrow B^\#(g(s))$}
+			\DisplayProof
+		\end{center}
+		Therefore we remove all formulas and rules featuring $g(s)$: 
+		\begin{center}
+			\AxiomC{}
+			\RightLabel{Ax}
+			\UnaryInfC{$A^\#(g(s))
+				\Rightarrow B^\#(s), A^\#(f(s))$}
+			\RightLabel{R$\to$}
+			\UnaryInfC{$\Rightarrow B^\#(s), A^\#(f(s))\to A^\#(f(s))$}
+			\AxiomC{}
+			\RightLabel{Ax}
+			\UnaryInfC{$B^\#(s)
+				\Rightarrow B^\#(s)$}
+			\RightLabel{L$\to$}
+			\BinaryInfC{$(A^\#(f(s))\to A^\#(f(s))\to B^\#(s))\Rightarrow B^\#(s)$}
+			\RightLabel{L$\forall$}
+			\UnaryInfC{$\forall u((A^\#(f(u))\to A^\#(f(u)))\to B^\#(u))\Rightarrow B^\#(s)$}
+			\DisplayProof
+		\end{center}
+		Then we add the superfluous formulas back in the axioms:
+		\begin{center}
+			\AxiomC{}
+			\RightLabel{Ax}
+			\UnaryInfC{$\substack{A^\#(g(s)),\\\forall u(\forall x(A^\#(g(u))\to B^\#(g(u)))\to B^\#(u))}
+				\Rightarrow B^\#(s), A^\#(f(s))$}
+			\RightLabel{R$\to$}
+			\UnaryInfC{$\forall u(\forall x(A^\#(g(u))\to B^\#(g(u)))\to B^\#(u))\Rightarrow B^\#(s), A^\#(f(s))\to A^\#(f(s))$}
+			\AxiomC{}
+			\RightLabel{Ax}
+			\UnaryInfC{\vdots}
+			\RightLabel{L$\to$}
+			\BinaryInfC{$\substack{(A^\#(f(s))\to A^\#(f(s))\to B^\#(s)),\\\forall u(\forall x(A^\#(g(u))\to B^\#(g(u)))\to B^\#(u))}\Rightarrow B^\#(s)$}
+			\RightLabel{L$\forall$}
+			\UnaryInfC{$\substack{\forall u((A^\#(f(u))\to A^\#(f(u)))\to B^\#(u))\\\forall u(\forall x(A^\#(g(u))\to B^\#(g(u)))\to B^\#(u))}\Rightarrow B^\#(s)$}
+			\DisplayProof
+		\end{center}
+	We then inductively proceed by examining the new last R$\to$ rule. This time however the subproof spanned by formulas and rules containing $f(s)$ is completely valid. Since the subproof does not contain any more R$\to$ or R$\forall$ formulas we are done.
+	\end{example}
+
+	\chapter{Conclusion}
+
+\section{Conclusion}
+
+	We have presented embeddings of intuitionistic into classical logic for the propositional and the predicate case.
+	The transformation saw an exponential blow-up parameterized by $|\mathcal F_\to|$ in the propositional case and a complexity increase reflected by an arity-increase of one for all relations and the introduction of new function symbols in the predicate case.
+	A key motivation for our work was a new approach for automated deduction for intuitionistic logic leveraging classical provers.
+	Our initial benchmarks showed decent results and proved this to be a legitimate route.
+	
+	So far our translation is very straightforward and while this was conceptually very helpful we expect that better results can be achieved by more elaborate mechanisms.	We plan to establish better bounds in future work by utilizing structural properties of the input formula, in particular by constructing smaller counter-examples $\mathcal M_T$ in case certain atoms are independent from each other, and utilizing additional information about the functions in $\mathcal F$ to reduce the space of Kripke Frames that need to be considered.
+	
+	On the theoretical side, we also hope to give a new translation from QBF to IPC that improves our understanding of the relationship between intuitionistic propositional logic and the polynomial hierarchy.
+	
+	
+
+	\appendix
+	\chapter{Zusammenfassung auf Deutsch}
+	
+	\chapter{Complete Benchmark Results}\label{benchmark-results}
+	\singlespacing
+	All benchmarks that are not listed ended with timeout.\\
+	
+	\begin{minipage}{0.45\textwidth}
+		\[\begin{matrix}
+			\text{Problem}&\text{Result}&\text{Time}\\
+			\text{AGT001+1.p}&\text{Proven}& 0.054 s\\
+			\text{AGT001+2.p}&\text{Proven}& 0.085 s\\
+			\text{AGT002+1.p}&\text{Proven}& 0.059 s\\
+			\text{AGT002+2.p}&\text{Proven}& 0.066 s\\
+			\text{AGT017+2.p}&\text{Proven}& 4.868 s\\
+			\text{ALG014+1.p}&\text{Proven}& 0.386 s\\
+			\text{ALG015+1.p}&\text{Proven}& 0.749 s\\
+			\text{ALG016+1.p}&\text{Proven}& 0.405 s\\
+			\text{ALG017+1.p}&\text{Proven}& 0.043 s\\
+			\text{ALG020+1.p}&\text{Proven}& 0.205 s\\
+			\text{ALG021+1.p}&\text{Proven}& 0.457 s\\
+			\text{ALG022+1.p}&\text{Proven}& 0.493 s\\
+			\text{ALG023+1.p}&\text{Proven}& 0.713 s\\
+			\text{ALG024+1.p}&\text{Proven}& 1.059 s\\
+			\text{ALG025+1.p}&\text{Proven}& 2.532 s\\
+			\text{ALG026+1.p}&\text{Proven}& 1.316 s\\
+			\text{ALG027+1.p}&\text{Proven}& 5.175 s\\
+			\text{ALG028+1.p}&\text{Proven}& 0.355 s\\
+			\text{ALG031+1.p}&\text{Proven}& 0.375 s\\
+			\text{ALG032+1.p}&\text{Proven}& 1.275 s\\
+			\text{ALG033+1.p}&\text{Proven}& 1.182 s\\
+			\text{ALG034+1.p}&\text{Proven}& 9.518 s\\
+			\text{ALG035+1.p}&\text{Proven}& 9.285 s\\
+			\text{ALG036+1.p}&\text{Proven}& 0.302 s\\
+			\text{ALG037+1.p}&\text{Proven}& 1.004 s\\
+			\text{ALG038+1.p}&\text{Proven}& 0.762 s\\
+			\text{ALG039+1.p}&\text{Proven}& 0.042 s\\
+			\text{ALG042+1.p}&\text{Proven}& 0.202 s\\
+			\text{ALG043+1.p}&\text{Proven}& 0.196 s\\
+			\text{ALG044+1.p}&\text{Proven}& 0.249 s\\
+			\text{ALG045+1.p}&\text{Proven}& 0.571 s\\
+			\text{ALG046+1.p}&\text{Proven}& 0.832 s\\
+		\end{matrix}\]
+	\end{minipage}
+	\begin{minipage}{0.45\textwidth}
+		\[\begin{matrix}
+			\text{Problem}&\text{Result}&\text{Time}\\
+			\text{ALG048+1.p}&\text{Proven}& 1.586 s\\
+			\text{ALG049+1.p}&\text{Proven}& 2.467 s\\
+			\text{ALG050+1.p}&\text{Proven}& 2.347 s\\
+			\text{ALG051+1.p}&\text{Proven}& 1.639 s\\
+			\text{ALG052+1.p}&\text{Proven}& 3.164 s\\
+			\text{ALG053+1.p}&\text{Proven}& 2.168 s\\
+			\text{ALG054+1.p}&\text{Proven}& 0.169 s\\
+			\text{ALG055+1.p}&\text{Proven}& 0.899 s\\
+			\text{ALG056+1.p}&\text{Proven}& 0.892 s\\
+			\text{ALG057+1.p}&\text{Proven}& 1.005 s\\
+			\text{ALG058+1.p}&\text{Proven}& 0.673 s\\
+			\text{ALG059+1.p}&\text{Proven}& 0.976 s\\
+			\text{ALG060+1.p}&\text{Proven}& 1.346 s\\
+			\text{ALG061+1.p}&\text{Proven}& 0.594 s\\
+			\text{ALG062+1.p}&\text{Proven}& 0.440 s\\
+			\text{ALG063+1.p}&\text{Proven}& 0.456 s\\
+			\text{ALG064+1.p}&\text{Proven}& 0.782 s\\
+			\text{ALG065+1.p}&\text{Proven}& 0.528 s\\
+			\text{ALG066+1.p}&\text{Proven}& 0.553 s\\
+			\text{ALG067+1.p}&\text{Proven}& 0.574 s\\
+			\text{ALG068+1.p}&\text{Proven}& 0.962 s\\
+			\text{ALG075+1.p}&\text{Proven}& 0.135 s\\
+			\text{ALG076+1.p}&\text{Proven}& 0.266 s\\
+			\text{ALG077+1.p}&\text{Proven}& 0.200 s\\
+			\text{ALG078+1.p}&\text{Proven}& 0.190 s\\
+			\text{ALG079+1.p}&\text{Proven}& 0.203 s\\
+			\text{ALG080+1.p}&\text{Proven}& 0.334 s\\
+			\text{ALG081+1.p}&\text{Proven}& 0.196 s\\
+			\text{ALG082+1.p}&\text{Proven}& 0.228 s\\
+			\text{ALG083+1.p}&\text{Proven}& 0.168 s\\
+			\text{ALG084+1.p}&\text{Proven}& 0.211 s\\
+			\text{ALG085+1.p}&\text{Proven}& 0.206 s\\
+		\end{matrix}\]
+	\end{minipage}
+	
+	\pagebreak
+	
+	\begin{minipage}{0.45\textwidth}
+		\[\begin{matrix}
+			\text{Problem}&\text{Result}&\text{Time}\\
+			\text{ALG086+1.p}&\text{Proven}& 0.273 s\\
+			\text{ALG087+1.p}&\text{Proven}& 0.305 s\\
+			\text{ALG088+1.p}&\text{Proven}& 0.195 s\\
+			\text{ALG089+1.p}&\text{Proven}& 0.293 s\\
+			\text{ALG090+1.p}&\text{Proven}& 0.270 s\\
+			\text{ALG091+1.p}&\text{Proven}& 0.466 s\\
+			\text{ALG092+1.p}&\text{Proven}& 21.681 s\\
+			\text{ALG093+1.p}&\text{Proven}& 0.551 s\\
+			\text{ALG094+1.p}&\text{Proven}& 0.280 s\\
+			\text{ALG095+1.p}&\text{Proven}& 0.358 s\\
+			\text{ALG096+1.p}&\text{Proven}& 1.859 s\\
+			\text{ALG097+1.p}&\text{Proven}& 1.531 s\\
+			\text{ALG098+1.p}&\text{Proven}& 2.604 s\\
+			\text{ALG099+1.p}&\text{Proven}& 3.372 s\\
+			\text{ALG100+1.p}&\text{Proven}& 2.517 s\\
+			\text{ALG101+1.p}&\text{Proven}& 3.101 s\\
+			\text{ALG104+1.p}&\text{Proven}& 2.526 s\\
+			\text{ALG105+1.p}&\text{Proven}& 0.765 s\\
+			\text{ALG106+1.p}&\text{Proven}& 2.808 s\\
+			\text{ALG107+1.p}&\text{Proven}& 1.168 s\\
+			\text{ALG108+1.p}&\text{Proven}& 2.324 s\\
+			\text{ALG109+1.p}&\text{Proven}& 1.958 s\\
+			\text{ALG110+1.p}&\text{Proven}& 1.049 s\\
+			\text{ALG111+1.p}&\text{Proven}& 0.960 s\\
+			\text{ALG112+1.p}&\text{Proven}& 1.348 s\\
+			\text{ALG113+1.p}&\text{Proven}& 0.846 s\\
+			\text{ALG114+1.p}&\text{Proven}& 0.889 s\\
+			\text{ALG115+1.p}&\text{Proven}& 1.004 s\\
+			\text{ALG116+1.p}&\text{Proven}& 1.253 s\\
+			\text{ALG117+1.p}&\text{Proven}& 1.121 s\\
+			\text{ALG118+1.p}&\text{Proven}& 1.133 s\\
+			\text{ALG119+1.p}&\text{Proven}& 1.539 s\\
+			\text{ALG120+1.p}&\text{Proven}& 1.905 s\\
+			\text{ALG121+1.p}&\text{Proven}& 0.962 s\\
+			\text{ALG122+1.p}&\text{Proven}& 2.674 s\\
+			\text{ALG123+1.p}&\text{Proven}& 1.099 s\\
+			\text{ALG124+1.p}&\text{Proven}& 1.390 s\\
+			\text{ALG125+1.p}&\text{Proven}& 1.243 s\\
+			\text{ALG126+1.p}&\text{Proven}& 2.903 s\\
+			\text{ALG127+1.p}&\text{Proven}& 2.391 s\\
+			\text{ALG128+1.p}&\text{Proven}& 6.782 s\\
+			\text{ALG130+1.p}&\text{Proven}& 0.548 s\\
+			\text{ALG131+1.p}&\text{Proven}& 7.478 s\\
+			\text{ALG132+1.p}&\text{Proven}& 1.040 s\\
+			\text{ALG133+1.p}&\text{Proven}& 7.531 s\\
+			\text{ALG134+1.p}&\text{Proven}& 1.663 s\\
+			\text{ALG135+1.p}&\text{Proven}& 0.914 s\\
+			\text{ALG136+1.p}&\text{Proven}& 1.122 s\\
+		\end{matrix}\]
+	\end{minipage}
+	\begin{minipage}{0.45\textwidth}
+		\[\begin{matrix}
+			\text{Problem}&\text{Result}&\text{Time}\\
+			\text{ALG137+1.p}&\text{Proven}& 1.047 s\\
+			\text{ALG138+1.p}&\text{Proven}& 0.208 s\\
+			\text{ALG139+1.p}&\text{Proven}& 0.998 s\\
+			\text{ALG140+1.p}&\text{Proven}& 1.416 s\\
+			\text{ALG141+1.p}&\text{Proven}& 0.958 s\\
+			\text{ALG142+1.p}&\text{Proven}& 0.910 s\\
+			\text{ALG143+1.p}&\text{Proven}& 1.345 s\\
+			\text{ALG145+1.p}&\text{Proven}& 1.407 s\\
+			\text{ALG146+1.p}&\text{Proven}& 1.061 s\\
+			\text{ALG147+1.p}&\text{Proven}& 6.912 s\\
+			\text{ALG148+1.p}&\text{Proven}& 1.260 s\\
+			\text{ALG149+1.p}&\text{Proven}& 1.434 s\\
+			\text{ALG150+1.p}&\text{Proven}& 1.175 s\\
+			\text{ALG151+1.p}&\text{Proven}& 29.674 s\\
+			\text{ALG152+1.p}&\text{Proven}& 3.644 s\\
+			\text{ALG153+1.p}&\text{Proven}& 26.962 s\\
+			\text{ALG157+1.p}&\text{Proven}& 2.262 s\\
+			\text{ALG158+1.p}&\text{Proven}& 4.045 s\\
+			\text{ALG159+1.p}&\text{Proven}& 14.128 s\\
+			\text{ALG161+1.p}&\text{Proven}& 1.952 s\\
+			\text{ALG162+1.p}&\text{Proven}& 2.372 s\\
+			\text{ALG164+1.p}&\text{Proven}& 1.593 s\\
+			\text{ALG165+1.p}&\text{Proven}& 1.910 s\\
+			\text{ALG166+1.p}&\text{Proven}& 1.755 s\\
+			\text{ALG167+1.p}&\text{Proven}& 1.744 s\\
+			\text{ALG168+1.p}&\text{Proven}& 0.963 s\\
+			\text{ALG169+1.p}&\text{Proven}& 0.947 s\\
+			\text{ALG170+1.p}&\text{Proven}& 0.746 s\\
+			\text{ALG171+1.p}&\text{Proven}& 0.080 s\\
+			\text{ALG172+1.p}&\text{Proven}& 0.076 s\\
+			\text{ALG173+1.p}&\text{Proven}& 0.085 s\\
+			\text{ALG174+1.p}&\text{Proven}& 0.080 s\\
+			\text{ALG175+1.p}&\text{Proven}& 0.088 s\\
+			\text{ALG180+1.p}&\text{Proven}& 0.225 s\\
+			\text{ALG181+1.p}&\text{Proven}& 0.143 s\\
+			\text{ALG182+1.p}&\text{Proven}& 0.135 s\\
+			\text{ALG183+1.p}&\text{Proven}& 0.138 s\\
+			\text{ALG184+1.p}&\text{Proven}& 0.142 s\\
+			\text{ALG185+1.p}&\text{Proven}& 0.499 s\\
+			\text{ALG186+1.p}&\text{Proven}& 0.391 s\\
+			\text{ALG187+1.p}&\text{Proven}& 0.430 s\\
+			\text{ALG188+1.p}&\text{Proven}& 0.445 s\\
+			\text{ALG189+1.p}&\text{Proven}& 0.508 s\\
+			\text{ALG190+1.p}&\text{Proven}& 2.462 s\\
+			\text{ALG191+1.p}&\text{Proven}& 2.207 s\\
+			\text{ALG192+1.p}&\text{Proven}& 0.648 s\\
+			\text{ALG193+1.p}&\text{Proven}& 0.584 s\\
+			\text{ALG194+1.p}&\text{Proven}& 28.952 s\\
+		\end{matrix}\]
+	\end{minipage}
+	
+	\pagebreak
+	
+	\begin{minipage}{0.45\textwidth}
+		\[\begin{matrix}
+			\text{Problem}&\text{Result}&\text{Time}\\
+			\text{ALG195+1.p}&\text{Proven}& 4.695 s\\
+			\text{ALG196+1.p}&\text{Proven}& 7.115 s\\
+			\text{ALG197+1.p}&\text{Proven}& 4.805 s\\
+			\text{ALG198+1.p}&\text{Proven}& 0.127 s\\
+			\text{ALG199+1.p}&\text{Proven}& 1.533 s\\
+			\text{ALG200+1.p}&\text{Proven}& 0.263 s\\
+			\text{ALG203+1.p}&\text{Proven}& 26.932 s\\
+			\text{ALG204+1.p}&\text{Proven}& 0.242 s\\
+			\text{ALG205+1.p}&\text{Proven}& 0.320 s\\
+			\text{ALG206+1.p}&\text{Proven}& 0.274 s\\
+			\text{ALG207+1.p}&\text{Proven}& 0.823 s\\
+			\text{ALG208+1.p}&\text{Proven}& 0.703 s\\
+			\text{ALG209+1.p}&\text{Proven}& 0.783 s\\
+			\text{ALG210+2.p}&\text{Proven}& 6.846 s\\
+			\text{ALG211+1.p}&\text{Proven}& 0.327 s\\
+			\text{GEJ002+1.p}&\text{Proven}& 7.672 s\\
+			\text{GEJ002+2.p}&\text{Proven}& 0.030 s\\
+			\text{GEJ004+3.p}&\text{Proven}& 23.293 s\\
+			\text{GEJ007+2.p}&\text{Proven}& 0.156 s\\
+			\text{GEJ007+4.p}&\text{Proven}& 0.098 s\\
+			\text{GEJ009+1.p}&\text{Proven}& 0.487 s\\
+			\text{GEJ009+2.p}&\text{Proven}& 0.054 s\\
+			\text{GEJ009+3.p}&\text{Proven}& 0.338 s\\
+			\text{GEJ009+4.p}&\text{Proven}& 0.046 s\\
+			\text{GEJ010+1.p}&\text{Proven}& 2.915 s\\
+			\text{GEJ010+2.p}&\text{Proven}& 7.168 s\\
+			\text{GEJ010+3.p}&\text{Proven}& 1.635 s\\
+			\text{GEJ038+1.p}&\text{Proven}& 0.029 s\\
+			\text{GEJ038+2.p}&\text{Proven}& 0.028 s\\
+			\text{GEJ042+1.p}&\text{Proven}& 0.057 s\\
+			\text{GEJ042+2.p}&\text{Proven}& 0.055 s\\
+			\text{GEJ043+2.p}&\text{Proven}& 17.815 s\\
+			\text{GEJ044+2.p}&\text{Proven}& 29.105 s\\
+			\text{GEJ051+1.p}&\text{Proven}& 0.030 s\\
+			\text{GEJ051+2.p}&\text{Proven}& 0.030 s\\
+			\text{GEJ060+1.p}&\text{Proven}& 0.082 s\\
+			\text{GEJ061+1.p}&\text{Proven}& 0.153 s\\
+			\text{GEJ062+1.p}&\text{Proven}& 0.036 s\\
+			\text{GEJ063+1.p}&\text{Proven}& 0.085 s\\
+			\text{GEJ064+1.p}&\text{Proven}& 0.093 s\\
+			\text{GEJ065+1.p}&\text{Proven}& 0.062 s\\
+			\text{GEJ066+1.p}&\text{Proven}& 0.078 s\\
+			\text{GEJ067+1.p}&\text{Proven}& 0.080 s\\
+			\text{GEJ068+1.p}&\text{Proven}& 0.071 s\\
+			\text{GEJ069+1.p}&\text{Proven}& 0.073 s\\
+			\text{GEJ070+1.p}&\text{Proven}& 0.111 s\\
+			\text{GEJ071+1.p}&\text{Proven}& 0.117 s\\
+			\text{GEJ072+1.p}&\text{Proven}& 0.103 s\\
+		\end{matrix}\]
+	\end{minipage}
+	\begin{minipage}{0.45\textwidth}
+		\[\begin{matrix}
+			\text{Problem}&\text{Result}&\text{Time}\\
+			\text{GEJ073+1.p}&\text{Proven}& 0.106 s\\
+			\text{GEJ074+1.p}&\text{Proven}& 0.102 s\\
+			\text{GEJ075+1.p}&\text{Proven}& 0.106 s\\
+			\text{GEJ076+1.p}&\text{Proven}& 0.091 s\\
+			\text{GEJ077+1.p}&\text{Proven}& 0.093 s\\
+			\text{GEJ078+1.p}&\text{Proven}& 0.090 s\\
+			\text{GEJ079+1.p}&\text{Proven}& 0.095 s\\
+			\text{GEJ080+1.p}&\text{Proven}& 0.120 s\\
+			\text{GEJ081+1.p}&\text{Proven}& 0.063 s\\
+			\text{GEJ082+1.p}&\text{Proven}& 0.071 s\\
+			\text{GEJ083+1.p}&\text{Proven}& 0.082 s\\
+			\text{GEJ084+1.p}&\text{Proven}& 0.088 s\\
+			\text{GEJ085+1.p}&\text{Proven}& 0.074 s\\
+			\text{GEJ086+1.p}&\text{Proven}& 0.083 s\\
+			\text{GEJ087+1.p}&\text{Proven}& 0.108 s\\
+			\text{GEJ088+1.p}&\text{Proven}& 0.108 s\\
+			\text{GEJ089+1.p}&\text{Proven}& 0.121 s\\
+			\text{GEJ090+1.p}&\text{Proven}& 0.125 s\\
+			\text{GEJ091+1.p}&\text{Proven}& 0.102 s\\
+			\text{GEJ092+1.p}&\text{Proven}& 0.110 s\\
+			\text{GEJ093+1.p}&\text{Proven}& 0.106 s\\
+			\text{GEJ094+1.p}&\text{Proven}& 0.117 s\\
+			\text{GEJ095+1.p}&\text{Proven}& 0.113 s\\
+			\text{GEJ096+1.p}&\text{Proven}& 0.119 s\\
+			\text{GEJ097+1.p}&\text{Proven}& 0.091 s\\
+			\text{GEO080+1.p}&\text{Proven}& 0.227 s\\
+			\text{GEO085+1.p}&\text{Proven}& 0.266 s\\
+			\text{GEO086+1.p}&\text{Proven}& 0.697 s\\
+			\text{GPJ001+1.p}&\text{Proven}& 13.428 s\\
+			\text{GPJ001+2.p}&\text{Proven}& 0.187 s\\
+			\text{GPJ002+1.p}&\text{Proven}& 0.067 s\\
+			\text{GPJ003+1.p}&\text{Proven}& 0.077 s\\
+			\text{GRA010+1.p}&\text{Proven}& 0.038 s\\
+			\text{GRA010+2.p}&\text{Proven}& 0.038 s\\
+			\text{KRS065+1.p}&\text{Proven}& 0.039 s\\
+			\text{KRS130+1.p}&\text{Proven}& 0.097 s\\
+			\text{KRS134+1.p}&\text{Proven}& 0.052 s\\
+			\text{KRS135+1.p}&\text{Proven}& 0.049 s\\
+			\text{KRS136+1.p}&\text{Proven}& 0.031 s\\
+			\text{KRS137+1.p}&\text{Proven}& 0.074 s\\
+			\text{KRS139+1.p}&\text{Proven}& 0.128 s\\
+			\text{KRS141+1.p}&\text{Proven}& 0.083 s\\
+			\text{KRS142+1.p}&\text{Proven}& 0.096 s\\
+			\text{KRS143+1.p}&\text{Proven}& 0.084 s\\
+			\text{KRS144+1.p}&\text{Proven}& 0.105 s\\
+			\text{KRS145+1.p}&\text{Proven}& 0.090 s\\
+			\text{KRS146+1.p}&\text{Proven}& 1.792 s\\
+			\text{KRS148+1.p}&\text{Proven}& 0.331 s\\
+		\end{matrix}\]
+	\end{minipage}
+	
+	\pagebreak
+	
+	\begin{minipage}{0.45\textwidth}
+		\[\begin{matrix}
+			\text{Problem}&\text{Result}&\text{Time}\\
+			\text{KRS149+1.p}&\text{Proven}& 0.493 s\\
+			\text{KRS150+1.p}&\text{Proven}& 0.247 s\\
+			\text{KRS152+1.p}&\text{Proven}& 0.090 s\\
+			\text{KRS154+1.p}&\text{Proven}& 0.788 s\\
+			\text{KRS156+1.p}&\text{Proven}& 0.539 s\\
+			\text{KRS157+1.p}&\text{Proven}& 1.134 s\\
+			\text{KRS158+1.p}&\text{Proven}& 0.184 s\\
+			\text{KRS160+1.p}&\text{Proven}& 0.102 s\\
+			\text{KRS163+1.p}&\text{Proven}& 0.065 s\\
+			\text{KRS164+1.p}&\text{Proven}& 0.072 s\\
+			\text{KRS165+1.p}&\text{Proven}& 0.045 s\\
+			\text{KRS166+1.p}&\text{Proven}& 0.047 s\\
+			\text{KRS167+1.p}&\text{Proven}& 0.170 s\\
+			\text{KRS169+1.p}&\text{Proven}& 1.030 s\\
+			\text{KRS170+1.p}&\text{Proven}& 0.048 s\\
+			\text{KRS171+1.p}&\text{Proven}& 0.055 s\\
+			\text{LCL414+1.p}&\text{Proven}& 0.880 s\\
+			\text{MGT003+1.p}&\text{Proven}& 3.148 s\\
+			\text{MGT006+1.p}&\text{Proven}& 27.800 s\\
+			\text{MGT009+1.p}&\text{Proven}& 28.410 s\\
+			\text{MGT013+1.p}&\text{Proven}& 10.306 s\\
+			\text{MGT014+1.p}&\text{Proven}& 10.485 s\\
+			\text{MGT036+3.p}&\text{Proven}& 0.087 s\\
+			\text{MGT045+1.p}&\text{Proven}& 0.077 s\\
+			\text{MGT049+1.p}&\text{Proven}& 0.059 s\\
+			\text{MGT052+1.p}&\text{Proven}& 0.086 s\\
+			\text{MSC010+1.p}&\text{Proven}& 0.038 s\\
+			\text{NLP001+1.p}&\text{Proven}& 0.237 s\\
+			\text{NLP002+1.p}&\text{Refuted}& 14.428 s\\
+			\text{NLP003+1.p}&\text{Refuted}& 14.224 s\\
+			\text{NLP004+1.p}&\text{Proven}& 4.340 s\\
+			\text{NLP007+1.p}&\text{Proven}& 4.476 s\\
+			\text{NLP009+1.p}&\text{Proven}& 4.150 s\\
+			\text{NLP011+1.p}&\text{Proven}& 4.546 s\\
+			\text{NLP104+1.p}&\text{Refuted}& 1.138 s\\
+			\text{NLP105+1.p}&\text{Refuted}& 1.216 s\\
+			\text{NLP106+1.p}&\text{Refuted}& 1.216 s\\
+			\text{NLP107+1.p}&\text{Refuted}& 1.241 s\\
+			\text{NLP108+1.p}&\text{Refuted}& 1.088 s\\
+			\text{NLP109+1.p}&\text{Refuted}& 1.178 s\\
+			\text{NLP110+1.p}&\text{Refuted}& 1.068 s\\
+			\text{NLP111+1.p}&\text{Refuted}& 1.095 s\\
+			\text{NLP112+1.p}&\text{Refuted}& 1.112 s\\
+			\text{NLP113+1.p}&\text{Refuted}& 1.380 s\\
+			\text{NLP117+1.p}&\text{Proven}& 0.304 s\\
+			\text{NLP122+1.p}&\text{Proven}& 0.302 s\\
+			\text{NLP204+1.p}&\text{Proven}& 3.293 s\\
+			\text{NLP208+1.p}&\text{Proven}& 3.487 s\\
+		\end{matrix}\]
+	\end{minipage}
+	\begin{minipage}{0.45\textwidth}
+		\[\begin{matrix}
+			\text{Problem}&\text{Result}&\text{Time}\\
+			\text{NUM304+1.p}&\text{Proven}& 2.448 s\\
+			\text{NUM333+1.p}&\text{Proven}& 27.096 s\\
+			\text{PUZ001+1.p}&\text{Proven}& 0.215 s\\
+			\text{PUZ031+1.p}&\text{Proven}& 0.252 s\\
+			\text{PUZ047+1.p}&\text{Proven}& 0.248 s\\
+			\text{PUZ060+1.p}&\text{Proven}& 0.113 s\\
+			\text{PUZ061+1.p}&\text{Proven}& 0.104 s\\
+			\text{SET002+3.p}&\text{Proven}& 0.050 s\\
+			\text{SET019+4.p}&\text{Proven}& 0.051 s\\
+			\text{SET047+1.p}&\text{Proven}& 0.656 s\\
+			\text{SET054+1.p}&\text{Proven}& 0.833 s\\
+			\text{SET055+1.p}&\text{Proven}& 0.041 s\\
+			\text{SET061+1.p}&\text{Proven}& 1.388 s\\
+			\text{SET062+3.p}&\text{Proven}& 0.127 s\\
+			\text{SET062+4.p}&\text{Proven}& 0.197 s\\
+			\text{SET063+3.p}&\text{Proven}& 6.494 s\\
+			\text{SET148+3.p}&\text{Proven}& 0.052 s\\
+			\text{SET194+3.p}&\text{Proven}& 1.440 s\\
+			\text{SET366+4.p}&\text{Proven}& 0.215 s\\
+			\text{SET574+3.p}&\text{Proven}& 0.096 s\\
+			\text{SET575+3.p}&\text{Proven}& 0.035 s\\
+			\text{SET583+3.p}&\text{Proven}& 0.036 s\\
+			\text{SET585+3.p}&\text{Proven}& 4.499 s\\
+			\text{SET589+3.p}&\text{Proven}& 0.155 s\\
+			\text{SET590+3.p}&\text{Proven}& 29.211 s\\
+			\text{SET602+3.p}&\text{Proven}& 0.494 s\\
+			\text{SET604+3.p}&\text{Proven}& 0.216 s\\
+			\text{SET618+3.p}&\text{Proven}& 17.657 s\\
+			\text{SET627+3.p}&\text{Proven}& 0.401 s\\
+			\text{SET631+3.p}&\text{Proven}& 0.306 s\\
+			\text{SET639+3.p}&\text{Proven}& 13.976 s\\
+			\text{SET658+3.p}&\text{Proven}& 0.873 s\\
+			\text{SET687+4.p}&\text{Proven}& 0.223 s\\
+			\text{SET705+4.p}&\text{Proven}& 0.240 s\\
+			\text{SWC128+1.p}&\text{Proven}& 0.086 s\\
+			\text{SWV011+1.p}&\text{Proven}& 0.053 s\\
+			\text{SWV014+1.p}&\text{Proven}& 0.281 s\\
+			\text{SWV016+1.p}&\text{Refuted}& 0.879 s\\
+			\text{SWV018+1.p}&\text{Refuted}& 0.973 s\\
+			\text{SWV022+1.p}&\text{Proven}& 0.054 s\\
+			\text{SWV023+1.p}&\text{Proven}& 0.050 s\\
+			\text{SWV043+1.p}&\text{Proven}& 0.039 s\\
+			\text{SWV045+1.p}&\text{Proven}& 0.041 s\\
+			\text{SWV047+1.p}&\text{Proven}& 0.042 s\\
+			\text{SWV054+1.p}&\text{Proven}& 0.042 s\\
+			\text{SWV057+1.p}&\text{Proven}& 0.039 s\\
+			\text{SWV058+1.p}&\text{Proven}& 0.042 s\\
+			\text{SWV059+1.p}&\text{Proven}& 0.065 s\\
+		\end{matrix}\]
+	\end{minipage}
+	
+	\pagebreak
+	
+	\begin{minipage}{0.45\textwidth}
+		\[\begin{matrix}
+			\text{Problem}&\text{Result}&\text{Time}\\
+			\text{SWV060+1.p}&\text{Proven}& 0.041 s\\
+			\text{SWV061+1.p}&\text{Proven}& 0.046 s\\
+			\text{SWV062+1.p}&\text{Proven}& 0.039 s\\
+			\text{SWV063+1.p}&\text{Proven}& 0.054 s\\
+			\text{SWV064+1.p}&\text{Proven}& 0.161 s\\
+			\text{SWV065+1.p}&\text{Proven}& 0.140 s\\
+			\text{SWV066+1.p}&\text{Proven}& 0.044 s\\
+			\text{SWV068+1.p}&\text{Proven}& 0.040 s\\
+			\text{SWV069+1.p}&\text{Proven}& 12.016 s\\
+			\text{SWV070+1.p}&\text{Proven}& 0.040 s\\
+			\text{SWV071+1.p}&\text{Proven}& 0.054 s\\
+			\text{SWV072+1.p}&\text{Proven}& 0.043 s\\
+			\text{SWV073+1.p}&\text{Proven}& 0.053 s\\
+			\text{SWV074+1.p}&\text{Proven}& 0.049 s\\
+			\text{SWV075+1.p}&\text{Proven}& 0.057 s\\
+			\text{SWV076+1.p}&\text{Proven}& 0.045 s\\
+			\text{SWV077+1.p}&\text{Proven}& 17.571 s\\
+			\text{SWV078+1.p}&\text{Proven}& 2.419 s\\
+			\text{SWV080+1.p}&\text{Proven}& 0.051 s\\
+			\text{SWV081+1.p}&\text{Proven}& 0.043 s\\
+			\text{SWV082+1.p}&\text{Proven}& 0.043 s\\
+			\text{SWV083+1.p}&\text{Proven}& 0.051 s\\
+			\text{SWV084+1.p}&\text{Proven}& 0.045 s\\
+			\text{SWV085+1.p}&\text{Proven}& 0.041 s\\
+			\text{SWV086+1.p}&\text{Proven}& 0.040 s\\
+			\text{SWV087+1.p}&\text{Proven}& 0.044 s\\
+			\text{SWV088+1.p}&\text{Proven}& 0.041 s\\
+			\text{SWV105+1.p}&\text{Proven}& 0.043 s\\
+			\text{SWV106+1.p}&\text{Proven}& 0.040 s\\
+			\text{SWV107+1.p}&\text{Proven}& 0.049 s\\
+			\text{SWV119+1.p}&\text{Proven}& 0.042 s\\
+			\text{SWV121+1.p}&\text{Proven}& 0.038 s\\
+			\text{SWV123+1.p}&\text{Proven}& 0.050 s\\
+			\text{SWV126+1.p}&\text{Proven}& 0.038 s\\
+			\text{SWV128+1.p}&\text{Proven}& 0.040 s\\
+			\text{SWV131+1.p}&\text{Proven}& 0.051 s\\
+			\text{SWV132+1.p}&\text{Proven}& 0.052 s\\
+			\text{SWV145+1.p}&\text{Proven}& 0.161 s\\
+			\text{SWV146+1.p}&\text{Proven}& 0.229 s\\
+			\text{SWV147+1.p}&\text{Proven}& 0.141 s\\
+			\text{SWV148+1.p}&\text{Proven}& 0.138 s\\
+			\text{SWV149+1.p}&\text{Proven}& 0.139 s\\
+			\text{SWV150+1.p}&\text{Proven}& 0.137 s\\
+			\text{SWV169+1.p}&\text{Proven}& 0.266 s\\
+			\text{SWV171+1.p}&\text{Proven}& 0.388 s\\
+			\text{SWV172+1.p}&\text{Proven}& 0.447 s\\
+			\text{SWV179+1.p}&\text{Proven}& 0.324 s\\
+			\text{SWV180+1.p}&\text{Proven}& 0.362 s\\
+		\end{matrix}\]
+	\end{minipage}
+	\begin{minipage}{0.45\textwidth}
+		\[\begin{matrix}
+			\text{Problem}&\text{Result}&\text{Time}\\
+			\text{SWV192+1.p}&\text{Proven}& 0.394 s\\
+			\text{SWV193+1.p}&\text{Proven}& 0.510 s\\
+			\text{SWV194+1.p}&\text{Proven}& 0.520 s\\
+			\text{SWV195+1.p}&\text{Proven}& 0.457 s\\
+			\text{SWV196+1.p}&\text{Proven}& 0.387 s\\
+			\text{SYJ001+1.001.p}&\text{Proven}& 0.030 s\\
+			\text{SYJ002+1.001.p}&\text{Proven}& 0.033 s\\
+			\text{SYJ004+1.001.p}&\text{Proven}& 0.052 s\\
+			\text{SYJ004+1.002.p}&\text{Proven}& 0.053 s\\
+			\text{SYJ004+1.003.p}&\text{Proven}& 0.055 s\\
+			\text{SYJ004+1.004.p}&\text{Proven}& 0.085 s\\
+			\text{SYJ004+1.005.p}&\text{Proven}& 0.078 s\\
+			\text{SYJ004+1.006.p}&\text{Proven}& 0.079 s\\
+			\text{SYJ004+1.007.p}&\text{Proven}& 0.073 s\\
+			\text{SYJ004+1.008.p}&\text{Proven}& 0.070 s\\
+			\text{SYJ004+1.009.p}&\text{Proven}& 0.096 s\\
+			\text{SYJ004+1.010.p}&\text{Proven}& 0.078 s\\
+			\text{SYJ004+1.011.p}&\text{Proven}& 0.101 s\\
+			\text{SYJ004+1.012.p}&\text{Proven}& 0.091 s\\
+			\text{SYJ004+1.013.p}&\text{Proven}& 0.104 s\\
+			\text{SYJ004+1.014.p}&\text{Proven}& 0.096 s\\
+			\text{SYJ004+1.015.p}&\text{Proven}& 0.082 s\\
+			\text{SYJ004+1.016.p}&\text{Proven}& 0.098 s\\
+			\text{SYJ004+1.017.p}&\text{Proven}& 0.092 s\\
+			\text{SYJ004+1.018.p}&\text{Proven}& 0.099 s\\
+			\text{SYJ004+1.019.p}&\text{Proven}& 0.097 s\\
+			\text{SYJ004+1.020.p}&\text{Proven}& 0.100 s\\
+			\text{SYJ013+1.p}&\text{Proven}& 0.057 s\\
+			\text{SYJ014+1.p}&\text{Proven}& 0.048 s\\
+			\text{SYJ015+1.p}&\text{Proven}& 0.050 s\\
+			\text{SYJ025+1.p}&\text{Proven}& 0.065 s\\
+			\text{SYJ026+1.p}&\text{Proven}& 0.047 s\\
+			\text{SYJ027+1.p}&\text{Proven}& 0.047 s\\
+			\text{SYJ028+1.p}&\text{Proven}& 0.068 s\\
+			\text{SYJ031+1.p}&\text{Proven}& 0.090 s\\
+			\text{SYJ033+1.p}&\text{Proven}& 0.099 s\\
+			\text{SYJ034+1.p}&\text{Proven}& 0.135 s\\
+			\text{SYJ035+1.p}&\text{Proven}& 1.537 s\\
+			\text{SYJ038+1.p}&\text{Proven}& 0.049 s\\
+			\text{SYJ039+1.p}&\text{Proven}& 0.086 s\\
+			\text{SYJ101+1.p}&\text{Proven}& 0.028 s\\
+			\text{SYJ102+1.p}&\text{Proven}& 0.032 s\\
+			\text{SYJ103+1.p}&\text{Proven}& 0.032 s\\
+			\text{SYJ104+1.p}&\text{Proven}& 0.030 s\\
+			\text{SYJ107+1.001.p}&\text{Proven}& 0.035 s\\
+			\text{SYJ107+1.002.p}&\text{Proven}& 0.047 s\\
+			\text{SYJ107+1.003.p}&\text{Proven}& 0.057 s\\
+			\text{SYJ107+1.004.p}&\text{Proven}& 0.068 s\\
+		\end{matrix}\]
+	\end{minipage}
+	
+	\pagebreak
+	
+	\begin{minipage}{0.45\textwidth}
+		\[\begin{matrix}
+			\text{Problem}&\text{Result}&\text{Time}\\
+			\text{SYJ108+1.p}&\text{Proven}& 0.026 s\\
+			\text{SYJ109+1.p}&\text{Proven}& 0.036 s\\
+			\text{SYJ111+1.p}&\text{Proven}& 0.049 s\\
+			\text{SYJ112+1.p}&\text{Proven}& 0.036 s\\
+			\text{SYJ114+1.p}&\text{Proven}& 0.046 s\\
+			\text{SYJ115+1.p}&\text{Proven}& 0.045 s\\
+			\text{SYJ116+1.001.p}&\text{Proven}& 0.058 s\\
+			\text{SYJ116+1.002.p}&\text{Proven}& 1.048 s\\
+			\text{SYJ117+1.p}&\text{Proven}& 0.048 s\\
+			\text{SYJ118+1.p}&\text{Proven}& 0.073 s\\
+			\text{SYJ119+1.p}&\text{Proven}& 0.052 s\\
+			\text{SYJ120+1.p}&\text{Proven}& 0.052 s\\
+			\text{SYJ121+1.p}&\text{Proven}& 0.057 s\\
+			\text{SYJ122+1.p}&\text{Proven}& 0.072 s\\
+			\text{SYJ123+1.p}&\text{Proven}& 0.059 s\\
+			\text{SYJ124+1.p}&\text{Proven}& 0.062 s\\
+			\text{SYJ202+1.002.p}&\text{Proven}& 0.056 s\\
+			\text{SYJ202+1.006.p}&\text{Proven}& 0.956 s\\
+			\text{SYJ204+1.002.p}&\text{Proven}& 0.037 s\\
+			\text{SYJ204+1.006.p}&\text{Proven}& 0.052 s\\
+			\text{SYJ204+1.010.p}&\text{Proven}& 0.073 s\\
+			\text{SYJ206+1.002.p}&\text{Proven}& 0.035 s\\
+			\text{SYJ210+1.002.p}&\text{Refuted}& 0.037 s\\
+			\text{SYJ210+1.006.p}&\text{Refuted}& 0.050 s\\
+			\text{SYJ210+1.010.p}&\text{Refuted}& 0.064 s\\
+			\text{SYN044+1.p}&\text{Proven}& 0.045 s\\
+			\text{SYN045+1.p}&\text{Proven}& 0.048 s\\
+			\text{SYN054+1.p}&\text{Refuted}& 0.089 s\\
+			\text{SYN055+1.p}&\text{Proven}& 0.061 s\\
+			\text{SYN057+1.p}&\text{Proven}& 0.104 s\\
+			\text{SYN058+1.p}&\text{Proven}& 0.096 s\\
+			\text{SYN061+1.p}&\text{Proven}& 0.057 s\\
+			\text{SYN062+1.p}&\text{Proven}& 0.052 s\\
+			\text{SYN065+1.p}&\text{Proven}& 0.066 s\\
+			\text{SYN066+1.p}&\text{Proven}& 0.086 s\\
+			\text{SYN071+1.p}&\text{Proven}& 0.059 s\\
+			\text{SYN072+1.p}&\text{Proven}& 0.089 s\\
+			\text{SYN079+1.p}&\text{Proven}& 0.056 s\\
+			\text{SYN080+1.p}&\text{Proven}& 0.218 s\\
+			\text{SYN082+1.p}&\text{Proven}& 0.101 s\\
+			\text{SYN323+1.p}&\text{Proven}& 0.066 s\\
+			\text{SYN346+1.p}&\text{Proven}& 0.061 s\\
+			\text{SYN356+1.p}&\text{Proven}& 0.076 s\\
+			\text{SYN357+1.p}&\text{Proven}& 0.041 s\\
+			\text{SYN358+1.p}&\text{Proven}& 0.048 s\\
+			\text{SYN359+1.p}&\text{Proven}& 0.060 s\\
+			\text{SYN379+1.p}&\text{Proven}& 0.062 s\\
+			\text{SYN387+1.p}&\text{Refuted}& 0.029 s\\
+		\end{matrix}\]
+	\end{minipage}
+	\begin{minipage}{0.45\textwidth}
+		\[\begin{matrix}
+			\text{Problem}&\text{Result}&\text{time}\\
+			\text{SYN390+1.p}&\text{Proven}& 0.035 s\\
+			\text{SYN401+1.p}&\text{Proven}& 0.045 s\\
+			\text{SYN402+1.p}&\text{Proven}& 0.044 s\\
+			\text{SYN404+1.p}&\text{Proven}& 0.045 s\\
+			\text{SYN405+1.p}&\text{Proven}& 0.049 s\\
+			\text{SYN406+1.p}&\text{Proven}& 0.060 s\\
+			\text{SYN410+1.p}&\text{Proven}& 0.044 s\\
+			\text{SYN490+1.p}&\text{Refuted}& 13.282 s\\
+			\text{SYN491+1.p}&\text{Refuted}& 20.030 s\\
+			\text{SYN495+1.p}&\text{Refuted}& 5.038 s\\
+			\text{SYN497+1.p}&\text{Refuted}& 25.937 s\\
+			\text{SYN516+1.p}&\text{Refuted}& 3.231 s\\
+			\text{SYN517+1.p}&\text{Refuted}& 1.989 s\\
+			\text{SYN523+1.p}&\text{Refuted}& 1.218 s\\
+			\text{SYN527+1.p}&\text{Refuted}& 8.835 s\\
+			\text{SYN532+1.p}&\text{Refuted}& 3.138 s\\
+			\text{SYN533+1.p}&\text{Refuted}& 23.206 s\\
+			\text{SYN721+1.p}&\text{Proven}& 0.078 s\\
+			\text{SYN722+1.p}&\text{Proven}& 0.105 s\\
+			\text{SYN733+1.p}&\text{Proven}& 0.073 s\\
+			\text{SYN915+1.p}&\text{Proven}& 0.034 s\\
+			\text{SYN916+1.p}&\text{Refuted}& 0.030 s\\
+			\text{SYN924+1.p}&\text{Proven}& 0.059 s\\
+			\text{SYN926+1.p}&\text{Proven}& 0.039 s\\
+			\text{SYN927+1.p}&\text{Proven}& 0.050 s\\
+			\text{SYN928+1.p}&\text{Proven}& 0.034 s\\
+			\text{SYN931+1.p}&\text{Proven}& 0.053 s\\
+			\text{SYN932+1.p}&\text{Proven}& 0.045 s\\
+			\text{SYN943+1.p}&\text{Proven}& 1.681 s\\
+			\text{SYN944+1.p}&\text{Proven}& 0.115 s\\
+			\text{SYN948+1.p}&\text{Proven}& 0.053 s\\
+			\text{SYN949+1.p}&\text{Proven}& 0.078 s\\
+			\text{SYN952+1.p}&\text{Proven}& 0.051 s\\
+			\text{SYN958+1.p}&\text{Proven}& 0.044 s\\
+			\text{SYN959+1.p}&\text{Proven}& 0.040 s\\
+			\text{SYN960+1.p}&\text{Proven}& 0.050 s\\
+			\text{SYN961+1.p}&\text{Proven}& 0.054 s\\
+			\text{SYN963+1.p}&\text{Proven}& 0.056 s\\
+			\text{SYN964+1.p}&\text{Proven}& 0.043 s\\
+			\text{SYN973+1.p}&\text{Proven}& 0.034 s\\
+			\text{SYN974+1.p}&\text{Proven}& 0.045 s\\
+			\text{SYN976+1.p}&\text{Proven}& 0.140 s\\
+			\text{SYN979+1.p}&\text{Proven}& 0.074 s\\
+			\text{SYN980+1.p}&\text{Proven}& 0.127 s\\
+			\text{TOP022+1.p}&\text{Proven}& 0.153 s\\
+		\end{matrix}\]
+	\end{minipage}
+							
 	
 	\bibliographystyle{plain}
 	\bibliography{EIICL}
-	
 \end{document}

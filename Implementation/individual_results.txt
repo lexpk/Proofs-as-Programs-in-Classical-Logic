@@ -1,0 +1,616 @@
+\begin{minipage}{0.45\textwidth}
+	\[\begin{matrix}
+		\text{Problem}&\text{Result}&\text{Time}\\
+		\text{AGT001+1.p}&\text{Proven}& 0.054 s\\
+		\text{AGT001+2.p}&\text{Proven}& 0.085 s\\
+		\text{AGT002+1.p}&\text{Proven}& 0.059 s\\
+		\text{AGT002+2.p}&\text{Proven}& 0.066 s\\
+		\text{AGT017+2.p}&\text{Proven}& 4.868 s\\
+		\text{ALG014+1.p}&\text{Proven}& 0.386 s\\
+		\text{ALG015+1.p}&\text{Proven}& 0.749 s\\
+		\text{ALG016+1.p}&\text{Proven}& 0.405 s\\
+		\text{ALG017+1.p}&\text{Proven}& 0.043 s\\
+		\text{ALG020+1.p}&\text{Proven}& 0.205 s\\
+		\text{ALG021+1.p}&\text{Proven}& 0.457 s\\
+		\text{ALG022+1.p}&\text{Proven}& 0.493 s\\
+		\text{ALG023+1.p}&\text{Proven}& 0.713 s\\
+		\text{ALG024+1.p}&\text{Proven}& 1.059 s\\
+		\text{ALG025+1.p}&\text{Proven}& 2.532 s\\
+		\text{ALG026+1.p}&\text{Proven}& 1.316 s\\
+		\text{ALG027+1.p}&\text{Proven}& 5.175 s\\
+		\text{ALG028+1.p}&\text{Proven}& 0.355 s\\
+		\text{ALG031+1.p}&\text{Proven}& 0.375 s\\
+		\text{ALG032+1.p}&\text{Proven}& 1.275 s\\
+		\text{ALG033+1.p}&\text{Proven}& 1.182 s\\
+		\text{ALG034+1.p}&\text{Proven}& 9.518 s\\
+		\text{ALG035+1.p}&\text{Proven}& 9.285 s\\
+		\text{ALG036+1.p}&\text{Proven}& 0.302 s\\
+		\text{ALG037+1.p}&\text{Proven}& 1.004 s\\
+		\text{ALG038+1.p}&\text{Proven}& 0.762 s\\
+		\text{ALG039+1.p}&\text{Proven}& 0.042 s\\
+		\text{ALG042+1.p}&\text{Proven}& 0.202 s\\
+		\text{ALG043+1.p}&\text{Proven}& 0.196 s\\
+		\text{ALG044+1.p}&\text{Proven}& 0.249 s\\
+		\text{ALG045+1.p}&\text{Proven}& 0.571 s\\
+		\text{ALG046+1.p}&\text{Proven}& 0.832 s\\
+	\end{matrix}\]
+\end{minipage}
+\begin{minipage}{0.45\textwidth}
+	\[\begin{matrix}
+		\text{Problem}&\text{Result}&\text{Time}\\
+		\text{ALG048+1.p}&\text{Proven}& 1.586 s\\
+		\text{ALG049+1.p}&\text{Proven}& 2.467 s\\
+		\text{ALG050+1.p}&\text{Proven}& 2.347 s\\
+		\text{ALG051+1.p}&\text{Proven}& 1.639 s\\
+		\text{ALG052+1.p}&\text{Proven}& 3.164 s\\
+		\text{ALG053+1.p}&\text{Proven}& 2.168 s\\
+		\text{ALG054+1.p}&\text{Proven}& 0.169 s\\
+		\text{ALG055+1.p}&\text{Proven}& 0.899 s\\
+		\text{ALG056+1.p}&\text{Proven}& 0.892 s\\
+		\text{ALG057+1.p}&\text{Proven}& 1.005 s\\
+		\text{ALG058+1.p}&\text{Proven}& 0.673 s\\
+		\text{ALG059+1.p}&\text{Proven}& 0.976 s\\
+		\text{ALG060+1.p}&\text{Proven}& 1.346 s\\
+		\text{ALG061+1.p}&\text{Proven}& 0.594 s\\
+		\text{ALG062+1.p}&\text{Proven}& 0.440 s\\
+		\text{ALG063+1.p}&\text{Proven}& 0.456 s\\
+		\text{ALG064+1.p}&\text{Proven}& 0.782 s\\
+		\text{ALG065+1.p}&\text{Proven}& 0.528 s\\
+		\text{ALG066+1.p}&\text{Proven}& 0.553 s\\
+		\text{ALG067+1.p}&\text{Proven}& 0.574 s\\
+		\text{ALG068+1.p}&\text{Proven}& 0.962 s\\
+		\text{ALG075+1.p}&\text{Proven}& 0.135 s\\
+		\text{ALG076+1.p}&\text{Proven}& 0.266 s\\
+		\text{ALG077+1.p}&\text{Proven}& 0.200 s\\
+		\text{ALG078+1.p}&\text{Proven}& 0.190 s\\
+		\text{ALG079+1.p}&\text{Proven}& 0.203 s\\
+		\text{ALG080+1.p}&\text{Proven}& 0.334 s\\
+		\text{ALG081+1.p}&\text{Proven}& 0.196 s\\
+		\text{ALG082+1.p}&\text{Proven}& 0.228 s\\
+		\text{ALG083+1.p}&\text{Proven}& 0.168 s\\
+		\text{ALG084+1.p}&\text{Proven}& 0.211 s\\
+		\text{ALG085+1.p}&\text{Proven}& 0.206 s\\
+	\end{matrix}\]
+\end{minipage}
+
+\pagebreak
+
+\begin{minipage}{0.45\textwidth}
+	\[\begin{matrix}
+		\text{Problem}&\text{Result}&\text{Time}\\
+		\text{ALG086+1.p}&\text{Proven}& 0.273 s\\
+		\text{ALG087+1.p}&\text{Proven}& 0.305 s\\
+		\text{ALG088+1.p}&\text{Proven}& 0.195 s\\
+		\text{ALG089+1.p}&\text{Proven}& 0.293 s\\
+		\text{ALG090+1.p}&\text{Proven}& 0.270 s\\
+		\text{ALG091+1.p}&\text{Proven}& 0.466 s\\
+		\text{ALG092+1.p}&\text{Proven}& 21.681 s\\
+		\text{ALG093+1.p}&\text{Proven}& 0.551 s\\
+		\text{ALG094+1.p}&\text{Proven}& 0.280 s\\
+		\text{ALG095+1.p}&\text{Proven}& 0.358 s\\
+		\text{ALG096+1.p}&\text{Proven}& 1.859 s\\
+		\text{ALG097+1.p}&\text{Proven}& 1.531 s\\
+		\text{ALG098+1.p}&\text{Proven}& 2.604 s\\
+		\text{ALG099+1.p}&\text{Proven}& 3.372 s\\
+		\text{ALG100+1.p}&\text{Proven}& 2.517 s\\
+		\text{ALG101+1.p}&\text{Proven}& 3.101 s\\
+		\text{ALG104+1.p}&\text{Proven}& 2.526 s\\
+		\text{ALG105+1.p}&\text{Proven}& 0.765 s\\
+		\text{ALG106+1.p}&\text{Proven}& 2.808 s\\
+		\text{ALG107+1.p}&\text{Proven}& 1.168 s\\
+		\text{ALG108+1.p}&\text{Proven}& 2.324 s\\
+		\text{ALG109+1.p}&\text{Proven}& 1.958 s\\
+		\text{ALG110+1.p}&\text{Proven}& 1.049 s\\
+		\text{ALG111+1.p}&\text{Proven}& 0.960 s\\
+		\text{ALG112+1.p}&\text{Proven}& 1.348 s\\
+		\text{ALG113+1.p}&\text{Proven}& 0.846 s\\
+		\text{ALG114+1.p}&\text{Proven}& 0.889 s\\
+		\text{ALG115+1.p}&\text{Proven}& 1.004 s\\
+		\text{ALG116+1.p}&\text{Proven}& 1.253 s\\
+		\text{ALG117+1.p}&\text{Proven}& 1.121 s\\
+		\text{ALG118+1.p}&\text{Proven}& 1.133 s\\
+		\text{ALG119+1.p}&\text{Proven}& 1.539 s\\
+		\text{ALG120+1.p}&\text{Proven}& 1.905 s\\
+		\text{ALG121+1.p}&\text{Proven}& 0.962 s\\
+		\text{ALG122+1.p}&\text{Proven}& 2.674 s\\
+		\text{ALG123+1.p}&\text{Proven}& 1.099 s\\
+		\text{ALG124+1.p}&\text{Proven}& 1.390 s\\
+		\text{ALG125+1.p}&\text{Proven}& 1.243 s\\
+		\text{ALG126+1.p}&\text{Proven}& 2.903 s\\
+		\text{ALG127+1.p}&\text{Proven}& 2.391 s\\
+		\text{ALG128+1.p}&\text{Proven}& 6.782 s\\
+		\text{ALG130+1.p}&\text{Proven}& 0.548 s\\
+		\text{ALG131+1.p}&\text{Proven}& 7.478 s\\
+		\text{ALG132+1.p}&\text{Proven}& 1.040 s\\
+		\text{ALG133+1.p}&\text{Proven}& 7.531 s\\
+		\text{ALG134+1.p}&\text{Proven}& 1.663 s\\
+		\text{ALG135+1.p}&\text{Proven}& 0.914 s\\
+		\text{ALG136+1.p}&\text{Proven}& 1.122 s\\
+	\end{matrix}\]
+\end{minipage}
+\begin{minipage}{0.45\textwidth}
+	\[\begin{matrix}
+		\text{Problem}&\text{Result}&\text{Time}\\
+		\text{ALG137+1.p}&\text{Proven}& 1.047 s\\
+		\text{ALG138+1.p}&\text{Proven}& 0.208 s\\
+		\text{ALG139+1.p}&\text{Proven}& 0.998 s\\
+		\text{ALG140+1.p}&\text{Proven}& 1.416 s\\
+		\text{ALG141+1.p}&\text{Proven}& 0.958 s\\
+		\text{ALG142+1.p}&\text{Proven}& 0.910 s\\
+		\text{ALG143+1.p}&\text{Proven}& 1.345 s\\
+		\text{ALG145+1.p}&\text{Proven}& 1.407 s\\
+		\text{ALG146+1.p}&\text{Proven}& 1.061 s\\
+		\text{ALG147+1.p}&\text{Proven}& 6.912 s\\
+		\text{ALG148+1.p}&\text{Proven}& 1.260 s\\
+		\text{ALG149+1.p}&\text{Proven}& 1.434 s\\
+		\text{ALG150+1.p}&\text{Proven}& 1.175 s\\
+		\text{ALG151+1.p}&\text{Proven}& 29.674 s\\
+		\text{ALG152+1.p}&\text{Proven}& 3.644 s\\
+		\text{ALG153+1.p}&\text{Proven}& 26.962 s\\
+		\text{ALG157+1.p}&\text{Proven}& 2.262 s\\
+		\text{ALG158+1.p}&\text{Proven}& 4.045 s\\
+		\text{ALG159+1.p}&\text{Proven}& 14.128 s\\
+		\text{ALG161+1.p}&\text{Proven}& 1.952 s\\
+		\text{ALG162+1.p}&\text{Proven}& 2.372 s\\
+		\text{ALG164+1.p}&\text{Proven}& 1.593 s\\
+		\text{ALG165+1.p}&\text{Proven}& 1.910 s\\
+		\text{ALG166+1.p}&\text{Proven}& 1.755 s\\
+		\text{ALG167+1.p}&\text{Proven}& 1.744 s\\
+		\text{ALG168+1.p}&\text{Proven}& 0.963 s\\
+		\text{ALG169+1.p}&\text{Proven}& 0.947 s\\
+		\text{ALG170+1.p}&\text{Proven}& 0.746 s\\
+		\text{ALG171+1.p}&\text{Proven}& 0.080 s\\
+		\text{ALG172+1.p}&\text{Proven}& 0.076 s\\
+		\text{ALG173+1.p}&\text{Proven}& 0.085 s\\
+		\text{ALG174+1.p}&\text{Proven}& 0.080 s\\
+		\text{ALG175+1.p}&\text{Proven}& 0.088 s\\
+		\text{ALG180+1.p}&\text{Proven}& 0.225 s\\
+		\text{ALG181+1.p}&\text{Proven}& 0.143 s\\
+		\text{ALG182+1.p}&\text{Proven}& 0.135 s\\
+		\text{ALG183+1.p}&\text{Proven}& 0.138 s\\
+		\text{ALG184+1.p}&\text{Proven}& 0.142 s\\
+		\text{ALG185+1.p}&\text{Proven}& 0.499 s\\
+		\text{ALG186+1.p}&\text{Proven}& 0.391 s\\
+		\text{ALG187+1.p}&\text{Proven}& 0.430 s\\
+		\text{ALG188+1.p}&\text{Proven}& 0.445 s\\
+		\text{ALG189+1.p}&\text{Proven}& 0.508 s\\
+		\text{ALG190+1.p}&\text{Proven}& 2.462 s\\
+		\text{ALG191+1.p}&\text{Proven}& 2.207 s\\
+		\text{ALG192+1.p}&\text{Proven}& 0.648 s\\
+		\text{ALG193+1.p}&\text{Proven}& 0.584 s\\
+		\text{ALG194+1.p}&\text{Proven}& 28.952 s\\
+	\end{matrix}\]
+\end{minipage}
+
+\pagebreak
+
+\begin{minipage}{0.45\textwidth}
+	\[\begin{matrix}
+		\text{Problem}&\text{Result}&\text{Time}\\
+		\text{ALG195+1.p}&\text{Proven}& 4.695 s\\
+		\text{ALG196+1.p}&\text{Proven}& 7.115 s\\
+		\text{ALG197+1.p}&\text{Proven}& 4.805 s\\
+		\text{ALG198+1.p}&\text{Proven}& 0.127 s\\
+		\text{ALG199+1.p}&\text{Proven}& 1.533 s\\
+		\text{ALG200+1.p}&\text{Proven}& 0.263 s\\
+		\text{ALG203+1.p}&\text{Proven}& 26.932 s\\
+		\text{ALG204+1.p}&\text{Proven}& 0.242 s\\
+		\text{ALG205+1.p}&\text{Proven}& 0.320 s\\
+		\text{ALG206+1.p}&\text{Proven}& 0.274 s\\
+		\text{ALG207+1.p}&\text{Proven}& 0.823 s\\
+		\text{ALG208+1.p}&\text{Proven}& 0.703 s\\
+		\text{ALG209+1.p}&\text{Proven}& 0.783 s\\
+		\text{ALG210+2.p}&\text{Proven}& 6.846 s\\
+		\text{ALG211+1.p}&\text{Proven}& 0.327 s\\
+		\text{GEJ002+1.p}&\text{Proven}& 7.672 s\\
+		\text{GEJ002+2.p}&\text{Proven}& 0.030 s\\
+		\text{GEJ004+3.p}&\text{Proven}& 23.293 s\\
+		\text{GEJ007+2.p}&\text{Proven}& 0.156 s\\
+		\text{GEJ007+4.p}&\text{Proven}& 0.098 s\\
+		\text{GEJ009+1.p}&\text{Proven}& 0.487 s\\
+		\text{GEJ009+2.p}&\text{Proven}& 0.054 s\\
+		\text{GEJ009+3.p}&\text{Proven}& 0.338 s\\
+		\text{GEJ009+4.p}&\text{Proven}& 0.046 s\\
+		\text{GEJ010+1.p}&\text{Proven}& 2.915 s\\
+		\text{GEJ010+2.p}&\text{Proven}& 7.168 s\\
+		\text{GEJ010+3.p}&\text{Proven}& 1.635 s\\
+		\text{GEJ038+1.p}&\text{Proven}& 0.029 s\\
+		\text{GEJ038+2.p}&\text{Proven}& 0.028 s\\
+		\text{GEJ042+1.p}&\text{Proven}& 0.057 s\\
+		\text{GEJ042+2.p}&\text{Proven}& 0.055 s\\
+		\text{GEJ043+2.p}&\text{Proven}& 17.815 s\\
+		\text{GEJ044+2.p}&\text{Proven}& 29.105 s\\
+		\text{GEJ051+1.p}&\text{Proven}& 0.030 s\\
+		\text{GEJ051+2.p}&\text{Proven}& 0.030 s\\
+		\text{GEJ060+1.p}&\text{Proven}& 0.082 s\\
+		\text{GEJ061+1.p}&\text{Proven}& 0.153 s\\
+		\text{GEJ062+1.p}&\text{Proven}& 0.036 s\\
+		\text{GEJ063+1.p}&\text{Proven}& 0.085 s\\
+		\text{GEJ064+1.p}&\text{Proven}& 0.093 s\\
+		\text{GEJ065+1.p}&\text{Proven}& 0.062 s\\
+		\text{GEJ066+1.p}&\text{Proven}& 0.078 s\\
+		\text{GEJ067+1.p}&\text{Proven}& 0.080 s\\
+		\text{GEJ068+1.p}&\text{Proven}& 0.071 s\\
+		\text{GEJ069+1.p}&\text{Proven}& 0.073 s\\
+		\text{GEJ070+1.p}&\text{Proven}& 0.111 s\\
+		\text{GEJ071+1.p}&\text{Proven}& 0.117 s\\
+		\text{GEJ072+1.p}&\text{Proven}& 0.103 s\\
+	\end{matrix}\]
+\end{minipage}
+\begin{minipage}{0.45\textwidth}
+	\[\begin{matrix}
+		\text{Problem}&\text{Result}&\text{Time}\\
+		\text{GEJ073+1.p}&\text{Proven}& 0.106 s\\
+		\text{GEJ074+1.p}&\text{Proven}& 0.102 s\\
+		\text{GEJ075+1.p}&\text{Proven}& 0.106 s\\
+		\text{GEJ076+1.p}&\text{Proven}& 0.091 s\\
+		\text{GEJ077+1.p}&\text{Proven}& 0.093 s\\
+		\text{GEJ078+1.p}&\text{Proven}& 0.090 s\\
+		\text{GEJ079+1.p}&\text{Proven}& 0.095 s\\
+		\text{GEJ080+1.p}&\text{Proven}& 0.120 s\\
+		\text{GEJ081+1.p}&\text{Proven}& 0.063 s\\
+		\text{GEJ082+1.p}&\text{Proven}& 0.071 s\\
+		\text{GEJ083+1.p}&\text{Proven}& 0.082 s\\
+		\text{GEJ084+1.p}&\text{Proven}& 0.088 s\\
+		\text{GEJ085+1.p}&\text{Proven}& 0.074 s\\
+		\text{GEJ086+1.p}&\text{Proven}& 0.083 s\\
+		\text{GEJ087+1.p}&\text{Proven}& 0.108 s\\
+		\text{GEJ088+1.p}&\text{Proven}& 0.108 s\\
+		\text{GEJ089+1.p}&\text{Proven}& 0.121 s\\
+		\text{GEJ090+1.p}&\text{Proven}& 0.125 s\\
+		\text{GEJ091+1.p}&\text{Proven}& 0.102 s\\
+		\text{GEJ092+1.p}&\text{Proven}& 0.110 s\\
+		\text{GEJ093+1.p}&\text{Proven}& 0.106 s\\
+		\text{GEJ094+1.p}&\text{Proven}& 0.117 s\\
+		\text{GEJ095+1.p}&\text{Proven}& 0.113 s\\
+		\text{GEJ096+1.p}&\text{Proven}& 0.119 s\\
+		\text{GEJ097+1.p}&\text{Proven}& 0.091 s\\
+		\text{GEO080+1.p}&\text{Proven}& 0.227 s\\
+		\text{GEO085+1.p}&\text{Proven}& 0.266 s\\
+		\text{GEO086+1.p}&\text{Proven}& 0.697 s\\
+		\text{GPJ001+1.p}&\text{Proven}& 13.428 s\\
+		\text{GPJ001+2.p}&\text{Proven}& 0.187 s\\
+		\text{GPJ002+1.p}&\text{Proven}& 0.067 s\\
+		\text{GPJ003+1.p}&\text{Proven}& 0.077 s\\
+		\text{GRA010+1.p}&\text{Proven}& 0.038 s\\
+		\text{GRA010+2.p}&\text{Proven}& 0.038 s\\
+		\text{KRS065+1.p}&\text{Proven}& 0.039 s\\
+		\text{KRS130+1.p}&\text{Proven}& 0.097 s\\
+		\text{KRS134+1.p}&\text{Proven}& 0.052 s\\
+		\text{KRS135+1.p}&\text{Proven}& 0.049 s\\
+		\text{KRS136+1.p}&\text{Proven}& 0.031 s\\
+		\text{KRS137+1.p}&\text{Proven}& 0.074 s\\
+		\text{KRS139+1.p}&\text{Proven}& 0.128 s\\
+		\text{KRS141+1.p}&\text{Proven}& 0.083 s\\
+		\text{KRS142+1.p}&\text{Proven}& 0.096 s\\
+		\text{KRS143+1.p}&\text{Proven}& 0.084 s\\
+		\text{KRS144+1.p}&\text{Proven}& 0.105 s\\
+		\text{KRS145+1.p}&\text{Proven}& 0.090 s\\
+		\text{KRS146+1.p}&\text{Proven}& 1.792 s\\
+		\text{KRS148+1.p}&\text{Proven}& 0.331 s\\
+	\end{matrix}\]
+\end{minipage}
+
+\pagebreak
+
+\begin{minipage}{0.45\textwidth}
+	\[\begin{matrix}
+		\text{Problem}&\text{Result}&\text{Time}\\
+		\text{KRS149+1.p}&\text{Proven}& 0.493 s\\
+		\text{KRS150+1.p}&\text{Proven}& 0.247 s\\
+		\text{KRS152+1.p}&\text{Proven}& 0.090 s\\
+		\text{KRS154+1.p}&\text{Proven}& 0.788 s\\
+		\text{KRS156+1.p}&\text{Proven}& 0.539 s\\
+		\text{KRS157+1.p}&\text{Proven}& 1.134 s\\
+		\text{KRS158+1.p}&\text{Proven}& 0.184 s\\
+		\text{KRS160+1.p}&\text{Proven}& 0.102 s\\
+		\text{KRS163+1.p}&\text{Proven}& 0.065 s\\
+		\text{KRS164+1.p}&\text{Proven}& 0.072 s\\
+		\text{KRS165+1.p}&\text{Proven}& 0.045 s\\
+		\text{KRS166+1.p}&\text{Proven}& 0.047 s\\
+		\text{KRS167+1.p}&\text{Proven}& 0.170 s\\
+		\text{KRS169+1.p}&\text{Proven}& 1.030 s\\
+		\text{KRS170+1.p}&\text{Proven}& 0.048 s\\
+		\text{KRS171+1.p}&\text{Proven}& 0.055 s\\
+		\text{LCL414+1.p}&\text{Proven}& 0.880 s\\
+		\text{MGT003+1.p}&\text{Proven}& 3.148 s\\
+		\text{MGT006+1.p}&\text{Proven}& 27.800 s\\
+		\text{MGT009+1.p}&\text{Proven}& 28.410 s\\
+		\text{MGT013+1.p}&\text{Proven}& 10.306 s\\
+		\text{MGT014+1.p}&\text{Proven}& 10.485 s\\
+		\text{MGT036+3.p}&\text{Proven}& 0.087 s\\
+		\text{MGT045+1.p}&\text{Proven}& 0.077 s\\
+		\text{MGT049+1.p}&\text{Proven}& 0.059 s\\
+		\text{MGT052+1.p}&\text{Proven}& 0.086 s\\
+		\text{MSC010+1.p}&\text{Proven}& 0.038 s\\
+		\text{NLP001+1.p}&\text{Proven}& 0.237 s\\
+		\text{NLP002+1.p}&\text{Refuted}& 14.428 s\\
+		\text{NLP003+1.p}&\text{Refuted}& 14.224 s\\
+		\text{NLP004+1.p}&\text{Proven}& 4.340 s\\
+		\text{NLP007+1.p}&\text{Proven}& 4.476 s\\
+		\text{NLP009+1.p}&\text{Proven}& 4.150 s\\
+		\text{NLP011+1.p}&\text{Proven}& 4.546 s\\
+		\text{NLP104+1.p}&\text{Refuted}& 1.138 s\\
+		\text{NLP105+1.p}&\text{Refuted}& 1.216 s\\
+		\text{NLP106+1.p}&\text{Refuted}& 1.216 s\\
+		\text{NLP107+1.p}&\text{Refuted}& 1.241 s\\
+		\text{NLP108+1.p}&\text{Refuted}& 1.088 s\\
+		\text{NLP109+1.p}&\text{Refuted}& 1.178 s\\
+		\text{NLP110+1.p}&\text{Refuted}& 1.068 s\\
+		\text{NLP111+1.p}&\text{Refuted}& 1.095 s\\
+		\text{NLP112+1.p}&\text{Refuted}& 1.112 s\\
+		\text{NLP113+1.p}&\text{Refuted}& 1.380 s\\
+		\text{NLP117+1.p}&\text{Proven}& 0.304 s\\
+		\text{NLP122+1.p}&\text{Proven}& 0.302 s\\
+		\text{NLP204+1.p}&\text{Proven}& 3.293 s\\
+		\text{NLP208+1.p}&\text{Proven}& 3.487 s\\
+	\end{matrix}\]
+\end{minipage}
+\begin{minipage}{0.45\textwidth}
+	\[\begin{matrix}
+		\text{Problem}&\text{Result}&\text{Time}\\
+		\text{NUM304+1.p}&\text{Proven}& 2.448 s\\
+		\text{NUM333+1.p}&\text{Proven}& 27.096 s\\
+		\text{PUZ001+1.p}&\text{Proven}& 0.215 s\\
+		\text{PUZ031+1.p}&\text{Proven}& 0.252 s\\
+		\text{PUZ047+1.p}&\text{Proven}& 0.248 s\\
+		\text{PUZ060+1.p}&\text{Proven}& 0.113 s\\
+		\text{PUZ061+1.p}&\text{Proven}& 0.104 s\\
+		\text{SET002+3.p}&\text{Proven}& 0.050 s\\
+		\text{SET019+4.p}&\text{Proven}& 0.051 s\\
+		\text{SET047+1.p}&\text{Proven}& 0.656 s\\
+		\text{SET054+1.p}&\text{Proven}& 0.833 s\\
+		\text{SET055+1.p}&\text{Proven}& 0.041 s\\
+		\text{SET061+1.p}&\text{Proven}& 1.388 s\\
+		\text{SET062+3.p}&\text{Proven}& 0.127 s\\
+		\text{SET062+4.p}&\text{Proven}& 0.197 s\\
+		\text{SET063+3.p}&\text{Proven}& 6.494 s\\
+		\text{SET148+3.p}&\text{Proven}& 0.052 s\\
+		\text{SET194+3.p}&\text{Proven}& 1.440 s\\
+		\text{SET366+4.p}&\text{Proven}& 0.215 s\\
+		\text{SET574+3.p}&\text{Proven}& 0.096 s\\
+		\text{SET575+3.p}&\text{Proven}& 0.035 s\\
+		\text{SET583+3.p}&\text{Proven}& 0.036 s\\
+		\text{SET585+3.p}&\text{Proven}& 4.499 s\\
+		\text{SET589+3.p}&\text{Proven}& 0.155 s\\
+		\text{SET590+3.p}&\text{Proven}& 29.211 s\\
+		\text{SET602+3.p}&\text{Proven}& 0.494 s\\
+		\text{SET604+3.p}&\text{Proven}& 0.216 s\\
+		\text{SET618+3.p}&\text{Proven}& 17.657 s\\
+		\text{SET627+3.p}&\text{Proven}& 0.401 s\\
+		\text{SET631+3.p}&\text{Proven}& 0.306 s\\
+		\text{SET639+3.p}&\text{Proven}& 13.976 s\\
+		\text{SET658+3.p}&\text{Proven}& 0.873 s\\
+		\text{SET687+4.p}&\text{Proven}& 0.223 s\\
+		\text{SET705+4.p}&\text{Proven}& 0.240 s\\
+		\text{SWC128+1.p}&\text{Proven}& 0.086 s\\
+		\text{SWV011+1.p}&\text{Proven}& 0.053 s\\
+		\text{SWV014+1.p}&\text{Proven}& 0.281 s\\
+		\text{SWV016+1.p}&\text{Refuted}& 0.879 s\\
+		\text{SWV018+1.p}&\text{Refuted}& 0.973 s\\
+		\text{SWV022+1.p}&\text{Proven}& 0.054 s\\
+		\text{SWV023+1.p}&\text{Proven}& 0.050 s\\
+		\text{SWV043+1.p}&\text{Proven}& 0.039 s\\
+		\text{SWV045+1.p}&\text{Proven}& 0.041 s\\
+		\text{SWV047+1.p}&\text{Proven}& 0.042 s\\
+		\text{SWV054+1.p}&\text{Proven}& 0.042 s\\
+		\text{SWV057+1.p}&\text{Proven}& 0.039 s\\
+		\text{SWV058+1.p}&\text{Proven}& 0.042 s\\
+		\text{SWV059+1.p}&\text{Proven}& 0.065 s\\
+	\end{matrix}\]
+\end{minipage}
+
+\pagebreak
+
+\begin{minipage}{0.45\textwidth}
+	\[\begin{matrix}
+		\text{Problem}&\text{Result}&\text{Time}\\
+		\text{SWV060+1.p}&\text{Proven}& 0.041 s\\
+		\text{SWV061+1.p}&\text{Proven}& 0.046 s\\
+		\text{SWV062+1.p}&\text{Proven}& 0.039 s\\
+		\text{SWV063+1.p}&\text{Proven}& 0.054 s\\
+		\text{SWV064+1.p}&\text{Proven}& 0.161 s\\
+		\text{SWV065+1.p}&\text{Proven}& 0.140 s\\
+		\text{SWV066+1.p}&\text{Proven}& 0.044 s\\
+		\text{SWV068+1.p}&\text{Proven}& 0.040 s\\
+		\text{SWV069+1.p}&\text{Proven}& 12.016 s\\
+		\text{SWV070+1.p}&\text{Proven}& 0.040 s\\
+		\text{SWV071+1.p}&\text{Proven}& 0.054 s\\
+		\text{SWV072+1.p}&\text{Proven}& 0.043 s\\
+		\text{SWV073+1.p}&\text{Proven}& 0.053 s\\
+		\text{SWV074+1.p}&\text{Proven}& 0.049 s\\
+		\text{SWV075+1.p}&\text{Proven}& 0.057 s\\
+		\text{SWV076+1.p}&\text{Proven}& 0.045 s\\
+		\text{SWV077+1.p}&\text{Proven}& 17.571 s\\
+		\text{SWV078+1.p}&\text{Proven}& 2.419 s\\
+		\text{SWV080+1.p}&\text{Proven}& 0.051 s\\
+		\text{SWV081+1.p}&\text{Proven}& 0.043 s\\
+		\text{SWV082+1.p}&\text{Proven}& 0.043 s\\
+		\text{SWV083+1.p}&\text{Proven}& 0.051 s\\
+		\text{SWV084+1.p}&\text{Proven}& 0.045 s\\
+		\text{SWV085+1.p}&\text{Proven}& 0.041 s\\
+		\text{SWV086+1.p}&\text{Proven}& 0.040 s\\
+		\text{SWV087+1.p}&\text{Proven}& 0.044 s\\
+		\text{SWV088+1.p}&\text{Proven}& 0.041 s\\
+		\text{SWV105+1.p}&\text{Proven}& 0.043 s\\
+		\text{SWV106+1.p}&\text{Proven}& 0.040 s\\
+		\text{SWV107+1.p}&\text{Proven}& 0.049 s\\
+		\text{SWV119+1.p}&\text{Proven}& 0.042 s\\
+		\text{SWV121+1.p}&\text{Proven}& 0.038 s\\
+		\text{SWV123+1.p}&\text{Proven}& 0.050 s\\
+		\text{SWV126+1.p}&\text{Proven}& 0.038 s\\
+		\text{SWV128+1.p}&\text{Proven}& 0.040 s\\
+		\text{SWV131+1.p}&\text{Proven}& 0.051 s\\
+		\text{SWV132+1.p}&\text{Proven}& 0.052 s\\
+		\text{SWV145+1.p}&\text{Proven}& 0.161 s\\
+		\text{SWV146+1.p}&\text{Proven}& 0.229 s\\
+		\text{SWV147+1.p}&\text{Proven}& 0.141 s\\
+		\text{SWV148+1.p}&\text{Proven}& 0.138 s\\
+		\text{SWV149+1.p}&\text{Proven}& 0.139 s\\
+		\text{SWV150+1.p}&\text{Proven}& 0.137 s\\
+		\text{SWV169+1.p}&\text{Proven}& 0.266 s\\
+		\text{SWV171+1.p}&\text{Proven}& 0.388 s\\
+		\text{SWV172+1.p}&\text{Proven}& 0.447 s\\
+		\text{SWV179+1.p}&\text{Proven}& 0.324 s\\
+		\text{SWV180+1.p}&\text{Proven}& 0.362 s\\
+	\end{matrix}\]
+\end{minipage}
+\begin{minipage}{0.45\textwidth}
+	\[\begin{matrix}
+		\text{Problem}&\text{Result}&\text{Time}\\
+		\text{SWV192+1.p}&\text{Proven}& 0.394 s\\
+		\text{SWV193+1.p}&\text{Proven}& 0.510 s\\
+		\text{SWV194+1.p}&\text{Proven}& 0.520 s\\
+		\text{SWV195+1.p}&\text{Proven}& 0.457 s\\
+		\text{SWV196+1.p}&\text{Proven}& 0.387 s\\
+		\text{SYJ001+1.001.p}&\text{Proven}& 0.030 s\\
+		\text{SYJ002+1.001.p}&\text{Proven}& 0.033 s\\
+		\text{SYJ004+1.001.p}&\text{Proven}& 0.052 s\\
+		\text{SYJ004+1.002.p}&\text{Proven}& 0.053 s\\
+		\text{SYJ004+1.003.p}&\text{Proven}& 0.055 s\\
+		\text{SYJ004+1.004.p}&\text{Proven}& 0.085 s\\
+		\text{SYJ004+1.005.p}&\text{Proven}& 0.078 s\\
+		\text{SYJ004+1.006.p}&\text{Proven}& 0.079 s\\
+		\text{SYJ004+1.007.p}&\text{Proven}& 0.073 s\\
+		\text{SYJ004+1.008.p}&\text{Proven}& 0.070 s\\
+		\text{SYJ004+1.009.p}&\text{Proven}& 0.096 s\\
+		\text{SYJ004+1.010.p}&\text{Proven}& 0.078 s\\
+		\text{SYJ004+1.011.p}&\text{Proven}& 0.101 s\\
+		\text{SYJ004+1.012.p}&\text{Proven}& 0.091 s\\
+		\text{SYJ004+1.013.p}&\text{Proven}& 0.104 s\\
+		\text{SYJ004+1.014.p}&\text{Proven}& 0.096 s\\
+		\text{SYJ004+1.015.p}&\text{Proven}& 0.082 s\\
+		\text{SYJ004+1.016.p}&\text{Proven}& 0.098 s\\
+		\text{SYJ004+1.017.p}&\text{Proven}& 0.092 s\\
+		\text{SYJ004+1.018.p}&\text{Proven}& 0.099 s\\
+		\text{SYJ004+1.019.p}&\text{Proven}& 0.097 s\\
+		\text{SYJ004+1.020.p}&\text{Proven}& 0.100 s\\
+		\text{SYJ013+1.p}&\text{Proven}& 0.057 s\\
+		\text{SYJ014+1.p}&\text{Proven}& 0.048 s\\
+		\text{SYJ015+1.p}&\text{Proven}& 0.050 s\\
+		\text{SYJ025+1.p}&\text{Proven}& 0.065 s\\
+		\text{SYJ026+1.p}&\text{Proven}& 0.047 s\\
+		\text{SYJ027+1.p}&\text{Proven}& 0.047 s\\
+		\text{SYJ028+1.p}&\text{Proven}& 0.068 s\\
+		\text{SYJ031+1.p}&\text{Proven}& 0.090 s\\
+		\text{SYJ033+1.p}&\text{Proven}& 0.099 s\\
+		\text{SYJ034+1.p}&\text{Proven}& 0.135 s\\
+		\text{SYJ035+1.p}&\text{Proven}& 1.537 s\\
+		\text{SYJ038+1.p}&\text{Proven}& 0.049 s\\
+		\text{SYJ039+1.p}&\text{Proven}& 0.086 s\\
+		\text{SYJ101+1.p}&\text{Proven}& 0.028 s\\
+		\text{SYJ102+1.p}&\text{Proven}& 0.032 s\\
+		\text{SYJ103+1.p}&\text{Proven}& 0.032 s\\
+		\text{SYJ104+1.p}&\text{Proven}& 0.030 s\\
+		\text{SYJ107+1.001.p}&\text{Proven}& 0.035 s\\
+		\text{SYJ107+1.002.p}&\text{Proven}& 0.047 s\\
+		\text{SYJ107+1.003.p}&\text{Proven}& 0.057 s\\
+		\text{SYJ107+1.004.p}&\text{Proven}& 0.068 s\\
+	\end{matrix}\]
+\end{minipage}
+
+\pagebreak
+
+\begin{minipage}{0.45\textwidth}
+	\[\begin{matrix}
+		\text{Problem}&\text{Result}&\text{Time}\\
+		\text{SYJ108+1.p}&\text{Proven}& 0.026 s\\
+		\text{SYJ109+1.p}&\text{Proven}& 0.036 s\\
+		\text{SYJ111+1.p}&\text{Proven}& 0.049 s\\
+		\text{SYJ112+1.p}&\text{Proven}& 0.036 s\\
+		\text{SYJ114+1.p}&\text{Proven}& 0.046 s\\
+		\text{SYJ115+1.p}&\text{Proven}& 0.045 s\\
+		\text{SYJ116+1.001.p}&\text{Proven}& 0.058 s\\
+		\text{SYJ116+1.002.p}&\text{Proven}& 1.048 s\\
+		\text{SYJ117+1.p}&\text{Proven}& 0.048 s\\
+		\text{SYJ118+1.p}&\text{Proven}& 0.073 s\\
+		\text{SYJ119+1.p}&\text{Proven}& 0.052 s\\
+		\text{SYJ120+1.p}&\text{Proven}& 0.052 s\\
+		\text{SYJ121+1.p}&\text{Proven}& 0.057 s\\
+		\text{SYJ122+1.p}&\text{Proven}& 0.072 s\\
+		\text{SYJ123+1.p}&\text{Proven}& 0.059 s\\
+		\text{SYJ124+1.p}&\text{Proven}& 0.062 s\\
+		\text{SYJ202+1.002.p}&\text{Proven}& 0.056 s\\
+		\text{SYJ202+1.006.p}&\text{Proven}& 0.956 s\\
+		\text{SYJ204+1.002.p}&\text{Proven}& 0.037 s\\
+		\text{SYJ204+1.006.p}&\text{Proven}& 0.052 s\\
+		\text{SYJ204+1.010.p}&\text{Proven}& 0.073 s\\
+		\text{SYJ206+1.002.p}&\text{Proven}& 0.035 s\\
+		\text{SYJ210+1.002.p}&\text{Refuted}& 0.037 s\\
+		\text{SYJ210+1.006.p}&\text{Refuted}& 0.050 s\\
+		\text{SYJ210+1.010.p}&\text{Refuted}& 0.064 s\\
+		\text{SYN044+1.p}&\text{Proven}& 0.045 s\\
+		\text{SYN045+1.p}&\text{Proven}& 0.048 s\\
+		\text{SYN054+1.p}&\text{Refuted}& 0.089 s\\
+		\text{SYN055+1.p}&\text{Proven}& 0.061 s\\
+		\text{SYN057+1.p}&\text{Proven}& 0.104 s\\
+		\text{SYN058+1.p}&\text{Proven}& 0.096 s\\
+		\text{SYN061+1.p}&\text{Proven}& 0.057 s\\
+		\text{SYN062+1.p}&\text{Proven}& 0.052 s\\
+		\text{SYN065+1.p}&\text{Proven}& 0.066 s\\
+		\text{SYN066+1.p}&\text{Proven}& 0.086 s\\
+		\text{SYN071+1.p}&\text{Proven}& 0.059 s\\
+		\text{SYN072+1.p}&\text{Proven}& 0.089 s\\
+		\text{SYN079+1.p}&\text{Proven}& 0.056 s\\
+		\text{SYN080+1.p}&\text{Proven}& 0.218 s\\
+		\text{SYN082+1.p}&\text{Proven}& 0.101 s\\
+		\text{SYN323+1.p}&\text{Proven}& 0.066 s\\
+		\text{SYN346+1.p}&\text{Proven}& 0.061 s\\
+		\text{SYN356+1.p}&\text{Proven}& 0.076 s\\
+		\text{SYN357+1.p}&\text{Proven}& 0.041 s\\
+		\text{SYN358+1.p}&\text{Proven}& 0.048 s\\
+		\text{SYN359+1.p}&\text{Proven}& 0.060 s\\
+		\text{SYN379+1.p}&\text{Proven}& 0.062 s\\
+		\text{SYN387+1.p}&\text{Refuted}& 0.029 s\\
+	\end{matrix}\]
+\end{minipage}
+\begin{minipage}{0.45\textwidth}
+	\[\begin{matrix}
+		\text{Problem}&\text{Result}&\text{time}\\
+		\text{SYN390+1.p}&\text{Proven}& 0.035 s\\
+		\text{SYN401+1.p}&\text{Proven}& 0.045 s\\
+		\text{SYN402+1.p}&\text{Proven}& 0.044 s\\
+		\text{SYN404+1.p}&\text{Proven}& 0.045 s\\
+		\text{SYN405+1.p}&\text{Proven}& 0.049 s\\
+		\text{SYN406+1.p}&\text{Proven}& 0.060 s\\
+		\text{SYN410+1.p}&\text{Proven}& 0.044 s\\
+		\text{SYN490+1.p}&\text{Refuted}& 13.282 s\\
+		\text{SYN491+1.p}&\text{Refuted}& 20.030 s\\
+		\text{SYN495+1.p}&\text{Refuted}& 5.038 s\\
+		\text{SYN497+1.p}&\text{Refuted}& 25.937 s\\
+		\text{SYN516+1.p}&\text{Refuted}& 3.231 s\\
+		\text{SYN517+1.p}&\text{Refuted}& 1.989 s\\
+		\text{SYN523+1.p}&\text{Refuted}& 1.218 s\\
+		\text{SYN527+1.p}&\text{Refuted}& 8.835 s\\
+		\text{SYN532+1.p}&\text{Refuted}& 3.138 s\\
+		\text{SYN533+1.p}&\text{Refuted}& 23.206 s\\
+		\text{SYN721+1.p}&\text{Proven}& 0.078 s\\
+		\text{SYN722+1.p}&\text{Proven}& 0.105 s\\
+		\text{SYN733+1.p}&\text{Proven}& 0.073 s\\
+		\text{SYN915+1.p}&\text{Proven}& 0.034 s\\
+		\text{SYN916+1.p}&\text{Refuted}& 0.030 s\\
+		\text{SYN924+1.p}&\text{Proven}& 0.059 s\\
+		\text{SYN926+1.p}&\text{Proven}& 0.039 s\\
+		\text{SYN927+1.p}&\text{Proven}& 0.050 s\\
+		\text{SYN928+1.p}&\text{Proven}& 0.034 s\\
+		\text{SYN931+1.p}&\text{Proven}& 0.053 s\\
+		\text{SYN932+1.p}&\text{Proven}& 0.045 s\\
+		\text{SYN943+1.p}&\text{Proven}& 1.681 s\\
+		\text{SYN944+1.p}&\text{Proven}& 0.115 s\\
+		\text{SYN948+1.p}&\text{Proven}& 0.053 s\\
+		\text{SYN949+1.p}&\text{Proven}& 0.078 s\\
+		\text{SYN952+1.p}&\text{Proven}& 0.051 s\\
+		\text{SYN958+1.p}&\text{Proven}& 0.044 s\\
+		\text{SYN959+1.p}&\text{Proven}& 0.040 s\\
+		\text{SYN960+1.p}&\text{Proven}& 0.050 s\\
+		\text{SYN961+1.p}&\text{Proven}& 0.054 s\\
+		\text{SYN963+1.p}&\text{Proven}& 0.056 s\\
+		\text{SYN964+1.p}&\text{Proven}& 0.043 s\\
+		\text{SYN973+1.p}&\text{Proven}& 0.034 s\\
+		\text{SYN974+1.p}&\text{Proven}& 0.045 s\\
+		\text{SYN976+1.p}&\text{Proven}& 0.140 s\\
+		\text{SYN979+1.p}&\text{Proven}& 0.074 s\\
+		\text{SYN980+1.p}&\text{Proven}& 0.127 s\\
+		\text{TOP022+1.p}&\text{Proven}& 0.153 s\\
+	\end{matrix}\]
+\end{minipage}
