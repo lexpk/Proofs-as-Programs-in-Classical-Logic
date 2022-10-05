@@ -1,52 +1,15 @@
-/WWTF/main.aux
-/WWTF/main.bbl
-/WWTF/main.blg
-/WWTF/main.log
-/WWTF/main.pdf
-/WWTF/main.synctex
-/WWTF/main.synctex.gz
-/WWTF/Draft Alexander/Proposal.aux
-/WWTF/Draft Alexander/Proposal.bbl
-/WWTF/Draft Alexander/Proposal.blg
-/WWTF/Draft Alexander/Proposal.log
-/WWTF/Draft Alexander/Proposal.pdf
-/WWTF/Draft Alexander/Proposal.synctex.gz
-/Notes/notes.aux
-/Notes/notes.bbl
-/Notes/notes.blg
-/Notes/notes.log
-/Notes/notes.pdf
-/Notes/notes.synctex.gz
-/Notes/Embedding intuitionistic into classical logic/EIICL.aux
-/Notes/Embedding intuitionistic into classical logic/EIICL.bbl
-/Notes/Embedding intuitionistic into classical logic/EIICL.blg
-/Notes/Embedding intuitionistic into classical logic/EIICL.log
-/Notes/Embedding intuitionistic into classical logic/EIICL.pdf
-/Notes/Embedding intuitionistic into classical logic/EIICL.synctex.gz
-/Notes/Embedding intuitionistic into classical logic/EIICL.out
-/Notes/Embedding intuitionistic into classical logic/EIICL.toc
-/Notes/A reverse double negation translation/RDNT.aux
-/Notes/A reverse double negation translation/RDNT.bbl
-/Notes/A reverse double negation translation/RDNT.blg
-/Notes/A reverse double negation translation/RDNT.log
-/Notes/A reverse double negation translation/RDNT.pdf
-/Notes/A reverse double negation translation/RDNT.synctex.gz
-/Notes/A reverse double negation translation/RDNT.out
-/Notes/A reverse double negation translation/RDNT.toc
-/CSL/lipics-v2021-EIICL.aux
-/CSL/lipics-v2021-EIICL.bbl
-/CSL/lipics-v2021-EIICL.blg
-/CSL/lipics-v2021-EIICL.log
-/CSL/lipics-v2021-EIICL.pdf
-/CSL/lipics-v2021-EIICL.synctex.gz
-/CSL/lipics-v2021-EIICL.vtc
-/CSL/lipics-v2021-EIICL.out
-/CSL/lipics-v2021-EIICL.toc
 /CSL/lipics-v2021-EIICL.bib
 /Implementation/ILTP-v1.1.2-firstorder
 /Implementation/ILTP-v1.1.2-firstorder.tar.gz
 /Implementation/ILTP-v1.1.2-firstorder-translated
 /Implementation/ILTP-v1.1.2-firstorder-results
 /Implementation/eiicl/target
-Notes/Embedding intuitionistic into classical logic/EIICL.out
-Notes/Embedding intuitionistic into classical logic/EIICL.toc
+*.aux
+*.bbl
+*.blg
+*.log
+*.toc
+*.out
+*.vtc
+*.gz
+*.pdf
