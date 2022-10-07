@@ -187,28 +187,28 @@ Theorem~\ref{thm:herbrand-skolem} follows from Lemmata~\ref{ap1} and~\ref{ap2} s
 Finally we note the results from~\cite{otten2005clausal} which are of importance to us.
 
 \begin{lemma}\label{lemma:propositional-normal-form}
-	For every propositional formula $\varphi$ there exists an atom $P$ as well as sets of clauses $\mathcal R$ of the form
+	For every propositional formula $\varphi$ there exists an atom $P$ as well as sets of clauses $\mathcal R, \mathcal X$, with $\mathcal R$ containing  \emph{flat clauses} of the form
 	$$(A_1\wedge\dots\wedge A_n)\to (B_1\vee\dots\vee B_n)$$
-	called \emph{flat} clauses and $\mathcal X$ of the form
-	$$(A\to B)\to C$$
-	called \emph{implication} clauses such that $\varphi$ is intuitionistically equivalid to
+	and $\mathcal X$ containing \emph{implication clauses} of the form
+	$$(A\to B)\to C,$$
+	such that $\varphi$ is intuitionistically equivalid to
 	$$\left(\bigwedge\mathcal R\wedge\bigwedge\mathcal X\right)\to P$$where $A_i, B_i, A, B, C$ are atomic. This size of $\mathcal R$ and $\mathcal X$ is linear in the size of $\varphi$. In general they will contain additional propositional variables.
 \end{lemma}
 
 A similar result holds in the first order case.
 
 \begin{lemma}\label{lemma:first-order-normal-form}
-	For every predicate formula $\varphi$ there exists a nullary relation symol $P$ as well as sets of clauses $\mathcal R$ of the form
-	$$\forall \vec x\left((A_1\wedge\dots\wedge A_n)\to (B_1\vee\dots\vee B_n)\right)$$
-	called \emph{flat} clauses and $\mathcal X$ of the form
+	For every predicate formula $\varphi$ there exists a nullary relation symol $P$ as well as sets of clauses $\mathcal R,\mathcal X, \mathcal Q$, with $\mathcal R$ containing \emph{flat clauses} of the form
+	$$\forall \vec x\left((A_1\wedge\dots\wedge A_n)\to (B_1\vee\dots\vee B_n)\right),$$
+	$\mathcal X$ containing \emph{implication clauses} of the form
 	$$\forall \vec x\left((A\to B)\to C\right)$$
-	called \emph{implication} clauses as well as $\mathcal Q$ of the form
-	$$\forall\vec x\left((\forall y A)\to B\right)$$
-	called \emph{quantification} clauses such that $\varphi$ is intuitionistically equivalid to
+	and $\mathcal Q$ containing \emph{quantification clauses} of the form
+	$$\forall\vec x\left((\forall y A)\to B\right),$$
+	such that $\varphi$ is intuitionistically equivalid to
 	$$\left(\bigwedge\mathcal R\wedge\bigwedge \mathcal X\wedge\bigwedge\mathcal Q\right)\to P$$where $A_i, B_i, A, B, C$ are atomic. This size of $\mathcal R, \mathcal X, \mathcal Q$ is linear in the size of $\varphi$. In general this formula will contain new function and relation symbols.
 \end{lemma}
 
-Since we could not find a proof of this result one is given in the appendix\ref{proof:first-order-normal-form}.
+Since we could not find a proof of this result one is given in the appendix as Lemma~\ref{proof:first-order-normal-form}.
 
 \section{Overview}
 
@@ -293,7 +293,7 @@ These results provide an effective framework for using classical provers to chec
 
 \section{Bounded Intuitionistic Counter-models}
 
-The most obvious approach to embedding intuitionistic into classical logic is to express intuitionistic semantics, i.e. Kripke frames, as a first order theory. For every propositional variable $A$ consider a unary predicate $A$ of the same name where $A(u)$ expresses that $A$ is true at some world $u$. We can then naively encode formulas as follows:
+The most obvious approach to embedding intuitionistic into classical logic is to examine intuitionistic semantics, e.g. Kripke frames, as a classical first order theory. For every propositional variable $A$ consider a unary predicate $A$ of the same name where $A(u)$ expresses that $A$ is true at some world $u$. We can then consider the following naive encoding:
 
 \begin{definition}
 	Let $\varphi$ be a propositional formula. Define $\varphi^{u}$ inductively:
@@ -315,7 +315,7 @@ The most obvious approach to embedding intuitionistic into classical logic is to
 	where $r$ is a new constant symbol.
 \end{definition}
 
-\noindent As all we have done is modeling Kripke frames as a first-order theory we directly obtain:
+\noindent As all we have done is modeling Kripke frames as a first-order theory so we directly obtain:
 
 \begin{lemma}
 	$\varphi$ is intuitionistically valid if and only if $\varphi^C$ is classically valid.
@@ -335,14 +335,14 @@ and each formula $\psi\in\mathcal X^{(u)S}$ is of the form
 $$\forall w(s\preceq w\to(w\preceq f_\psi(w)\to A(f_\psi(w))\to B(f_\psi(w)))\to C(w))$$
 with $f_\psi$ being a new function symbol.
 
-We now argue that if a counter-model exists for $\varphi^\circ$ then a small counter-model exists. This is ultimately what enables our translations.
+We now argue that if a counter-model for $\varphi^{CH}$ exists then a small counter-model exists. This is ultimately what enables our translations.
 
 \begin{definition}
 For $\psi\in\mathcal X$ let $[\psi]$ denote the corresponding clause in $\mathcal X^{(u)S}$. Suppose we are given a counter-model $\mathcal M = (M, I)$ for $\varphi^{CH}$.
 We say $(A\to B)\to C\in\mathcal X$ is \emph{fulfilled} at $m\in M$ iff $A^I(m)\to B^I(m)$ is false or $C^I(m)$ is true. For $\psi\in\mathcal X$ define $$g_\psi : M\to M, m\mapsto\begin{cases}
 		m,&\text{ if $\psi$ is fulfilled at $u$,}\\
 		f^I_{\lbrack\psi\rbrack}(m),&\text{ else.}		
-	\end{cases}$$. Define a model $\mathcal M_T = (M_T, I_T)$ as follows:
+	\end{cases}$$Define a model $\mathcal M_T = (M_T, I_T)$ as follows:
 	\begin{itemize}
 		\item $M_T$ is the set of sequences without repetition on $\mathcal X$.
 		\item Interpret $\preceq$ as the prefix-order.
@@ -361,8 +361,8 @@ We say $(A\to B)\to C\in\mathcal X$ is \emph{fulfilled} at $m\in M$ iff $A^I(m)\
 	\end{enumerate}
 \end{lemma}
 
-A proof can be found in the appendix as Lemma~\ref{proof:prop-countermodel-reduction}. Essentially what this tells us is that for every $m$ at which $\psi$ is fulfilled, in particular for each $m$ in the image of $f_\psi$, we may add the assumption that $f_\psi(n) = n$ for all $n\geq m$ without changing the validity of $\psi$.
-With this lemma in hand showing that $(M_T, I_T)$ is a counter-model to $\varphi^\circ$ is a straightforward check of definitions.
+A proof can be found in the appendix as Lemma~\ref{proof:prop-countermodel-reduction}. Essentially what this tells us is that for every $m$ at which $\psi$ is fulfilled, in particular for each $m$ in the image of $f_{[\psi]}$, we may add the assumption that $f_{[\psi]}(n) = n$ for all $n\geq m$ without changing the validity of $\psi$.
+With this lemma in hand showing that $(M_T, I_T)$ is a counter-model to $\varphi^{CH}$ is a straightforward check of definitions.
 
 \begin{corollary}\label{cor:prop-tree-model}
 	If $\mathcal M$ is a counter-model to $\varphi^{CH}$ then so is $\mathcal M_T$.
@@ -384,19 +384,38 @@ We can apply the previous results to give a direct embedding from intuitionistic
 	x, &\text{ if $\psi$ occurs in $x$,}\\
 	x\psi, &\text{ otherwise.}
 \end{cases}$$
-Now we can replace every $\forall$-quantifier by enumerating all the ground terms, and then replace all distinct ground instances of relations by new propositional variables yielding a propositional formula. This gives us the translation stated in Theorem~\ref{thm:reduction-propositional}.
+Now we can replace every $\forall$-quantifier in $\varphi^{CH}$ by enumerating all the ground terms, and then replace all distinct ground instances of relations by new propositional variables yielding a propositional formula. Note that the encoding of partial order becomes redundant with this so we drop it, but we need to keep the persistency restraints. This gives us the following theorem:
+
+\begin{theorem}
+	Suppose we are given a formula as in Lemma~\ref{lemma:propositional-normal-form}, i.e. of the form
+	$$\left(\bigwedge\mathcal R\wedge\bigwedge\mathcal S\right)\to P$$
+	with flat $\mathcal R$ and implication $\mathcal S$. Let $\Lambda$ denote the set of sequences without repetition over $\mathcal X$. For every propositional variable $A$ and $\lambda\in\Lambda$ consider a new propositional Variable $X^\lambda$. Define $R^\#$ as the union over all sets
+	$$
+		\{(A_1^\lambda \wedge\dots\wedge A_n^\lambda)\to(B_1^\lambda \vee\dots\vee B_n^\lambda)\:|\:\lambda\in\Lambda\}
+	$$
+	for $(A_1 \wedge\dots\wedge A_n)\to(B_1\vee\dots\vee B_n)\in\mathcal R$ and $\mathcal X^\#$ as the union over all sets
+	$$
+		\{({A^\lambda\psi} \to A^{\lambda\psi})\to(C^\lambda)\:|\:\lambda\in\Lambda, \psi\text{ does not occur in }\lambda\}
+	$$
+	for $\psi = (A\to B)\to C\in\mathcal X$ as well as $P^\#$ as the union over all sets
+	$$
+		\{A^\lambda\to A^{\lambda\psi}\:|\:\lambda\in\Lambda, \psi\psi\text{ does not occur in }\lambda\}
+	$$
+	 for each propositional variable $A$ occurring in $\varphi$ encoding persistency. Then
+	$$
+		\varphi^\# := \left(\bigwedge P^\#\wedge\bigwedge \mathcal R^\#\wedge\bigwedge\mathcal X^\#\right)\to P^\epsilon
+	$$
+	is classically valid if and only if $\varphi$ is intuitionistically valid.
+\end{theorem}
 %\begin{theorem}
 %	$\bigwedge\mathcal S\to P$ is intuitionistically valid iff $\bigwedge\mathcal S^\#\to P^\emptyset$ is classically valid.
 %\end{theorem}
 
 \begin{example}
-	Let us consider the law of excluded middle $\varphi = A\vee\neg A$. Then we get
-	$$\mathcal S^-(\varphi) = \{(P_A\vee P_{\neg A})\to P_\varphi, A\to P_A, (A\to \bot)\to P_{\neg A}\},$$
-	and we know that $\varphi$ is valid iff $\bigwedge \mathcal S^-(\varphi)\to P_\varphi$ is valid. Applying the above lemma this is intuitionistically valid iff $\bigwedge\mathcal S^\#\to P^\emptyset_\varphi$ is classically valid, where, setting $\psi = (A\to \bot)\to P_{\neg A}$,
-	\begin{align*}
-		\mathcal S^\# =&\{P_\varphi^\epsilon\to P_\varphi^{\psi}, P_A^\epsilon\to P_A^{\psi},P_{\neg A}^\epsilon\to P_{\neg A}^{\psi},A^\epsilon\to A^{\psi},A^\epsilon\to P_A^\epsilon, P_A^{\psi}\to P_A^{\psi}, \}\cup\\ &\{(P_A^\epsilon\vee P_{\neg A}^\epsilon)\to P_\varphi^\epsilon, (P_A^{\psi}\vee P_{\neg A}^{\psi})\to P_\varphi^{\psi},\}\cup\\&\{(A^{\psi}\to \bot)\to P_{\neg A}^\epsilon, (A^{\psi}\to \bot)\to P_{\neg A}^{\psi}\}.
-	\end{align*}
-	We now note that $P_\varphi^\epsilon  = P_A^\epsilon = P_{\neg A}^\epsilon = A^\epsilon = 0$, $P_{\varphi}^{\psi} = P_A^{\psi} =  P_{\neg A}^{\psi} = A^{\psi} = 1$ indeed defines a counter-model.
+	Let us consider the law of excluded middle $\varphi = A\vee\neg A$ for which there is the equivalid normal form
+	$$((A\to P)\wedge ((A\to \bot)\to P))\to P.$$
+	Applying the above lemma this is intuitionistically valid if and only if $$((A^\epsilon\to A^\psi)\wedge(P^\epsilon\to P^\psi)\wedge(A^\epsilon\to P^\epsilon)\wedge(A^\psi\to P^\psi)\wedge ((A^\psi\to \bot)\to P^\epsilon))\to P^\epsilon$$ is classically valid where $\psi := (A\to \bot)\to P$.
+	We note that $A^\epsilon  = P^\epsilon = 0$, $A^\psi = P^{\psi}  = 1$ indeed defines a counter-model.
 \end{example}	
 
 \section{IPC to QBF}
@@ -405,10 +424,10 @@ It is known that a polynomial time translation between QBF and IPC must exist, s
 The translation from the last section will serve as starting point for developing the translation in this section.
 For lack of space, we do not define the semantics of QBF in this paper and refer the reader to standard sources e.g.~\cite{series/faia/2009-185}.
 
-Suppose we are given a formula in normal form $$\left(\bigwedge R\wedge\bigwedge X\right)\to P$$ as in Lemma~\ref{lemma:propositional-normal-form}. We will now formulate a QBF that expresses that $\varphi$ has an intuitionistic counter-model. The idea how to get a polynomially-sized formula is: Instead of expressing validity at every node of $\mathcal M_T$ --- which was done in the CPC translation --- we express that on each path in $\mathcal M_T$ the nodes satisfy all conditions for $\mathcal M_T$ being a counter-model. The universally quantified variables $F_\psi$ in the next definition handle the branching, i.e. express which path is considered.
+Suppose we are given a formula $\varphi$ in normal form $$\left(\bigwedge R\wedge\bigwedge X\right)\to P$$ as in Lemma~\ref{lemma:propositional-normal-form}. We will now formulate a QBF that expresses that $\varphi$ has an intuitionistic counter-model. The idea how to get a polynomially-sized formula is: Instead of expressing validity at every node of $\mathcal M_T$ --- which was done in the CPC translation --- we express that on each path in $\mathcal M_T$ the nodes satisfy all conditions for $\mathcal M_T$ being a counter-model. The universally quantified variables $X_\psi$ in the next definition handle the branching, i.e. express which path is considered.
 
 \begin{definition}
-	For every propositional variable $A$ occurring in $\mathcal S$ and non-negative integer $n$ consider a new atom $A^n$ and for every formula $\psi\in\mathcal X$ consider a new atom $X_\psi^n$. Let $\vec A^n$ range over all propositional variables $A^n$ and $\vec X^n$ range over all $X_\psi^n$. Define
+	For every propositional variable $A$ occurring in $\varphi$ and non-negative integer $n$ consider a new propositional variable $A^n$ and for every formula $\psi\in\mathcal X$ consider a new propositional variable $X_\psi^n$. Let $\vec A^n$ range over all propositional variables $A^n$ and $\vec X^n$ range over all $X_\psi^n$. Define
 	\begin{itemize}
 		\item {\normalfont Valid}$(n)$ which encodes that $\vec X^n_\psi$ represents a valid next element of a sequence without repetition, i.e. if we interpret the $\vec X^i$ as bit-vectors, then $\vec X^n$ has exactly one bit set to $1$, indicating the formula at the $n$-th position of the sequence, and it is at a position that is $0$ in $\sum\{\vec X^i\:|\:i < n\}$.
 		\item {\normalfont Persistent}$(n)$ which encodes that the persistency condition holds.
@@ -434,7 +453,7 @@ Suppose we are given a formula in normal form $$\left(\bigwedge R\wedge\bigwedge
 	$$\hspace*{-.3cm}
 	\varphi^Q = \exists A^0\forall X^0\left(\neg A^0\wedge\left(X^0\to \exists A^1\left((A^0\to A^1)\wedge(X_0\to (A^1\to \bot)\to \bot)\right)\right)\right),
 	$$
-	which is a satisfiable QBF since $A^0 = 0, A^1 = 1$ satisfies it for any $X^0$.
+	which is a satisfiable QBF since $A^0 = 0, A^1 = 1$ satisfies it for any choice of $X^0$.
 \end{example}
 
 
@@ -725,7 +744,7 @@ Suppose $\mathcal M, v\models\chi$. Then, for all $m\in M$ we have that $\mathca
 
 Lemmas~\ref{thm:struct1} and~\ref{thm:struct2} then follow directly by induction on the height of $\varphi$.
 
-\begin{lemma}
+\begin{lemma}\label{proof:first-order-normal-form}
 	For every predicate formula $\varphi$ there exists a nullary relation symol $P$ as well as sets of clauses $\mathcal R$ of the form
 	$$\forall \vec x\left((A_1\wedge\dots\wedge A_n)\to (B_1\vee\dots\vee B_n)\right)$$
 	called \emph{flat} clauses and $\mathcal X$ of the form
@@ -736,7 +755,7 @@ Lemmas~\ref{thm:struct1} and~\ref{thm:struct2} then follow directly by induction
 	$$\left(\bigwedge\mathcal R\wedge\bigwedge \mathcal X\wedge\bigwedge\mathcal Q\right)\to P$$where $A_i, B_i, A, B, C$ are atomic. This size of $\mathcal R, \mathcal X, \mathcal Q$ is linear in the size of $\varphi$. In general this formula will contain new function symbols and relational symbols.
 \end{lemma}
 
-\begin{proof}\label{proof:first-order-normal-form}
+\begin{proof}
 	As in~\cite{otten2005clausal} we may assume that $\varphi$ is of the form $\psi\to P$. Recall that the transformation works by transforming $\psi$ into a set of equivalent assumptions $\left\lbrack \psi\right\rbrack$ of the desired form. We extend the given procedure with rules for quantifiers as follows:
 	\begin{align*}
 		\left\lbrack(\forall x \psi)\to A\right\rbrack&:= \left\lbrack\psi[s(\vec z)/x]\to A\right\rbrack\\
