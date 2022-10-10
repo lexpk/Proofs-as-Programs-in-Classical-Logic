@@ -2,56 +2,47 @@ import subprocess
 import tqdm
 import os
 
-VAMPIRE_PATH = "/home/lambdax/.vampire/vampire"
-TRANSLATOR = "./eiicl/target/debug/eiicl"
+NANO_PATH = "/home/lambdax/Implementation/provers/nanoCoP-i20/nanocopi.sh"
 
-INCLUDE_ROOT = "./ILTP-v1.1.2-firstorder/"
 PROBLEM_ROOT = "./ILTP-v1.1.2-firstorder/Problems/"
-TRANSLATION_ROOT = "./ILTP-v1.1.2-firstorder-translated/"
-RESULT_ROOT = "./ILTP-v1.1.2-firstorder-results/"
+RESULT_ROOT = "./ILTP-v1.1.2-firstorder-results-nanocop/"
 
 total_proven = 0
 total_disproven = 0
 total_unresolved = 0
 total_total = 0
 
-if not os.path.isdir(TRANSLATION_ROOT):
-    os.mkdir(TRANSLATION_ROOT)
 if not os.path.isdir(RESULT_ROOT):
     os.mkdir(RESULT_ROOT)
 for directory in os.listdir(PROBLEM_ROOT):
     proven = 0
     disproven = 0
     unresolved = 0
-    if not os.path.isdir(os.path.join(TRANSLATION_ROOT, directory)):
-        os.mkdir(os.path.join(TRANSLATION_ROOT, directory))
     if not os.path.isdir(os.path.join(RESULT_ROOT, directory)):
         os.mkdir(os.path.join(RESULT_ROOT, directory))
     for translation in tqdm.tqdm(os.listdir(os.path.join(PROBLEM_ROOT, directory)), desc=f"{directory}"):
         problem_path = os.path.join(os.path.join(
             PROBLEM_ROOT, directory), translation)
-        translation_path = os.path.join(os.path.join(
-            TRANSLATION_ROOT, directory), translation)
-        with open(translation_path, "w") as output_file:
-            subprocess.run([TRANSLATOR, problem_path,
-                           INCLUDE_ROOT], stdout=output_file)
         result_path = os.path.join(os.path.join(
             RESULT_ROOT, directory), translation)
         with open(result_path, "w") as output_file:
-            subprocess.run([VAMPIRE_PATH, translation_path,
-                           "--time_limit", "10"], stdout=output_file)
+            try:
+                subprocess.run([NANO_PATH, problem_path], stdout=output_file)
+            except subprocess.TimeoutExpired:
+                subprocess.run(["killall", "swipl"])
+                print("timeout", file=output_file)
         with open(result_path, "r") as result:
             result_text = result.read()
         with open(problem_path, "r") as result:
             problem_text = result.read()    
-        if "Refutation found." in result_text:
+        if "intuitionistic Theorem" in result_text:
             proven += 1
             assert "Status (intuit.) : Non-Theorem" not in problem_text
-        elif "SZS status CounterSatisfiable" in result_text:
+        elif "timeout" in result_text:
+            unresolved += 1
+        else:
             disproven += 1
             assert "Status (intuit.) : Theorem" not in problem_text
-        else:
-            unresolved += 1
     total_proven += proven
     total_disproven += disproven
     total_unresolved += unresolved
