@@ -11,10 +11,13 @@ pub struct Encoding<'a> {
     axioms: Vec<normalized_formula::NormalizedFormula<'a>>,
     goal: Option<normalized_formula::AtomizedSubformula>,
     variables: HashMap<String, Vec<String>>,
-    pub f: HashMap<String, Vec<String>>,
+    pub f_implication: HashMap<String, Vec<String>>,
+    f_pred: HashMap<String, Vec<String>>,
+    pub f_forall: HashMap<String, Vec<String>>,
     constants: Vec<String>,
     function_symbols: HashMap<String, Vec<String>>,
     relation_symbols: HashMap<String, Vec<String>>,
+    new_relation_symbols: HashMap<String, Vec<String>>,
     polarity: bool,
 }
 
@@ -24,10 +27,13 @@ impl<'a> Encoding<'a> {
             axioms: vec![],
             goal: None,
             variables: HashMap::new(),
-            f: HashMap::new(),
+            f_implication: HashMap::new(),
+            f_pred: HashMap::new(),
+            f_forall: HashMap::new(),
             constants: Vec::new(),
             function_symbols: HashMap::new(),
             relation_symbols: HashMap::new(),
+            new_relation_symbols: HashMap::new(),
             polarity: true,
         }
     }
@@ -41,9 +47,179 @@ impl<'a> Encoding<'a> {
         return encoding;
     }
 
-    pub fn to_tptp(&self) -> Vec<top::FofAnnotated> {
+    pub fn to_tptp(&mut self) -> Vec<top::FofAnnotated> {
         let mut result = vec![];
-        for (f, args) in self.f.iter() {
+        for (f, args) in self.f_implication.iter() {
+            result.push(top::FofAnnotated(top::Annotated {
+                name: common::Name::AtomicWord(common::AtomicWord::Lower(common::LowerWord("a"))),
+                role: top::FormulaRole(common::LowerWord("axiom")),
+                formula: Box::new(fof::Formula(fof::LogicFormula::Binary(
+                    fof::BinaryFormula::Nonassoc(fof::BinaryNonassoc {
+                        left: Box::new(fof::UnitFormula::Unitary(fof::UnitaryFormula::Atomic(
+                            Box::new(fof::AtomicFormula::Plain(fof::PlainAtomicFormula(
+                                fof::PlainTerm::Function(
+                                    common::Functor(common::AtomicWord::Lower(common::LowerWord(
+                                        "exists",
+                                    ))),
+                                    Box::new(fof::Arguments(vec![
+                                        fof::Term::Variable(common::Variable(common::UpperWord(
+                                            "X",
+                                        ))),
+                                        fof::Term::Variable(common::Variable(common::UpperWord(
+                                            "CurrentWorld",
+                                        ))),
+                                    ])),
+                                ),
+                            ))),
+                        ))),
+                        op: common::NonassocConnective::LRImplies,
+                        right: Box::new(fof::UnitFormula::Unitary(fof::UnitaryFormula::Atomic(
+                            Box::new(fof::AtomicFormula::Plain(fof::PlainAtomicFormula(
+                                fof::PlainTerm::Function(
+                                    common::Functor(common::AtomicWord::Lower(common::LowerWord(
+                                        "exists",
+                                    ))),
+                                    Box::new(fof::Arguments(vec![
+                                        fof::Term::Variable(common::Variable(common::UpperWord(
+                                            "X",
+                                        ))),
+                                        fof::Term::Function(Box::new(fof::FunctionTerm::Plain(
+                                            fof::PlainTerm::Function(
+                                                common::Functor(common::AtomicWord::SingleQuoted(
+                                                    common::SingleQuoted(f),
+                                                )),
+                                                Box::new(fof::Arguments(
+                                                    args.iter()
+                                                        .map(|x| {
+                                                            fof::Term::Variable(common::Variable(
+                                                                common::UpperWord(x),
+                                                            ))
+                                                        })
+                                                        .chain(vec![fof::Term::Variable(
+                                                            common::Variable(common::UpperWord(
+                                                                "CurrentWorld",
+                                                            )),
+                                                        )])
+                                                        .collect(),
+                                                )),
+                                            ),
+                                        ))),
+                                    ])),
+                                ),
+                            ))),
+                        ))),
+                    }),
+                ))),
+                annotations: top::Annotations(None),
+            }));
+            result.push(top::FofAnnotated(top::Annotated {
+                name: common::Name::AtomicWord(common::AtomicWord::Lower(common::LowerWord("a"))),
+                role: top::FormulaRole(common::LowerWord("axiom")),
+                formula: Box::new(fof::Formula(fof::LogicFormula::Binary(
+                    fof::BinaryFormula::Nonassoc(fof::BinaryNonassoc {
+                        left: Box::new(fof::UnitFormula::Unitary(fof::UnitaryFormula::Atomic(
+                            Box::new(fof::AtomicFormula::Plain(fof::PlainAtomicFormula(
+                                fof::PlainTerm::Function(
+                                    common::Functor(common::AtomicWord::SingleQuoted(common::SingleQuoted(
+                                        self.f_pred.keys().find(|x| x == &&(f.clone() + "pred")).unwrap(),
+                                    ))),
+                                    Box::new(fof::Arguments(
+                                        self.f_pred.get(&(f.clone() + "pred")).unwrap().iter()
+                                                .map(|x| {
+                                                    fof::Term::Variable(common::Variable(
+                                                        common::UpperWord(x),
+                                                    ))
+                                                })
+                                                .chain(vec![fof::Term::Variable(
+                                                    common::Variable(common::UpperWord(
+                                                        "CurrentWorld",
+                                                    )),
+                                                )])
+                                                .collect(),
+                                    )),
+                                ),
+                            ))),
+                        ))),
+                        op: common::NonassocConnective::LRImplies,
+                        right: Box::new(fof::UnitFormula::Unitary(fof::UnitaryFormula::Atomic(Box::new(fof::AtomicFormula::Defined(
+                            fof::DefinedAtomicFormula::Infix(fof::DefinedInfixFormula {
+                                left: Box::new(fof::Term::Function(Box::new(
+                                    fof::FunctionTerm::Plain(fof::PlainTerm::Function(
+                                        common::Functor(common::AtomicWord::SingleQuoted(
+                                            common::SingleQuoted(f),
+                                        )),
+                                        Box::new(fof::Arguments(
+                                            self.f_pred.get(&(f.clone() + "pred")).unwrap().iter()
+                                                .map(|x| {
+                                                    fof::Term::Variable(common::Variable(
+                                                        common::UpperWord(x),
+                                                    ))
+                                                })
+                                                .chain(vec![fof::Term::Variable(common::Variable(
+                                                    common::UpperWord("CurrentWorld"),
+                                                ))])
+                                                .collect(),
+                                        )),
+                                    )),
+                                ))),
+                                op: common::DefinedInfixPred(common::InfixEquality),
+                                right: Box::new(fof::Term::Variable(
+                                    common::Variable(common::UpperWord(
+                                        "CurrentWorld",
+                                    )),
+                                )),
+                            }),
+                        ))))),
+                    }),
+                ))),
+                annotations: top::Annotations(None),
+            }));
+            result.push(top::FofAnnotated(top::Annotated {
+                name: common::Name::AtomicWord(common::AtomicWord::Lower(common::LowerWord("a"))),
+                role: top::FormulaRole(common::LowerWord("axiom")),
+                formula: Box::new(fof::Formula(fof::LogicFormula::Unitary(
+                    fof::UnitaryFormula::Atomic(
+                        Box::new(fof::AtomicFormula::Plain(fof::PlainAtomicFormula(
+                            fof::PlainTerm::Function(
+                                common::Functor(common::AtomicWord::SingleQuoted(common::SingleQuoted(
+                                    self.f_pred.keys().find(|x| x == &&(f.clone() + "pred")).unwrap(),
+                                ))),
+                                Box::new(fof::Arguments(
+                                    self.f_pred.get(&(f.clone() + "pred")).unwrap().iter()
+                                            .map(|x| {
+                                                fof::Term::Variable(common::Variable(
+                                                    common::UpperWord(x),
+                                                ))
+                                            })
+                                            .chain(vec![fof::Term::Function(Box::new(
+                                                fof::FunctionTerm::Plain(fof::PlainTerm::Function(
+                                                    common::Functor(common::AtomicWord::SingleQuoted(
+                                                        common::SingleQuoted(f),
+                                                    )),
+                                                    Box::new(fof::Arguments(
+                                                        self.f_pred.get(&(f.clone() + "pred")).unwrap().iter()
+                                                            .map(|x| {
+                                                                fof::Term::Variable(common::Variable(
+                                                                    common::UpperWord(x),
+                                                                ))
+                                                            })
+                                                            .chain(vec![fof::Term::Variable(common::Variable(
+                                                                common::UpperWord("CurrentWorld"),
+                                                            ))])
+                                                            .collect(),
+                                                    )),
+                                                )),
+                                            ))])
+                                            .collect(),
+                                )),
+                            ),
+                        ))),
+                    )
+                ))),
+                annotations: top::Annotations(None),
+            }));
+        }
+        for (f, args) in self.f_forall.iter() {
             result.push(top::FofAnnotated(top::Annotated {
                 name: common::Name::AtomicWord(common::AtomicWord::Lower(common::LowerWord("a"))),
                 role: top::FormulaRole(common::LowerWord("axiom")),
@@ -323,7 +499,7 @@ impl<'a> Encoding<'a> {
             }))
         }
         for (r, r_args) in self.relation_symbols.iter() {
-            for (f, f_args) in self.f.iter() {
+            for (f, f_args) in self.f_implication.iter().chain(self.f_forall.iter()) {
                 result.push(top::FofAnnotated(top::Annotated {
                     name: common::Name::AtomicWord(common::AtomicWord::Lower(common::LowerWord(
                         "d",
@@ -359,6 +535,97 @@ impl<'a> Encoding<'a> {
                                     fof::PlainAtomicFormula(fof::PlainTerm::Function(
                                         common::Functor(common::AtomicWord::Lower(
                                             common::LowerWord(r),
+                                        )),
+                                        Box::new(fof::Arguments(
+                                            r_args
+                                                .iter()
+                                                .map(|x| {
+                                                    fof::Term::Variable(common::Variable(
+                                                        common::UpperWord(x),
+                                                    ))
+                                                })
+                                                .chain(vec![fof::Term::Function(Box::new(
+                                                    fof::FunctionTerm::Plain(
+                                                        fof::PlainTerm::Function(
+                                                            common::Functor(
+                                                                common::AtomicWord::SingleQuoted(
+                                                                    common::SingleQuoted(f),
+                                                                ),
+                                                            ),
+                                                            Box::new(fof::Arguments(
+                                                                f_args
+                                                                    .iter()
+                                                                    .map(|x| {
+                                                                        fof::Term::Variable(
+                                                                            common::Variable(
+                                                                                common::UpperWord(
+                                                                                    x,
+                                                                                ),
+                                                                            ),
+                                                                        )
+                                                                    })
+                                                                    .chain(vec![
+                                                                        fof::Term::Variable(
+                                                                            common::Variable(
+                                                                                common::UpperWord(
+                                                                                    "CurrentWorld",
+                                                                                ),
+                                                                            ),
+                                                                        ),
+                                                                    ])
+                                                                    .collect(),
+                                                            )),
+                                                        ),
+                                                    ),
+                                                ))])
+                                                .collect(),
+                                        )),
+                                    )),
+                                ))),
+                            )),
+                        }),
+                    ))),
+                    annotations: top::Annotations(None),
+                }))
+            }
+        }
+        for (r, r_args) in self.f_pred.iter().chain(self.new_relation_symbols.iter()) {
+            for (f, f_args) in self.f_implication.iter().chain(self.f_forall.iter()) {
+                result.push(top::FofAnnotated(top::Annotated {
+                    name: common::Name::AtomicWord(common::AtomicWord::Lower(common::LowerWord(
+                        "d",
+                    ))),
+                    role: top::FormulaRole(common::LowerWord("axiom")),
+                    formula: Box::new(fof::Formula(fof::LogicFormula::Binary(
+                        fof::BinaryFormula::Nonassoc(fof::BinaryNonassoc {
+                            left: Box::new(fof::UnitFormula::Unitary(fof::UnitaryFormula::Atomic(
+                                Box::new(fof::AtomicFormula::Plain(fof::PlainAtomicFormula(
+                                    fof::PlainTerm::Function(
+                                        common::Functor(common::AtomicWord::SingleQuoted(
+                                            common::SingleQuoted(r),
+                                        )),
+                                        Box::new(fof::Arguments(
+                                            r_args
+                                                .iter()
+                                                .map(|x| {
+                                                    fof::Term::Variable(common::Variable(
+                                                        common::UpperWord(x),
+                                                    ))
+                                                })
+                                                .chain(vec![fof::Term::Variable(common::Variable(
+                                                    common::UpperWord("CurrentWorld"),
+                                                ))])
+                                                .collect(),
+                                        )),
+                                    ),
+                                ))),
+                            ))),
+                            op: common::NonassocConnective::LRImplies,
+                            right: Box::new(fof::UnitFormula::Unitary(
+                                fof::UnitaryFormula::Atomic(Box::new(fof::AtomicFormula::Plain(
+                                    fof::PlainAtomicFormula(fof::PlainTerm::Function(
+                                        common::Functor(common::AtomicWord::SingleQuoted(
+                                            common::SingleQuoted(r),
                                         )),
                                         Box::new(fof::Arguments(
                                             r_args
@@ -529,11 +796,23 @@ impl<'a> Add for Encoding<'a> {
             .into_iter()
             .chain(rhs.variables.clone().into_iter())
             .collect();
-        result.f = self
-            .f
+        result.f_implication = self
+            .f_implication
             .clone()
             .into_iter()
-            .chain(rhs.f.clone().into_iter())
+            .chain(rhs.f_implication.clone().into_iter())
+            .collect();
+        result.f_pred = self
+            .f_pred
+            .clone()
+            .into_iter()
+            .chain(rhs.f_pred.clone().into_iter())
+            .collect();
+        result.f_forall = self
+            .f_forall
+            .clone()
+            .into_iter()
+            .chain(rhs.f_forall.clone().into_iter())
             .collect();
         result.constants = self
             .constants
@@ -547,16 +826,22 @@ impl<'a> Add for Encoding<'a> {
             )
             .collect();
         result.function_symbols = self
-            .variables
+            .function_symbols
             .clone()
             .into_iter()
             .chain(rhs.function_symbols.clone().into_iter())
             .collect();
         result.relation_symbols = self
-            .variables
+            .relation_symbols
             .clone()
             .into_iter()
             .chain(rhs.relation_symbols.clone().into_iter())
+            .collect();
+        result.new_relation_symbols = self
+            .new_relation_symbols
+            .clone()
+            .into_iter()
+            .chain(rhs.new_relation_symbols.clone().into_iter())
             .collect();
         return result;
     }
@@ -575,7 +860,9 @@ impl<'a> AddAssign for Encoding<'a> {
             self.goal = rhs.goal.clone();
         }
         self.variables.extend(rhs.variables.clone().into_iter());
-        self.f.extend(rhs.f.clone().into_iter());
+        self.f_implication.extend(rhs.f_implication.clone().into_iter());
+        self.f_pred.extend(rhs.f_pred.clone().into_iter());
+        self.f_forall.extend(rhs.f_forall.clone().into_iter());
         let new_constants: Vec<String> = rhs
             .constants
             .clone()
@@ -587,6 +874,8 @@ impl<'a> AddAssign for Encoding<'a> {
             .extend(rhs.function_symbols.clone().into_iter());
         self.relation_symbols
             .extend(rhs.relation_symbols.clone().into_iter());
+        self.new_relation_symbols
+            .extend(rhs.new_relation_symbols.clone().into_iter());
     }
 }
 
@@ -608,9 +897,6 @@ impl<'a> Visitor<'a> for Encoding<'a> {
 
     fn visit_constant(&mut self, constant: &common::Constant<'a>) {
         self.variables.insert(constant.to_string(), vec![]);
-        self.constants.push(constant.to_string());
-        self.constants.sort_unstable();
-        self.constants.dedup();
     }
 
     fn visit_fof_arguments(&mut self, fof_arguments: &fof::Arguments<'a>) {
@@ -681,7 +967,12 @@ impl<'a> Visitor<'a> for Encoding<'a> {
                 self.visit_fof_function_term(fof_function_term);
                 match **fof_function_term {
                     fof::FunctionTerm::Plain(ref plain_term) => match plain_term {
-                        fof::PlainTerm::Constant(_) => {}
+                        fof::PlainTerm::Constant(constant) => {
+                            self.variables.insert(constant.to_string(), vec![]);
+                            self.constants.push(constant.to_string());
+                            self.constants.sort_unstable();
+                            self.constants.dedup();
+                        }
                         fof::PlainTerm::Function(ref functor, ref arguments) => {
                             self.function_symbols.insert(
                                 functor.to_string(),
@@ -690,7 +981,12 @@ impl<'a> Visitor<'a> for Encoding<'a> {
                         }
                     },
                     fof::FunctionTerm::System(ref system_term) => match system_term {
-                        fof::SystemTerm::Constant(_) => {}
+                        fof::SystemTerm::Constant(constant) => {
+                            self.variables.insert(constant.to_string(), vec![]);
+                            self.constants.push(constant.to_string());
+                            self.constants.sort_unstable();
+                            self.constants.dedup();
+                        }
                         fof::SystemTerm::Function(ref functor, ref arguments) => {
                             self.function_symbols.insert(
                                 functor.to_string(),
@@ -770,6 +1066,10 @@ impl<'a> Visitor<'a> for Encoding<'a> {
             remove_outer_parens(fof_defined_infix_formula.to_string()),
             variables.clone(),
         );
+        self.new_relation_symbols.insert(
+            remove_outer_parens(fof_defined_infix_formula.to_string()),
+            variables
+        );
     }
 
     fn visit_fof_atomic_formula(&mut self, fof_atomic_formula: &fof::AtomicFormula<'a>) {
@@ -777,9 +1077,22 @@ impl<'a> Visitor<'a> for Encoding<'a> {
             fof::AtomicFormula::Plain(fof_plain_atomic_formula) => {
                 self.visit_fof_plain_atomic_formula(fof_plain_atomic_formula);
                 match fof_plain_atomic_formula.0 {
-                    fof::PlainTerm::Constant(_) => {}
+                    fof::PlainTerm::Constant(ref constant) => {
+                        self.relation_symbols.insert(
+                            constant.to_string(),
+                            Vec::new(),
+                        );
+                        self.new_relation_symbols.insert(
+                            constant.to_string(),
+                            Vec::new(),
+                        );
+                    }
                     fof::PlainTerm::Function(ref functor, ref arguments) => {
                         self.relation_symbols.insert(
+                            functor.to_string(),
+                            (0..arguments.0.len()).map(|y| format!("Y_{}", y)).collect(),
+                        );
+                        self.new_relation_symbols.insert(
                             functor.to_string(),
                             (0..arguments.0.len()).map(|y| format!("Y_{}", y)).collect(),
                         );
@@ -847,9 +1160,22 @@ impl<'a> Visitor<'a> for Encoding<'a> {
             fof::AtomicFormula::System(fof_system_atomic_formula) => {
                 self.visit_fof_system_atomic_formula(fof_system_atomic_formula);
                 match fof_system_atomic_formula.0 {
-                    fof::SystemTerm::Constant(_) => {}
+                    fof::SystemTerm::Constant(ref constant) => {
+                        self.relation_symbols.insert(
+                            constant.to_string(),
+                            Vec::new(),
+                        );
+                        self.new_relation_symbols.insert(
+                            constant.to_string(),
+                            Vec::new(),
+                        );
+                    }
                     fof::SystemTerm::Function(ref functor, ref arguments) => {
                         self.relation_symbols.insert(
+                            functor.to_string(),
+                            (0..arguments.0.len()).map(|y| format!("Y_{}", y)).collect(),
+                        );
+                        self.new_relation_symbols.insert(
                             functor.to_string(),
                             (0..arguments.0.len()).map(|y| format!("Y_{}", y)).collect(),
                         );
@@ -903,16 +1229,16 @@ impl<'a> Visitor<'a> for Encoding<'a> {
         self.polarity = polarity;
         match self.polarity {
             true => {
-                self.f.insert(
-                    String::from("f_") + &remove_outer_parens(fof_infix_unary.to_string()),
-                    (0..self
-                        .variables
-                        .get(&remove_outer_parens(fof_infix_unary.to_string()))
-                        .unwrap()
-                        .len())
-                        .map(|z| format!("Z_{}", z))
-                        .collect(),
-                );
+                let f = String::from("f_") + &remove_outer_parens(fof_infix_unary.to_string());
+                let args: Vec<String> = (0..self
+                    .variables
+                    .get(&remove_outer_parens(fof_infix_unary.to_string()))
+                    .unwrap()
+                    .len())
+                    .map(|z| format!("Z_{}", z))
+                    .collect();
+                self.f_implication.insert(f.clone(), args.clone());
+                self.f_pred.insert(f + "pred", args.into_iter().map(|x| x.clone() + "pred").collect());
                 self.axioms
                     .push(normalized_formula::NormalizedFormula::DoubleImplication {
                         left: (
@@ -1001,6 +1327,10 @@ impl<'a> Visitor<'a> for Encoding<'a> {
                     },
                 }),
         }
+        self.new_relation_symbols.insert(
+            remove_outer_parens(fof_infix_unary.to_string()),
+            self.variables.get(&remove_outer_parens(fof_infix_unary.to_string())).unwrap().clone()
+        );
     }
 
     fn visit_fof_binary_nonassoc(&mut self, fof_binary_nonassoc: &fof::BinaryNonassoc<'a>) {
@@ -1032,16 +1362,16 @@ impl<'a> Visitor<'a> for Encoding<'a> {
                         remove_outer_parens(fof_binary_nonassoc.to_string()),
                         variables,
                     );
-                    self.f.insert(
-                        String::from("f_") + &fof_binary_nonassoc.to_string(),
-                        (0..self
-                            .variables
-                            .get(&remove_outer_parens(fof_binary_nonassoc.to_string()))
-                            .unwrap()
-                            .len())
-                            .map(|z| format!("Z_{}", z))
-                            .collect(),
-                    );
+                    let f = String::from("f_") + &remove_outer_parens(fof_binary_nonassoc.to_string());
+                    let args: Vec<String> = (0..self
+                        .variables
+                        .get(&remove_outer_parens(fof_binary_nonassoc.to_string()))
+                        .unwrap()
+                        .len())
+                        .map(|z| format!("Z_{}", z))
+                        .collect();
+                    self.f_implication.insert(f.clone(), args.clone());
+                    self.f_pred.insert(f.clone() + "pred", args.into_iter().map(|x| x.clone() + "pred").collect());
                     self.axioms
                         .push(normalized_formula::NormalizedFormula::DoubleImplication {
                             left: (
@@ -1709,6 +2039,10 @@ impl<'a> Visitor<'a> for Encoding<'a> {
                 }
             }
         }
+        self.new_relation_symbols.insert(
+            remove_outer_parens(fof_binary_nonassoc.to_string()),
+            self.variables.get(&remove_outer_parens(fof_binary_nonassoc.to_string())).unwrap().clone()
+        );
     }
 
     fn visit_fof_or_formula(&mut self, fof_or_formula: &fof::OrFormula<'a>) {
@@ -1797,6 +2131,10 @@ impl<'a> Visitor<'a> for Encoding<'a> {
                         .collect(),
                 }),
         }
+        self.new_relation_symbols.insert(
+            remove_outer_parens(fof_or_formula.to_string()),
+            self.variables.get(&remove_outer_parens(fof_or_formula.to_string())).unwrap().clone()
+        );
     }
 
     fn visit_fof_and_formula(&mut self, fof_and_formula: &fof::AndFormula<'a>) {
@@ -1882,6 +2220,10 @@ impl<'a> Visitor<'a> for Encoding<'a> {
                         .collect(),
                 }),
         }
+        self.new_relation_symbols.insert(
+            remove_outer_parens(fof_and_formula.to_string()),
+            self.variables.get(&remove_outer_parens(fof_and_formula.to_string())).unwrap().clone()
+        );
     }
 
     fn visit_fof_unary_formula(&mut self, fof_unary_formula: &fof::UnaryFormula<'a>) {
@@ -1900,16 +2242,16 @@ impl<'a> Visitor<'a> for Encoding<'a> {
                 );
                 match self.polarity {
                     true => {
-                        self.f.insert(
-                            String::from("f_") + &fof_unary_formula.to_string(),
-                            (0..self
-                                .variables
-                                .get(&remove_outer_parens(fof_unary_formula.to_string()))
-                                .unwrap()
-                                .len())
-                                .map(|z| format!("Z_{}", z))
-                                .collect(),
-                        );
+                        let f = String::from("f_") + &fof_unary_formula.to_string();
+                        let args: Vec<String> = (0..self
+                            .variables
+                            .get(&remove_outer_parens(fof_unary_formula.to_string()))
+                            .unwrap()
+                            .len())
+                            .map(|z| format!("Z_{}", z))
+                            .collect(); 
+                        self.f_implication.insert(f.clone(), args.clone());
+                        self.f_pred.insert(f.clone() + "pred", args.into_iter().map(|x| x.clone() + "pred").collect());
                         self.axioms
                             .push(normalized_formula::NormalizedFormula::DoubleImplication {
                                 left: (
@@ -2014,6 +2356,10 @@ impl<'a> Visitor<'a> for Encoding<'a> {
                 self.visit_fof_infix_unary(fof_infix_unary)
             }
         }
+        self.new_relation_symbols.insert(
+            remove_outer_parens(fof_unary_formula.to_string()),
+            self.variables.get(&remove_outer_parens(fof_unary_formula.to_string())).unwrap().clone()
+        );
     }
 
     fn visit_fof_quantified_formula(
@@ -2053,7 +2399,7 @@ impl<'a> Visitor<'a> for Encoding<'a> {
         match self.polarity {
             true => match fof_quantified_formula.quantifier {
                 fof::Quantifier::Forall => {
-                    self.f.insert(
+                    self.f_forall.insert(
                         String::from("f_")
                             + &remove_outer_parens(fof_quantified_formula.to_string()),
                         (0..self
@@ -2242,6 +2588,10 @@ impl<'a> Visitor<'a> for Encoding<'a> {
                 }
             },
         }
+        self.new_relation_symbols.insert(
+            remove_outer_parens(fof_quantified_formula.to_string()),
+            self.variables.get(&remove_outer_parens(fof_quantified_formula.to_string())).unwrap().clone()
+        );
     }
 
     fn visit_fof_unitary_formula(&mut self, fof_unitary_formula: &fof::UnitaryFormula<'a>) {
