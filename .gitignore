@@ -5,6 +5,8 @@
 /Implementation/ILTP-v1.1.2-firstorder.tar.gz
 /Implementation/ILTP-v1.1.2-firstorder-translated
 /Implementation/ILTP-v1.1.2-firstorder-results
+/Implementation/ILTP-v1.1.2-firstorder-translated-idempotence
+/Implementation/ILTP-v1.1.2-firstorder-results-idempotence
 /Implementation/eiicl/target
 *.aux
 *.bbl
@@ -15,4 +17,5 @@
 *.vtc
 *.gz
 *.pdf
-Implementation/TMP_OUTPUT_nanocopi_2022-10-10_224044_842929524
+Implementation/ILTP-v1.1.2-firstorder-results-idempotence/
+*.p
