@@ -167,7 +167,7 @@ Whenever we add a function symbol we implicitly extend the signature by some not
 		\item $(\forall x\varphi)^S_Z = \forall x(\varphi[a/x]^S_{Z\cup\{a\}}[x/a])$ where $a$ is a new free variable\\$(\forall x\varphi)^H_Z = \varphi[s(z_1,\dots,z_n)/x]^H_Z$ where $s$ is a new function, $\{z_1\dots z_n\} = Z$.
 		\item $(\exists x\varphi)^S_Z = \varphi[s(z_1,\dots,z_n)/x]^S_Z$ where $s$ is a new function, $\{z_1\dots z_n\} = Z$\\$(\exists x\varphi)^H_Z = \exists x(\varphi[a/x]^H_{Z\cup\{a\}}[x/a])$ where $a$ is a new free variable.
 	\end{itemize}
-	Let $\varphi^S = (\exists x_1\dots\exists x_n \varphi[x_1/a_1\dots x_n/a_n])^S_\emptyset$ and $\varphi^H = (\forall x_1\dots\forall x_n \varphi[x_1/a_1\dots x_n/a_n])^H_\emptyset$ where $a_1,\dots,a_n$ are the free variables occurring in $\varphi$.
+	Let $$\varphi^S = (\exists x_1\dots\exists x_n \varphi[x_1/a_1\dots x_n/a_n])^S_\emptyset$$ and $$\varphi^H = (\forall x_1\dots\forall x_n \varphi[x_1/a_1\dots x_n/a_n])^H_\emptyset$$ where $a_1,\dots,a_n$ are the free variables occurring in $\varphi$.
 \end{definition}
 
 \begin{theorem}
@@ -580,73 +580,14 @@ $$Putting all of this together yields the following translation:
 	$$
 	is classically valid, where $s$ is a new constant symbol and
 	\begin{align*}
-		K(\varphi) := &\:\bigwedge\{\forall\vec z\forall x\forall u((E(x, u)\to E(x, f_\psi(\vec z, u)))\:|\:\psi\in\mathcal F\}\wedge\\
+		K(\varphi) := &\:\bigwedge\left\{\forall\vec z\forall x\forall u((E(x, u)\to E(x, f_\psi(\vec z, u)))\:|\:\psi\in\mathcal X\cup\mathcal Q\right\}\wedge\\
 		&\:\forall u\left(\exists xE(x, u)\to \bigwedge\{\forall\vec z(\vec E(\vec z, u)\to E(f(\vec z), u))\:|\:\text{$f$ a function in $\varphi$}\}\right)\wedge\\
-		&\:\bigwedge\{\forall\vec z_1\forall \vec z_2\forall u(A(\vec z_1, u)\to A(\vec z_1, f_\psi(\vec z_2, u)))\:|\:\text{$\psi\in\mathcal F$, $A$ a relation in $\varphi$}\}.
+		&\resizebox{.9\hsize}{!}{$\:\bigwedge\left\{\forall\vec z_1\forall \vec z_2\forall u(A(\vec z_1, u)\to A(\vec z_1, f_\psi(\vec z_2, u)))\:|\:\text{$\psi\in\mathcal X\cup\mathcal Q$, $A$ a relation in $\varphi$}\right\}$.}
 	\end{align*}
 	The size of the obtained formula is linear in the input. However $|\mathcal X| + |\mathcal Q| + 1$ new function symbols and the new binary predicate $E$ were introduced and each $n$-ary relation symbol has been extended to a $n+1$-ary relation symbol.
 \end{theorem}
 
-It is not possible to completely eliminate worlds from the domain by enumerating them since there are formulas with no finite counter-examples. An analogous procedure to the propositional case fails:
-
-\begin{definition}
-\label{def:fo-fulfilled}
-	Suppose we are given a counter-model $\mathcal M = (M, I)$ for $\varphi^{CH}$. For $\psi = \forall\vec z\psi\in\mathcal \mathcal X$ we say it is \emph{fulfilled} at $u\in M$ with $\vec m\in M^n$ iff $(A_{[\psi]}^I(\vec a, u)\to B_{[\psi]}^I(\vec b, u))[\vec m/\vec z]$ is false or $C_\psi^I(\vec c, u)[\vec m/\vec z]$ is true.
-	For $\psi = \forall\vec z\psi\in\mathcal Q$ we say it is \emph{fulfilled} at $u\in M$ with $\vec m\in M^n$ iff there is $m\in M$ with $E^{I}(m, u)$ such that $A^{I[m/x]}_\psi(\vec a)[\vec m/\vec z]$ is false or $B_\psi^I(\vec b)[\vec m/\vec z]$ is true.
-\end{definition}
-
-We get an analogous result to Lemma~\ref{thm:prop-countermodel-reduction}:
-
-\begin{lemma}
-\label{thm:fo-countermodel-reduction}
-	Let $\mathcal M = (M, I)$ be a counter-model to $\mathcal \varphi^\circ$.
-	\begin{enumerate}
-		\item $\psi$ is fulfilled at $f_\psi^I(\vec a, u)$ with $\vec a$ for all $u\in M, \psi\in\mathcal F$, $\vec a\in M^n$.
-		\item If $\psi\in\mathcal F_\to$ is fulfilled at $u\in M$ with $\vec a$ then $\psi$ is fulfilled at all $w\geq u$ with $\vec a$.
-	\end{enumerate}	
-\end{lemma}
-
-However part 2 of Lemma~\ref{thm:fo-countermodel-reduction} fails for $\psi\in\mathcal F_\forall$, because even if for all $x$ with $E(x, v$), we have $A(x, v)$, there could be some term $y$ with $\neg E(y, v)$ and $w$ with $v\preceq w$ such that $E(y, w)$ and $\neg A(y, w)$. This is why we must consider sequences that have repetitions:
-
-\begin{wrapfigure}[16]{r}{0.4\textwidth}
-	\vspace{-32pt}
-	\begin{center}
-		\begin{tikzpicture}[squarednode/.style={rectangle, draw, very thick, minimum size=5mm}]
-			\node[squarednode]      (0)   [] {$ $};
-			\node[squarednode]      (1r)   [above right=of 0] {{\color{blue}$1$}};
-			\node[squarednode]      (1l)   [above left=of 0] {{\color{red}$1$}};
-			\node[squarednode]      (2r)   [above=of 1r] {{1, \color{blue}$2$}};
-			\node[squarednode]      (2l)   [above=of 1l] {{1, \color{red}$2$}};
-			\node[squarednode]      (3r)   [above=of 2r] {{1, 2, \color{blue}$3$}};
-			\node[squarednode]      (3l)   [above=of 2l] {{1, 2, \color{red}$3$}};
-			\node      (4r)   [above=of 3r] {{$\vdots$}};
-			\node      (4l)   [above=of 3l] {{$\vdots$}};
-			\draw[-{Stealth[length=3mm, width=3mm]}, color=black] (0.north east) -- (1r.south west);
-			\draw[-{Stealth[length=3mm, width=3mm]}, color=black] (0.north west) -- (1l.south east);
-			\draw[-{Stealth[length=3mm, width=3mm]}, color=black] (1r.north) -- (2r.south);
-			\draw[-{Stealth[length=3mm, width=3mm]}, color=black] (1l.north) -- (2l.south);
-			\draw[-{Stealth[length=3mm, width=3mm]}, color=black] (1l.north east) -- (2r.south west);
-			\draw[-{Stealth[length=3mm, width=3mm]}, color=black] (1r.north west) -- (2l.south east);
-			\draw[-{Stealth[length=3mm, width=3mm]}, color=black] (2r.north) -- (3r.south);
-			\draw[-{Stealth[length=3mm, width=3mm]}, color=black] (2l.north) -- (3l.south);
-			\draw[-{Stealth[length=3mm, width=3mm]}, color=black] (2l.north east) -- (3r.south west);
-			\draw[-{Stealth[length=3mm, width=3mm]}, color=black] (2r.north west) -- (3l.south east);
-			\draw[-{Stealth[length=3mm, width=3mm]}, color=black] (3r.north) -- (4r.south);
-			\draw[-{Stealth[length=3mm, width=3mm]}, color=black] (3l.north) -- (4l.south);
-			\draw[-{Stealth[length=3mm, width=3mm]}, color=black] (3l.north east) -- (4r.south west);
-			\draw[-{Stealth[length=3mm, width=3mm]}, color=black] (3r.north west) -- (4l.south east);
-		\end{tikzpicture}
-	\end{center}
-	\caption{Counter-model to $\varphi$.}
-	\label{fig1}
-\end{wrapfigure}
-\begin{example}
-	Consider $\varphi = \neg(\neg \forall xA(x)\vee\neg \forall xB(x))$. There is a counter-model as shown in Figure~\ref{fig1},
-	where we indicate at each world the elements that exist at it. For black numbers $n$, both $A(n)$ and $B(n)$ hold at that world, for red ones only $A(n)$, for blue ones only $B(n)$. The arrows indicate the order. $\neg\forall xA(x)$ is not fulfilled at worlds in the left column and $\neg\forall xB(x)$ is not fulfilled at worlds in the right column. In particular applying $f_{\neg \forall xA(x)}$ we must always reach the right column and applying $f_{\neg \forall xB(x)}$ we must always reach the left column. Therefore applying $f_{\neg \forall xA(x)}\circ f_{\neg \forall xB(x)}$ we cannot remain stationary.
-\end{example}
-
-Let us add that Lemma~\ref{thm:fo-countermodel-reduction} still equips us with additional information that could be used to guide proof search: We could add additional axioms that restrict the interpretation of functions. That is, we may assume that $f_\psi(w) = w$, if $\exists u(w = f_\psi(u))$ for all $\psi\in\mathcal F_\forall$ (i.e. that $f_\psi$ is idempotent), and $f_\psi(w) = w$, if $\exists u(w \geq f_\psi(u))$ for all $\psi\in\mathcal F_\to$ (which is even stronger than idempotence).
-How adding such axioms impacts proof search will need to be evaluated in experiments.
+It is not possible to completely eliminate worlds from the domain by enumerating them since there are formulas with no finite counter-examples. An analogous procedure to the propositional case fails, however we can still retrieve additional axioms that restrict the interpretation of functions. That is, we may assume that $f_\psi(\vec t, w) = w$, if $\exists u(w = f_\psi(\vec t, u))$ for all $\psi\in\mathcal X\cup\mathcal Q$ (i.e. that $f_\psi$ parametrized by $\vec t$ is idempotent), and $f_\psi(\vec t, w) = w$, if $\exists u(w \geq f_\psi(\vec t, u))$ for all $\psi\in\mathcal X$ (which is even stronger than idempotence).
 
 \section{Conclusion}
 
