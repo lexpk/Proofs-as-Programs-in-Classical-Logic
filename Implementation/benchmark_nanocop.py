@@ -27,26 +27,15 @@ for directory in os.listdir(PROBLEM_ROOT):
             RESULT_ROOT, directory), translation)
         with open(result_path, "w") as output_file:
             try:
-<<<<<<< Updated upstream
                 subprocess.run([NANO_PATH, problem_path], stdout=output_file)
             except subprocess.TimeoutExpired:
                 subprocess.run(["killall", "swipl"])
-=======
-                subprocess.run([NANO_PATH, problem_path],
-                           timeout=10,
-                           stdout=output_file)
-            except subprocess.TimeoutExpired:
->>>>>>> Stashed changes
                 print("timeout", file=output_file)
         with open(result_path, "r") as result:
             result_text = result.read()
         with open(problem_path, "r") as result:
             problem_text = result.read()    
-<<<<<<< Updated upstream
-        if "intuitionistic Theorem" in result_text:
-=======
         if "is an intuitionistic Theorem" in result_text:
->>>>>>> Stashed changes
             proven += 1
             assert "Status (intuit.) : Non-Theorem" not in problem_text
         elif "timeout" in result_text:
