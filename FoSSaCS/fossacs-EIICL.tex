@@ -87,7 +87,7 @@ In this section we fix notation and recall the semantics for classical and intui
 \begin{definition}
 	A \emph{valuation} $v$ maps each propositional variable $A$ to a \emph{truth value} $v(A)\in\{0, 1\}$. We inductively define the model relation $\models$ between $v$ and formulas:
 	\begin{itemize}
-		\item $v\not\models \bot$ and $v\models A$ iff $v(A) = 1$ for each propositional variable $A$.
+		\item $v\not\models \bot$, $v\models A$ iff $v(A) = 1$ for each propositional variable $A$.
 		\item $v\models \varphi\wedge\psi$ iff $v\models\varphi$ and $v\models\psi$.
 		\item $v\models\varphi\vee\psi$ iff $v\models\varphi$ or $v\models\psi$.
 		\item $v\models\varphi\to \psi$ iff $v\not\models\varphi$ or $v\models\psi$.
@@ -101,7 +101,7 @@ One notable property of classical logic is that a formula $\varphi$ is valid if 
 	A \emph{Kripke structure} $\mathcal K = (W, (v_w)_{w\in W})$ consists of a partially ordered set $W$ of \emph{worlds}, called the Kripke \emph{frame}, and a family of valuations $(v_w)_{w\in W}$ such that $v_u(A)\leq v_u(A)$ for all $u\leq w$ and propositional variables $A$ (this is called the \emph{persistency condition}).
 	The model relation between the $v_u$ and formulas $\varphi$ is defined as before, except in the case of implications, where we set
 	\begin{itemize}
-		\item $v_u\models\varphi\to \psi$ if for all $w\geq u$ we have $w\not\models\varphi$ or $u\models\psi$.
+		\item $v_u\models\varphi\to \psi$ iff for all $w\geq u$ we have $w\not\models\varphi$ or $u\models\psi$.
 	\end{itemize}
 	We say that $\varphi$ is satisfied at a world $u$ if $v_u\models\varphi$ and write $u\models\varphi$. If a formula is satisfied at every world then $\mathcal K$ is a \emph{model} for $\varphi$. A formula is valid if every Kripke structure is a model of it. We denote the set of valid formulas with \emph{IPC} (Intuitionistic Propositional Calculus).
 \end{definition}
@@ -128,8 +128,10 @@ We now recall the semantics of first-order logic:
 	\end{itemize}
 	We define a model relation between pairs $\mathcal M, v$ and formulas $\varphi$ as follows
 	\begin{itemize}
-		\item $\mathcal M, v\not\models\bot$, $\mathcal M, v\models R(t_1,\dots,t_n)$ iff $(t_1^{I, v},\dots,t_n^{I, v})\in R^I$, $\mathcal M, v\models s = t$ iff $s^{I, v} = t^{I, v}$.
-		\item $\mathcal M, v\models \varphi\wedge \psi$ iff $\mathcal M, v\models\varphi$ and $\mathcal M, v\models\psi$, $\mathcal M, v\models \varphi\vee\psi$ iff $\mathcal M, v\models\varphi$ or $\mathcal M, v\models\psi$.
+		\item $\mathcal M, v\not\models\bot$
+		\item $\mathcal M, v\models R(t_1,\dots,t_n)$ iff $(t_1^{I, v},\dots,t_n^{I, v})\in R^I$, $\mathcal M, v\models s = t$ iff $s^{I, v} = t^{I, v}$.
+		\item $\mathcal M, v\models \varphi\wedge \psi$ iff $\mathcal M, v\models\varphi$ and $\mathcal M, v\models\psi$
+		\item $\mathcal M, v\models \varphi\vee\psi$ iff $\mathcal M, v\models\varphi$ or $\mathcal M, v\models\psi$.
 		\item $\mathcal M, v\models \varphi\to\psi$ iff $\mathcal M, v\not\models\varphi$ or $\mathcal M, v\models\psi$.
 		\item $\mathcal M, v\models\exists x\varphi$ iff there exists $m\in M$ such that $\mathcal M, v[m/a]\models\varphi[a/x]$ where a is a free variable that does not occur in $\varphi$.
 		\item $\mathcal M, v\models\forall x\varphi$ iff for all $m\in M$ we have $\mathcal M, v[m/a]\models\varphi[a/x]$ where a is a free variable that does not occur in $\varphi$.
@@ -138,16 +140,13 @@ We now recall the semantics of first-order logic:
 \end{definition}
 
 \begin{definition}
-	A $\Sigma$-\emph{Kripke structure} $\mathcal{K}$ is a partially ordered set $W$, called the Kripke \emph{frame}, and a family of $\Sigma$-structures $(\mathcal{M}_w)_{w\in W}$ such that for $u\leq w$ we have $M_u\subseteq M_w$, $f^{I_w}|_{M_u} = f^{I_u}$.\footnote{Here $f|_M$ denotes the restriction of $f$ to $M$} and $R^{I_w}|_{M_u} = R^{I_u}$.
-	Then we define a model relation between worlds $u\in W$ and variable assignments $v$ (targeting $M_u$) and formulas $\varphi$ as follows:
+	A $\Sigma$-\emph{Kripke structure} $\mathcal{K}$ is a partially ordered set $W$, called the Kripke \emph{frame}, and a family of $\Sigma$-structures $(\mathcal{M}_w)_{w\in W}$ such that for $u\leq w$ we have $M_u\subseteq M_w$, $f^{I_w}|_{M_u} = f^{I_u}$ and $R^{I_w}|_{M_u} = R^{I_u}$.\footnote{Here $f|_M$ denotes the restriction of $f$ to $M$}
+	The model relation between $\mathcal M_u$, $v$ (targeting $\mathcal M_u$) and formulas $\varphi$ is defined as before, except in the cases of implication and $\forall$-quantification, where we set
 	\begin{itemize}
-		\item $u, v\not\models\bot$, $u, v\models R(t_1,\dots,t_n)$ iff $\mathcal M_u, v\models R(t_1,\dots,t_n)$, $u, v\models s = t$ iff $s^{I_u, v} = t^{I_u, v}$.
-		\item $u, v\models \varphi\wedge \psi$ iff $u, v\models\varphi$ and $u, v\models\psi$, $u, v\models \varphi\vee\psi$ iff $u, v\models\varphi$ or $u, v\models\psi$.
-		\item $u, v\models \varphi\to\psi$ iff for every $w\geq u$ we have $w, v\not\models\varphi$ or $w, v\models\psi$.
-		\item $u, v\models\exists x\varphi$ iff there exists $m\in M_u$ such that $u, v[m/a]\models\varphi[a/x]$ where a is a free variable that does not occur in $\varphi$.
-		\item $u, v\models\forall x\varphi$ iff for every $w\geq u$ and $m\in M_w$ we have $w, v[m/a]\models\varphi[a/x]$ where a is a free variable that does not occur in $\varphi$.
+		\item $\mathcal M_u, v\models \varphi\to\psi$ iff for every $w\geq u$ we have $w, v\not\models\varphi$ or $w, v\models\psi$.
+		\item $\mathcal M_u, v\models\forall x\varphi$ iff for every $w\geq u$ and $m\in M_w$ we have $w, v[m/a]\models\varphi[a/x]$ where a is a free variable that does not occur in $\varphi$.
 	\end{itemize}
-	$\mathcal{K}$ satisfies $\varphi$ if $u, v\models\varphi$ holds for every world $u$ and variable assignment $v$. $\varphi$ is valid if it is satisfied by every Kripke structure.
+	We write $u, v\models\varphi$ if $\mathcal M_u, v\models \varphi$. $\mathcal{K}$ satisfies $\varphi$ if $u, v\models\varphi$ holds for every world $u$ and variable assignment $v$. If such $\mathcal K$ exists then $\varphi$ is satisfiable. $\varphi$ is valid if it is satisfied by every Kripke structure.
 	$\varphi$ is valid for some frame (write $W\models\varphi$) if it is satisfied in every Krike structure with that frame. We denote the set of valid formulas with \emph{IQC} (Intuitionistic Quantified Calculus).
 \end{definition}
 In addition to the propositional tautologies there are now sentences involving quantifiers which are classically valid but not intuitionistically, e.g., $\neg\forall x A(x)\to \exists x \neg A(x)$.
@@ -192,7 +191,7 @@ Finally we note the results from~\cite{otten2005clausal} which are of importance
 	and $\mathcal X$ containing \emph{implication clauses} of the form
 	$$(A\to B)\to C,$$
 	such that $\varphi$ is intuitionistically equivalid to
-	$$\left(\bigwedge\mathcal R\wedge\bigwedge\mathcal X\right)\to P$$where $A_i, B_i, A, B, C$ are atomic. This size of $\mathcal R$ and $\mathcal X$ is linear in the size of $\varphi$. In general they will contain additional propositional variables.
+	$$\left(\bigwedge\mathcal R\wedge\bigwedge\mathcal X\right)\to P$$where $A_i, B_i, A, B, C$ are atomic. The size of $\mathcal R$ and $\mathcal X$ is linear in the size of $\varphi$. In general they will contain additional propositional variables.
 \end{lemma}
 
 A similar result holds in the first order case.
@@ -311,8 +310,7 @@ The most obvious approach to embedding intuitionistic into classical logic is to
 		\text{\normalfont Persistent}(u, w)=&\:\bigwedge \{A(u)\to A(w)\:|\: \text{ $A$ occurs in $\varphi$}\}
 	\end{align*}
 	Then define
-	$$\varphi^{C} = K(\varphi)\to \varphi^{r}$$
-	where $r$ is a new constant symbol.
+	$$\varphi^{C} = K(\varphi)\to \forall u\varphi^{u}.$$
 \end{definition}
 
 \noindent As all we have done is modeling Kripke frames as a first-order theory so we directly obtain:
@@ -324,13 +322,13 @@ The most obvious approach to embedding intuitionistic into classical logic is to
 This is somewhat unsatisfying as we end up in a much more complex logic. However using the normal form from Lemma~\ref{lemma:propositional-normal-form}, i.e. assuming that $\varphi$ is of the form $$\left(\bigwedge\mathcal R\wedge\bigwedge\mathcal X\right)\to P$$ for some flat clauses $\mathcal R$ and implicational clauses $\mathcal X$, further simplification is possible:
 \begin{itemize}
 	\item For flat clauses $(\bigwedge A_i\to\bigvee B_j)^u$ is
-	$$\forall w\left(u\preceq w\to\bigwedge_i A_i(u)\to\bigvee_jB_j(u)\right).$$
+	$$\forall w\left(u\preceq w\to\bigwedge_i A_i(w)\to\bigvee_jB_j(w)\right).$$
 	\item For implication clauses $((A\to B)\to C)^u$ is
 	$$\forall w(u\preceq w\to(\forall k(w\preceq k\to A(k)\to B(k)))\to C(w))$$
 \end{itemize}
 
-and after applying Herbrandization we end up with a formula $$\varphi^{CH} = K(\varphi)\to r\preceq s\to\left(\bigwedge\mathcal R^{uS}\wedge \bigwedge\mathcal X^{uS}\right)\to P(s)$$ where $s$ is a new constant symbol, each formula in $\mathcal R^{uS}$ is of the form
-$$\forall w\left(s\preceq w\to\bigwedge_iA_i(u)\to\bigvee_jB_j(u)\right)$$
+and after applying Herbrandization we end up with a formula $$\varphi^{CH} = K(\varphi)\to\left(\bigwedge\mathcal R^{uS}\wedge \bigwedge\mathcal X^{uS}\right)\to P(s)$$ where $s$ is a new constant symbol, each formula in $\mathcal R^{uS}$ is of the form
+$$\forall w\left(s\preceq w\to\bigwedge_iA_i(w)\to\bigvee_jB_j(w)\right)$$
 and each formula $\psi\in\mathcal X^{uS}$ is of the form
 $$\forall w(s\preceq w\to(w\preceq f_\psi(w)\to A(f_\psi(w))\to B(f_\psi(w)))\to C(w))$$
 with $f_\psi$ being a new function symbol.
@@ -345,7 +343,7 @@ We say $(A\to B)\to C\in\mathcal X$ is \emph{fulfilled} at $m\in M$ iff $A^I(m)\
 	\end{cases}$$Define a model $\mathcal M_T = (M_T, I_T)$ as follows:
 	\begin{itemize}
 		\item $M_T$ is the set of sequences without repetition on $\mathcal X$.
-		\item $r^{I_T} = s^{I_T} = \epsilon$.
+		\item $s^{I_T} = \epsilon$.
 		\item Interpret $\preceq$ as the prefix-order.
 		\item We set $$f_\psi^{I_T}(\psi_1\dots\psi_n) = \begin{cases}
 			\psi_1\dots\psi_n, &\text{if $\psi$ occurs in $[\psi_1]\dots[\psi_n]$,}\\
@@ -385,18 +383,18 @@ We can apply the previous results to give a direct embedding from intuitionistic
 	x, &\text{ if $\psi$ occurs in $x$,}\\
 	x\psi, &\text{ otherwise.}
 \end{cases}$$
-Now we can replace every $\forall$-quantifier in $\varphi^{CH}$ by enumerating all the ground terms, and then replace all distinct ground instances of relations by new propositional variables yielding a propositional formula. Note that the encoding of partial order becomes redundant with this so we drop it, but we need to keep the persistency restraints. This gives us the following theorem:
+Now we can replace every $\forall$-quantifier in $\varphi^{CH}$ by enumerating all the ground terms, and then replace all distinct ground instances of relations by new propositional variables yielding a propositional formula. Note that the encoding of partial order becomes redundant with this so we drop it, but we need to keep the persistency constraints. This gives us the following theorem:
 
 \begin{theorem}
 	Suppose we are given a formula as in Lemma~\ref{lemma:propositional-normal-form}, i.e. of the form
 	$$\left(\bigwedge\mathcal R\wedge\bigwedge\mathcal S\right)\to P$$
-	with flat $\mathcal R$ and implication $\mathcal S$. Let $\Lambda$ denote the set of sequences without repetition over $\mathcal X$. For every propositional variable $A$ and $\lambda\in\Lambda$ consider a new propositional Variable $X^\lambda$. Define $R^\#$ as the union over all sets
+	with flat $\mathcal R$ and implication $\mathcal S$. Let $\Lambda$ denote the set of sequences without repetition over $\mathcal X$. For every propositional variable $A$ and $\lambda\in\Lambda$ consider a new propositional Variable $A^\lambda$. Define $R^\#$ as the union over all sets
 	$$
 		\left\{\bigwedge_iA_i^\lambda\to\bigvee_jB_j^\lambda\:|\:\lambda\in\Lambda\right\}
 	$$
 	for $\bigwedge_iA_i\to\bigvee_jB_j\in\mathcal R$ and $\mathcal X^\#$ as the union over all sets
 	$$
-		\left\{\left({A^\lambda\psi} \to A^{\lambda\psi}\right)\to(C^\lambda)\:|\:\lambda\in\Lambda, \psi\text{ does not occur in }\lambda\right\}
+		\left\{\left(A^{\lambda\psi} \to A^{\lambda\psi}\right)\to(C^\lambda)\:|\:\lambda\in\Lambda, \psi\text{ does not occur in }\lambda\right\}
 	$$
 	for $\psi = (A\to B)\to C\in\mathcal X$ as well as $P^\#$ as the union over all sets
 	$$
@@ -425,7 +423,7 @@ It is known that a polynomial time translation between QBF and IPC must exist, s
 The translation from the last section will serve as starting point for developing the translation in this section.
 For lack of space, we do not define the semantics of QBF in this paper and refer the reader to standard sources e.g.~\cite{series/faia/2009-185}.
 
-Suppose we are given a formula $\varphi$ in normal form $$\left(\bigwedge R\wedge\bigwedge X\right)\to P$$ as in Lemma~\ref{lemma:propositional-normal-form}. We will now formulate a QBF that expresses that $\varphi$ has an intuitionistic counter-model. The idea how to get a polynomially-sized formula is: Instead of expressing validity at every node of $\mathcal M_T$ --- which was done in the CPC translation --- we express that on each path in $\mathcal M_T$ the nodes satisfy all conditions for $\mathcal M_T$ being a counter-model. The universally quantified variables $X_\psi$ in the next definition handle the branching, i.e. express which path is considered.
+Suppose we are given a formula $\varphi$ in normal form $$\left(\bigwedge\mathcal R\wedge\bigwedge\mathcal X\right)\to P$$ as in Lemma~\ref{lemma:propositional-normal-form}. We will now formulate a QBF that expresses that $\varphi$ has an intuitionistic counter-model. The idea how to get a polynomially-sized formula is: Instead of expressing validity at every node of $\mathcal M_T$ --- which was done in the CPC translation --- we express that on each path in $\mathcal M_T$ the nodes satisfy all conditions for $\mathcal M_T$ being a counter-model. The universally quantified variables $X_\psi$ in the next definition handle the branching, i.e. express which path is considered.
 
 \begin{definition}
 	For every propositional variable $A$ occurring in $\varphi$ and non-negative integer $n$ consider a new propositional variable $A^n$ and for every formula $\psi\in\mathcal X$ consider a new propositional variable $X_\psi^n$. Let $\vec A^n$ range over all propositional variables $A^n$ and $\vec X^n$ range over all $X_\psi^n$. Define
@@ -443,8 +441,7 @@ Suppose we are given a formula $\varphi$ in normal form $$\left(\bigwedge R\wedg
 	\begin{align*}
 		\text{\normalfont Valid}(n) = &\left(\bigvee\left\{X^n_\psi\:|\:\psi\in\mathcal X\right\}\right)\wedge\left(\bigwedge \left\{\neg(X^n_{\psi_1}\wedge X^n_{\psi_2})\:|\:\psi_1\neq\psi_2\in\mathcal X\right\}\right)\wedge\\&\left(\bigwedge\left\{\bigwedge\{X^i_\psi\to\neg X^n_\psi\:|\:i < n\}\:|\:\psi\in\mathcal X\right\}\right)\\
 		\text{\normalfont Persistent}(n) = & \bigwedge\left\{A^{n-1}\to A^n\:|\: A \text{ prop. variable with }A^{n-1}\in\vec A^{n-1}, A^n \in\vec A^{n}\right\}\\
-		\text{\normalfont Sat}_{\mathcal R}(n) = &\bigwedge\left\{(A^n\circ B^n)\to C^n\:|\:(A\circ B)\to C\in \mathcal R\right\}\wedge\\
-		&\bigwedge\left\{A^n\to (B^n\circ C^n)\:|\:A\to (B\circ C)\in \mathcal R\right\}\\
+		\text{\normalfont Sat}_{\mathcal R}(n) = &\bigwedge\left\{\bigwedge A^n_i\to\bigvee B^n_j\:|\:\bigwedge_i\mathcal R\right\}\\
 		\text{\normalfont Sat}_{\mathcal X}(n) = & \bigwedge\left\{X^{n-1}_\psi\to (A^n\to B^n)\to C^{n-1}\:|\:\psi = (A\to B)\to C\in\mathcal X\right\}
 	\end{align*}
 \end{definition}
@@ -471,7 +468,7 @@ A simple counting argument shows that for each $n < |\mathcal X|$ we have $|\tex
 Note that the last set of universally quantified variables can be avoided because there is only one assignment that has the chance to falsify $\varphi^Q$, namely the assignment that assigns $1$ to the single $X_\psi^n$ such that $X_\psi^i = 0$ for all $i < n$. Hence, in our final formula we can replace every $X_\psi^n$ with $\bigwedge\{\neg X_\psi^i\:|\:i < n\}$ and remove that quantification over $X_\psi^n$. With that we get the following:
 
 \begin{corollary}
-	Let $N$-\textbf{IntInvalid} be the problem of deciding if a formula $(\bigwedge \mathcal R\wedge\mathcal X)\to P$ as in Lemma~\ref{lemma:propositional-normal-form} with $|\mathcal X|\leq N$ is not intuitionistically valid. Then $N$-\textbf{IntInvalid} is in $\Sigma_{2N-1}^P$. The dual problem $N$-\textbf{IntValid} is in $\Pi_{2N-1}^P$.
+	Let $N$-\textbf{IntInvalid} be the problem of deciding if a formula $(\bigwedge \mathcal R\wedge\bigwedge\mathcal X)\to P$ as in Lemma~\ref{lemma:propositional-normal-form} with $|\mathcal X|\leq N$ is not intuitionistically valid. Then $N$-\textbf{IntInvalid} is in $\Sigma_{2N-1}^P$. The dual problem $N$-\textbf{IntValid} is in $\Pi_{2N-1}^P$.
 \end{corollary}
 
 
