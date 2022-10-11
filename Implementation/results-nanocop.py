@@ -1,6 +1,6 @@
 import os
 
-RESULT_ROOT = "./ILTP-v1.1.2-firstorder-results/"
+RESULT_ROOT = "./ILTP-v1.1.2-firstorder-results-nanocop/"
 
 total_proven = 0
 total_disproven = 0
@@ -18,9 +18,9 @@ for directory in os.listdir(RESULT_ROOT):
             RESULT_ROOT, directory), translation)
         with open(result_path, "r") as result:
             result_text = result.read()
-        if "Refutation found." in result_text:
+        if "is an intuitionistic Theorem" in result_text:
             proven += 1
-        elif "SZS status CounterSatisfiable" in result_text:
+        elif "is an intuitionistic Non-Theorem" in result_text:
             disproven += 1
         else:
             unresolved += 1

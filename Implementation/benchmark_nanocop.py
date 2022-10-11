@@ -27,7 +27,7 @@ for directory in os.listdir(PROBLEM_ROOT):
             RESULT_ROOT, directory), translation)
         with open(result_path, "w") as output_file:
             try:
-                subprocess.run([NANO_PATH, problem_path], stdout=output_file)
+                subprocess.run([NANO_PATH, problem_path], stdout=output_file, timeout=10)
             except subprocess.TimeoutExpired:
                 subprocess.run(["killall", "swipl"])
                 print("timeout", file=output_file)
@@ -37,12 +37,12 @@ for directory in os.listdir(PROBLEM_ROOT):
             problem_text = result.read()    
         if "is an intuitionistic Theorem" in result_text:
             proven += 1
-            assert "Status (intuit.) : Non-Theorem" not in problem_text
-        elif "timeout" in result_text:
-            unresolved += 1
-        else:
+            assert "Status (intuit.) : Non-Theorem" not in problem_text or "Problem negated" in problem_text
+        elif "intuitionistically Satisfiable" in result_text:
             disproven += 1
-            assert "Status (intuit.) : Theorem" not in problem_text
+            assert "Status (intuit.) : Theorem" not in problem_text or "Problem negated" in problem_text
+        else:
+            unresolved += 1
     total_proven += proven
     total_disproven += disproven
     total_unresolved += unresolved

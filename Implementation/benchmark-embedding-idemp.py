@@ -7,8 +7,8 @@ TRANSLATOR = "./eiicl/target/debug/eiicl"
 
 INCLUDE_ROOT = "./ILTP-v1.1.2-firstorder/"
 PROBLEM_ROOT = "./ILTP-v1.1.2-firstorder/Problems/"
-TRANSLATION_ROOT = "./ILTP-v1.1.2-firstorder-translated/"
-RESULT_ROOT = "./ILTP-v1.1.2-firstorder-results/"
+TRANSLATION_ROOT = "./ILTP-v1.1.2-firstorder-translated-embedding-idemp/"
+RESULT_ROOT = "./ILTP-v1.1.2-firstorder-results-embedding-idemp/"
 
 total_proven = 0
 total_disproven = 0
