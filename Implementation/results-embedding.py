@@ -1,7 +1,6 @@
 import os
-import tqdm
 
-RESULT_ROOT = "./ILTP-v1.1.2-firstorder-results-leancop/"
+RESULT_ROOT = "./ILTP-v1.1.2-firstorder-results-embedding/"
 
 total_proven = 0
 total_disproven = 0
@@ -14,14 +13,14 @@ for directory in os.listdir(RESULT_ROOT):
     proven = 0
     disproven = 0
     unresolved = 0
-    for result in tqdm.tqdm(os.listdir(os.path.join(RESULT_ROOT, directory)), desc=f"{directory}"):
+    for translation in os.listdir(os.path.join(RESULT_ROOT, directory)):
         result_path = os.path.join(os.path.join(
-            RESULT_ROOT, directory), result)
-        with open(result_path, "r") as input_file:
-            result_text = input_file.read()
-        if "is an Intuitionistic Theorem" in result_text:
+            RESULT_ROOT, directory), translation)
+        with open(result_path, "r") as result:
+            result_text = result.read()
+        if "Refutation found." in result_text:
             proven += 1
-        elif "is an Intuitionistic Non-Theorem" in result_text:
+        elif "SZS status CounterSatisfiable" in result_text:
             disproven += 1
         else:
             unresolved += 1

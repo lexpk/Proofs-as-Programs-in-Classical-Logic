@@ -1,10 +1,7 @@
 \documentclass[runningheads]{llncs}
 \usepackage{amsmath, amsfonts}
 \usepackage{wrapfig}
-\usepackage{tikz-qtree}
-\usetikzlibrary{positioning}
-\usetikzlibrary{arrows.meta}
-\usetikzlibrary{arrows,shapes,quotes}
+\usepackage{multicol}
 \usepackage[T1]{fontenc}
 % T1 fonts will be used to generate the final print and online PDFs,
 % so please use T1 fonts in your manuscript whenever possible.
@@ -210,83 +207,36 @@ Since we could not find a proof of this result one is given in the appendix as L
 
 \section{Overview}
 
-We shall now give an overview of our main results and highlight the key arguments. Recall that our goal is to give an effective translation procedure that, for a given formula $\varphi$, yields a formula $\varphi^\#$, such that $\varphi$ is intuitionistically valid if and only if $\varphi^\#$ is classically valid. We start with the propositional case. The key arguments are the same as in the first-order case, while it is technically simpler and less cluttered.
+We shall now give an overview of our main results and highlight the key arguments. We start with the propositional case. The key arguments are the same as in the first-order case, while it is technically simpler and less cluttered.
 
-Before our main transformation we employ a preprocessing step akin to the Tseytin transformation~\cite{tseitin1983complexity}, which is a popular pre-processing step in classical automated reasoning:
-It gives an equisatisfiable sentence (over an extended set of propositions) in conjunctive normal form.
-Eliminating all implications, however, is not possible in intuitionistic logic since $A\to B$ is not equivalent to $\neg A\vee B$.
-Still we propose a similar transformation.
-A notable feature of our transformation is that all non-classical content is encapsulated in formulas of type $(A\to B)\to C$, i.e. if there are no such formulas in the transformed formula then the classical validity of the transformed formula immediately implies intuitionistic validity.
+The general idea is to use the Kripke semantics for intuitionistic logic, which are expressed in classical logic, to perform an embedding of formulas. That is, for each formula $\varphi$ we give a formula $\varphi^\#$ that is classically valid if and only if $\varphi$ is intuitionistically valid, establishing a dual to the double negation translation.
 
-\begin{theorem}\label{thm:Tseytin}
-For every propositional formula $\varphi$ there effectively are an atom $P$ and a set of $\mathcal S$ of formulas (over an extended set of propositions) of one of the forms\\
-$\hspace{1cm} A\to (B\wedge C), (A\wedge B)\to C, A\to (B\vee C), (A\vee B)\to C, (A\to B)\to C,$\\
-for atomic $A, B, C$, such that $\varphi$ is intuitionistically valid if and only if $\bigwedge\mathcal S\to P$ is intuitionistically valid. The time complexity of the transformation is linear in the input size.
-\end{theorem}
+The key property that allows us to reduce our encoding, which a priori targets first order logic, to propositional logic, is a reduction of counter-models, which is a proper dual to validity for intuitionistic logic. In particular, given $$\varphi = \left(\bigwedge\mathcal R\wedge\mathcal X\right)\to P$$ as in Lemma~\ref{lemma:propositional-normal-form} we establish:
 
-The main transformation then proceeds in three steps:
-%
-1) We encode as a first-order sentence that the considered formula holds for every Kripke frame.
-Since Kripke frames for propositional logic over a fixed alphabet of propositional variables form a first-order theory this step is rather straightforward.
-%
-2) Next we eliminate some quantifiers via Herbrandization. The only quantifiers eliminated occur in formulas derived from formulas of type $(A\to B)\to C$.
-%
-3) We can then argue that if there is a counter-model for the resulting formula then there is a counter-model with a certain Kripke frame of bounded size completely determined by the number of formulas of type $(A\to B)\to C$.
-This allows us to eliminate the remaining quantifiers by simply enumerating the worlds in that Kripke frame.
+\begin{lemma}
+	If $\varphi$ is intuitionistically invalid then there exists a Kripke counter-model which is a rooted tree with height and degree bounded by $|\mathcal X|$.
+\end{lemma}
 
-Summarizing, we obtain the following result:
+This allows us to embed intuitionistic propositional logic into classical propositional logic.
+
+\begin{lemma}
+	For each propositional formula $\varphi$ there is effectively a formula $\varphi^\#$ with $\mathcal |\varphi^\#|\in\mathcal O(|\mathcal R|\cdot\exp(|\mathcal X|\log(|\mathcal X|)))$ such that $\varphi$ is intuitionistically valid if and only if $\varphi^\#$ is classically valid.
+\end{lemma}
+
+The exact details can be found in Theorem~\ref{thm:prop-translation}. The essential mechanisms is the elimination $\forall$-quantifiers by enumeration of worlds in a sufficiently general Kripke Frame. Instead of expressing correctness at each world of the model we can express that the worlds along some path in the tree are correct. The branching of paths can be expressed through quantification in a quantified boolean formula (QBF) which gives us the following:
+
+\begin{lemma}
+	For each propositional formula $\varphi$ there is effectively a QBF $\varphi^Q$ with $\mathcal |\varphi^Q|\in\mathcal O(|\mathcal R|\cdot|\mathcal X| + |\mathcal X|^3)$ such that $\varphi$ is intuitionistically invalid if and only if $\varphi^Q$ is a satisfiable QBF.
+\end{lemma}
+
+Again, the details can be found in Section~\ref{sec:qbf}. Next we attempt to transport these results to the first order case. There are formulas for which only counter-examples with an infinite Kripke Frame exist. Therefore, there is no hope of completely eliminating terms representing worlds from the final embedding. This also means that our language necessarily becomes more complex. However a number of reductions is still possible.
 
 \begin{theorem}
-\label{thm:reduction-propositional}
-	Let $\mathcal S$ be as in Theorem~\ref{thm:Tseytin} and $\mathcal F_\to\subseteq\mathcal S$ denote the subset of formulas of the form $(A\to B)\to C$ and $\Lambda$ denote the set of sequences without repetition over $\mathcal F_\to$. For each atom $A$ and $k\in\Lambda$ consider a new atom $A^k$. Obtain $\mathcal S^\#$ by including the following formulas:
-	\begin{itemize}
-		\item $A^k\to A^{k\psi}$ for each atom $A$ occurring in $\mathcal S$, $k\in\Lambda$ and $\psi\in\mathcal F_\to$ not occurring in $k$.
-		\item $A^k\to (B^k\circ C^k)$ for each $\circ\in\{\wedge,\vee\}$, $A\to (B\circ C)\in\mathcal S$, $k\in\Lambda$.
-		\item $(A^k\circ B^k)\to C^k$ for each $\circ\in\{\wedge,\vee\}$, $A\to (B\circ C)\in\mathcal S$, $k\in\Lambda$.
-		\item $(A^{k\psi}\to B^{k\psi})\to C^k$ for $\psi = (A\to B)\to C\in\mathcal S$, $k\in\Lambda$ if $\psi$ does not occur in $k$.
-	\end{itemize}
-Then, $\bigwedge S\to P$ is intuitionistically valid iff $\bigwedge S^\#\to P^\epsilon$ is classically valid, where $\epsilon$ denotes the empty sequence. The size of $\mathcal S^\#$ is in $\mathcal O(|\mathcal S|\cdot2^{|\mathcal F_\to|\cdot\log(|\mathcal F_\to|)})$. Futhermore, there is an effective procedure for translating counter-models between the sentences.
+	\label{thm:reduction-first-order-short}
+	There exists a linear-time procedure that gives for every first-order formula $\varphi$ a formula $\varphi^\#$ such that $\varphi$ is intuitionistically valid if and only if $\varphi^\#$ is classically valid. The size of $\varphi^\#$ is in linear in the size of $\varphi$, however, for each $n$-ary relation symbol in $\varphi$ there is a corresponding $n+1$-ary relation symbol in $\varphi^\#$, and $\varphi$ contains a new binary predicate $E$ as well as a number of new function symbols. Furthermore, there is an effective translation between intuitionistic counter-models of $\varphi$ and classical counter-models of $\varphi^\#$.
 \end{theorem}
 
-Instead of explicitly enumerating the worlds of a counter-example of bounded size (as in the reduction stated in the above theorem), we can also do this enumeration implicitly with a quantified boolean formula (QBF).
-We can show that this QBF is satisfiable if and only if there exists a counter-model for our original formula:
-
-\begin{theorem}
-	Let $\mathcal S$ be as in Theorem~\ref{thm:Tseytin} and $\mathcal F_\to\subseteq\mathcal S$ denote the subset of formulas of the form $(A\to B)\to C$. There is an effective procedure that produces a QBF $\varphi^Q$ of size $\mathcal O(|\mathcal S|\cdot|\mathcal F_\to| + |\mathcal F_\to|^3)$ with $2\cdot |\mathcal F_\to|-1$ quantifier alternations such that $\varphi$ is intuitionistically valid if and only if $\varphi^Q$ is not satisfiable. For fixed $N\in\mathbb N$, deciding intuitionistic validity for formulas $\bigwedge \mathcal S\to P$ where $\mathcal S$ is as above and $|\mathcal F_\to| = N$ is therefore in $\Sigma_{2N-1}$.
-\end{theorem}
-
-%\begin{theorem}
-%	For every predicate formula $\varphi$ there exists an effective procedure that yields an atom $P$ and a set $\mathcal S$ of formulas of the forms
-%	$$\forall \vec z(A(\vec a)\to (B(\vec b)\wedge C(\vec c))), \forall \vec z((A(\vec a)\wedge B(\vec b))\to C(\vec c)),$$$$\forall \vec z(A(\vec a)\to (B(\vec b)\vee C(\vec c))),
-%	\forall \vec z((A(\vec a)\vee B(\vec b))\to C(\vec c)),$$$$ \forall \vec z((A(\vec a)\to B(\vec b))\to C(\vec c)),\forall \vec z(\forall xA(\vec a)\to B(\vec b)),$$$$ \forall \vec z(A(\vec a)\to\forall xB(b)), \forall \vec z(\exists xA(\vec a)\to B(\vec b)), \forall \vec z(A(\vec a)\to\exists xB(b))$$for atomic $A, B, C$ and vectors of variables $\vec z, \vec a, \vec b, \vec c$ such that $\varphi$ is intuitionistically valid if and only if $\bigwedge\mathcal S\to P$ is intuitionistically valid. The size of $\mathcal S$ and time complexity of the transformation are linear in the input size.
-%\end{theorem}
-
-We then move to the first-order case. Here the construction is a bit more involved but the underlying approach is the same.
-Again we first perform a Tseytin-like transformation.
-Here the non-classical content is encapsulated by formulas of type $(A\to B)\to C$ and $\forall xA\to B$.
-The details of this translation are given in Section~\ref{section:tseytin}.
-We then proceed similarly to the propositional case.
-Note however that one difficulty arises from the fact that our (classical) domain will now contain on the one hand worlds in the Kripke frame but on the other hand also proper domain elements.
-We resolve this apparent conflict by introducing a special binary predicate $E$, inspired by~\cite{iemhoff2010eskolemization}, encoding which domain elements exists at which world.
-The main transformation then again proceeds in three steps:
-Step 1) and 2) are analogous to the propositional case.
-The real difference arises in step 3):
-While we can also establish the existence of a canonic counter-model whose frame only depends on formulas of type $(A\to B)\to C$ and $\forall xA\to B$, the size of this counter-model is countably infinite in general.
-This is not surprising since certain intuitionistically invalid formulas like the double negation shift $\forall x\neg\neg A(x)\to \neg\neg\forall x A(x)$ don't have finite counter-models.
-Therefore we are not able to eliminate the $\forall$-quantifiers associated with the Kripke semantics.
-However since our translation targets first-order logic, we believe that the introduction of these quantifiers is acceptable.
-%
-Summarizing, we obtain the following result:
-
-\begin{theorem}
-\label{thm:reduction-first-order-short}
-There exists a linear-time procedure that gives for every first-order formula $\varphi$ a formula $\varphi^\#$ such that $\varphi$ is intuitionistically valid if and only if $\varphi^\#$ is classically valid. The size of $\varphi^\#$ is in linear in the size of $\varphi$, however, for each $n$-ary relation symbol in $\varphi$ there is a corresponding $n+1$-ary relation symbol in $\varphi^\#$, and $\varphi$ contains a new binary predicate $E$ as well as a number of new function symbols. Furthermore, there is an effective translation between intuitionistic counter-models of $\varphi$ and classical counter-models of $\varphi^\#$.
-\end{theorem}
-A more detailed account of Theorem~\ref{thm:reduction-first-order-short} is given in Theorem~\ref{thm:fo-translation}.
-
-These results provide an effective framework for using classical provers to check intuitionistic validity. First experiments with the Vampire theorem prover~\cite{kovacs2013first} show promise.
-
-
+A detailed account of the translation can be found in definition~\ref{def:fo-translation}. Finally, we benchmark our translation by translating all problems in the ILTP problem set~\cite{iltp} and applying the Vampire theorem prover~\cite{kovacs2013first} to the translated instances. While this approach falls short of the absolute state of the art in general, under the right circumstances it is a reasonable approach. Since there is still a lot of room for improvement this is a hopeful first sign.
 
 
 \section{Bounded Intuitionistic Counter-models}
@@ -385,7 +335,7 @@ Essentially what this tells us is that for every $m$ at which $\psi$ is fulfille
 \end{remark}
 
 \begin{corollary}
-	If a formula in normal form as in Lemma~\ref{lemma:propositional-normal-form} in intuitionistically invalid then there exists a Kripke counter-model which is a rooted tree with height and degree bounded by $|\mathcal X|$.
+	If a formula in normal form as in Lemma~\ref{lemma:propositional-normal-form} is intuitionistically invalid then there exists a Kripke counter-model which is a rooted tree with height and degree bounded by $|\mathcal X|$.
 \end{corollary}
 
 \section{IPC to CPC}
@@ -396,7 +346,7 @@ We can apply the previous results to give a direct embedding from intuitionistic
 \end{cases}$$
 Now we can replace every $\forall$-quantifier in $\varphi^{CH}$ by enumerating all the ground terms, and then replace all distinct ground instances of relations by new propositional variables yielding a propositional formula. Note that the encoding of partial order becomes redundant with this so we drop it, but we need to keep the persistency constraints. This gives us the following theorem:
 
-\begin{theorem}
+\begin{theorem}\label{thm:prop-translation}
 	Suppose we are given a formula as in Lemma~\ref{lemma:propositional-normal-form}, i.e. of the form
 	$$\left(\bigwedge\mathcal R\wedge\bigwedge\mathcal S\right)\to P$$
 	with flat $\mathcal R$ and implication $\mathcal S$. Let $\Lambda$ denote the set of sequences without repetition over $\mathcal X$. For every propositional variable $A$ and $\lambda\in\Lambda$ consider a new propositional Variable $A^\lambda$. Define $R^\#$ as the union over all sets
@@ -428,7 +378,7 @@ Now we can replace every $\forall$-quantifier in $\varphi^{CH}$ by enumerating a
 	We note that $A^\epsilon  = P^\epsilon = 0$, $A^\psi = P^{\psi}  = 1$ indeed defines a counter-model.
 \end{example}	
 
-\section{IPC to QBF}
+\section{IPC to QBF}\label{sec:qbf}
 
 It is known that a polynomial time translation between QBF and IPC must exist, since both problems are PSPACE complete~\cite{garey1979computers,statman1979intuitionistic}.
 The translation from the last section will serve as starting point for developing the translation in this section.
@@ -471,9 +421,9 @@ Suppose we are given a formula $\varphi$ in normal form $$\left(\bigwedge\mathca
 \end{lemma}
 A proof can be found in the appendix as Lemma~\ref{lemma:QBF}.
 
-A simple counting argument shows that for each $n < |\mathcal X|$ we have $|\text{Valid}(n)|\in \mathcal O(|\mathcal X|^2)$, $|\text{Persistent}(n)|, |\text{Sat}_{\mathcal R}(n)|\in \mathcal O(|\varphi|)$ and $|\text{Sat}_{\mathcal X}(n)|\in \mathcal O(|\mathcal X|)$ so overall we get:
+A simple counting argument shows that for each $n < |\mathcal X|$ we have $|\text{Valid}(n)|\in \mathcal O(|\mathcal X|^2)$, $|\text{Persistent}(n)|, |\text{Sat}_{\mathcal R}(n)|\in \mathcal O(|\mathcal R|)$ and $|\text{Sat}_{\mathcal X}(n)|\in \mathcal O(|\mathcal X|)$ so overall we get:
 \begin{lemma}
-	The size of $\varphi^Q$ is in $\mathcal O(|\varphi|\cdot|\mathcal X| + |\mathcal X|^3)$.
+	The size of $\varphi^Q$ is in $\mathcal O(|\mathcal R|\cdot|\mathcal X| + |\mathcal X|^3)$.
 \end{lemma}
 
 Note that the last set of universally quantified variables can be avoided because there is only one assignment that has the chance to falsify $\varphi^Q$, namely the assignment that assigns $1$ to the single $X_\psi^n$ such that $X_\psi^i = 0$ for all $i < n$. Hence, in our final formula we can replace every $X_\psi^n$ with $\bigwedge\{\neg X_\psi^i\:|\:i < n\}$ and remove that quantification over $X_\psi^n$. With that we get the following:
@@ -485,9 +435,9 @@ Note that the last set of universally quantified variables can be avoided becaus
 
 \section{CQC to IQC}
 
-We now give an analogous transformation for first order logic. Our trick of lifting the sentence to first-order logic to encode the Kripke semantics no longer works in such a straightforward manner, since we already are in first-order logic. However we do it nonetheless! The domain of our classical model will feature on the one hand elements representing worlds in a Kripke frame and on the other hand the domain-elements from the Kripke model. We reconcile these notions by introducing a special binary predicate $E$, first considered in~\cite{baaz2006skolemization} and expanded onto in~\cite{iemhoff2010eskolemization}, where $E(x, u)$ encodes that $x$ is an element of the domain of the world $u$. To encode that some $n$-ary relation $A$ holds at a world $u$ we replace each $n$-ary relation symbol $A$ with a $n+1$-ary relation symbol $A$, interpreting $A(\vec x, u)$ as "$A(\vec x)$ holds at u". Furthermore we write $\vec E(\vec x, u)$ for $\bigwedge\{E(x_i, u)\:|\:x_i\in \vec x\}$. With this we obtain the following encoding of Kripke Semantics:
+We now give an analogous transformation for first order logic. Our trick of lifting the sentence to first-order logic to encode the Kripke semantics no longer works in such a straightforward manner, since we already are in first-order logic. However we do it nonetheless! The domain of our classical model will feature on the one hand elements representing worlds in a Kripke frame and on the other hand the domain-elements from the Kripke model. We reconcile these notions by introducing a special binary predicate $E$, first considered in~\cite{baaz2006skolemization} and expanded onto in~\cite{iemhoff2010eskolemization}, where $E(x, u)$ encodes that $x$ is an element of the domain of the world $u$. To encode that some $n$-ary relation $A$ holds at a world $u$ we extend each $n$-ary relation symbol to a $n+1$-ary relation symbol of the same name, interpreting $A(\vec x, u)$ as "$A(\vec x)$ holds at u". Furthermore we write $\vec E(\vec x, u)$ for $\bigwedge\{E(x_i, u)\:|\:x_i\in \vec x\}$. With this we obtain the following encoding of Kripke Semantics:
 
-\begin{definition}
+\begin{definition}\label{def:fo-translation}
 	Let $\varphi$ be a propositional formula. Define $\varphi^{u}$ inductively:
 	\begin{itemize}
 		\item $\bot^u = \bot$.
@@ -495,7 +445,7 @@ We now give an analogous transformation for first order logic. Our trick of lift
 		\item $(\varphi\circ\psi)^u = \varphi^u\circ\psi^u$ for $\circ\in\{\wedge, \vee\}$.
 		\item $(\varphi\to \psi)^u = \forall w(u\preceq w\to\varphi^{w}\to\psi^{w})$
 		\item $(\exists x\varphi)^u = \exists x(E(x,u)\wedge\varphi^u)$
-		\item $(\forall x\varphi)^u = \forall w(u\preceq w\to E(x, w)\to \varphi^w)$
+		\item $(\forall x\varphi)^u = \forall x\forall w(u\preceq w\to E(x, w)\to \varphi^w)$
 	\end{itemize}
 	where $w$ is some new variable. Let $K(\varphi)$ encode the theory of Kripke structures as well as the predicate $E$, i.e.
 	\begin{align*}
@@ -518,7 +468,31 @@ We now give an analogous transformation for first order logic. Our trick of lift
 	$\varphi$ is intuitionistically valid if and only if $\varphi^C$ is classically valid.
 \end{lemma}
 
-Since we are mixing worlds and proper intuitionistic domain elements in a single classical domain there are some details to be taken care of. A proof is given in the appendix as Lemma~\ref{proof:fo-simplification}.
+\begin{proof}
+	Since we are mixing worlds and proper intuitionistic domain elements in a single classical domain there are some details to be taken care of. We proceed by translation of counter-models.
+	
+	Suppose first we have a counter-model $\mathcal M = (M, I)$ to $\varphi^C$. As a Kripke frame $(W, \leq)$ take $ W = \{m\in M\:|\:\text{ World}^I(m)\}$ and let $\leq$ be $\preceq^I$ restricted to $W$. Then let $M_u = \{m\in M\:|\: E(m, u)\}$ and let $f^{I_u}$ be $f^I$ restricted to $M_u$ and $A^{I_u}(\vec x): \Leftrightarrow A(\vec x, u)$. It is then a straightforward check of definitions that this defines a Kripke counter-model to $\varphi$.
+	
+	The other direction is a bit more involved. Suppose we have a Kripke counter-model to $\varphi$ with frame $(W, \preceq)$ and family of $\Sigma$-structures $(M_w, I_w)_{w\in W}$. In particular, since it is a counter-model there exists $w_0\in W$ and a variable assignment $v$ with $w_0, v\not\models\varphi$. Let $W_0 = \{w\in W\:|\: w_0\preceq w\}$ and define an equivalence relation $\sim$ on $\{(x, u)\:|\:u\in W_0, x\in M_u\}$ via $(x, u)\sim (y, w)$ iff $x = y$ and there exists $v\in W_0$ comparable with both $u, w$ such that $x\in v$ and denote the equivalence class of $(x, u)$ with $[x, u]$. Let $M = W_0\cup \{[x, u]\:|\:u\in W_0, x\in M_u\}$.
+	Now have
+	\begin{itemize}
+		\item $\preceq^I = \leq$ when restricted to $W_0$ and $\prec$ can be interpreted as an arbitrary PO otherwise.
+		\item $E^I(m, w)$ iff $w\in W_0$ and $m = [x, w]$ for some $x\in M_w$.
+		\item $f^I(m_1\dots m_n) =\begin{cases}
+			f^{I_u}(x_1\dots x_n), &\substack{\text{if there are $ u\in W_0, x_i\in M_u$}\\ \text{with $m_i= [x_i, u]$ for all $i$,}}\\
+			w_0, & \text{otherwise.}
+		\end{cases}$
+		\item ${A}^I(m_1\dots m_n, u) \Leftrightarrow\begin{cases}
+			A^{I_u}(x_1\dots x_n), &\substack{\text{if $u\in W_0$ and $\exists x_i\in M_u$}\\\text{with $m_i= [x_i, u]$ for all $i$,}}\\
+			\top, & \text{otherwise.}
+		\end{cases}$
+	\end{itemize}
+	One easily verifies that these are well-defined. Let us now briefly check that this indeed defines a counter-model. Clearly World$(w_0)$ holds and $K(\varphi)$ also holds. All that remains to show is that $M, I, v[w_0/u]\not\models\varphi^u$. We proceed by induction on the height of $\varphi$. Consider e.g. the case where $\varphi$ is of the form $\forall x\psi$.
+	We have to show that
+	$$M, I, v[w_0/u]\models \forall x\forall w(u\preceq w\to E(x, w)\to \psi^w)$$
+	does not hold for some $v$. Now since $\varphi$ is intuitionistically invalid there exists $w_1\in W_0$ and $m\in M_{w_1}$ such that $w_1, v[m/x]\not\models\psi$. By induction hypothesis $M, I, v[w_1/w]\not\models\psi^w$ for some $v$. By definition $M, I, v[w_1/w, [m, w_1]/x]\models E(x, w)$ and $w_0\preceq^I w_1$ holds. Therefore indeed $$M, I, v[w_0/u, w_1/w, [m, w_1]/x]\not\models \forall w(u\preceq w\to E(x, w)\to \psi^w)$$ holds and we are done. The other cases are analogous.\hfill$\square$
+\end{proof}
+
 
 
 Now again due to Lemma~\ref{lemma:first-order-normal-form} it is sufficient to consider formulas $\varphi$ of the form $$\left(\bigwedge\mathcal R\wedge\bigwedge\mathcal X\wedge\bigwedge\mathcal Q\right)\to P$$ with flat clauses $\mathcal R$, implication clauses $\mathcal X$ and quantification clauses $\mathcal Q$, which after Herbrandization leaves us with $$\varphi^{CH} = \text{World}(s)\to K(\varphi)\to\left(\bigwedge R^{uS}\wedge \bigwedge X^{uS}\wedge\bigwedge Q^{uS}\right)\to P(s)$$
@@ -561,27 +535,27 @@ $$Putting all of this together yields the following translation:
 \begin{theorem}\label{thm:fo-translation}
 	Let $\mathcal R,\mathcal X,\mathcal Q$ be as above. For every $n$-ary relation $A$ define a new $n+1$-ary relation of the same name. For every $\psi\in\mathcal \mathcal X\cup\mathcal Q$ define a new function symbol $f_\psi$. Consider a new binary relation symbol $E$ and define $\vec E(\vec x, u) := \bigwedge\{E(x, u)\:|\:x\in\vec x\}$. Obtain $\mathcal R^\#$ by including
 	$$
-		\forall u\forall \vec x(\vec E(\vec x, u)\to\bigwedge_i A_i(\vec a_i, u)\to\bigvee_j B_j(\vec b_j, u))
+		\forall u\forall \vec x\left(\vec E(\vec x, u)\to\bigwedge_i A_i(\vec a_i, u)\to\bigvee_j B_j(\vec b_j, u)\right)
 	$$
  	for each flat clause 
  	$$
- 		\forall \vec x(\bigwedge_i A_i(\vec a_i)\to\bigvee_j B_j(\vec b_j))\in\mathcal R,
+ 		\forall \vec x\left(\bigwedge_i A_i(\vec a_i)\to\bigvee_j B_j(\vec b_j)\right)\in\mathcal R,
  	$$
  	$\mathcal X^\#$ by including
  	$$
- 		\forall u\forall \vec x((A(\vec a, f_\psi(\vec z, u))\to B(\vec b, f_\psi(\vec z, u))\to C(\vec c, u)))
+ 		\forall u\forall \vec x\left(A(\vec a, f_\psi(\vec z, u))\to B(\vec b, f_\psi(\vec z, u))\to C(\vec c, u)\right)
  	$$
  	for each implication clause 
 	$$
-		\psi = \forall \vec x((A(\vec a)\to B(\vec b))\to C(\vec c))\in\mathcal X,
+		\psi = \forall \vec x\left(\left(A(\vec a)\to B(\vec b)\right)\to C(\vec c)\right)\in\mathcal X,
 	$$
 	and $\mathcal Q^\#$ by including
 	$$
-		\forall u\forall \vec x(\forall y(A(\vec a, f_\psi(\vec z, u)))\to B(\vec b, u))
+		\forall u\forall \vec x\left(\forall y\left(A(\vec a, f_\psi(\vec z, u))\right)\to B(\vec b, u)\right)
 	$$
 	for each implication clause 
 	$$
-		\psi = \forall \vec x(\forall y(A(\vec a))\to B(\vec b))\in\mathcal X.
+		\psi = \forall \vec x\left(\forall y\left(A(\vec a)\right)\to B(\vec b)\right)\in\mathcal X.
 	$$
 	Then $\varphi$ is intuitionistically if and only if
 	$$
@@ -603,9 +577,9 @@ It is not possible to completely eliminate worlds from the domain by enumerating
 \begin{wrapfigure}[6]{r}{0.4\textwidth}
 		\vspace*{-1.7cm}
 		\begin{tabular}{l|c|c}
-			Embedding&&\\
+			Embedding&571&21.4\%\\
 			 Embedding (idem.)&557&20.9\%\\
-			ileanCoP 1.2&&\\
+			ileanCoP 1.2&875&32.8\%\\
 			nanoCoP-i 2.0&858&32.1\%\\\hline
 			Total&2669&100\%
 		\end{tabular}
@@ -616,31 +590,31 @@ It is not possible to completely eliminate worlds from the domain by enumerating
 We have benchmarked our first-order translation on version 1.1.2 of the ILTP problem set~\cite{iltp} by performing our translation and then examining the generated classical problem using Vampire~\cite{kovacs2013first}. For comparison the state-of-the-art intuitionistic provers ileanCoP 1.2~\cite{otten2008leancop} and nanoCoP-i 2.0~\cite{otten2021nanocop} are used. All benchmarks were conducted on an Intel Core i5-8400 2.80GHz machine running Linux with a time limit of 10s per problem. Two versions of the translation were tested, one with and one without the additional axioms encoding idempotence. The results can be seen in Figure \ref{fig:a}. In general our approach falls short of the state of the art. However when binning for $|\mathcal Q|$ and $|\mathcal X|$ as seen in Figure~\ref{fig:b} we observe something interesting.
 \begin{figure}
 	\centering
-	\begin{tabular}{c|c|c|c|c|c|c}
-		$|\mathcal Q|$&$|\mathcal X|$&Embedding&Embedding (idem.)&ileanCoP&nanoCoP-i 2.0&Total\\\hline
-		0&0&&157&&61&178\\
-		0&1-2&&130&&96&400\\
-		0&3-5&&17&&40&105\\
-		0&6-10&&4&&7&19\\
-		0&11-20&&0&&3&34\\
-		0&21+&&7&&1&17\\
-		1-2&0&&14&&15&17\\
-		1-2&1-2&&67&&206&270\\
-		1-2&3-5&&77&&122&312\\
-		1-2&6-10&&15&&28&64\\
-		1-2&11+&&4&&6&12\\
-		3-5&0&&14&&16&16\\
-		3-5&1-2&&11&&36&49\\
-		3-5&3-5&&15&&58&159\\
-		3-5&6-10&&16&&83&199\\
-		3-5&11+&&2&&3&38\\
-		6+&0-2&&1&&50&50\\
-		6+&3+&&3&&24&605
+	\begin{tabular}{c|c|lr|lr|lr|lr|c}
+		$|\mathcal Q|$&$|\mathcal X|$&\multicolumn{2}{c}{Embedding}&\multicolumn{2}{c}{Embedding (idem.)}&\multicolumn{2}{c}{ileanCoP}&\multicolumn{2}{c}{nanoCoP-i 2.0}&Total\\\hline
+		0&0		&157&88.2\%	&157&88.2\%		&128&71.9\%		&61&38.1\%	&178\\
+		0&1-2	&119&29.75\%&130&32.5\%		&108&27.0\%		&96&24.0\%	&400\\
+		0&3-5	&16&		&17&16.2\%		&50&47.6\%		&40&28.1\%	&105\\
+		0&6-10	&16&		&4&21.1\%		&9&47.4\%		&7&36.8\%	&19\\
+		0&11-20	&2&			&0&0\%			&2&5.9\%		&3&8.8\%	&34\\
+		0&21+	&8&			&7&41.2\%		&9&52.9\%		&1&5.9\%	&17\\
+		1-2&0	&14&		&14&82.4\%		&16&94.1\%		&15&88.2\%	&17\\
+		1-2&1-2	&70&		&67&24.8\%		&211&78.1\%		&206&76.3\%	&270\\
+		1-2&3-5	&80&		&77&24.7\%		&141&45.2\%		&122&39.1\%	&312\\
+		1-2&6-10&16&		&15&23.4\%		&29&45.3\%		&28&43.8\%	&64\\
+		1-2&11+	&6&			&6&16.2\%		&10&27.0\%		&9&24.3\%	&37\\
+		3-5&0	&14&		&14&87.5\%		&16&100\%		&16&100\%	&16\\
+		3-5&1-2	&14&		&11&22.4\%		&37&75.5\%		&36&73.4\%	&49\\
+		3-5&3-5	&10&		&15&9.4\%		&72&45.3\%		&58&36.5\%	&159\\
+		3-5&6-10&18&		&16&8.0\%		&64&32.2\%		&83&41.7\%	&199\\
+		3-5&11+	&2&			&2&5.3\%		&0&0\%			&3&7.9\%	&38\\
+		6+&0-2	&1&			&1&2.0\%		&49&98.0\%		&50&100\%	&50\\
+		6+&3+	&7&			&3&	0.6\%		&24&3.4\%		&24&3.4\%	&605
 	\end{tabular}
 	\caption{Solved problems binned by $|\mathcal Q|$ and $|\mathcal X|$.}
 	\label{fig:b}
 \end{figure}
-Leveraging the power of Vampire, for low $|\mathcal X|$ and $|\mathcal Q|$ the embedding performs on par or even outperforms the dedicated intuitionistic provers. For larger values the state of the art provers have an advantage, in particular when both parameters are combined. Therefore our tool is already useful if it is known that $|\mathcal X|$ and $|\mathcal Q|$ are small. Another hopeful sign is that the inclusion of idempotence increases performance in particular for larger $|\mathcal X|$ and $|\mathcal Q|$. Further improvements could be achieved by introducing more axioms based on structural properties of the formula.
+Leveraging the power of Vampire, for low $|\mathcal X|$ and $|\mathcal Q|$ the embedding performs on par or even outperforms the dedicated intuitionistic provers. For larger values the state of the art provers have an advantage, in particular when both parameters are combined. Therefore our tool is already useful if it is known that $|\mathcal X|$ and $|\mathcal Q|$ are small. We see that idempotence does not improve performance. On the other hand from a model-theoretic perspective this is quite powerful. We suspect that a more clever encoding of this property could improve our results. There are other restriction on models we could consider encoding based on structural properties of the formula, e.g. the relation between occurrences of different atoms.
 Another interesting observation is that $|\mathcal X|$ and $|\mathcal Q|$ also seem to correlate with success rate for the dedicated intuitionistic provers.
 
 
@@ -650,7 +624,7 @@ Another interesting observation is that $|\mathcal X|$ and $|\mathcal Q|$ also s
 We have presented embeddings of intuitionistic into classical logic for the propositional and the predicate case. Using Kripke semantics and model reduction we have established that the complexity overhead of intuitionistic logic over classical logic can be parametrized by $|\mathcal X|$ and $|\mathcal Q|$. This is directly reflected in the exponential blow-up parametrized by $|\mathcal X|$ in the propositional case and more indirectly in our benchmarks in the predicate case.
 
 A key motivation for our work has been the potential of using classical provers for intuitionistic proofs. Our tests have shown that there are cases where this is already reasonable.
-However, the current complexity considerations are direct consequences of our straightforward constructions. We plan to establish better bounds in future work by utilizing structural properties of the input formula, in particular by constructing smaller counter-examples $\mathcal M_T$ and using redundant axioms to limit the search. Our addition of idempotence axioms has demonstrated that this is a promising approach.
+However, the current complexity considerations are direct consequences of our straightforward constructions. We plan to establish better bounds in future work by utilizing structural properties of the input formula, in particular relations between different atoms. We hope that this will allow the construction of smaller counter-examples $\mathcal M_T$ and the use of redundant axioms to limit search in a more clever way.
 
 On the theoretical side, we also hope to give a new translation from QBF to IPC that improves our understanding of the relationship between intuitionistic propositional logic and the polynomial hierarchy.
 Finally, we plan to complement the counter-model translation presented in this paper by a proof translation.
@@ -704,34 +678,5 @@ On the other hand suppose $\varphi^Q$ is satisfiable. We construct a counter-exa
 Again we proceed iteratively. Interpret $A^\epsilon$ such as $A^0$ is interpreted in some satisfying interpretation of $\varphi^Q$. Suppose we are given a sequence $\psi_1\dots \psi_{n-1}$ such that for $i<n$ having $A^i = A^{\psi_0\dots\psi_{n-1}}$ is part of a satisfying interpretation of $\varphi^Q$, in which $X^i_\psi$ is chosen true iff $\psi = \psi_i$. Let $\psi_n\in\mathcal X$. Consider some interpretation of the $A^n$ that are part of a satisfying assignment where $X^n_\psi$ is true iff $\psi = \psi_n$ and all variables quantified above are chosen as before. Have $A^{\psi_0\dots\psi_n} = A^n$ for each propositional variable $A$. From the definitions it directly follows that construction yields a counter-model for $\varphi^\#$.\hfill$\square$
 \end{proof}
 
-\begin{lemma}\label{proof:fo-simplification}
-	$\varphi$ is intuitionistically valid if and only of $\varphi^C$ is classically valid.
-\end{lemma}
-
-\begin{proof}
-	We proceed by translation of counter-examples. Suppose first we have a counter-example $\mathcal M = (M, I)$ to $\varphi^C$. As a Kripke frame $(W, \leq)$ take all $ W = \{m\in M\:|\:\text{ World}^I(m)\}$ let $\leq$ be $\preceq^I$ restricted to $W$. Then let $M_u = \{m\in M\:|\: E(m, u)\}$ and let $f^{I_u}$ be $f^I$ restricted to $M_u$ and $A^{I_u}(\vec x): \Leftrightarrow A(\vec x, u)$. It is then a straightforward check of definitions that this defines a Kripke counter-model to $\varphi$.
-	
-	The other direction is a bit more involved. Suppose we have a Kripke counter-model to $\varphi$ with frame $(W, \preceq)$ and family of $\Sigma$-structures $(M_w, I_w)_{w\in W}$. In particular, since it is a counter-model there exists $w_0\in W$ with $w_0\not\models\varphi$. Let $W_0 = \{w\in W\:|\: w\geq w_0\}$ and define an equivalence relation $\sim$ on $\{(x, u)\:|\:u\in W_0, x\in M_u\}$ via $(x, u)\sim (y, w)$ iff $x = y$ and there exists $v\in W_0$ comparable with both $u, w$ such that $x\in v$ and denote the equivalence class of $(x, u)$ with $[x, u]$. Let $M = W_0\cup \{[x, u]\:|\:u\in W_0, x\in M_u\}$.
-	Now have
-	\begin{itemize}
-		\item $s^I = w_0$.
-		\item $E^I(m, w)$ iff $w\in W_0$ and $m = [x, w]$ for some $x\in M_w$.
-		\item $f^I(m_1\dots m_n) =\begin{cases}
-			f^{I_u}(x_1\dots x_n), &\substack{\text{if there are $ u\in W_0, x_i\in M_u$}\\ \text{with $m_i= [x_i, u]$ for all $i$,}}\\
-			w_0, & \text{otherwise.}
-		\end{cases}$
-		\item ${A}^I(m_1\dots m_n, u) \Leftrightarrow\begin{cases}
-			A^{I_u}(x_1\dots x_n), &\substack{\text{if $u\in W_0$ and $\exists x_i\in M_u$}\\\text{with $m_i= [x_i, u]$ for all $i$,}}\\
-			\top, & \text{otherwise.}
-		\end{cases}$
-	\end{itemize}
-	One easily verifies that these are well-defined. Let us now briefly check that this indeed defines a counter-model. First of all there ${P}^I(w_0)$ is false, World$(w_0)$ holds and $K(\varphi)$ is also easily verified. All that remains to show is that (for each $v$) $M, I, v[w_0/u]\models\bigwedge\mathcal R^{u}\wedge\bigwedge\mathcal X^{u}$. Consider e.g. the case where $\psi\in\mathcal X$, i.e. is of the form
-	$$ \forall \vec z((A(\vec a)\to B(\vec b))\to C(\vec c))$$
-	We have to show that
-	$$M, I\models \forall \vec z(\vec E(\vec z, w_0)\to \forall w(w_0\preceq w\to A(\vec a, w)\to B(\vec b, w))\to C(\vec c, w_0))$$
-	holds. Suppose towards contradiction that it does not, i.e. there is $\vec z\in M$ such that for all $w\in M$
-	$$\vec E^I(\vec z, w_0)\to (w_0\preceq w\to {A}^I(\vec a, w)\to {B}^I(\vec b, w))\to {C}^I(\vec c, w_0)$$ is false. For that ${C}^I(\vec c, w_0)$ must be false and $\vec E^I(\vec z, w_0)$ must be true so we can write $\vec z = [z_1, u]\dots[z_n, u]$ for some $z_i\in W_{w_0}$. But then by5 definition
-	$$((A^{I_{w_0}}(\vec a)\to B^{I_{w_0}}(\vec b))\to C^{I_{w_0}}(\vec c))[\vec z/z_1\dots z_n]$$ is false in our original Kripke counter-model, so it cannot be a counter-example of $\varphi$, which is a contradiction. The argument for $\psi\in\mathcal R$ is analogous.\hfill$\square$
-\end{proof}
 
 \end{document}

@@ -18,7 +18,7 @@ if not os.path.isdir("ILTP-v1.1.2-firstorder-translated-leancop"):
     os.mkdir("ILTP-v1.1.2-firstorder-translated-leancop")
 if not os.path.isdir("ILTP-v1.1.2-firstorder-results-leancop"):
     os.mkdir("ILTP-v1.1.2-firstorder-results-leancop")
-for directory in os.listdir(PROBLEM_ROOT)[7:]:
+for directory in os.listdir(PROBLEM_ROOT):
     proven = 0
     disproven = 0
     unresolved = 0
@@ -32,7 +32,7 @@ for directory in os.listdir(PROBLEM_ROOT)[7:]:
         translation_path = os.path.join(os.path.join(
             TRANSLATION_ROOT, directory), problem)
         with open(translation_path, "w") as output_file:
-            subprocess.run([TRANSLATOR, "-f", "leancop", "-q2", "-d", "-", problem_path], stdout=output_file)
+            subprocess.run([TRANSLATOR, "-f", "leancop", "-q2", "-t", "stdfof+add_equality", "-d", "-", problem_path], stdout=output_file)
         result_path = os.path.join(os.path.join(
             RESULT_ROOT, directory), problem)
         with open(result_path, "w") as output_file:
