@@ -16,6 +16,9 @@
 %\usepackage{color}
 %\renewcommand\UrlFont{\color{blue}\rmfamily}
 %
+\usepackage{tikz}
+\usetikzlibrary{shapes,backgrounds}
+
 \begin{document}
 	%
 	\title{Embedding Intuitionistic into Classical Logic}
@@ -592,52 +595,78 @@ $$Putting all of this together yields the following translation:
 	The size of the obtained formula is linear in the input. However $|\mathcal X| + |\mathcal Q| + 1$ new function symbols and the new binary predicate $E$ were introduced and each $n$-ary relation has been extended to a $n+1$-ary relation.
 \end{theorem}
 
+
+\begin{wrapfigure}[8]{r}{0.4\textwidth}
+	\vspace*{-.5cm}
+	\begin{tabular}{l|c|c}
+		Embedding&571&21.4\%\\
+		Embedding (idem.)&557&20.9\%\\
+		ileanCoP 1.2&875&32.8\%\\
+		nanoCoP-i 2.0&858&32.1\%\\\hline
+		Total&2669&100\%
+	\end{tabular}
+	\caption{Solved problems.}
+	\label{fig:a}
+\end{wrapfigure}
+
 It is not possible to completely eliminate worlds from the domain by enumerating them since there are formulas with no finite counter-examples. An analogous procedure to the propositional case fails, however we can still retrieve additional axioms that restrict the interpretation of functions. That is, we may assume that $f_\psi(\vec t, w) = w$, if $\exists u(w = f_\psi(\vec t, u))$ for all $\psi\in\mathcal X\cup\mathcal Q$ (i.e. that $f_\psi$ parametrized by $\vec t$ is idempotent), and $f_\psi(\vec t, w) = w$, if $\exists u(w \geq f_\psi(\vec t, u))$ for all $\psi\in\mathcal X$ (which is even stronger than idempotence).
 
 \section{Benchmark}
 
-\begin{wrapfigure}[6]{r}{0.4\textwidth}
-		\vspace*{-1.7cm}
-		\begin{tabular}{l|c|c}
-			Embedding&571&21.4\%\\
-			 Embedding (idem.)&557&20.9\%\\
-			ileanCoP 1.2&875&32.8\%\\
-			nanoCoP-i 2.0&858&32.1\%\\\hline
-			Total&2669&100\%
-		\end{tabular}
-		\caption{Solved problems.}
-		\label{fig:a}
+
+\begin{wrapfigure}[13]{r}{0.4\textwidth}
+	\vspace*{4.9cm}
+	\hspace*{1cm}
+	\begin{tikzpicture}
+		\begin{scope}[opacity=0.3, blend mode=multiply]
+			\def\firstcircle{(90:.75) circle (1.5)}
+			\def\secondcircle{(210:.75) circle (1.5)}
+			\def\thirdcircle{(330:.75) circle (1.5)}
+			\begin{tikzpicture}
+				\begin{scope}[shift={(3cm,-5cm)}, fill opacity=0.5]
+					\fill[red] \firstcircle;
+					\fill[green] \secondcircle;
+					\fill[blue] \thirdcircle;
+					\draw node {$491$};
+					\draw node at (30:1.2) {$30$};
+					\draw node at (150:1.2) {$42$};
+					\draw node at (270:1.2) {$22$};
+					\draw node at (90:1.8) {$8$};
+					\draw node at (210:1.8) {$2$};
+					\draw node at (330:1.8) {$417$};
+				\end{scope}
+			\end{tikzpicture}
+		\end{scope}
+	\end{tikzpicture}
+	\vspace*{-7.1cm}
+	\caption{Symmetric difference. Instances proven by Embedding (red), Embedding (idem.) (green), ileanCoP or nanoCoP (blue)}
+	\label{fig:c}
 \end{wrapfigure}
 
-We have benchmarked our first-order translation on version 1.1.2 of the ILTP problem set~\cite{iltp} by performing our translation and then examining the generated classical problem using Vampire~\cite{kovacs2013first}. For comparison the state-of-the-art intuitionistic provers ileanCoP 1.2~\cite{otten2008leancop} and nanoCoP-i 2.0~\cite{otten2021nanocop} are used. All benchmarks were conducted on an Intel Core i5-8400 2.80GHz machine running Linux with a time limit of 10s per problem. Two versions of the translation were tested, one with and one without the additional axioms encoding idempotence. The results can be seen in Figure \ref{fig:a}. In general our approach falls short of the state of the art. However when binning for $|\mathcal Q|$ and $|\mathcal X|$ as seen in Figure~\ref{fig:b} we observe something interesting.
+We have benchmarked our first-order translation on version 1.1.2 of the ILTP problem set~\cite{iltp} by performing our translation and then examining the generated classical problem using Vampire~\cite{kovacs2013first}. For comparison the state-of-the-art intuitionistic provers ileanCoP 1.2~\cite{otten2008leancop} and nanoCoP-i 2.0~\cite{otten2021nanocop} were used. All benchmarks were conducted on an Intel Core i5-8400 2.80GHz machine running Linux with a time limit of 10s per problem. The problem \textsc{SYN007+1} was removed as our normal form procedure would explode the size of instance.
+
+Two versions of the translation were tested, one with and one without the additional axioms encoding idempotence. The results can be seen in Figure \ref{fig:a}. In general our approach falls short of the state of the art. However when binning for $|\mathcal Q|$ and $|\mathcal X|$ as seen in Figure~\ref{fig:b} we observe good performance for $|\mathcal Q| = 0$ and $|\mathcal X| \leq 3$. Figure~\ref{fig:c} shows that we solve 52 problems not solved by the existing provers.
 \begin{figure}
 	\centering
 	\begin{tabular}{c|c|lr|lr|lr|lr|c}
 		$|\mathcal Q|$&$|\mathcal X|$&\multicolumn{2}{c}{Embedding}&\multicolumn{2}{c}{Embedding (idem.)}&\multicolumn{2}{c}{ileanCoP}&\multicolumn{2}{c}{nanoCoP-i 2.0}&Total\\\hline
 		0&0		&157&88.2\%	&157&88.2\%		&128&71.9\%		&61&38.1\%	&178\\
-		0&1-2	&119&29.75\%&130&32.5\%		&108&27.0\%		&96&24.0\%	&400\\
-		0&3-5	&16&		&17&16.2\%		&50&47.6\%		&40&28.1\%	&105\\
-		0&6-10	&16&		&4&21.1\%		&9&47.4\%		&7&36.8\%	&19\\
-		0&11-20	&2&			&0&0\%			&2&5.9\%		&3&8.8\%	&34\\
-		0&21+	&8&			&7&41.2\%		&9&52.9\%		&1&5.9\%	&17\\
-		1-2&0	&14&		&14&82.4\%		&16&94.1\%		&15&88.2\%	&17\\
-		1-2&1-2	&70&		&67&24.8\%		&211&78.1\%		&206&76.3\%	&270\\
-		1-2&3-5	&80&		&77&24.7\%		&141&45.2\%		&122&39.1\%	&312\\
-		1-2&6-10&16&		&15&23.4\%		&29&45.3\%		&28&43.8\%	&64\\
-		1-2&11+	&6&			&6&16.2\%		&10&27.0\%		&9&24.3\%	&37\\
-		3-5&0	&14&		&14&87.5\%		&16&100\%		&16&100\%	&16\\
-		3-5&1-2	&14&		&11&22.4\%		&37&75.5\%		&36&73.4\%	&49\\
-		3-5&3-5	&10&		&15&9.4\%		&72&45.3\%		&58&36.5\%	&159\\
-		3-5&6-10&18&		&16&8.0\%		&64&32.2\%		&83&41.7\%	&199\\
-		3-5&11+	&2&			&2&5.3\%		&0&0\%			&3&7.9\%	&38\\
-		6+&0-2	&1&			&1&2.0\%		&49&98.0\%		&50&100\%	&50\\
-		6+&3+	&7&			&3&	0.6\%		&24&3.4\%		&24&3.4\%	&605
+		0&1-2	&119&29.8\%&130&32.5\%		&108&27.0\%		&96&24.0\%	&400\\
+		0&3-5	&16&15.2\%	&17&16.2\%		&50&47.6\%		&40&28.1\%	&105\\
+		0&6+	&27&38.6\%	&11&15.7\%		&20&28.6\%		&11&15.7\%	&70\\
+		1-2&0-2	&84&29.3\%	&81&28.2\%		&227&79.1\%		&221&77.0\%	&287\\
+		1-2&3-5	&80&25.6\%	&77&24.7\%		&141&45.2\%		&122&39.1\%	&312\\
+		1-2&6+	&22&21.8\%	&21&20.8\%		&39&38.6\%		&37&36.6\%	&101\\
+		3-5&0-5	&38&17.0\%	&40&17.9\%		&125&55.8\%		&110&49.1\%	&224\\
+		3-5&6+  &20&8.4\%	&18&7.6\%		&64&27.0\%		&86&36.3\%	&237\\
+		6+&0+	&8&1.1\%	&5&0.7\%		&73&9.7\%		&74&9.8\%	&755
 	\end{tabular}
 	\caption{Solved problems binned by $|\mathcal Q|$ and $|\mathcal X|$.}
 	\label{fig:b}
 \end{figure}
-Leveraging the power of Vampire, for low $|\mathcal X|$ and $|\mathcal Q|$ the embedding performs on par or even outperforms the dedicated intuitionistic provers. For larger values the state of the art provers have an advantage, in particular when both parameters are combined. Therefore our tool is already useful if it is known that $|\mathcal X|$ and $|\mathcal Q|$ are small. We see that idempotence does not improve performance. On the other hand from a model-theoretic perspective this is quite powerful. We suspect that a more clever encoding of this property could improve our results. There are other restriction on models we could consider encoding based on structural properties of the formula, e.g. the relation between occurrences of different atoms.
-Another interesting observation is that $|\mathcal X|$ and $|\mathcal Q|$ also seem to correlate with success rate for the dedicated intuitionistic provers.
+
+
+ Therefore our tool is already useful if it is known that $|\mathcal X|$ and $|\mathcal Q|$ are small. We see that idempotence does not improve performance. On the other hand from a model-theoretic perspective it is quite powerful. We suspect that a more clever encoding of this property could improve our results. There are other restrictions on models we could consider, based on structural properties of the formula, e.g. the relation between occurrences of different atoms.
 
 
 
