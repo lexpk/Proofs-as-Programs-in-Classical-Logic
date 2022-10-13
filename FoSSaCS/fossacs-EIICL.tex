@@ -37,7 +37,7 @@
 The famous double negation translation~\cite{glivenko1929quelques,godel1933intuitionistischen} establishes an embedding from classical into intuitionistic logic. Curiously the reverse direction has not been covered in literature. Based on the work in~\cite{claessen2015sat} we establish a small model property for intuitionistic propositional logic in order to utilize its Kripke semantics to give a simple embedding into classical propositional logic and quantified boolean formulas. We transfer there methods to the first order case and also give an embedding of intuitionistic first-order logic into classical first-order-logic.
 This allows a direct application of state-of-the-art classical first-order provers to the problem of determining intuitionistic validity.
 
-A first benchmark shows that under the right circumstances this is a valid approach. Crucially, our constructions support the transfer of counter-models to validity, which is important to model checking applications, where the output of counter-examples is an appreciated feature.
+For certain classes of benchmarks our approach can compete with state-of-the-art provers, in particular when the intuitionistic content is low. Crucially, our constructions support the transfer of counter-models to validity, which is important to model checking applications, where the output of counter-examples is an appreciated feature.
 \end{abstract}
 
 \section{Introduction}
@@ -73,6 +73,28 @@ In summary, our work establishes and then examines the following approach to the
 	\item Translate the classical proof/counter-model of $\varphi^\#$ to a corresponding intuitionistic proof/counter-model of $\varphi$.
 \end{itemize}
 
+
+\subsection*{Main Contributions}
+\begin{itemize}
+	\item Establishing a small model property for intuitionistic propositional logic.
+	\item Embedding intuitionistic propositional logic into classical propositional logic.
+	\item \resizebox*{0.96\hsize}{!}{Embedding intuitionistic propositional logic into quantified boolean formulas.}
+	\item Presenting a model reduction for intuitionistic first-order logic.
+	\item Embedding intuitionistic into classical first-order logic.
+	\item Benchmarking our new approach to intuitionistic theorem proving.  
+\end{itemize}
+
+\subsection*{Related work}
+
+There are various known translations between logics. Most relevant are the double negation translation~\cite{glivenko1929quelques,gentzen1936widerspruchsfreiheit}, the embedding of intuitionistic logic into S4~\cite{basicprooftheory} and of various non-classical logics into higher-order classical logic~\cite{LEO,wisniewski2016tptp}.
+
+Of special relevance is the reduction of intuitionistic propositional logic given in~\cite{claessen2015sat} and examined in~\cite{fiorentini2019proof}, which we further expand upon.
+
+On the other hand there have been attempts to circumvent intuitionistic logic by equipping classical proofs with operational semantics~\cite{Control1,Parigot1}, which however does not permit in general the realizability of $\exists$ and $\vee$.
+
+There are some results relating intuitionistic and classical validity, most famously for $\Pi_2$-formulas in Peano Arithmetic~\cite{friedman1978classically}, but also in some other cases~\cite{schwichtenberg}. However, they only apply in very limited settings.
+
+Finally, of course dedicated theorem provers for intuitionistic logic exists, generally using the inverse method~\cite{mclaughlin2008imogen,pavlov2017whaleprover}, but more recently also based on connection-based calculi~\cite{otten2008leancop,otten2021nanocop}, which also work well for classical logic.
 
 \section{Preliminaries}
 
@@ -236,7 +258,7 @@ Again, the details can be found in Section~\ref{sec:qbf}. Next we attempt to tra
 	There exists a linear-time procedure that gives for every first-order formula $\varphi$ a formula $\varphi^\#$ such that $\varphi$ is intuitionistically valid if and only if $\varphi^\#$ is classically valid. The size of $\varphi^\#$ is in linear in the size of $\varphi$, however, for each $n$-ary relation symbol in $\varphi$ there is a corresponding $n+1$-ary relation symbol in $\varphi^\#$, and $\varphi$ contains a new binary predicate $E$ as well as a number of new function symbols. Furthermore, there is an effective translation between intuitionistic counter-models of $\varphi$ and classical counter-models of $\varphi^\#$.
 \end{theorem}
 
-A detailed account of the translation can be found in definition~\ref{def:fo-translation}. Finally, we benchmark our translation by translating all problems in the ILTP problem set~\cite{iltp} and applying the Vampire theorem prover~\cite{kovacs2013first} to the translated instances. While this method falls short of the absolute state of the art in general, under the right circumstances it is a reasonable approach. Since there is still a lot of room for improvement this is a hopeful first sign.
+A detailed account of the translation can be found in definition~\ref{def:fo-translation}. Finally, we benchmark our translation by translating all problems in the ILTP problem set~\cite{iltp} and applying the Vampire theorem prover~\cite{kovacs2013first} to the translated instances. While this method falls short of the absolute state-of-the-art in general, for certain subsets of benchmarks it beats existing provers, in particular when the intuitionistic content is low. Since there is still a lot of room for improvement this is a hopeful first sign.
 
 
 \section{Bounded Intuitionistic Counter-models}
