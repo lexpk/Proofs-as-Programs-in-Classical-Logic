@@ -37,10 +37,14 @@
 	%
 	\maketitle
 \begin{abstract}
-The famous double negation translation~\cite{glivenko1929quelques,godel1933intuitionistischen} establishes an embedding from classical into intuitionistic logic. Curiously the reverse direction has not been covered in literature. Based on the work in~\cite{claessen2015sat} we establish a small model property for intuitionistic propositional logic in order to utilize its Kripke semantics to give a simple embedding into classical propositional logic and quantified boolean formulas. We transfer these methods to the first-order case and also give an embedding of intuitionistic first-order logic into classical first-order-logic.
-This allows a direct application of state-of-the-art classical first-order provers to the problem of determining intuitionistic validity.
-
-For certain classes of benchmarks our approach can compete with state-of-the-art provers, in particular when the intuitionistic content is low. Crucially, our constructions support the transfer of counter-models to validity, which is important to model checking applications, where the output of counter-examples is an appreciated feature.
+The famous double negation translation~\cite{glivenko1929quelques,godel1933intuitionistischen} establishes an embedding from classical into intuitionistic logic.
+Curiously, the reverse direction has not been covered in literature.
+Utilizing a normal form for intuitionistic logic~\cite{claessen2015sat}, we establish a small model property for intuitionistic propositional logic.
+We use this property for a direct encoding of the Kripke semantics into classical propositional logic and quantified boolean formulas.
+Next, we transfer the developed techniques to the first order case and provide an embedding of intuitionistic first-order logic into classical first-order-logic.
+Our goal here is an encoding that facilitates the use of state-of-the-art provers for classical first-order logic for determining intuitionistic validity.
+In an experimental evaluation, we show that our approach can compete with state-of-the-art provers for certain classes of benchmarks, in particular when the intuitionistic content is low.
+We further note that our constructions support the transfer of counter-models to validity, which is an desired feature in model checking applications.
 \end{abstract}
 
 \section{Introduction}
@@ -84,7 +88,7 @@ In summary, our work establishes and then examines the following approach to the
 	\item \resizebox*{0.96\hsize}{!}{Embedding intuitionistic propositional logic into quantified boolean formulas.}
 	\item Presenting a model reduction for intuitionistic first-order logic.
 	\item Embedding intuitionistic into classical first-order logic.
-	\item Benchmarking our new approach to intuitionistic theorem proving.  
+	\item Benchmarking our new approach to intuitionistic theorem proving.
 \end{itemize}
 
 \subsection*{Related work}
@@ -562,7 +566,7 @@ $$Putting all of this together yields the following translation:
 	$$
 		\forall u\forall \vec x\left(\vec E(\vec x, u)\to\bigwedge_i A_i(\vec a_i, u)\to\bigvee_j B_j(\vec b_j, u)\right)
 	$$
- 	for each flat clause 
+ 	for each flat clause
  	$$
  		\forall \vec x\left(\bigwedge_i A_i(\vec a_i)\to\bigvee_j B_j(\vec b_j)\right)\in\mathcal R,
  	$$
@@ -570,7 +574,7 @@ $$Putting all of this together yields the following translation:
  	$$
  		\forall u\forall \vec x\left(A(\vec a, f_\psi(\vec z, u))\to B(\vec b, f_\psi(\vec z, u))\to C(\vec c, u)\right)
  	$$
- 	for each implication clause 
+ 	for each implication clause
 	$$
 		\psi = \forall \vec x\left(\left(A(\vec a)\to B(\vec b)\right)\to C(\vec c)\right)\in\mathcal X,
 	$$
@@ -578,7 +582,7 @@ $$Putting all of this together yields the following translation:
 	$$
 		\forall u\forall \vec x\left(\forall y\left(A(\vec a, f_\psi(\vec z, u))\right)\to B(\vec b, u)\right)
 	$$
-	for each implication clause 
+	for each implication clause
 	$$
 		\psi = \forall \vec x\left(\forall y\left(A(\vec a)\right)\to B(\vec b)\right)\in\mathcal X.
 	$$
