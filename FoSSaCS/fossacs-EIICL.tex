@@ -34,7 +34,7 @@
 	%
 	\maketitle
 \begin{abstract}
-The famous double negation translation~\cite{glivenko1929quelques,godel1933intuitionistischen} establishes an embedding from classical into intuitionistic logic. Curiously the reverse direction has not been covered in literature. Based on the work in~\cite{claessen2015sat} we establish a small model property for intuitionistic propositional logic which allows us to utilize its Kripke semantics to give a simple embedding into classical propositional logic and quantified boolean formulas. We then transfer this procedure to first-order logic which allows us to give a embedding of intuitionistic first-order logic into classical first-order-logic.
+The famous double negation translation~\cite{glivenko1929quelques,godel1933intuitionistischen} establishes an embedding from classical into intuitionistic logic. Curiously the reverse direction has not been covered in literature. Based on the work in~\cite{claessen2015sat} we establish a small model property for intuitionistic propositional logic in order to utilize its Kripke semantics to give a simple embedding into classical propositional logic and quantified boolean formulas. We transfer there methods to the first order case and also give an embedding of intuitionistic first-order logic into classical first-order-logic.
 This allows a direct application of state-of-the-art classical first-order provers to the problem of determining intuitionistic validity.
 
 A first benchmark shows that under the right circumstances this is a valid approach. Crucially, our constructions support the transfer of counter-models to validity, which is important to model checking applications, where the output of counter-examples is an appreciated feature.
@@ -95,10 +95,10 @@ In this section we fix notation and recall the semantics for classical and intui
 One notable property of classical logic is that a formula $\varphi$ is valid if and only if its negation $\neg\varphi := \varphi\to\bot$ is not satisfiable, i.e. there does not exist a model for it. The same does not hold true for intuitionistic logic as we shall see.
 
 \begin{definition}
-	A \emph{Kripke structure} $\mathcal K = (W, (v_w)_{w\in W})$ consists of a partially ordered set $W$ of \emph{worlds}, called the Kripke \emph{frame}, and a family of valuations $(v_w)_{w\in W}$ such that $v_u(A)\leq v_u(A)$ for all $u\leq w$ and propositional variables $A$ (this is called the \emph{persistency condition}).
+	A \emph{Kripke structure} $\mathcal K = (W, (v_w)_{w\in W})$ consists of a partially ordered set $W$ of \emph{worlds}, called the Kripke \emph{frame}, and an indexed family of valuations $(v_w)_{w\in W}$ such that $v_u(A)\leq v_w(A)$ for all $u\leq w$ and propositional variables $A$ (this is called the \emph{persistency condition}).
 	The model relation between the $v_u$ and formulas $\varphi$ is defined as before, except in the case of implications, where we set
 	\begin{itemize}
-		\item $v_u\models\varphi\to \psi$ iff for all $w\geq u$ we have $w\not\models\varphi$ or $u\models\psi$.
+		\item $v_u\models\varphi\to \psi$ iff for all $w\geq u$ we have $w\not\models\varphi$ or $w\models\psi$.
 	\end{itemize}
 	We say that $\varphi$ is satisfied at a world $u$ if $v_u\models\varphi$ and write $u\models\varphi$. If a formula is satisfied at every world then $\mathcal K$ is a \emph{model} for $\varphi$. A formula is valid if every Kripke structure is a model of it. We denote the set of valid formulas with \emph{IPC} (Intuitionistic Propositional Calculus).
 \end{definition}
@@ -130,23 +130,23 @@ We now recall the semantics of first-order logic:
 		\item $\mathcal M, v\models \varphi\wedge \psi$ iff $\mathcal M, v\models\varphi$ and $\mathcal M, v\models\psi$
 		\item $\mathcal M, v\models \varphi\vee\psi$ iff $\mathcal M, v\models\varphi$ or $\mathcal M, v\models\psi$.
 		\item $\mathcal M, v\models \varphi\to\psi$ iff $\mathcal M, v\not\models\varphi$ or $\mathcal M, v\models\psi$.
-		\item $\mathcal M, v\models\exists x\varphi$ iff there exists $m\in M$ such that $\mathcal M, v[m/a]\models\varphi[a/x]$ where a is a free variable that does not occur in $\varphi$.
-		\item $\mathcal M, v\models\forall x\varphi$ iff for all $m\in M$ we have $\mathcal M, v[m/a]\models\varphi[a/x]$ where a is a free variable that does not occur in $\varphi$.
+		\item $\mathcal M, v\models\exists x\varphi$ iff there exists $m\in M$ such that $\mathcal M, v[m/a]\models\varphi[a/x]$.
+		\item $\mathcal M, v\models\forall x\varphi$ iff for all $m\in M$ we have $\mathcal M, v[m/a]\models\varphi[a/x]$.
 	\end{itemize}
-	A $\Sigma$-structure $\mathcal M$ satisfies $\varphi$ if $\mathcal M, v\models\varphi$ for every $v$, we write $\mathcal M\models\varphi$. A formula is valid if every $\Sigma$-structure $\mathcal M$ satisfies it. We denote the set of valid formulas with \emph{CQC} (Classical Quantified Calculus).
+	 Here $a$ is a free variable that does not occur in $\varphi$. A $\Sigma$-structure $\mathcal M$ satisfies $\varphi$ if $\mathcal M, v\models\varphi$ for every $v$, we write $\mathcal M\models\varphi$. A formula is valid if every $\Sigma$-structure $\mathcal M$ satisfies it. We denote the set of valid formulas with \emph{CQC} (Classical Quantified Calculus).
 \end{definition}
 
 \begin{definition}
-	A $\Sigma$-\emph{Kripke structure} $\mathcal{K}$ is a partially ordered set $W$, called the Kripke \emph{frame}, and a family of $\Sigma$-structures $(\mathcal{M}_w)_{w\in W}$ such that for $u\leq w$ we have $M_u\subseteq M_w$, $f^{I_w}|_{M_u} = f^{I_u}$ and $R^{I_w}|_{M_u} = R^{I_u}$.\footnote{Here $f|_M$ denotes the restriction of $f$ to $M$}
-	The model relation between $\mathcal M_u$, $v$ (targeting $\mathcal M_u$) and formulas $\varphi$ is defined as before, except in the cases of implication and $\forall$-quantification, where we set
+	A $\Sigma$-\emph{Kripke structure} $\mathcal{K}$ is a partially ordered set $W$, called the Kripke \emph{frame}, and an indexed family of $\Sigma$-structures $(\mathcal{M}_w)_{w\in W}$ such that for $u\leq w$ we have $M_u\subseteq M_w$, $f^{I_w}|_{M_u} = f^{I_u}$ and $R^{I_w}|_{M_u} = R^{I_u}$.\footnote{Here $f|_M$ denotes the restriction of $f$ to $M$}
+	The model relation between $\mathcal M_u$, $v$ (mapping into $M_u$) and formulas $\varphi$ is defined as before, except in the cases of implication and $\forall$-quantification, where we set
 	\begin{itemize}
 		\item $\mathcal M_u, v\models \varphi\to\psi$ iff for every $w\geq u$ we have $w, v\not\models\varphi$ or $w, v\models\psi$.
-		\item $\mathcal M_u, v\models\forall x\varphi$ iff for every $w\geq u$ and $m\in M_w$ we have $w, v[m/a]\models\varphi[a/x]$ where a is a free variable that does not occur in $\varphi$.
+		\item $\mathcal M_u, v\models\forall x\varphi$ iff for every $w\geq u$ and $m\in M_w$ we have $w, v[m/a]\models\varphi[a/x]$.
 	\end{itemize}
 	We write $u, v\models\varphi$ if $\mathcal M_u, v\models \varphi$. $\mathcal{K}$ satisfies $\varphi$ if $u, v\models\varphi$ holds for every world $u$ and variable assignment $v$. $\varphi$ is valid if it is satisfied by every Kripke structure.
 	$\varphi$ is valid for some frame (write $W\models\varphi$) if it is satisfied in every Krike structure with that frame. We denote the set of valid formulas with \emph{IQC} (Intuitionistic Quantified Calculus).
 \end{definition}
-In addition to propositional tautologies there are now sentences involving quantifiers which are classically valid but not intuitionistically, e.g., $\neg\forall x A(x)\to \exists x \neg A(x)$.
+In addition to propositional tautologies there are now quantified formulas which are classically valid but not intuitionistically, e.g., $\neg\forall x A(x)\to \exists x \neg A(x)$.
 
 \subsection{Skolemization and Herbrandization}\label{section:herbrandiaztion}
 
@@ -156,13 +156,13 @@ A fresh variable is any variable that does not occur in any of the considered fo
 Whenever we add a function symbol we implicitly extend the signature by some not previously contained symbol.
 
 \begin{definition}
-	For formulas $\varphi$ we define the Skolemization $\varphi^S_Z$ and Herbrandization $\varphi^H_Z$ with respect to $Z$ by simultaneous induction as follows:
+	For formulas $\varphi$ we define the Skolemization $\varphi^S_Z$ and Herbrandization $\varphi^H_Z$ with respect to a set of variables $Z$ by simultaneous induction:
 	\begin{itemize}
 		\item $A^S_Z = A^H_Z = A$ for each atomic $A$.
 		\item $(\varphi\circ\psi)^X_Z = \varphi^X_Z\circ\psi^X_Z$ for $\circ\in\{\wedge, \vee\}$, $X\in\{S, H\}$.
-		\item $(\varphi\to\psi)^S_Z = \varphi^H_Z\to \psi^S_Z$\\$(\varphi\to\psi)^H_Z = \varphi^S_Z\to\psi^H_Z$.
-		\item $(\forall x\varphi)^S_Z = \forall x(\varphi[a/x]^S_{Z\cup\{a\}}[x/a])$ where $a$ is a new free variable\\$(\forall x\varphi)^H_Z = \varphi[s(z_1,\dots,z_n)/x]^H_Z$ where $s$ is a new function, $\{z_1\dots z_n\} = Z$.
-		\item $(\exists x\varphi)^S_Z = \varphi[s(z_1,\dots,z_n)/x]^S_Z$ where $s$ is a new function, $\{z_1\dots z_n\} = Z$\\$(\exists x\varphi)^H_Z = \exists x(\varphi[a/x]^H_{Z\cup\{a\}}[x/a])$ where $a$ is a new free variable.
+		\item $(\varphi\to\psi)^S_Z = \varphi^H_Z\to \psi^S_Z$ and $(\varphi\to\psi)^H_Z = \varphi^S_Z\to\psi^H_Z$.
+		\item $(\forall x\varphi)^S_Z = \forall x(\varphi[a/x]^S_{Z\cup\{a\}}[x/a])$ where $a$ is a new free variable.\\$(\forall x\varphi)^H_Z = \varphi[s(z_1,\dots,z_n)/x]^H_Z$ where $s$ is a new function, $\{z_1\dots z_n\} = Z$.
+		\item $(\exists x\varphi)^S_Z = \varphi[s(z_1,\dots,z_n)/x]^S_Z$ where $s$ is a new function, $\{z_1\dots z_n\} = Z$.\\$(\exists x\varphi)^H_Z = \exists x(\varphi[a/x]^H_{Z\cup\{a\}}[x/a])$ where $a$ is a new free variable.
 	\end{itemize}
 	Let $$\varphi^S = (\exists x_1\dots\exists x_n \varphi[x_1/a_1\dots x_n/a_n])^S_\emptyset$$ and $$\varphi^H = (\forall x_1\dots\forall x_n \varphi[x_1/a_1\dots x_n/a_n])^H_\emptyset$$ where $a_1,\dots,a_n$ are the free variables occurring in $\varphi$.
 \end{definition}
@@ -203,33 +203,33 @@ A similar result holds in the first order case.
 	$$\left(\bigwedge\mathcal R\wedge\bigwedge \mathcal X\wedge\bigwedge\mathcal Q\right)\to P$$where $A_i, B_i, A, B, C$ are atomic. This size of $\mathcal R, \mathcal X, \mathcal Q$ is linear in the size of $\varphi$. In general this formula will contain new function and relation symbols.
 \end{lemma}
 
-Since we could not find a proof of this result one is given in the appendix as Lemma~\ref{proof:first-order-normal-form}.
+Since we could not find a proof of this, one is given in the appendix.
 
 \section{Overview}
 
-We shall now give an overview of our main results and highlight the key arguments. We start with the propositional case. The key arguments are the same as in the first-order case, while it is technically simpler and less cluttered.
+We shall now give an overview of our main results and highlight the key arguments. We start with the propositional case. The important insights are the same as in the first-order case, while it is technically simpler and less cluttered.
 
 The general idea is to use the Kripke semantics for intuitionistic logic, which are expressed in classical logic, to perform an embedding of formulas. That is, for each formula $\varphi$ we give a formula $\varphi^\#$ that is classically valid if and only if $\varphi$ is intuitionistically valid, establishing a dual to the double negation translation.
 
-The key property that allows us to reduce our encoding, which a priori targets first order logic, to propositional logic, is a reduction of counter-models, which is a proper dual to validity for intuitionistic logic. In particular, given $$\varphi = \left(\bigwedge\mathcal R\wedge\mathcal X\right)\to P$$ as in Lemma~\ref{lemma:propositional-normal-form} we establish:
+The key property that allows us to reduce our encoding to propositional logic, which a priori targets first order logic, is a reduction of counter-models. In particular, given $$\varphi = \left(\bigwedge\mathcal R\wedge\mathcal X\right)\to P$$ as in Lemma~\ref{lemma:propositional-normal-form} we establish:
 
 \begin{lemma}
 	If $\varphi$ is intuitionistically invalid then there exists a Kripke counter-model which is a rooted tree with height and degree bounded by $|\mathcal X|$.
 \end{lemma}
 
-This allows us to embed intuitionistic propositional logic into classical propositional logic.
+This allows us to embed intuitionistic propositional logic into classical propositional logic by replacing quantification over worlds by their enumeration.
 
 \begin{lemma}
-	For each propositional formula $\varphi$ there is effectively a formula $\varphi^\#$ with $\mathcal |\varphi^\#|\in\mathcal O(|\mathcal R|\cdot\exp(|\mathcal X|\log(|\mathcal X|)))$ such that $\varphi$ is intuitionistically valid if and only if $\varphi^\#$ is classically valid.
+	For each propositional formula $\varphi$ there is effectively a formula $\varphi^\#$ with $\mathcal |\varphi^\#|\in\mathcal O(|\mathcal R|\cdot\exp(|\mathcal X|\log|\mathcal X|))$ such that $\varphi$ is intuitionistically valid if and only if $\varphi^\#$ is classically valid.
 \end{lemma}
 
-The exact details can be found in Theorem~\ref{thm:prop-translation}. The essential mechanisms is the elimination $\forall$-quantifiers by enumeration of worlds in a sufficiently general Kripke Frame. Instead of expressing correctness at each world of the model we can express that the worlds along some path in the tree are correct. The branching of paths can be expressed through quantification in a quantified boolean formula (QBF) which gives us the following:
+The exact details can be found in Theorem~\ref{thm:prop-translation}. Instead of expressing correctness at each world of the model, we can express that the worlds along some path in the tree are correct. The branching of paths can be expressed through quantification in a quantified boolean formula (QBF) which gives us the following:
 
 \begin{lemma}
 	For each propositional formula $\varphi$ there is effectively a QBF $\varphi^Q$ with $\mathcal |\varphi^Q|\in\mathcal O(|\mathcal R|\cdot|\mathcal X| + |\mathcal X|^3)$ such that $\varphi$ is intuitionistically invalid if and only if $\varphi^Q$ is a satisfiable QBF.
 \end{lemma}
 
-Again, the details can be found in Section~\ref{sec:qbf}. Next we attempt to transport these results to the first order case. There are formulas for which only counter-examples with an infinite Kripke Frame exist. Therefore, there is no hope of completely eliminating terms representing worlds from the final embedding. This also means that our language necessarily becomes more complex. However a number of reductions is still possible.
+Again, the details can be found in Section~\ref{sec:qbf}. Next we attempt to transport these results to the first order case. However, there are formulas for which only counter-examples with an infinite Kripke frame exist. Therefore, there is no hope of completely eliminating terms representing worlds from the final embedding. This also means that our language necessarily becomes more complex. Still, a number of reductions is possible.
 
 \begin{theorem}
 	\label{thm:reduction-first-order-short}
