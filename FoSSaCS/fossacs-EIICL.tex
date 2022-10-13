@@ -3,6 +3,7 @@
 \usepackage{wrapfig}
 \usepackage{multicol}
 \usepackage[T1]{fontenc}
+\usepackage{todonotes}
 % T1 fonts will be used to generate the final print and online PDFs,
 % so please use T1 fonts in your manuscript whenever possible.
 % Other font encondings may result in incorrect characters.
@@ -37,14 +38,14 @@
 	%
 	\maketitle
 \begin{abstract}
-The famous double negation translation~\cite{glivenko1929quelques,godel1933intuitionistischen} establishes an embedding from classical into intuitionistic logic.
+The famous double negation translation~\cite{glivenko1929quelques,godel1933intuitionistischen} establishes an embedding of classical into intuitionistic logic.
 Curiously, the reverse direction has not been covered in literature.
 Utilizing a normal form for intuitionistic logic~\cite{claessen2015sat}, we establish a small model property for intuitionistic propositional logic.
 We use this property for a direct encoding of the Kripke semantics into classical propositional logic and quantified boolean formulas.
 Next, we transfer the developed techniques to the first order case and provide an embedding of intuitionistic first-order logic into classical first-order-logic.
 Our goal here is an encoding that facilitates the use of state-of-the-art provers for classical first-order logic for determining intuitionistic validity.
 In an experimental evaluation, we show that our approach can compete with state-of-the-art provers for certain classes of benchmarks, in particular when the intuitionistic content is low.
-We further note that our constructions support the transfer of counter-models to validity, which is an desired feature in model checking applications.
+We further note that our constructions support the transfer of counter-models to validity, which is a desired feature in model checking applications.
 \end{abstract}
 
 \section{Introduction}
@@ -66,43 +67,44 @@ There have also been some successful attempts to study intuitionistic validity v
 We finally add that, in contrast to intuitionistic provers, a tremendous amount of work has been put into optimizing provers for classical logic.
 
 With this work we want to leverage the progress in classical reasoning for intuitionistic logic.
-To this end, we give an embedding from intuitionistic logic into classical logic. 
-That is, we give an effective procedure that returns for each formula $\varphi$ a modified formula $\varphi^\#$, such that $\varphi$ is intuitionistically valid if and only if $\varphi^\#$ is classically valid.
-Interestingly, the reverse direction, the famous double-negation translation, has long been established and goes back to Glivenko~\cite{glivenko1929quelques} in the propositional case, and to G\"odel~\cite{godel1933intuitionistischen} and Gentzen~\cite{gentzen1936widerspruchsfreiheit} in the first-order case. In the propositional case it is particularly simple: $\varphi$ is classically valid if and only if $\neg\neg\varphi$ is intuitionistically valid. Intuitively the translation collapses for each subformula $\psi$ of $\varphi$ the truth values of $\psi$ and $\neg\neg\psi$, which are classically but not intuitionistically equivalent. This gives us a first idea why the reverse direction is perhaps more difficult: We need to expand the truth values of $\psi$ and $\neg\neg\psi$, i.e. if they both occur in $\varphi$, we must have a way to (classically) assign different truth values to their respective counterparts in $\varphi^\#$. In particular, this necessitates the introduction of new propositional variables in our procedure, which already marks a big difference to the double negation translation.
-%
-In addition to the translation of formulas we give an effective translation of counter-models, i.e. for each intuitionistic counter-model of $\varphi$ we can effectively construct a classical counter-model of $\varphi^\#$ and vice versa.
-We note that the existence of counter-models is a key notion that forms a proper dual to validity --- whereas the satisfiability of the negation is not necessary for invalidity (in contrast to classical logic, where it is a proper dual to validity).
-Transforming and reducing counter-models to a normal form is also what ultimately enables our translation.
-
-In summary, our work establishes and then examines the following approach to theorem proving for intuitionistic logic:
+To this end, we propose the following methodology:
 \begin{itemize}
-	\item Translate the input formula $\varphi$ to $\varphi^\#$, which is classically valid if and only if $\varphi$ is intuitionistically valid.
+	\item Translate an input formula $\varphi$ to a formula $\varphi^\#$, which is classically valid if and only if $\varphi$ is intuitionistically valid.
 	\item Determine the classical validity of $\varphi^\#$ using a prover for classical logic, resulting in a proof or counter-model.
 	\item Translate the classical proof/counter-model of $\varphi^\#$ to a corresponding intuitionistic proof/counter-model of $\varphi$.
 \end{itemize}
-
-
-\subsection*{Main Contributions}
+\textbf{Contributions.} We now overview the main results of this paper (which we discuss in more detail in Sections~\ref{sec:overview} and~\ref
 \begin{itemize}
-	\item Establishing a small model property for intuitionistic propositional logic.
-	\item Embedding intuitionistic propositional logic into classical propositional logic.
-	\item \resizebox*{0.96\hsize}{!}{Embedding intuitionistic propositional logic into quantified boolean formulas.}
-	\item Presenting a model reduction for intuitionistic first-order logic.
-	\item Embedding intuitionistic into classical first-order logic.
-	\item Benchmarking our new approach to intuitionistic theorem proving.
+	\item We establish a small model property for counter-models to validity in intuitionistic propositional logic.
+	\item Based on the small model property, we provide an embedding of intuitionistic propositional logic into classical propositional logic and into quantified boolean formulas, i.e., we provide an 
+	\item We discuss the reduction of counter-models in intuitionistic first-order logic and, based on this reduction, present an embedding intuitionistic into classical first-order logic.
+	\item We provide an experimental evaluation on the use of provers for classical first-order logic for determining intuitionistic validity.
+ We show that our approach can compete with state-of-the-art provers for certain classes of benchmarks, in particular when the intuitionistic content is low.
 \end{itemize}
 
 \subsection*{Related work}
+The famous double-negation translation establishes
+an embedding of classical into intuitionistic logic, going back to Glivenko~\cite{glivenko1929quelques} in the propositional case, and to G\"odel~\cite{godel1933intuitionistischen} and Gentzen~\cite{gentzen1936widerspruchsfreiheit} in the first-order case.
+In the propositional case the embedding is particularly simple: 
+A formula $\varphi$ is classically valid if and only if $\neg\neg\varphi$ is intuitionistically valid. 
+Intuitively, the translation collapses for each subformula $\psi$ of $\varphi$ the truth values of $\psi$ and $\neg\neg\psi$, which are classically but not intuitionistically equivalent.
+For embedding intuitionistic into classical logic, we need to do the opposite:
+We need to expand the truth values of $\psi$ and $\neg\neg\psi$, i.e., if they both occur in $\varphi$, we must have a way to (classically) assign different truth values to their respective counterparts in $\varphi^\#$.
+This necessitates the introduction of new propositional variables in our procedure, which marks a big difference to the double negation translation.
 
-There are various known translations between logics. Most relevant are the double negation translation~\cite{glivenko1929quelques,gentzen1936widerspruchsfreiheit}, the embedding of intuitionistic logic into S4~\cite{basicprooftheory} and of various non-classical logics into higher-order classical logic~\cite{LEO,wisniewski2016tptp}.
+We further mention some translations between logics from the literature.
+Most relevant are the embedding of intuitionistic logic into S4~\cite{basicprooftheory} and of various non-classical logics into higher-order classical logic~\cite{LEO,wisniewski2016tptp} \todo{why are they relevant?}.
+Of special relevance is the reduction of intuitionistic propositional logic given in~\cite{claessen2015sat}
+\todo{reduction to what?} and examined in~\cite{fiorentini2019proof} \todo{what has been examined here?}, which we further expand upon in this paper.
 
-Of special relevance is the reduction of intuitionistic propositional logic given in~\cite{claessen2015sat} and examined in~\cite{fiorentini2019proof}, which we further expand upon.
-
+\todo{This paragraph is more about realizability, right? So remove, or connect to paper?}
 On the other hand there have been attempts to circumvent intuitionistic logic by equipping classical proofs with operational semantics~\cite{Control1,Parigot1}, which however does not permit in general the realizability of $\exists$ and $\vee$.
 
-There are some results relating intuitionistic and classical validity, most famously for $\Pi_2$-formulas in Peano Arithmetic~\cite{friedman1978classically}, but also in some other cases~\cite{schwichtenberg}. However, they only apply in very limited settings.
+We finally mention a long-standing line of research that has investigated when classical validity implies intuitionistic validity.
+This most famously holds for $\Pi_2$-formulas in Peano Arithmetic~\cite{friedman1978classically}, but also other conditions are known~\cite{schwichtenberg}. 
+In contrast, we propose a translation of an intuitionistic formula to an equi-valid classical formula.
 
-Finally, of course dedicated theorem provers for intuitionistic logic exists, generally using the inverse method~\cite{mclaughlin2008imogen,pavlov2017whaleprover}, but more recently also based on connection-based calculi~\cite{otten2008leancop,otten2021nanocop}, which also work well for classical logic.
+%Finally, of course dedicated theorem provers for intuitionistic logic exists, generally using the inverse method~\cite{mclaughlin2008imogen,pavlov2017whaleprover}, but more recently also based on connection-based calculi~\cite{otten2008leancop,otten2021nanocop}, which also work well for classical logic.
 
 \section{Preliminaries}
 
@@ -236,6 +238,7 @@ A similar result holds in the first order case.
 Since we could not find a proof of this, one is given in the appendix.
 
 \section{Overview}
+\label{sec:overview}
 
 We shall now give an overview of our main results and highlight the key arguments. We start with the propositional case. The important insights are the same as in the first-order case, while it is technically simpler and less cluttered.
 
