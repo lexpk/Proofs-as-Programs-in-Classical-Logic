@@ -236,7 +236,7 @@ Again, the details can be found in Section~\ref{sec:qbf}. Next we attempt to tra
 	There exists a linear-time procedure that gives for every first-order formula $\varphi$ a formula $\varphi^\#$ such that $\varphi$ is intuitionistically valid if and only if $\varphi^\#$ is classically valid. The size of $\varphi^\#$ is in linear in the size of $\varphi$, however, for each $n$-ary relation symbol in $\varphi$ there is a corresponding $n+1$-ary relation symbol in $\varphi^\#$, and $\varphi$ contains a new binary predicate $E$ as well as a number of new function symbols. Furthermore, there is an effective translation between intuitionistic counter-models of $\varphi$ and classical counter-models of $\varphi^\#$.
 \end{theorem}
 
-A detailed account of the translation can be found in definition~\ref{def:fo-translation}. Finally, we benchmark our translation by translating all problems in the ILTP problem set~\cite{iltp} and applying the Vampire theorem prover~\cite{kovacs2013first} to the translated instances. While this approach falls short of the absolute state of the art in general, under the right circumstances it is a reasonable approach. Since there is still a lot of room for improvement this is a hopeful first sign.
+A detailed account of the translation can be found in definition~\ref{def:fo-translation}. Finally, we benchmark our translation by translating all problems in the ILTP problem set~\cite{iltp} and applying the Vampire theorem prover~\cite{kovacs2013first} to the translated instances. While this method falls short of the absolute state of the art in general, under the right circumstances it is a reasonable approach. Since there is still a lot of room for improvement this is a hopeful first sign.
 
 
 \section{Bounded Intuitionistic Counter-models}
@@ -262,7 +262,7 @@ The most obvious approach to embedding intuitionistic into classical logic is to
 	$$\varphi^{C} = K(\varphi)\to \forall u\varphi^{u}.$$
 \end{definition}
 
-\noindent As all we have done is modeling Kripke frames as a first-order theory so we directly obtain:
+\noindent All we have done is model Kripke semantics as a first-order theory, so we obtain:
 
 \begin{lemma}
 	$\varphi$ is intuitionistically valid if and only if $\varphi^C$ is classically valid.
@@ -331,7 +331,7 @@ Essentially what this tells us is that for every $m$ at which $\psi$ is fulfille
 \end{corollary}
 
 \begin{remark}
-	It is well known that Kripke frames which are trees are complete with regard to intuitionistic logic. Our contribution is giving an easy to compute explicit size and geometry that depends only on the structure of the considered formula.
+	It is well known that Kripke frames which are trees are complete with regard to intuitionistic logic. Our contribution is giving an explicit bound to height and degree that depends only on a simple property of the considered formula.
 \end{remark}
 
 \begin{corollary}
@@ -340,11 +340,11 @@ Essentially what this tells us is that for every $m$ at which $\psi$ is fulfille
 
 \section{IPC to CPC}
 
-We can apply the previous results to give a direct embedding from intuitionistic into classical propositional logic. We know that $\varphi^{CH}$ is valid iff it is valid for structures that have as a domain the sequences without repetition over $\mathcal F_\to$, ordered by the prefix-relation and $$s^I = \epsilon, f_\psi^I(x) = \begin{cases}
+We can apply the previous results to give a direct embedding from intuitionistic into classical propositional logic. We know that $\varphi^{CH}$ is valid if and only if it is valid for structures that have as a domain the sequences without repetition over $\mathcal X$, ordered by the prefix-relation and $$s^I = \epsilon, f_\psi^I(x) = \begin{cases}
 	x, &\text{ if $\psi$ occurs in $x$,}\\
 	x\psi, &\text{ otherwise.}
 \end{cases}$$
-Now we can replace every $\forall$-quantifier in $\varphi^{CH}$ by enumerating all the ground terms, and then replace all distinct ground instances of relations by new propositional variables yielding a propositional formula. Note that the encoding of partial order becomes redundant with this so we drop it, but we need to keep the persistency constraints. This gives us the following theorem:
+Now we can replace every $\forall$-quantifier in $\varphi^{CH}$ by enumerating all the ground terms, and then replace all distinct ground instances of relations by new propositional variables yielding a propositional formula. Note that the encoding of the partial order becomes redundant, so we drop it. We need to keep the persistency constraints. This gives us the following theorem:
 
 \begin{theorem}\label{thm:prop-translation}
 	Suppose we are given a formula as in Lemma~\ref{lemma:propositional-normal-form}, i.e. of the form
@@ -355,13 +355,13 @@ Now we can replace every $\forall$-quantifier in $\varphi^{CH}$ by enumerating a
 	$$
 	for $\bigwedge_iA_i\to\bigvee_jB_j\in\mathcal R$ and $\mathcal X^\#$ as the union over all sets
 	$$
-		\left\{\left(A^{\lambda\psi} \to A^{\lambda\psi}\right)\to(C^\lambda)\:|\:\lambda\in\Lambda, \psi\text{ does not occur in }\lambda\right\}
+		\left\{\left(A^{\lambda\psi} \to A^{\lambda\psi}\right)\to C^\lambda\:|\:\lambda\in\Lambda, \psi\text{ does not occur in }\lambda\right\}
 	$$
 	for $\psi = (A\to B)\to C\in\mathcal X$ as well as $P^\#$ as the union over all sets
 	$$
-		\left\{A^\lambda\to A^{\lambda\psi}\:|\:\lambda\in\Lambda, \psi\psi\text{ does not occur in }\lambda\right\}
+		\left\{A^\lambda\to A^{\lambda\psi}\:|\:\lambda\in\Lambda, \psi\text{ does not occur in }\lambda\right\}
 	$$
-	 for each propositional variable $A$ occurring in $\varphi$ encoding persistency. Then
+	 for each propositional variable $A$ occurring in $\varphi$, encoding persistency. Then
 	$$
 		\varphi^\# := \left(\bigwedge P^\#\wedge\bigwedge \mathcal R^\#\wedge\bigwedge\mathcal X^\#\right)\to P^\epsilon
 	$$
@@ -394,9 +394,9 @@ Suppose we are given a formula $\varphi$ in normal form $$\left(\bigwedge\mathca
 		\item {\normalfont Sat}$_{\mathcal R}(n)$ encoding that the formulas in $\mathcal R$ hold at the $n$-th world of the path.
 		\item {\normalfont Sat}$_{\mathcal X}(n)$ encoding that the formula in $\mathcal X$ that is represented by $\vec X^{n-1}$ holds.
 	\end{itemize}
-	Have $k = |\mathcal X|$ and define$$\varphi^Q_{i} = \exists \vec A^i\forall \vec X^i\left(\text{\normalfont Persistent}(i)\wedge \text{\normalfont Sat}_{\mathcal R}(i)\wedge \text{\normalfont Sat}_{\mathcal X}(i)\wedge\left(\text{\normalfont Valid}(i)\to \varphi^Q_{i+1}\right)\right)$$
-	for $0 < i < k$, as well as the special cases
-	$$\varphi^Q_{k} = \exists \vec A^k\left(\text{\normalfont Persistent}(k)\wedge \text{\normalfont Sat}_{\mathcal R}(k)\wedge \text{\normalfont Sat}_{\mathcal X}(k)\right)$$
+	Define$$\varphi^Q_{i} = \exists \vec A^i\forall \vec X^i\left(\text{\normalfont Persistent}(i)\wedge \text{\normalfont Sat}_{\mathcal R}(i)\wedge \text{\normalfont Sat}_{\mathcal X}(i)\wedge\left(\text{\normalfont Valid}(i)\to \varphi^Q_{i+1}\right)\right)$$
+	for $0 < i < |\mathcal{X}|$, as well as the special cases
+	$$\varphi^Q_{|\mathcal{X}|} = \exists \vec A^{|\mathcal{X}|}\left(\text{\normalfont Persistent}(|\mathcal{X}|)\wedge \text{\normalfont Sat}_{\mathcal R}(|\mathcal{X}|)\wedge \text{\normalfont Sat}_{\mathcal X}(|\mathcal{X}|)\right)$$
 	for leafs, and $$\varphi^Q = \varphi_0^Q = \exists \vec A^0\forall \vec X^0\left(\neg P^0\wedge \text{\normalfont Sat}_{\mathcal R}(0)\wedge(\text{\normalfont Valid}(0)\to \varphi_1^Q)\right)$$for the root.
 	Example encodings of the above formulas are:
 	\begin{align*}
