@@ -67,18 +67,19 @@ There have also been some successful attempts to study intuitionistic validity v
 We finally add that, in contrast to intuitionistic provers, a tremendous amount of work has been put into optimizing provers for classical logic.
 
 With this work we want to leverage the progress in classical reasoning for intuitionistic logic.
-To this end, we propose the following methodology:
+To this end, we study embeddings of intuitionistic into classical logic and propose the following methodology:
 \begin{itemize}
 	\item Translate an input formula $\varphi$ to a formula $\varphi^\#$, which is classically valid if and only if $\varphi$ is intuitionistically valid.
 	\item Determine the classical validity of $\varphi^\#$ using a prover for classical logic, resulting in a proof or counter-model.
 	\item Translate the classical proof/counter-model of $\varphi^\#$ to a corresponding intuitionistic proof/counter-model of $\varphi$.
 \end{itemize}
-\textbf{Contributions.} We now overview the main results of this paper (which we discuss in more detail in Sections~\ref{sec:overview} and~\ref
+\subsection*{Contributions} 
+We now overview the main results of this paper (which we discuss in more detail in Sections~\ref{sec:overview} and~\ref{sec:evaluation}):
 \begin{itemize}
 	\item We establish a small model property for counter-models to validity in intuitionistic propositional logic.
-	\item Based on the small model property, we provide an embedding of intuitionistic propositional logic into classical propositional logic and into quantified boolean formulas, i.e., we provide an 
-	\item We discuss the reduction of counter-models in intuitionistic first-order logic and, based on this reduction, present an embedding intuitionistic into classical first-order logic.
-	\item We provide an experimental evaluation on the use of provers for classical first-order logic for determining intuitionistic validity.
+	\item Based on the small model property, we provide an embedding of intuitionistic propositional logic into classical propositional logic and into quantified boolean formulas.
+	\item We discuss the reduction of counter-models in intuitionistic first-order logic and, based on this reduction, present an embedding of intuitionistic into classical first-order logic.
+	\item We provide an experimental evaluation on the use of first-order provers for classical logic for determining intuitionistic validity.
  We show that our approach can compete with state-of-the-art provers for certain classes of benchmarks, in particular when the intuitionistic content is low.
 \end{itemize}
 
@@ -253,7 +254,7 @@ The key property that allows us to reduce our encoding to propositional logic, w
 This allows us to embed intuitionistic propositional logic into classical propositional logic by replacing quantification over worlds by their enumeration.
 
 \begin{lemma}
-	For each propositional formula $\varphi$ there is effectively a formula $\varphi^\#$ with $\mathcal |\varphi^\#|\in\mathcal O(|\mathcal R|\cdot\exp(|\mathcal X|\log|\mathcal X|))$ such that $\varphi$ is intuitionistically valid if and only if $\varphi^\#$ is classically valid.
+	For each propositional formula $\varphi$ there is effectively a formula $\varphi^\#$ with $\mathcal |\varphi^\#|\in\mathcal O(|\mathcal R|\cdot 2^{|\mathcal X|\log|\mathcal X|})$ such that $\varphi$ is intuitionistically valid if and only if $\varphi^\#$ is classically valid.
 \end{lemma}
 
 The exact details can be found in Theorem~\ref{thm:prop-translation}. Instead of expressing correctness at each world of the model, we can express that the worlds along some path in the tree are correct. The branching of paths can be expressed through quantification in a quantified boolean formula (QBF) which gives us the following:
@@ -269,7 +270,7 @@ Again, the details can be found in Section~\ref{sec:qbf}. Next we attempt to tra
 	There exists a linear-time procedure that gives for every first-order formula $\varphi$ a formula $\varphi^\#$ such that $\varphi$ is intuitionistically valid if and only if $\varphi^\#$ is classically valid. The size of $\varphi^\#$ is in linear in the size of $\varphi$, however, for each $n$-ary relation symbol in $\varphi$ there is a corresponding $n+1$-ary relation symbol in $\varphi^\#$, and $\varphi$ contains a new binary predicate $E$ as well as a number of new function symbols. Furthermore, there is an effective translation between intuitionistic counter-models of $\varphi$ and classical counter-models of $\varphi^\#$.
 \end{theorem}
 
-A detailed account of the translation can be found in definition~\ref{def:fo-translation}. Finally, we benchmark our translation by translating all problems in the ILTP problem set~\cite{iltp} and applying the Vampire theorem prover~\cite{kovacs2013first} to the translated instances. While this method falls short of the absolute state-of-the-art in general, for certain subsets of benchmarks it beats existing provers, in particular when the intuitionistic content is low. Since there is still a lot of room for improvement this is a hopeful first sign.
+A detailed account of the translation can be found in Definition~\ref{def:fo-translation}. Finally, we benchmark our translation by translating all problems in the ILTP problem set~\cite{iltp} and applying the Vampire theorem prover~\cite{kovacs2013first} to the translated instances. While this method falls short of the absolute state-of-the-art in general, for certain subsets of benchmarks it beats existing provers, in particular when the intuitionistic content is low. Since there is still a lot of room for improvement this is a hopeful first sign.
 
 
 \section{Bounded Intuitionistic Counter-models}
@@ -619,7 +620,8 @@ $$Putting all of this together yields the following translation:
 
 It is not possible to completely eliminate worlds from the domain by enumerating them since there are formulas with no finite counter-examples. An analogous procedure to the propositional case fails, however we can still retrieve additional axioms that restrict the interpretation of functions. That is, we may assume that $f_\psi(\vec t, w) = w$, if $\exists u(w = f_\psi(\vec t, u))$ for all $\psi\in\mathcal X\cup\mathcal Q$ (i.e. that $f_\psi$ parametrized by $\vec t$ is idempotent), and $f_\psi(\vec t, w) = w$, if $\exists u(w \geq f_\psi(\vec t, u))$ for all $\psi\in\mathcal X$ (which is even stronger than idempotence).
 
-\section{Benchmark}
+\section{Experimental Evaluation}
+\label{sec:evaluation}
 
 
 \begin{wrapfigure}[13]{r}{0.4\textwidth}
@@ -651,9 +653,15 @@ It is not possible to completely eliminate worlds from the domain by enumerating
 	\label{fig:c}
 \end{wrapfigure}
 
-We have benchmarked our first-order translation on version 1.1.2 of the ILTP problem set~\cite{iltp} by performing our translation and then examining the generated classical problem using Vampire~\cite{kovacs2013first}. For comparison the state-of-the-art intuitionistic provers ileanCoP 1.2~\cite{otten2008leancop} and nanoCoP-i 2.0~\cite{otten2021nanocop} were used. All benchmarks were conducted on an Intel Core i5-8400 2.80GHz machine running Linux with a time limit of 10s per problem. The problem \textsc{SYN007+1} was removed as our normal form procedure would explode the size of instance.
+We have benchmarked our first-order translation on version 1.1.2 of the ILTP problem set~\cite{iltp} by performing our translation and then examining the generated classical problem using Vampire~\cite{kovacs2013first}. 
+For comparison the state-of-the-art intuitionistic provers ileanCoP 1.2~\cite{otten2008leancop} and nanoCoP-i 2.0~\cite{otten2021nanocop} were used. All benchmarks were conducted on an Intel Core i5-8400 2.80GHz machine running Linux with a time limit of 10s per problem. The problem \textsc{SYN007+1} was removed as our normal form procedure would explode the size of instance.
 
-Two versions of the translation were tested, one with and one without the additional axioms encoding idempotence. The results can be seen in Figure \ref{fig:a}. In general our approach falls short of the state of the art. However when binning for $|\mathcal Q|$ and $|\mathcal X|$ as seen in Figure~\ref{fig:b} we observe good performance for $|\mathcal Q| = 0$ and $|\mathcal X| \leq 3$. Figure~\ref{fig:c} shows that we solve 52 problems not solved by the existing provers.
+Two versions of the translation were tested, one with and one without the additional axioms encoding idempotence. The results are stated in Figure \ref{fig:a}. 
+In general, our approach falls short of the state of the art. 
+However when grouping the benchmarks by $|\mathcal Q|$ and $|\mathcal X|$, see Figure~\ref{fig:b},
+we observe good performance of our approach for $|\mathcal Q| = 0$ and $|\mathcal X| \leq 2$ resp. $|\mathcal X| \geq 6$.
+\todo{Note that I added $\ge 6$.}
+Figure~\ref{fig:c} shows that our approach solved 52 problems not solved by the state-of-the-art provers.
 \begin{figure}
 	\centering
 	\begin{tabular}{c|c|lr|lr|lr|lr|c}
@@ -669,14 +677,13 @@ Two versions of the translation were tested, one with and one without the additi
 		3-5&6+  &20&8.4\%	&18&7.6\%		&64&27.0\%		&86&36.3\%	&237\\
 		6+&0+	&8&1.1\%	&5&0.7\%		&73&9.7\%		&74&9.8\%	&755
 	\end{tabular}
-	\caption{Solved problems binned by $|\mathcal Q|$ and $|\mathcal X|$.}
+	\caption{Solved problems grouped by $|\mathcal Q|$ and $|\mathcal X|$.}
 	\label{fig:b}
 \end{figure}
 
-
- Therefore our tool is already useful if it is known that $|\mathcal X|$ and $|\mathcal Q|$ are small. We see that idempotence does not improve performance. On the other hand from a model-theoretic perspective it is quite powerful. We suspect that a more clever encoding of this property could improve our results. There are other restrictions on models we could consider, based on structural properties of the formula, e.g. the relation between occurrences of different atoms.
-
-
+We conclude that our approach already has merits when $|\mathcal X|$ and $|\mathcal Q|$ are small. 
+We see that encoding idempotence does help to solve some additional benchmarks, but in general does not improve performance.
+However, idempotence is a quite powerful concept from a model-theoretic perspective. We suspect that a more clever encoding of this property could improve our results. There are other restrictions on models we could consider, based on structural properties of the formula, e.g. the relation between occurrences of different atoms.
 
 \section{Conclusion}
 
