@@ -94,12 +94,9 @@ We need to expand the truth values of $\psi$ and $\neg\neg\psi$, i.e., if they b
 This necessitates the introduction of new propositional variables in our procedure, which marks a big difference to the double negation translation.
 
 We further mention some translations between logics from the literature.
-Most relevant are the embedding of intuitionistic logic into S4~\cite{basicprooftheory} and of various non-classical logics into higher-order classical logic~\cite{LEO,wisniewski2016tptp} \todo{why are they relevant?}.
-Of special relevance is the reduction of intuitionistic propositional logic given in~\cite{claessen2015sat}
-\todo{reduction to what?} and examined in~\cite{fiorentini2019proof} \todo{what has been examined here?}, which we further expand upon in this paper.
-
-\todo{This paragraph is more about realizability, right? So remove, or connect to paper?}
-On the other hand there have been attempts to circumvent intuitionistic logic by equipping classical proofs with operational semantics~\cite{Control1,Parigot1}, which however does not permit in general the realizability of $\exists$ and $\vee$.
+Most relevant are the embedding of intuitionistic logic into S4~\cite{basicprooftheory} and of various non-classical logics into higher-order classical logic~\cite{LEO,wisniewski2016tptp}.
+Of special relevance are the normalization procedures for intuitionistic propositional logic given in~\cite{claessen2015sat}
+and examined from a proof-theoretic perspective in~\cite{fiorentini2019proof}, which we further expand upon in this paper.
 
 We finally mention a long-standing line of research that has investigated when classical validity implies intuitionistic validity.
 This most famously holds for $\Pi_2$-formulas in Peano Arithmetic~\cite{friedman1978classically}, but also other conditions are known~\cite{schwichtenberg}. 
@@ -660,8 +657,7 @@ Two versions of the translation were tested, one with and one without the additi
 In general, our approach falls short of the state of the art. 
 However when grouping the benchmarks by $|\mathcal Q|$ and $|\mathcal X|$, see Figure~\ref{fig:b},
 we observe good performance of our approach for $|\mathcal Q| = 0$ and $|\mathcal X| \leq 2$ resp. $|\mathcal X| \geq 6$.
-\todo{Note that I added $\ge 6$.}
-Figure~\ref{fig:c} shows that our approach solved 52 problems not solved by the state-of-the-art provers.
+Figure~\ref{fig:c} shows that our approach solved 52 problems not solved by the state-of-the-art provers.\pagebreak
 \begin{figure}
 	\centering
 	\begin{tabular}{c|c|lr|lr|lr|lr|c}
@@ -680,6 +676,7 @@ Figure~\ref{fig:c} shows that our approach solved 52 problems not solved by the 
 	\caption{Solved problems grouped by $|\mathcal Q|$ and $|\mathcal X|$.}
 	\label{fig:b}
 \end{figure}
+\vspace*{-.5cm}
 
 We conclude that our approach already has merits when $|\mathcal X|$ and $|\mathcal Q|$ are small. 
 We see that encoding idempotence does help to solve some additional benchmarks, but in general does not improve performance.
