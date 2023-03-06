@@ -1,0 +1,46 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage{setspace}
+
+\title{Master's Thesis Summary}
+\author{Alexander Pluska}
+\begin{document}
+
+	\maketitle
+	
+	Constructive mathematics refers to a flavour of mathematics in which the existence of an object can only be established by explicit construction, as opposed to classical mathematics where existence can be shown implicitly, e.g. by assuming non-existence and deriving a contradiction.
+	The formalism usually associated with constructive mathematics is intuitionistic logic, which essentially differentiates itself from classical logic by the fact that the law of excluded middle $A\vee\neg A$ and the double negation shift $\forall x\neg\neg P(x)\to\neg\neg\forall xP(x)$ are not valid.
+	Besides philosophical considerations, most prominently advocated by Brouwer~\cite{brouwer1907over} and Bishop~\cite{bishop1967foundations}, there is a particular motivation for studying constructive mathematics from the perspective of computer science in that proofs in  intuitionistic logic directly correspond to computer programs --- as expressed in the Curry-Howard correspondence~\cite{howard1980formulae}.
+	
+	The interest in intuitionistic logic has led to the development of a number of automated theorem proving systems for propositional as well as for predicate logic and a collection of benchmark problems (see e.g. the
+	ILTP library website~\cite{iltp}).
+	However, progress in automated theorem proving for intuitionistic logic has been slow, whereas reasoners for classical logic have made tremendous progress, see e.g. the TPTP~\cite{casc} and SAT~\cite{satc} competitions.
+	This difference can be partially explained by fundamental differences between the logics.
+	Foremost, determining intuitionistic validity is computationally harder, i.e. in the propositional case intuitionistic validity is \verb+PSPACE+-complete~\cite{statman1979intuitionistic} whereas classical validity is \verb+coNP+-complete~\cite{cook1971complexity}.
+	A further advantage of classical logic is the existence of calculi that are particularly suitable for automation such as superposition~\cite{bachmair2001resolution}, which rely on the existence of convenient normal forms such as CNF, and the duality between validity and satisfiability, i.e. to show the validity of a formula it suffices to show the unsatisfiability of the negated formula.
+	While some (albeit more complex) normal forms also exist  for intuitionistic logic, crucially the duality between validity and satisfiability of the negation does not hold.
+	Therefore, most dedicated intuitionistic theorem provers~\cite{mclaughlin2009efficient, tammet1996resolution} use the naive inverse method, i.e. direct search for a cut-free proof by applying the rules from some proof calculus inversely, enhanced by search strategies such as focussing and polarization. This approach generally leads to a much more complex search and is therefore difficult to implement efficiently.
+	Finally, we add that in contrast to intuitionistic provers a tremendous amount of work has been put into optimizing provers for classical logic, in particular for the propositional case, i.e. SAT-solvers.
+	
+	With this work we want to propose a novel approach for intuitionistic theorem proving that leverages the progress in classical theorem proving, that is for each formula $\varphi$:
+	\begin{itemize}
+		\item Give a formula $\varphi^\#$ that is classically valid if and only if $\varphi$ is intuitionistically valid.
+		\item Use a state-of-the-art classical prover to establish the validity/invalidity of $\varphi^\#$.
+		\item Transform the generated proof/counter-model of $\varphi^\#$ to one of $\varphi$.
+	\end{itemize}
+	The most challenging part of this approach is giving the translation of $\varphi$ to $\varphi^\#$.
+	Interestingly, the reverse direction, the famous double-negation translation, has long been established and goes back to Glivenko~\cite{glivenko1929quelques} in the propositional case, and to G\"odel~\cite{godel1933intuitionistischen} and Gentzen~\cite{gentzen1936widerspruchsfreiheit} in the first-order case. In the propositional case, it is particularly simple: $\varphi$ is classically valid if and only if $\neg\neg\varphi$ is intuitionistically valid. Intuitively, the translation collapses for each subformula $\psi$ of $\varphi$ the truth values of $\psi$ and $\neg\neg\psi$, which are classically but not intuitionistically equivalent. This gives us a first idea why the reverse direction is perhaps more difficult: We need to expand the truth values of $\psi$ and $\neg\neg\psi$, i.e. if they both occur in $\varphi$, we must have a way to (classically) assign different truth values to their respective counterparts in $\varphi^\#$. In particular, this necessitates the introduction of new propositional variables in our procedure, which already marks a big difference to the double negation translation.
+	
+	While establishing the translation of formulas we also perform an effective translation of counter-models, i.e. for each intuitionistic counter-model of $\varphi$ we effectively construct a classical counter-model of $\varphi^\#$ and vice versa.
+	We note that the existence of counter-models is a key notion that forms a proper dual to validity --- whereas the satisfiability of the negation is not necessary for invalidity (in contrast to classical logic, where it is a proper dual to validity).
+	Transforming and reducing counter-models to a normal form is also what ultimately enables our translation. Apart from a translation of counter-models in the final chapter, we also explicitly describe how to equivalently transform classical proofs of $\varphi^\#$ to intuitionistic proofs of $\varphi$.
+	
+	
+	As a final contribution, we implement our translation in the Rust programming language. Our implementation transforms a first-order problem in the tptp format~\cite{tptp} and outputs the translated problem in the same format. The code is published on GitHub~\cite{implementation}. We then benchmark our implementation using the ILTP problem set~\cite{iltp}, i.e. we translate all problems in the set and then run the Vampire theorem prover~\cite{Kov_cs_2013} on the translated problems. Our approach performs on par with existing approaches for intuitionistic theorem proving, but comes short of the state-of-the art. As there is still a lot of room for optimization, this is a hopeful first sign.
+	
+	\begingroup
+	\setstretch{0.8}
+	\bibliographystyle{plain}
+	\bibliography{EIICL}
+	\endgroup
+\end{document}

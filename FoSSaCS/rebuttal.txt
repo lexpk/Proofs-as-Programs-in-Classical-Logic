@@ -1,0 +1,38 @@
+Thank you for your insightful reviews. We will take the feedback into account for preparing the final version. We now address the points raised by the reviewers:
+
+
+R1, "erroneous translations":
+
+We agree that the translation is incomplete as given. However, this issue is a minor mistake in the write-up and can be easily be fixed (moreover, our implementation already handles the observed issue correctly): That the translation is incomplete is due to the fact that definition 9 handles universally quantified variables differently than free variables (which are not translated at all). This incompleteness arises from the fact that the translation is only intended to be used on sentences. However, the inductive nature of definition 9 necessitates that φᶜ be defined even when not all variables are quantified. With this in mind we can easily fix the problem by changing definition 9 analogously to definition 5, i.e. replacing all free variables with bound ones and universally quantifying over them before applying the transformation. We note that our tool already introduces the necessary universal quantifiers during the normalization, and so is not affected by the observed issue. We further note that the results of our tool are validated against the known results of the ILTP set, which increases the confidence in the correctness of our translation (and indeed allowed us to fix bugs during implementation).
+
+R1, "lack of clarity and rigour":
+
+We believe that the level of technical detail of our paper is on par with related papers from the literature. We judged that, besides taking up precious space, the inclusion/repetition of standard definitions would occlude the contributions of our paper. Such omissions are quite usual, even in papers where syntax is relevant, e.g. [1, 2, 3]. In particular notions such as atomic formulas or ground expressions are rarely ever defined.  While our definitions of semantics suggest the underlying languages we concede that they should be made explicit.
+
+ [1] Otten, Jens. "Clausal connection-based theorem proving in intuitionistic first-order logic." International Conference on Automated Reasoning with Analytic Tableaux and Related Methods. Springer, Berlin, Heidelberg, 2005.
+
+ [2] Parigot, Michel. "λμ-calculus: an algorithmic interpretation of classical natural deduction." International Conference on Logic for Programming Artificial Intelligence and Reasoning. Springer, Berlin, Heidelberg, 1992.
+
+ [3] Baaz, Matthias and Iemhoff, Rosalie. "The Skolemization of existential quantifiers in intuitionistic logic." Annals of Pure and Applied Logic 142.1-3 (2006): 269-295.
+
+We are thankful for the points raised by the reviewer and we will do our best to integrate them, which will improve the quality of our paper.
+
+We address a few selected points by the reviewer: 
+
+- We agree that a definition of the formal languages should be noted and we will give either an exact definition or reference.
+
+- As correctly observed, the paper was written with distinct sets of free and bound variables in mind, with letters a, b usually indicating free variables and u, w, x, y bound ones (see e.g. definition 5). We agree that the distinction between free and bound variables should be noted. 
+
+- We cannot fully understand the criticism of Definition 7:
+ * Cᴵ(m) is true iff m ∈ Cᴵ, similarly Aᴵ(m) → Bᴵ(m) is false iff m ∈ Aᴵ and not m ∈ Bᴵ. While one could be more deliberate in their terminology, this is not so unusual.
+ * The notation [ψ] was introduced precisely so that f^I_{[ψ]} would be defined for ψ ∈ X, since f_ψ is only defined for ψ ∈ X^{uS} in Lemma 6.
+ * s is also introduced in Lemma 6.
+ * Definition 7 defines for every counter-model M of ψ^{CH} a modified model M_T. Corollary 1 is in line with this.
+
+- We will incorporate the suggestions by the reviewer to improve clarity, e.g. requiring certain sets to be finite.
+ 
+
+R2, "use of QBF solvers for the propositional case": We agree that it would be interesting to test the performance of our translation for the propositional case. However the interest in intuitionistic propositional logic is lower than for the first-order case, where applications are more evident, e.g. program extraction. Therefore we focused our evaluation efforts on the first-order case.
+
+
+R3, "However, it isn't clear whether these adjustments would indeed close the gap.": Indeed, the results do not demonstrate that our approach has the potential to outperform other algorithms on the general problem. However, there is sufficient evidence that on certain subsets it can, namely at the very least for |Q| = 0 and |X| < 3 (referring to Fig. 3). Note in particular that our tool is quite efficient in applying a classical solver if |Q| = |X| = 0. It could be useful as part of a portfolio solver even at this point.
