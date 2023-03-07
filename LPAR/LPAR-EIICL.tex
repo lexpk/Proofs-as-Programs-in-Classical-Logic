@@ -117,29 +117,9 @@ In this section we fix notation and recall the semantics for classical and intui
 
 \subsection{Syntax}
 
-For propositional logic we assume an ambient set of propositional variables. A propositional formula is defined inductively as follows:
-\begin{itemize}
-	\item The propositional constant $\bot$ is a formula.
-	\item Each propositional variable is a formula.
-	\item Given formulas $\varphi$ and $\psi$ and a connector $\circ\in\{\wedge, \vee,\to\}$ there is a formula $\varphi\circ\psi$.
-\end{itemize}
+For propositional logic we assume an ambient set of propositional variables. As usual a formula is either $\bot$, a propositional variable or, given formulas $\varphi$ and $\psi$ and $\circ\in\{\wedge, \vee,\to\}$, $\varphi\circ\psi$.
 
-For predicate logic we assume an ambient signature $\Sigma$, i.e., a set of function and predicate symbols with their respective arities, and sets of free and bound variables. Generally free variables will be denoted will letters at the beginning of the alphabet while bound variables will be denoted with letters at the end of the alphabet. $\nu$ will usually be a placeholder that can be instantiated with free or bound variables. We can define terms $t$ and substitutions $t[\nu/b]$ by simultaneous induction as follows:
-\vspace*{-.3cm}
-\begin{itemize}
-	\item Each free variable $a$ is a term and $a[\nu/b] := \begin{cases}
-		\nu & \text{if } a = b \\
-		a & \text{otherwise}
-	\end{cases}$.
-	\item For each $n$-ary function symbol $f$ and terms $t_1, \ldots, t_n$ we have that $f(t_1, \ldots, t_n)$ is a term and $f(t_1, \ldots, t_n)[\nu/b] := f(t_1[\nu/b], \ldots, t_n[\nu/b])$.
-\end{itemize}
-We can then define formulas $\varphi$ and substitutions $\varphi[\nu/b]$ by simultaneous induction as follows:
-\begin{itemize}
-	\item The constant $\bot$ is a formula and $\bot[\nu/b] := \bot$.
-	\item For each $n$-ary predicate symbol $P$ and terms $t_1, \ldots, t_n$ we have that $P(t_1, \ldots, t_n)$ is a formula and $P(t_1,\ldots, t_n)[\nu/b] := P(t_1[\nu/b], \ldots, t_n[\nu/b])$.
-	\item Given formulas $\varphi$ and $\psi$ and a connector $\circ\in \{\wedge,\vee,\to\}$ there is a formula $\varphi\circ\psi$ and $(\varphi\circ\psi)[\nu/b] := \varphi[\nu/b]\circ\psi[\nu/b]$.
-	\item Given a formula $\varphi$, a free variable $a$, a bound variable $x$ not occurring in $\varphi$ and a quantifier $Q\in\{\exists,\forall\}$ there is a formula $Qx(\varphi[x/a])$ and $Qx(\varphi[x/a])[\nu/b] := Qx(\varphi[x/a][\nu/b])$.
-\end{itemize}
+For predicate logic we assume an ambient signature $\Sigma$, i.e., a set of function and predicate symbols with their respective arities, and a set of variables. As usual we can inductively define terms and formuas. A term is either a variable or, given an $n$-ary function symbol $f$ and terms $t_1, \ldots, t_n$, $f(t_1, \ldots, t_n)$. A formula is either $\bot$, or, given a $n$-ary predicate symbol $P$ and terms $t_1, \ldots, t_n$, $P(t_1, \ldots, t_n)$, or, given formulas $\varphi$ and $\psi$ and $\circ\in\{\wedge, \vee,\to\}$, $\varphi\circ\psi$, or, given a formula $\varphi$ and a variable $x$, $\exists x\varphi$ or $\forall x\varphi$. Free and bound variables are defined as usual and we assume that they comprise distinct sets, such that bound variables are not affected by substitutions of free variables. Generally we will denote free variables with letters at the beginning of the alphabet and bound variables with letters at the end of the alphabet.
 
 
 \subsection{Propositional Semantics}
@@ -197,7 +177,7 @@ We now recall the semantics of first-order logic:
 		\item $\mathcal M, v\models\exists x\varphi$ iff there exists $m\in M$ such that $\mathcal M, v[m/a]\models\varphi[a/x]$.
 		\item $\mathcal M, v\models\forall x\varphi$ iff for all $m\in M$ we have $\mathcal M, v[m/a]\models\varphi[a/x]$.
 	\end{itemize}
-	 Here $a$ is a free variable that does not occur in $\varphi$. A $\Sigma$-structure $\mathcal M$ satisfies $\varphi$ if $\mathcal M, v\models\varphi$ for every $v$, we write $\mathcal M\models\varphi$. A formula is valid if every $\Sigma$-structure $\mathcal M$ satisfies it. We denote the set of valid formulas with \emph{CQC} (Classical Quantified Calculus).
+	 Here $a$ is a free variable that does not occur in $\varphi$. $\varphi$ is satisfiable if $\mathcal M, v\models\varphi$ for some $\mathcal M, v$. It is valid if $\mathcal M, v\models\varphi$ for every $\mathcal M, v$. We denote the set of valid formulas with \emph{CQC} (Classical Quantified Calculus).
 \end{definition}
 
 \begin{definition}
@@ -208,7 +188,7 @@ We now recall the semantics of first-order logic:
 		\item $\mathcal M_u, v\models\forall x\varphi$ iff for every $w\geq u$ and $m\in M_w$ we have $\mathcal M_w, v[m/a]\models\varphi[a/x]$.
 	\end{itemize}
 	We write $u, v\models\varphi$ if $\mathcal M_u, v\models \varphi$. $\mathcal{K}$ satisfies $\varphi$ if $u, v\models\varphi$ holds for every world $u$ and variable assignment $v$. $\varphi$ is valid if it is satisfied by every Kripke structure.
-	$\varphi$ is valid for some frame (write $W\models\varphi$) if it is satisfied in every Kripke structure with that frame. We denote the set of valid formulas with \emph{IQC} (Intuitionistic Quantified Calculus).
+	We denote the set of valid formulas with \emph{IQC} (Intuitionistic Quantified Calculus).
 \end{definition}
 In addition to propositional tautologies there are now quantified formulas which are classically valid but not intuitionistically, e.g., $\neg\forall x A(x)\to \exists x \neg A(x)$.
 
@@ -538,38 +518,7 @@ We now give an analogous transformation for first order logic. Our trick of lift
 	$\varphi$ is intuitionistically valid if and only if $\varphi^C$ is classically valid.
 \end{lemma}
 
-\begin{proof}
-	Since we are mixing worlds and proper intuitionistic domain elements in a single classical domain there are some details to be taken care of. We proceed by translation of counter-models.
-	
-	Suppose first we have a counter-model $\mathcal M = (M, I)$ to $\varphi^C$. As a Kripke frame $(W, \leq)$ take $ W = \{m\in M\:|\:\text{ World}^I(m)\}$ and let $\leq$ be $\preceq^I$ restricted to $W$. Then let $M_u = \{m\in M\:|\: E(m, u)\}$ and let $f^{I_u}$ be $f^I$ restricted to $M_u$ and $A^{I_u}(\vec x): \Leftrightarrow A(\vec x, u)$. It is then a straightforward check of definitions that this defines a Kripke counter-model to $\varphi$.
-	
-	The other direction is a bit more involved. Suppose we have a Kripke counter-model to $\varphi$ with frame $(W, \preceq)$ and family of $\Sigma$-structures $(M_w, I_w)_{w\in W}$. In particular, since it is a counter-model there exists $w_0\in W$ and a variable assignment $v$ with $w_0, v\not\models\varphi$. Let $W_0 = \{w\in W\:|\: w_0\preceq w\}$ and define an equivalence relation $\sim$ on $\{(x, u)\:|\:u\in W_0, x\in M_u\}$ via $(x, u)\sim (y, w)$ iff $x = y$ and there exists $v\in W_0$ comparable with both $u, w$ such that $x\in v$ and denote the equivalence class of $(x, u)$ with $[x, u]$. Let $M = W_0\cup \{[x, u]\:|\:u\in W_0, x\in M_u\}$.
-	Now have
-	\begin{itemize}
-		\item $\preceq^I = \leq\cup \{(m, m): m\in M\setminus W_0\}$ as a set, i.e. $\preceq$ corresponds to $\leq$ on $W_0$ and is trivial elsewhere.
-		\item $E^I(m, w)$ iff $w\in W_0$ and $m = [x, w]$ for some $x\in M_w$.
-		\item $f^I(m_1\dots m_n) =\begin{cases}
-			f^{I_u}(x_1\dots x_n), &\substack{\text{if there are $ u\in W_0, x_i\in M_u$}\\ \text{with $m_i= [x_i, u]$ for all $i$,}}\\
-			w_0, & \text{otherwise.}
-		\end{cases}$
-		\item ${A}^I(m_1\dots m_n, u) \Leftrightarrow\begin{cases}
-			A^{I_u}(x_1\dots x_n), &\substack{\text{if $u\in W_0$ and $\exists x_i\in M_u$}\\\text{with $m_i= [x_i, u]$ for all $i$,}}\\
-			\bot, & \text{otherwise.}
-		\end{cases}$
-	\end{itemize}
-	One easily verifies that these are well-defined. We now show by induction on the height of the formula the following:
-	
-	\emph{Claim.} For any formula $\psi$ in which the free variable $b$ doesn't occur, world $w_k\in W_0$ and variable assignments $v_c, v_i$ such that $v_c(a) = [v_k(a), w_k]$ for all free variables $a$ occurring in $\psi$ it holds that \[M, I, v_c[w_k/b]\models \psi^b\text{ if and only if $w_k, v_i\models \psi$.}\]
-	
-	For the base case, i.e. if $\psi = P(t_1,\dots, t_n)$ for some $n$-ary predicate symbol $P$, the claim follows directly from the definitions.
-	
-	For the induction step consider e.g. the case where $\psi$ is of the form $\forall x \psi'$.
-	Suppose first that $w_k, v_i\not\models \forall x\psi'$, i.e. there exists $w_l\geq w_k$ and $m_l\in w_l$ such that $w_l, v_i[m_l/a]\not\models \psi'[a/x]$. Then by the induction hypothesis $M, I, v_c[[v_i(a), w_l],w_l/c]\not\models \psi'[a/x]^c$. Furthermore by definition $M, I, v_c[w_l/c, w_k/b]\models b\preceq c$ and $M, I, v_c[v_c[[v_i(a), w_l],w_l/c]\models E(a, c)$. Hence $M, I, v_c[w_k/b]\not\models \psi^b$. Suppose on the other hand that $w_k, v_i\not\models\forall x\psi'$, i.e. for all $w_l\geq w_k$ and $m_l\in w_l$ it holds that $w_l, v_i[m_l/a]\models \psi'[a/x]$. Then by the induction hypothesis $M, I, v_c[[m_l, w_l]/A,w_l/c]\models \psi'[a/x]^c$ for all $w_l\geq w_k$ and $m_l\in w_l$. It can be shown that for every other assignment of $c$ and $a$ either $b\preceq c$ or $E(a, c)$ is violated. Hence $M, I, v_c[w_k/b]\models \psi^b$. For other forms of $\psi$ one proceeds in similar fashion. This completes the proof of the claim.
-
-	Recall that $w_0, v\not\models\varphi$. From the claim it follows that \[M, I, v'[[v(a_0), w_0]/a_0\dots[v(a_n), w_0]/a_0, w_0/b]\not\models \varphi^b\]where $a_0\dots a_n$ are the free variables occurring in $\varphi$ and $v'$ is any variable assignment. Furthermore a straightforward check of definitions yields \[M, I, v'[[v(a_0), w_0]/a_0\dots[v(a_n), w_0]/a_0, w_0/b]\models K(\varphi)\wedge \text{World}(b)\wedge\vec E(\vec a, b).\]Therefore $M, I\not\models \varphi^C$ and we are done. 
-
-\end{proof}
-
+A proof can be found in the appendix~\ref*{proof:fo-simplification}.
 
 
 Now again due to Lemma~\ref{lemma:first-order-normal-form} it is sufficient to consider formulas $\varphi$ of the form $$\left(\bigwedge\mathcal R\wedge\bigwedge\mathcal X\wedge\bigwedge\mathcal Q\right)\to P$$ with flat clauses $\mathcal R$, implication clauses $\mathcal X$ and quantification clauses $\mathcal Q$, which after Herbrandization leaves us with $$\varphi^{CH} = \text{World}(s)\to K(\varphi)\to\left(\bigwedge R^{bS}\wedge \bigwedge X^{bS}\wedge\bigwedge Q^{bS}\right)\to P(s)$$
@@ -786,6 +735,44 @@ Continue this construction until $n  = |\mathcal X|$. Then from $\mathcal M$ bei
 	
 On the other hand suppose $\varphi^Q$ is satisfiable. We construct a counter-example to $\varphi^\#$.
 Again we proceed iteratively. Interpret $A^\epsilon$ such as $A^0$ is interpreted in some satisfying interpretation of $\varphi^Q$. Suppose we are given a sequence $\psi_1\dots \psi_{n-1}$ such that for $i<n$ having $A^i = A^{\psi_0\dots\psi_{n-1}}$ is part of a satisfying interpretation of $\varphi^Q$, in which $X^i_\psi$ is chosen true iff $\psi = \psi_i$. Let $\psi_n\in\mathcal X$. Consider some interpretation of the $A^n$ that are part of a satisfying assignment where $X^n_\psi$ is true iff $\psi = \psi_n$ and all variables quantified above are chosen as before. Have $A^{\psi_0\dots\psi_n} = A^n$ for each propositional variable $A$. From the definitions it directly follows that construction yields a counter-model for $\varphi^\#$.
+\end{proof}
+
+
+
+\begin{lemma}\label{proof:fo-simplification}
+	$\varphi$ is intuitionistically valid if and only if $\varphi^C$ is classically valid.
+\end{lemma}
+
+\begin{proof}
+	Since we are mixing worlds and proper intuitionistic domain elements in a single classical domain there are some details to be taken care of. We proceed by translation of counter-models.
+	
+	Suppose first we have a counter-model $\mathcal M = (M, I)$ to $\varphi^C$. As a Kripke frame $(W, \leq)$ take $ W = \{m\in M\:|\:\text{ World}^I(m)\}$ and let $\leq$ be $\preceq^I$ restricted to $W$. Then let $M_u = \{m\in M\:|\: E(m, u)\}$ and let $f^{I_u}$ be $f^I$ restricted to $M_u$ and $A^{I_u}(\vec x): \Leftrightarrow A(\vec x, u)$. It is then a straightforward check of definitions that this defines a Kripke counter-model to $\varphi$.
+	
+	The other direction is a bit more involved. Suppose we have a Kripke counter-model to $\varphi$ with frame $(W, \preceq)$ and family of $\Sigma$-structures $(M_w, I_w)_{w\in W}$. In particular, since it is a counter-model there exists $w_0\in W$ and a variable assignment $v$ with $w_0, v\not\models\varphi$. Let $W_0 = \{w\in W\:|\: w_0\preceq w\}$ and define an equivalence relation $\sim$ on $\{(x, u)\:|\:u\in W_0, x\in M_u\}$ via $(x, u)\sim (y, w)$ iff $x = y$ and there exists $v\in W_0$ comparable with both $u, w$ such that $x\in v$ and denote the equivalence class of $(x, u)$ with $[x, u]$. Let $M = W_0\cup \{[x, u]\:|\:u\in W_0, x\in M_u\}$.
+	Now have
+	\begin{itemize}
+		\item $\preceq^I = \leq\cup \{(m, m): m\in M\setminus W_0\}$ as a set, i.e. $\preceq$ corresponds to $\leq$ on $W_0$ and is trivial elsewhere.
+		\item $E^I(m, w)$ iff $w\in W_0$ and $m = [x, w]$ for some $x\in M_w$.
+		\item $f^I(m_1\dots m_n) =\begin{cases}
+			f^{I_u}(x_1\dots x_n), &\substack{\text{if there are $ u\in W_0, x_i\in M_u$}\\ \text{with $m_i= [x_i, u]$ for all $i$,}}\\
+			w_0, & \text{otherwise.}
+		\end{cases}$
+		\item ${A}^I(m_1\dots m_n, u) \Leftrightarrow\begin{cases}
+			A^{I_u}(x_1\dots x_n), &\substack{\text{if $u\in W_0$ and $\exists x_i\in M_u$}\\\text{with $m_i= [x_i, u]$ for all $i$,}}\\
+			\bot, & \text{otherwise.}
+		\end{cases}$
+	\end{itemize}
+	One easily verifies that these are well-defined. We now show by induction on the height of the formula the following:
+	
+	\emph{Claim.} For any formula $\psi$ in which the free variable $b$ doesn't occur, world $w_k\in W_0$ and variable assignments $v_c, v_i$ such that $v_c(a) = [v_k(a), w_k]$ for all free variables $a$ occurring in $\psi$ it holds that \[M, I, v_c[w_k/b]\models \psi^b\text{ if and only if $w_k, v_i\models \psi$.}\]
+	
+	For the base case, i.e. if $\psi = P(t_1,\dots, t_n)$ for some $n$-ary predicate symbol $P$, the claim follows directly from the definitions.
+	
+	For the induction step consider e.g. the case where $\psi$ is of the form $\forall x \psi'$.
+	Suppose first that $w_k, v_i\not\models \forall x\psi'$, i.e. there exists $w_l\geq w_k$ and $m_l\in w_l$ such that $w_l, v_i[m_l/a]\not\models \psi'[a/x]$. Then by the induction hypothesis $M, I, v_c[[v_i(a), w_l],w_l/c]\not\models \psi'[a/x]^c$. Furthermore by definition $M, I, v_c[w_l/c, w_k/b]\models b\preceq c$ and $M, I, v_c[v_c[[v_i(a), w_l],w_l/c]\models E(a, c)$. Hence $M, I, v_c[w_k/b]\not\models \psi^b$. Suppose on the other hand that $w_k, v_i\not\models\forall x\psi'$, i.e. for all $w_l\geq w_k$ and $m_l\in w_l$ it holds that $w_l, v_i[m_l/a]\models \psi'[a/x]$. Then by the induction hypothesis $M, I, v_c[[m_l, w_l]/A,w_l/c]\models \psi'[a/x]^c$ for all $w_l\geq w_k$ and $m_l\in w_l$. It can be shown that for every other assignment of $c$ and $a$ either $b\preceq c$ or $E(a, c)$ is violated. Hence $M, I, v_c[w_k/b]\models \psi^b$. For other forms of $\psi$ one proceeds in similar fashion. This completes the proof of the claim.
+
+	Recall that $w_0, v\not\models\varphi$. From the claim it follows that \[M, I, v'[[v(a_0), w_0]/a_0\dots[v(a_n), w_0]/a_0, w_0/b]\not\models \varphi^b\]where $a_0\dots a_n$ are the free variables occurring in $\varphi$ and $v'$ is any variable assignment. Furthermore a straightforward check of definitions yields \[M, I, v'[[v(a_0), w_0]/a_0\dots[v(a_n), w_0]/a_0, w_0/b]\models K(\varphi)\wedge \text{World}(b)\wedge\vec E(\vec a, b).\]Therefore $M, I\not\models \varphi^C$ and we are done. 
+
 \end{proof}
 
 
