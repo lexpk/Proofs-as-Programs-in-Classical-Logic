@@ -23,6 +23,8 @@
 \theoremstyle{definition}
 \newtheorem{remark}[theorem]{Remark}
 
+\let\OLDitemize\itemize
+\renewcommand\itemize{\OLDitemize\addtolength{\itemsep}{-5pt}}
 
 \begin{document}
 	%
@@ -74,12 +76,12 @@ We finally add that, in contrast to intuitionistic provers, a tremendous amount 
 With this work we want to leverage the progress in classical reasoning for intuitionistic logic.
 To this end, we study embeddings of intuitionistic into classical logic and propose the following methodology:
 \begin{itemize}
-	\item Translate an input formula $\varphi$ to a formula $\varphi^\#$, which is classically valid if and only if $\varphi$ is intuitionistically valid.
-	\item Determine the classical validity of $\varphi^\#$ using a prover for classical logic, resulting in a proof or counter-model.
-	\item Translate the classical proof/counter-model of $\varphi^\#$ to a corresponding intuitionistic proof/counter-model of $\varphi$.
+	\item Give for each $\varphi$ a formula $\varphi^\#$, which is classically valid iff $\varphi$ is intuitionistically valid.
+	\item Determine the classical validity of $\varphi^\#$ using a prover for classical logic.
+	\item Translate the classical proof (resp. counter-model) of $\varphi^\#$ given by the prover to a corresponding intuitionistic proof (resp. counter-model) of $\varphi$.
 \end{itemize}
 \subsection*{Contributions} 
-We now overview the main results of this paper (which we discuss in more detail in Sections~\ref{sec:overview} and~\ref{sec:evaluation}):
+The following main contributions will be discussed in more detail in Sections~\ref{sec:overview} and~\ref{sec:evaluation}:
 \begin{itemize}
 	\item We establish a small model property for counter-models to validity in intuitionistic propositional logic.
 	\item Based on the small model property, we provide an embedding of intuitionistic propositional logic into classical propositional logic and into quantified boolean formulas.
@@ -123,6 +125,7 @@ For propositional logic we assume an ambient set of propositional variables. A p
 \end{itemize}
 
 For predicate logic we assume an ambient signature $\Sigma$, i.e., a set of function and predicate symbols with their respective arities, and sets of free and bound variables. Generally free variables will be denoted will letters at the beginning of the alphabet while bound variables will be denoted with letters at the end of the alphabet. $\nu$ will usually be a placeholder that can be instantiated with free or bound variables. We can define terms $t$ and substitutions $t[\nu/b]$ by simultaneous induction as follows:
+\vspace*{-.3cm}
 \begin{itemize}
 	\item Each free variable $a$ is a term and $a[\nu/b] := \begin{cases}
 		\nu & \text{if } a = b \\
@@ -307,6 +310,7 @@ The most obvious approach to embedding intuitionistic into classical logic is to
 
 \begin{definition}
 	Let $\varphi$ be a propositional formula. Define $\varphi^{\nu}$ inductively:
+	\vspace*{-.1cm}
 	\begin{itemize}
 		\item $\bot^\nu = \bot$.
 		\item $A^{\nu} = A(\nu)$ for every propositional variable $A$.
@@ -314,14 +318,17 @@ The most obvious approach to embedding intuitionistic into classical logic is to
 		\item $(\varphi\to \psi)^\nu = \forall w(\nu\preceq w\to\varphi^{w}\to\psi^{w})$ where $w$ is some new bound variable.
 	\end{itemize}
 	Let $K(\varphi)$ encode the theory of Kripke structures, i.e.
-	$$K(\varphi) = \text{\normalfont PartialOrder}(\preceq)\wedge\forall u\forall w(u\preceq w\to \text{\normalfont Persistent}(u, w))$$
+	\vspace*{-.1cm}
+	\[K(\varphi) = \text{\normalfont PartialOrder}(\preceq)\wedge\forall u\forall w(u\preceq w\to \text{\normalfont Persistent}(u, w))\]
+	\vspace*{-.4cm}
 	with e.g.
+	\vspace*{-.2cm}
 	\begin{align*}
 		\text{\normalfont PartialOrder}(\preceq) =&\:\forall u(u\preceq u)\wedge\forall u\forall w(u\preceq w\to w\preceq u\to u = w)\wedge\\&\:\forall u\forall v\forall w(u\preceq v\to v\preceq w\to u\preceq w)\\
 		\text{\normalfont Persistent}(u, w)=&\:\bigwedge \{A(u)\to A(w)\:|\: \text{ $A$ occurs in $\varphi$}\}
 	\end{align*}
 	Then define
-	$$\varphi^{C} = K(\varphi)\to \varphi^{b}$$
+	$\varphi^{C} = K(\varphi)\to \varphi^{b}$
 	where $b$ is a new free variable.
 \end{definition}
 
@@ -384,7 +391,7 @@ We say $(A\to B)\to C\in\mathcal X$ is \emph{fulfilled} at $m\in M$ iff $A^I(m)\
 	Due to persistency $C^I(m)$ is also false.
 	Because $\psi$ is fulfilled at $m$, $A^I(m)\to B^I(m)$ must be false, i.e. $A^I(m)$ is true and $B^I(m)$ is false. Then $A^I(n)$ and $A^I(f^I_{[\psi]}(n))$ are also true due to persistency.
 	Because $(A^I(f^I_{[\psi]}(n))\to B^I(f^I_{[\psi]}(n)))\to C^I(n)$ holds, we now get that  $B^I(f^I_{[\psi]}(n))$ must be false.
-	But then due to persistency so is $B^I(n)$ and we have that $\psi$ is fulfilled at $n$.\hfill$\square$
+	But then due to persistency so is $B^I(n)$ and we have that $\psi$ is fulfilled at $n$.
 \end{proof}
 
 Essentially what this tells us is that for every $m$ at which $\psi$ is fulfilled, in particular for each $m$ in the image of $f_{[\psi]}$, we may add the assumption that $f_{[\psi]}(n) = n$ for all $n\succeq m$ without changing the validity of $\psi$. With this lemma in hand showing that $(M_T, I_T)$ is a counter-model to $\varphi^{CH}$ is a straightforward check of definitions.
@@ -640,9 +647,16 @@ $$Putting all of this together yields the following translation:
 	The size of the obtained formula is linear in the input. However $|\mathcal X| + |\mathcal Q| + 1$ new function symbols and the new binary predicate $E$ were introduced and each $n$-ary predicate has been extended to a $n+1$-ary predicate.
 \end{theorem}
 
+It is not possible to completely eliminate worlds from the domain by enumerating them since there are formulas with no finite counter-examples. An analogous procedure to the propositional case fails, however we can still retrieve additional axioms that restrict the interpretation of functions. That is, we may assume that $f_\psi(\vec t, w) = w$, if $\exists u(w = f_\psi(\vec t, u))$ for all $\psi\in\mathcal X\cup\mathcal Q$ (i.e. that $f_\psi$ parametrized by $\vec t$ is idempotent), and $f_\psi(\vec t, w) = w$, if $\exists u(w \geq f_\psi(\vec t, u))$ for all $\psi\in\mathcal X$ (which is even stronger than idempotence).
 
-\begin{wrapfigure}[8]{r}{0.4\textwidth}
-	\vspace*{-.5cm}
+\section{Experimental Evaluation}
+\label{sec:evaluation}
+
+
+
+
+\begin{wrapfigure}[4]{r}{0.4\textwidth}
+	\vspace*{-2cm}
 	\begin{tabular}{l|c|c}
 		Embedding&571&21.4\%\\
 		Embedding (idem.)&557&20.9\%\\
@@ -654,15 +668,13 @@ $$Putting all of this together yields the following translation:
 	\label{fig:a}
 \end{wrapfigure}
 
-It is not possible to completely eliminate worlds from the domain by enumerating them since there are formulas with no finite counter-examples. An analogous procedure to the propositional case fails, however we can still retrieve additional axioms that restrict the interpretation of functions. That is, we may assume that $f_\psi(\vec t, w) = w$, if $\exists u(w = f_\psi(\vec t, u))$ for all $\psi\in\mathcal X\cup\mathcal Q$ (i.e. that $f_\psi$ parametrized by $\vec t$ is idempotent), and $f_\psi(\vec t, w) = w$, if $\exists u(w \geq f_\psi(\vec t, u))$ for all $\psi\in\mathcal X$ (which is even stronger than idempotence).
-
-\section{Experimental Evaluation}
-\label{sec:evaluation}
+We have benchmarked our first-order translation on version 1.1.2 of the ILTP problem set~\cite{iltp} by performing our translation and then examining the generated classical problem using Vampire~\cite{kovacs2013first}. 
+For comparison the state-of-the-art intuitionistic provers ileanCoP 1.2~\cite{otten2008leancop} and nanoCoP-i 2.0~\cite{otten2021nanocop} were used. All benchmarks were conducted on an Intel Core i5-8400 2.80GHz machine running Linux with a time limit of 10s per problem. The problem \textsc{SYN007+1} was removed as our normal form procedure would explode the size of instance.
 
 
-\begin{wrapfigure}[13]{r}{0.4\textwidth}
-	\vspace*{4.9cm}
-	\hspace*{1cm}
+\begin{wrapfigure}[16]{r}{0.4\textwidth}
+	\vspace{6cm}
+	\hspace*{1.5cm}
 	\begin{tikzpicture}
 		\begin{scope}[opacity=0.1, blend mode=multiply]
 			\def\firstcircle{(90:.75) circle (1.5)}
@@ -684,19 +696,16 @@ It is not possible to completely eliminate worlds from the domain by enumerating
 			\end{tikzpicture}
 		\end{scope}
 	\end{tikzpicture}
-	\vspace*{-7.1cm}
+	\vspace*{-7.5cm}
 	\caption{Instances proven by combinations of Embedding (red), Embedding (idem.) (green), ileanCoP or nanoCoP (blue)}
 	\label{fig:c}
 \end{wrapfigure}
-
-We have benchmarked our first-order translation on version 1.1.2 of the ILTP problem set~\cite{iltp} by performing our translation and then examining the generated classical problem using Vampire~\cite{kovacs2013first}. 
-For comparison the state-of-the-art intuitionistic provers ileanCoP 1.2~\cite{otten2008leancop} and nanoCoP-i 2.0~\cite{otten2021nanocop} were used. All benchmarks were conducted on an Intel Core i5-8400 2.80GHz machine running Linux with a time limit of 10s per problem. The problem \textsc{SYN007+1} was removed as our normal form procedure would explode the size of instance.
 
 Two versions of the translation were tested, one with and one without the additional axioms encoding idempotence. The results are stated in Figure \ref{fig:a}. 
 In general, our approach falls short of the state of the art. 
 However when grouping the benchmarks by $|\mathcal Q|$ and $|\mathcal X|$, see Figure~\ref{fig:b},
 we observe good performance of our approach for $|\mathcal Q| = 0$ and $|\mathcal X| \leq 2$ resp. $|\mathcal X| \geq 6$.
-Figure~\ref{fig:c} shows that our approach solved 52 problems not solved by the state-of-the-art provers. Notably, while there is big overlap in solved instances, ileanCoP and nanoCoP also have a significant symmetric difference.\pagebreak
+Figure~\ref{fig:c} shows that our approach solved 52 problems not solved by the state-of-the-art provers. Notably, while there is big overlap in solved instances, ileanCoP and nanoCoP also have a significant symmetric difference.
 \begin{figure}
 	\centering
 	\begin{tabular}{c|c|lr|lr|lr|lr|c}
@@ -715,7 +724,6 @@ Figure~\ref{fig:c} shows that our approach solved 52 problems not solved by the 
 	\caption{Solved problems grouped by $|\mathcal Q|$ and $|\mathcal X|$.}
 	\label{fig:b}
 \end{figure}
-\vspace*{-.5cm}
 
 We conclude that our approach already has merits when $|\mathcal Q| = 0$ and $|\mathcal X|$ is small. 
 We see that encoding idempotence does help to solve some additional benchmarks, but in general does not improve performance.
@@ -777,7 +785,7 @@ Interpret the atoms $A^n$ as $\mathcal M$ interprets $A^{\psi_1\dots\psi_n}$.
 Continue this construction until $n  = |\mathcal X|$. Then from $\mathcal M$ being a counter-example to $(\bigwedge\mathcal R^\#\wedge\bigwedge\mathcal X^\#)\to P^\epsilon$ it directly follows that this interpretation satisfies $\varphi^Q$.
 	
 On the other hand suppose $\varphi^Q$ is satisfiable. We construct a counter-example to $\varphi^\#$.
-Again we proceed iteratively. Interpret $A^\epsilon$ such as $A^0$ is interpreted in some satisfying interpretation of $\varphi^Q$. Suppose we are given a sequence $\psi_1\dots \psi_{n-1}$ such that for $i<n$ having $A^i = A^{\psi_0\dots\psi_{n-1}}$ is part of a satisfying interpretation of $\varphi^Q$, in which $X^i_\psi$ is chosen true iff $\psi = \psi_i$. Let $\psi_n\in\mathcal X$. Consider some interpretation of the $A^n$ that are part of a satisfying assignment where $X^n_\psi$ is true iff $\psi = \psi_n$ and all variables quantified above are chosen as before. Have $A^{\psi_0\dots\psi_n} = A^n$ for each propositional variable $A$. From the definitions it directly follows that construction yields a counter-model for $\varphi^\#$.\hfill$\square$
+Again we proceed iteratively. Interpret $A^\epsilon$ such as $A^0$ is interpreted in some satisfying interpretation of $\varphi^Q$. Suppose we are given a sequence $\psi_1\dots \psi_{n-1}$ such that for $i<n$ having $A^i = A^{\psi_0\dots\psi_{n-1}}$ is part of a satisfying interpretation of $\varphi^Q$, in which $X^i_\psi$ is chosen true iff $\psi = \psi_i$. Let $\psi_n\in\mathcal X$. Consider some interpretation of the $A^n$ that are part of a satisfying assignment where $X^n_\psi$ is true iff $\psi = \psi_n$ and all variables quantified above are chosen as before. Have $A^{\psi_0\dots\psi_n} = A^n$ for each propositional variable $A$. From the definitions it directly follows that construction yields a counter-model for $\varphi^\#$.
 \end{proof}
 
 
