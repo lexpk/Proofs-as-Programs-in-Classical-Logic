@@ -360,7 +360,7 @@ We say $(A\to B)\to C\in\mathcal X$ is \emph{fulfilled} at $m\in M$ iff $A^I(m)\
 \begin{lemma}~\label{thm:prop-countermodel-reduction}
 	Let $\mathcal M = (M, I)$ be a counter-model to $\mathcal \varphi^{CH}$.
 	\begin{enumerate}
-		\item $\psi$ is fulfilled at $f_{[\psi]}^I(u)$ for all $u\in M, \psi\in\mathcal X$.
+		\item $\psi$ is fulfilled at $f_{[\psi]}^I(m)$ for all $m\in M, \psi\in\mathcal X$.
 		\item If $\psi$ is fulfilled at some $m\in M$ then $\psi$ is fulfilled at all $n\succeq^I m$.
 	\end{enumerate}
 \end{lemma}
@@ -533,9 +533,8 @@ We now give an analogous transformation for first order logic. Our trick of lift
 
 A proof can be found in the appendix~\ref*{proof:fo-simplification}.
 
-
-Now again due to Lemma~\ref{lemma:first-order-normal-form} it is sufficient to consider formulas $\varphi$ of the form $$\left(\bigwedge\mathcal R\wedge\bigwedge\mathcal X\wedge\bigwedge\mathcal Q\right)\to P$$ with flat clauses $\mathcal R$, implication clauses $\mathcal X$ and quantification clauses $\mathcal Q$, which after Herbrandization leaves us with $$\varphi^{CH} = \text{World}(s)\to K(\varphi)\to\left(\bigwedge R^{bS}\wedge \bigwedge X^{bS}\wedge\bigwedge Q^{bS}\right)\to P(s)$$
-where $s$ is a new constant symbol, each formula in $\mathcal R^{bS}$ is of the form
+Now again due to Lemma~\ref{lemma:first-order-normal-form} it is sufficient to consider formulas $\varphi$ of the form $$\left(\bigwedge\mathcal R\wedge\bigwedge\mathcal X\wedge\bigwedge\mathcal Q\right)\to P$$ with flat clauses $\mathcal R$, implication clauses $\mathcal X$ and quantification clauses $\mathcal Q$, which after Herbrandization leaves us with $$\varphi^{CH} = K(\varphi)\to\text{World}(s)\to\vec E(\vec r, s) \to \left(\bigwedge R^{bS}\wedge \bigwedge X^{bS}\wedge\bigwedge Q^{bS}\right)\to P(s)$$
+where $\vec r, s$ are new constant symbols, each formula in $\mathcal R^{bS}$ is of the form
 $$\forall w \forall \vec x(s\preceq w\to\vec E(x, w)\to\bigwedge_i A_i(\vec a_i, u)\to\bigvee_j B_j(\vec b_j, u)),$$
 each formula $\psi\in\mathcal X^{bS}$ is of the form
 $$
@@ -547,13 +546,14 @@ with $f_\psi$ being a new function symbol.
 
 As in the previous section we can define a tree counter-model for this.
 \begin{definition}
-	Suppose we are given a counter-model $\mathcal M = (M, I)$ for $\varphi^{CH}$. Define $\mathcal M_T = (M_T, I_T)$ as follows:
+	Suppose we are given a counter-model $\mathcal M = (M, I)$ for $\varphi^{CH}$. W.l.o.g. suppose $\{m\in M\:|\:\text{World}(m)\}$ has a minimal element, say $w_0$. Define $\mathcal M_T = (M_T, I_T)$ as follows:
 	\begin{itemize}
-		\item $M_T$ are the sequences on $\{(\vec m, \psi)\:|\:\psi\in \mathcal F, \vec m\in M^n\}$.
-		\item $r^{I_T} = s^{I_T} = \epsilon$.
-		\item We interpret $\preceq$ as the prefix-order.
-		\item We set $f_\psi^{I_T}(\vec m, (\vec m_1, \psi_1)\dots (\vec m_n, \psi_n)) = (\vec m_1, \psi_1)\dots (\vec m_n, \psi_n)(\vec m, \psi).$
-		\item For predicate symbols $R$, we set $${R}^{I_T}(\vec m, (\vec m_1, \psi_1)\dots (\vec m_n, \psi_n)) = {R}^I(\vec m, f_{\psi_n}(\vec m_n, \dots(f_{\psi_1}(\vec m_1, s^I))\dots)).$$
+		\item $M_T$ is the union of $M$ and sequences $(\vec m_1, \psi_1)\dots (\vec m_n, \psi_n)$ such that $\vec E^I(\vec m_1, w_0)$ and $\vec E^I(\vec m_i, f_{\psi_i}(\vec m_i, f_{\psi_{i-1}}^I(\vec m_{i-1}, \dots f_{\psi_1}^I(\vec m_1, w_0)\dots)))$ for $i > 0$ hold.
+		\item $s^{I_T} = w_0$, $\vec r^{I_T} = \vec r^I$.
+		\item We interpret $\preceq$ trivially on $M$ and as the prefix-order elsewhere.
+		\item Have $E^{I_T}(m, (\vec m_1, \psi_1)\dots (\vec m_n, \psi_n))$ iff $E^I(m, f_{\psi_n}^I(\vec m_n, \dots f_{\psi_1}^I(\vec m_1, w_0)\dots))$.
+		\item We set $f_\psi^{I_T}(\vec m, (\vec m_1, \psi_1)\dots (\vec m_n, \psi_n)) = (\vec m_1, \psi_1)\dots (\vec m_n, \psi_n)(\vec m, \psi)$ and arbitrary else.
+		\item For predicate symbols $R$, we set $${R}^{I_T}(\vec m, (\vec m_1, \psi_1)\dots (\vec m_n, \psi_n)) = {R}^I(\vec m, f_{\psi_n}^I(\vec m_n, \dots(f_{\psi_1}^I(\vec m_1, s^I))\dots))$$ and arbitrary otherwise, for function symbols $f^{I_T}(\vec m) = f^I(\vec m)$ and arbitrary else.
 	\end{itemize}
 \end{definition}
 
@@ -598,9 +598,9 @@ $$Putting all of this together yields the following translation:
 	$
 	Then $\varphi$ is intuitionistically valid if and only if
 	$$
-		\varphi^\# := \exists xE(x, s)\to K(\varphi)\to \left(\bigwedge\mathcal R^\#\wedge\bigwedge\mathcal X^\#\wedge\bigwedge\mathcal Q^\#\right)\to P^\#(s)
+		\varphi^\# := K(\varphi)\to\text{World}(s)\to\vec E(\vec r, s) \to \left(\bigwedge\mathcal R^\#\wedge\bigwedge\mathcal X^\#\wedge\bigwedge\mathcal Q^\#\right)\to P^\#(s)
 	$$
-	is classically valid, where $s$ is a new constant symbol and
+	is classically valid, where $s, \vec r$ are new constants introduced by Herbrandization of free variables,
 	\begin{align*}
 		K(\varphi) := &\:\bigwedge\left\{\forall\vec z\forall x\forall u((E(x, u)\to E(x, f_\psi(\vec z, u)))\:|\:\psi\in\mathcal X\cup\mathcal Q\right\}\wedge\\
 		&\:\forall u\left(\exists xE(x, u)\to \bigwedge\{\forall\vec z(\vec E(\vec z, u)\to E(f(\vec z), u))\:|\:\text{$f$ a function in $\varphi$}\}\right)\wedge\\
@@ -613,9 +613,6 @@ It is not possible to completely eliminate worlds from the domain by enumerating
 
 \section{Experimental Evaluation}
 \label{sec:evaluation}
-
-
-
 
 \begin{wrapfigure}[5]{r}{0.4\textwidth}
 	\vspace*{-1.6cm}
