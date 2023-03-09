@@ -113,7 +113,7 @@ In contrast, we propose a translation of an intuitionistic formula to an equi-va
 
 \section{Preliminaries}
 
-In this section we fix notation and recall the semantics for classical and intuitionistic logic. 
+In this section we fix notation and recall the semantics for classical and intuitionistic logic.
 Furthermore, we recapitulate some results from~\cite{otten2005clausal}.
 
 \subsection{Syntax}
@@ -252,7 +252,7 @@ Since we could not find a proof for the first-order case, we provide one in the 
 \section{Overview}
 \label{sec:overview}
 
-We shall now give an overview of our main results and highlight the key arguments. 
+We shall now give an overview of our main results and highlight the key arguments.
 We start with the propositional case, as the important insights are the same as in the first-order case, while it is technically simpler and less cluttered.
 
 The first step is to express the Kripke semantics of intuitionistic logic in classical first-order logic.
@@ -279,7 +279,7 @@ Building on the same idea, we can also give a quantified boolean formula (QBF) o
 	For each propositional formula $\varphi$ there is effectively a QBF $\varphi^Q$ \todo{Ich würde die Formeln $\varphi^Q$ hier und in Section 6 aus Symmetriegründen auch $\varphi^\#$ nennen.} with $\mathcal |\varphi^Q|\in\mathcal O(|\mathcal R|\cdot|\mathcal X| + |\mathcal X|^3)$ such that $\varphi$ is intuitionistically invalid if and only if $\varphi^Q$ is a satisfiable QBF.
 \end{lemma}
 
-Again, the details can be found in Section~\ref{sec:qbf}. 
+Again, the details can be found in Section~\ref{sec:qbf}.
 Next we attempt to transport these results to the first order case. However, there are formulas for which only counter-examples with an infinite Kripke frame exist. Therefore, there is no hope of completely eliminating terms representing worlds from the final embedding. This also means that our language necessarily becomes more complex. Still, a number of reductions are possible.
 
 \begin{theorem}
@@ -368,7 +368,7 @@ We say $(A\to B)\to C\in\mathcal X$ is \emph{fulfilled} at $m\in M$ iff $A^I(m)\
 
 \begin{proof}
 	1. If $C^I(m)$ is true then we are done due to persistency. Otherwise $C^I(m)$ is false.
-	Because $(A^I(f_{[\psi]}^I(m))\to B^I(f_{[\psi]}^I(m)))\to C^I(u)$ holds, then $A^I(f_{[\psi]}^I(u))\to B^I(f_{[\psi]}^I(u))$ must be false.
+	Because $(A^I(f_{[\psi]}^I(m))\to B^I(f_{[\psi]}^I(m)))\to C^I(m)$ holds, then $A^I(f_{[\psi]}^I(m))\to B^I(f_{[\psi]}^I(m))$ must be false.
 	
 	
 	2. Let $n\succeq^I m$.
@@ -442,13 +442,13 @@ It is known that a polynomial time translation between QBF and IPC must exist, s
 For lack of space, we do not give the semantics of QBF in this paper and instead refer the reader to standard sources e.g.~\cite{series/faia/2009-185}.
 The translation from the last section will serve as starting point for this section.
 
-Suppose we are given a formula $\varphi$ in normal form $$\left(\bigwedge\mathcal R\wedge\bigwedge\mathcal X\right)\to P$$ as in Lemma~\ref{lemma:propositional-normal-form}. We now given an intuition on how to obtain a QBF of polynomial size that expresses that $\varphi$ has an intuitionistic counter-model: 
-Instead of expressing validity at every node of $\mathcal M_T$ --- which was done in the CPC translation --- we express that on each path in $\mathcal M_T$ the nodes satisfy all conditions for $\mathcal M_T$ being a counter-model. 
+Suppose we are given a formula $\varphi$ in normal form $$\left(\bigwedge\mathcal R\wedge\bigwedge\mathcal X\right)\to P$$ as in Lemma~\ref{lemma:propositional-normal-form}. We now given an intuition on how to obtain a QBF of polynomial size that expresses that $\varphi$ has an intuitionistic counter-model:
+Instead of expressing validity at every node of $\mathcal M_T$ --- which was done in the CPC translation --- we express that on each path in $\mathcal M_T$ the nodes satisfy all conditions for $\mathcal M_T$ being a counter-model.
 The universally quantified variables $X_\psi$ in the next definition handle the branching, i.e. express which path is considered.
 
 \begin{definition}
-For every propositional variable $A$ occurring in $\varphi$ and non-negative integer $n$ (representing the distance of a node from the root on a path) consider a new propositional variable $A^n$ and for every formula $\psi\in\mathcal X$ consider a new propositional variable $X_\psi^n$.
-Let $\vec A^n$ range over all propositional variables $A^n$ and $\vec X^n$ range over all $X_\psi^n$. 
+For every propositional variable $A$ occurring in $\varphi$ and non-negative integer $n$ (representing the $n$-th position of a node on a path) consider a new propositional variable $A^n$ and for every formula $\psi\in\mathcal X$ consider a new propositional variable $X_\psi^n$.
+Let $\vec A^n$ range over all propositional variables $A^n$ and $\vec X^n$ range over all $X_\psi^n$.
 Define
 	\begin{itemize}
 		\item {\normalfont Valid}$(n)$ which encodes that $\vec X^n_\psi$ represents a valid next element of a sequence without repetition, i.e. if we interpret the $\vec X^i$ as bit-vectors, then $\vec X^n$ has exactly one bit set to $1$, indicating the formula $\psi$ at the $n$-th position of the sequence, and it is at a position that is $0$ in all $\vec X^i$ with $i < n$ (i.e., it did not occur in the sequence previously).
@@ -464,7 +464,7 @@ Define
 	\begin{align*}
 		\text{\normalfont Valid}(n) = &\left(\bigvee\left\{X^n_\psi\:|\:\psi\in\mathcal X\right\}\right)\wedge\left(\bigwedge \left\{\neg(X^n_{\psi_1}\wedge X^n_{\psi_2})\:|\:\psi_1\neq\psi_2\in\mathcal X\right\}\right)\wedge\\&\left(\bigwedge\left\{\bigwedge\{X^i_\psi\to\neg X^n_\psi\:|\:i < n\}\:|\:\psi\in\mathcal X\right\}\right)\\
 		\text{\normalfont Persistent}(n) = & \bigwedge\left\{A^{n-1}\to A^n\:|\: A \text{ prop. variable with }A^{n-1}\in\vec A^{n-1}, A^n \in\vec A^{n}\right\}\\
-		\text{\normalfont Sat}_{\mathcal R}(n) = &\bigwedge\left\{\bigwedge A^n_i\to\bigvee B^n_j\:|\:\bigwedge A_i\to\bigvee B_j\mathcal R\right\}\\
+		\text{\normalfont Sat}_{\mathcal R}(n) = &\bigwedge\left\{\bigwedge A^n_i\to\bigvee B^n_j\:|\:\bigwedge A_i\to\bigvee B_j \in \mathcal R\right\}\\
 		\text{\normalfont Sat}_{\mathcal X}(n) = & \bigwedge\left\{X^{n-1}_\psi\to (A^n\to B^n)\to C^{n-1}\:|\:\psi = (A\to B)\to C\in\mathcal X\right\}
 	\end{align*}
 \end{definition}
@@ -731,7 +731,7 @@ We will target the particular calculi used by state-of-the-art provers, e.g. sup
 \end{lemma}
 \begin{proof}
 Suppose $\varphi$ is not intuitionistically valid.
-Then, $(\bigwedge\mathcal R\wedge\bigwedge\mathcal X)\to P$ has an intuitionistic counter-model. By the previous section there exists a classical counter-model $\mathcal M$ for $(\bigwedge\mathcal R^\#\wedge\bigwedge\mathcal X^\#)\to P^\epsilon$.
+Then, $(\bigwedge\mathcal R\wedge\bigwedge\mathcal X)\to P$ has an intuitionistic counter-model. By the previous section\todo{unklar was mit "previous section" gemeint ist, und was für ein model du genau meinst.} there exists a classical counter-model $\mathcal M$ for $(\bigwedge\mathcal R^\#\wedge\bigwedge\mathcal X^\#)\to P^\epsilon$.
 We now define a QBF model iteratively.
 For each atom $A$ interpret $A^0$ such as $\mathcal M$ interprets $A^\epsilon$. Suppose we are given interpretations of all atoms $A^i$ for $i < n$ and a sequence with no repetitions $\psi_1\dots\psi_{n-1}$ over $\mathcal X$ such that $\psi_i$ is exactly the $\psi\in\mathcal X$ for which $X_{\psi}^i$ is true and $A^i$ is interpreted as $A^{\psi_1\dots\psi_i}$  in $\mathcal M$.
 Let the $X^{n}_\psi$ be arbitrarily interpreted (since they are $\forall$-quantified). If not exactly one of the $X^{n}_\psi$ is interpreted as true, then valid$(n)$ fails and the remaining propositions can be chosen arbitrarily. If $X^i_{\psi_n} = 1$ for some $i < n$, then valid$(n)$ also fails and the remaining propositions can be chosen arbitrarily.
@@ -754,7 +754,9 @@ Again we proceed iteratively. Interpret $A^\epsilon$ such as $A^0$ is interprete
 	
 	Suppose first we have a counter-model $\mathcal M = (M, I)$ to $\varphi^C$. As a Kripke frame $(W, \leq)$ take $ W = \{m\in M\:|\:\text{ World}^I(m)\}$ and let $\leq$ be $\preceq^I$ restricted to $W$. Then let $M_u = \{m\in M\:|\: E(m, u)\}$ and let $f^{I_u}$ be $f^I$ restricted to $M_u$ and $A^{I_u}(\vec x): \Leftrightarrow A(\vec x, u)$. It is then a straightforward check of definitions that this defines a Kripke counter-model to $\varphi$.
 	
-	The other direction is a bit more involved. Suppose we have a Kripke counter-model to $\varphi$ with frame $(W, \preceq)$ and family of $\Sigma$-structures $(M_w, I_w)_{w\in W}$. In particular, since it is a counter-model there exists $w_0\in W$ and a variable assignment $v$ with $w_0, v\not\models\varphi$. Let $W_0 = \{w\in W\:|\: w_0\preceq w\}$ and define an equivalence relation $\sim$ on $\{(x, u)\:|\:u\in W_0, x\in M_u\}$ via $(x, u)\sim (y, w)$ iff $x = y$ and there exists $v\in W_0$ comparable with both $u, w$ such that $x\in v$ and denote the equivalence class of $(x, u)$ with $[x, u]$. Let $M = W_0\cup \{[x, u]\:|\:u\in W_0, x\in M_u\}$.
+	The other direction is a bit more involved. Suppose we have a Kripke counter-model to $\varphi$ with frame $(W, \preceq)$ and family of $\Sigma$-structures $(M_w, I_w)_{w\in W}$. 
+In particular, since it is a counter-model there exists $w_0\in W$ and a variable assignment $v$ with $w_0, v\not\models\varphi$.
+Let $W_0 = \{w\in W\:|\: w_0\preceq w\}$ and define an equivalence relation $\sim$ on $\{(x, u)\:|\:u\in W_0, x\in M_u\}$ via $(x, u)\sim (y, w)$ iff $x = y$ and there exists $v\in W_0$ comparable with both $u, w$ such that $x\in v$ and denote the equivalence class of $(x, u)$ with $[x, u]$. Let $M = W_0\cup \{[x, u]\:|\:u\in W_0, x\in M_u\}$.
 	Now have
 	\begin{itemize}
 		\item $\preceq^I = \leq\cup \{(m, m): m\in M\setminus W_0\}$ as a set, i.e. $\preceq$ corresponds to $\leq$ on $W_0$ and is trivial elsewhere.
@@ -770,15 +772,17 @@ Again we proceed iteratively. Interpret $A^\epsilon$ such as $A^0$ is interprete
 	\end{itemize}
 	One easily verifies that these are well-defined. We now show by induction on the height of the formula the following:
 	
-	\emph{Claim.} For any formula $\psi$ in which the free variable $b$ doesn't occur, world $w_k\in W_0$ and variable assignments $v_c, v_i$ such that $v_c(a) = [v_k(a), w_k]$ for all free variables $a$ occurring in $\psi$ it holds that \[M, I, v_c[w_k/b]\models \psi^b\text{ if and only if $w_k, v_i\models \psi$.}\]
+	\emph{Claim.} For any formula $\psi$ in which the free variable $b$ doesn't occur, world $w_k\in W_0$ and variable assignments $v_c, v_i$ such that $v_c(a) = [v_k(a), w_k]$ \todo{das sollte $v_i$ statt $v_k$ sein, oder} for all free variables $a$ occurring in $\psi$ it holds that
+\todo{Hier und weiter und sind immer M,I genannt, aber eigentlich haben wir Notation für $\mathcal M,v \models$ definiert}
+\[M, I, v_c[w_k/b]\models \psi^b\text{ if and only if $w_k, v_i\models \psi$.}\]
 	
 	For the base case, i.e. if $\psi = P(t_1,\dots, t_n)$ for some $n$-ary predicate symbol $P$, the claim follows directly from the definitions.
 	
 	For the induction step consider e.g. the case where $\psi$ is of the form $\forall x \psi'$.
-	Suppose first that $w_k, v_i\not\models \forall x\psi'$, i.e. there exists $w_l\geq w_k$ and $m_l\in w_l$ such that $w_l, v_i[m_l/a]\not\models \psi'[a/x]$. Then by the induction hypothesis $M, I, v_c[[v_i(a), w_l],w_l/c]\not\models \psi'[a/x]^c$. Furthermore by definition $M, I, v_c[w_l/c, w_k/b]\models b\preceq c$ and $M, I, v_c[v_c[[v_i(a), w_l],w_l/c]\models E(a, c)$. Hence $M, I, v_c[w_k/b]\not\models \psi^b$. Suppose on the other hand that $w_k, v_i\not\models\forall x\psi'$, i.e. for all $w_l\geq w_k$ and $m_l\in w_l$ it holds that $w_l, v_i[m_l/a]\models \psi'[a/x]$. Then by the induction hypothesis $M, I, v_c[[m_l, w_l]/A,w_l/c]\models \psi'[a/x]^c$ for all $w_l\geq w_k$ and $m_l\in w_l$. It can be shown that for every other assignment of $c$ and $a$ either $b\preceq c$ or $E(a, c)$ is violated. Hence $M, I, v_c[w_k/b]\models \psi^b$. For other forms of $\psi$ one proceeds in similar fashion. This completes the proof of the claim.
+	Suppose first that $w_k, v_i\not\models \forall x\psi'$, i.e. there exists $w_l\geq w_k$ and $m_l\in w_l$ such that $w_l, v_i[m_l/a]\not\models \psi'[a/x]$. Then by the induction hypothesis $M, I, v_c[[v_i(a), w_l],w_l/c]\not\models \psi'[a/x]^c$\todo{hier fehlt die Ersetzung für $[v_i(a), w_l]$. Fehlt außerdem nicht irgendein Bezug zu $m_l$?}. Furthermore by definition $M, I, v_c[w_l/c, w_k/b]\models b\preceq c$ and $M, I, v_c[v_c[[v_i(a), w_l],w_l/c]\models E(a, c)$\todo{hier fehlt die Ersetzung für $[v_i(a), w_l]$. Außerdem ist hier wirklich $v_c[v_c$ gemeint?}. Hence $M, I, v_c[w_k/b]\not\models \psi^b$. Suppose on the other hand that $w_k, v_i\not\models\forall x\psi'$, i.e. for all $w_l\geq w_k$ and $m_l\in w_l$ it holds that $w_l, v_i[m_l/a]\models \psi'[a/x]$. Then by the induction hypothesis $M, I, v_c[[m_l, w_l]/A,w_l/c]\models \psi'[a/x]^c$\todo{Hier wohl a statt A} for all $w_l\geq w_k$ and $m_l\in w_l$. It can be shown that for every other assignment of $c$ and $a$ either $b\preceq c$ or $E(a, c)$ is violated. Hence $M, I, v_c[w_k/b]\models \psi^b$. For other forms of $\psi$ one proceeds in similar fashion. This completes the proof of the claim.
 
 	Recall that $w_0, v\not\models\varphi$. From the claim it follows that \[M, I, v'[[v(a_0), w_0]/a_0\dots[v(a_n), w_0]/a_0, w_0/b]\not\models \varphi^b\]where $a_0\dots a_n$ are the free variables occurring in $\varphi$ and $v'$ is any variable assignment. Furthermore a straightforward check of definitions yields \[M, I, v'[[v(a_0), w_0]/a_0\dots[v(a_n), w_0]/a_0, w_0/b]\models K(\varphi)\wedge \text{World}(b)\wedge\vec E(\vec a, b).\]Therefore $M, I\not\models \varphi^C$ and we are done.
-
+\todo{Da ich hier nicht durchgekommen bin, kannst du den ganzen Beweis nochmal checken :p ?}
 \end{proof}
 
 
