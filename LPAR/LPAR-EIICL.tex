@@ -68,7 +68,7 @@ The progress in automated reasoning for intuitionistic logic, however, has been 
 This difference can partially be explained by fundamental differences between the logics.
 First of all, determining intuitionistic validity is computationally harder, e.g., in the propositional case intuitionistic validity is \verb+PSPACE+-complete~\cite{statman1979intuitionistic}, whereas classical validity is \verb+coNP+-complete~\cite{cook1971complexity}.
 A further advantage of classical logic is the existence of calculi that are particularly suited for automation, such as superposition~\cite{bachmair2001resolution}, which rely on the existence of convenient normal forms such as CNF, and the duality between validity and satisfiability (i.e., in order to show the validity of a formula it suffices to show the unsatisfiability of the negated formula, which is insufficient in intuitionistic logic).
-The first dedicated intuitionistic theorem provers~\cite{mclaughlin2009efficient,tammet1996resolution} used the naïve inverse method, i.e., a direct search for a cut-free proof by applying the rules from some proof calculus inversely, which generally leads to a very complex search. 
+The first dedicated intuitionistic theorem provers~\cite{mclaughlin2009efficient,tammet1996resolution} used the naïve inverse method, i.e., a direct search for a cut-free proof by applying the rules from some proof calculus inversely, which generally leads to a very complex search.
 More recently, connection-based methods have been applied to various non-classical logics~\cite{otten2005clausal,otten2021nanocop}, including intuitionistic logic.
 There have also been some successful attempts to study intuitionistic validity via embedding into higher-order classical logic~\cite{LEO}.
 We finally add that, in contrast to intuitionistic provers, a tremendous amount of work has been put into optimizing provers for classical logic.
@@ -80,7 +80,7 @@ To this end, we study embeddings of intuitionistic into classical logic and prop
 	\item Determine the classical validity of $\varphi^\#$ using a prover for classical logic.
 	\item Translate the classical proof (resp. counter-model) of $\varphi^\#$ given by the prover to a corresponding intuitionistic proof (resp. counter-model) of $\varphi$.
 \end{itemize}
-\subsection*{Contributions} 
+\subsection*{Contributions}
 The following main contributions will be discussed in more detail in Sections~\ref{sec:overview} and~\ref{sec:evaluation}:
 \begin{itemize}
 	\item We establish a small model property for counter-models to validity in intuitionistic propositional logic.
@@ -93,8 +93,8 @@ The following main contributions will be discussed in more detail in Sections~\r
 \subsection*{Related work}
 The famous double-negation translation establishes
 an embedding of classical into intuitionistic logic, going back to Glivenko~\cite{glivenko1929quelques} in the propositional case, and to G\"odel~\cite{godel1933intuitionistischen} and Gentzen~\cite{gentzen1936widerspruchsfreiheit} in the first-order case.
-In the propositional case the embedding is particularly simple: 
-A formula $\varphi$ is classically valid if and only if $\neg\neg\varphi$ is intuitionistically valid. 
+In the propositional case the embedding is particularly simple:
+A formula $\varphi$ is classically valid if and only if $\neg\neg\varphi$ is intuitionistically valid.
 Intuitively, the translation collapses for each subformula $\psi$ of $\varphi$ the truth values of $\psi$ and $\neg\neg\psi$, which are classically but not intuitionistically equivalent.
 For embedding intuitionistic into classical logic, we need to do the opposite:
 We need to expand the truth values of $\psi$ and $\neg\neg\psi$, i.e., if they both occur in $\varphi$, we must have a way to (classically) assign different truth values to their respective counterparts in $\varphi^\#$.
@@ -106,14 +106,15 @@ Of special relevance are the normalization procedures for intuitionistic proposi
 and examined from a proof-theoretic perspective in~\cite{fiorentini2019proof}, which we further expand upon in this paper.
 
 We finally mention a long-standing line of research that has investigated when classical validity implies intuitionistic validity.
-This most famously holds for $\Pi_2$-formulas in Peano Arithmetic~\cite{friedman1978classically}, but also other conditions are known~\cite{schwichtenberg}. 
+This most famously holds for $\Pi_2$-formulas in Peano Arithmetic~\cite{friedman1978classically}, but also other conditions are known~\cite{schwichtenberg}.
 In contrast, we propose a translation of an intuitionistic formula to an equi-valid classical formula.
 
 %Finally, of course dedicated theorem provers for intuitionistic logic exists, generally using the inverse method~\cite{mclaughlin2008imogen,pavlov2017whaleprover}, but more recently also based on connection-based calculi~\cite{otten2008leancop,otten2021nanocop}, which also work well for classical logic.
 
 \section{Preliminaries}
 
-In this section we fix notation and recall the semantics for classical and intuitionistic logic. Furthermore we recapitulate some results from~\cite{otten2005clausal}.
+In this section we fix notation and recall the semantics for classical and intuitionistic logic. 
+Furthermore, we recapitulate some results from~\cite{otten2005clausal}.
 
 \subsection{Syntax}
 
@@ -175,7 +176,7 @@ We now recall the semantics of first-order logic:
 		\item $\mathcal M, v\models \varphi\vee\psi$ iff $\mathcal M, v\models\varphi$ or $\mathcal M, v\models\psi$.
 		\item $\mathcal M, v\models \varphi\to\psi$ iff $\mathcal M, v\not\models\varphi$ or $\mathcal M, v\models\psi$.
 		\item $\mathcal M, v\models\exists x\varphi$ iff there exists $m\in M$ such that $\mathcal M, v[m/a]\models\varphi[a/x]$.
-		\item $\mathcal M, v\models\forall x\varphi$ iff for all $m\in M$ we have $\mathcal M, v[m/a]\models\varphi[a/x]$.
+		\item $\mathcal M, v\models\forall x\varphi$ iff for all $m\in M$ we have $\mathcal M, v[m/a]\models\varphi[a/x]$.\todo{Hier und im Rest vom paper bin nicht so glücklich über diese Substitution von durch a..}
 	\end{itemize}
 	 Here $a$ is a free variable that does not occur in $\varphi$. $\varphi$ is satisfiable if $\mathcal M, v\models\varphi$ for some $\mathcal M, v$. It is valid if $\mathcal M, v\models\varphi$ for every $\mathcal M, v$. We denote the set of valid formulas with \emph{CQC} (Classical Quantified Calculus).
 \end{definition}
@@ -197,7 +198,7 @@ In addition to propositional tautologies there are now quantified formulas which
 An important step in the embedding will be the elimination of quantifiers via Herbrandization.
 In this process we introduce fresh variables and add additional function symbols to the signature.
 A fresh variable is any variable that does not occur in any considered formula.
-Whenever we add a function symbol we implicitly extend the signature by a not previously contained symbol.
+Whenever we add a function symbol we implicitly extend the signature by a fresh symbol.
 
 \begin{definition}\label{definition:skolemization}
 	For formulas $\varphi$ we define the Skolemization $\varphi^S_Z$ and Herbrandization $\varphi^H_Z$ with respect to a set of free variables $Z$ by simultaneous induction:
@@ -206,7 +207,8 @@ Whenever we add a function symbol we implicitly extend the signature by a not pr
 		\item $(\varphi\circ\psi)^X_Z = \varphi^X_Z\circ\psi^X_Z$ for $\circ\in\{\wedge, \vee\}$, $X\in\{S, H\}$.
 		\item $(\varphi\to\psi)^S_Z = \varphi^H_Z\to \psi^S_Z$ and $(\varphi\to\psi)^H_Z = \varphi^S_Z\to\psi^H_Z$.
 		\item $(\forall x\varphi)^S_Z = \forall x(\varphi[a/x]^S_{Z\cup\{a\}}[x/a])$ where $a$ is a new free variable.\\$(\forall x\varphi)^H_Z = \varphi[s(z_1,\dots,z_n)/x]^H_Z$ where $s$ is a new function, $\{z_1\dots z_n\} = Z$.
-		\item $(\exists x\varphi)^S_Z = \varphi[s(z_1,\dots,z_n)/x]^S_Z$ where $s$ is a new function, $\{z_1\dots z_n\} = Z$.\\$(\exists x\varphi)^H_Z = \exists x(\varphi[a/x]^H_{Z\cup\{a\}}[x/a])$ where $a$ is a new free variable.
+		\item $(\exists x\varphi)^S_Z = \varphi[s(z_1,\dots,z_n)/x]^S_Z$ where $s$ is a new function, $\{z_1\dots z_n\} = Z$.\\$(\exists x\varphi)^H_Z = \exists x(\varphi[a/x]^H_{Z\cup\{a\}}[x/a])$
+ where $a$ is a new free variable.
 	\end{itemize}
 	Let $\varphi^S = (\exists x_1\dots\exists x_n \varphi[x_1/a_1\dots x_n/a_n])^S_\emptyset$ and $\varphi^H = (\forall x_1\dots\forall x_n \varphi[x_1/a_1\dots x_n/a_n])^H_\emptyset$ where $a_1,\dots,a_n$ are the free variables occurring in $\varphi$.
 \end{definition}
@@ -223,7 +225,7 @@ Whenever we add a function symbol we implicitly extend the signature by a not pr
 
 \subsection{Intuitionistic normal forms}
 
-Finally we note the results from~\cite{otten2005clausal} which are of importance to us.
+Finally we recall a result from~\cite{otten2005clausal}, on which we build in this paper.
 
 \begin{lemma}\label{lemma:propositional-normal-form}
 	For every propositional formula $\varphi$ there exists an atom $P$ as well as sets of clauses $\mathcal R, \mathcal X$, with $\mathcal R$ containing  \emph{flat clauses} of the form
@@ -231,7 +233,7 @@ Finally we note the results from~\cite{otten2005clausal} which are of importance
 	and $\mathcal X$ containing \emph{implication clauses} of the form
 	$$(A\to B)\to C,$$
 	such that $\varphi$ is intuitionistically equivalid to
-	$$\left(\bigwedge\mathcal R\wedge\bigwedge\mathcal X\right)\to P$$where $A_i, B_i, A, B, C$ are atomic. The size of $\mathcal R$ and $\mathcal X$ is linear in the size of $\varphi$. In general they will contain additional propositional variables.
+	$$\left(\bigwedge\mathcal R\wedge\bigwedge\mathcal X\right)\to P$$where $A_i, B_i, A, B, C$ are atomic. The size of $\mathcal R$ and $\mathcal X$ is linear in the size of $\varphi$. In general these formulae will contain additional propositional variables.
 \end{lemma}
 
 \begin{lemma}\label{lemma:first-order-normal-form}
@@ -242,37 +244,43 @@ Finally we note the results from~\cite{otten2005clausal} which are of importance
 	and $\mathcal Q$ containing \emph{quantification clauses} of the form
 	$$\forall\vec x\left((\forall y A)\to B\right),$$
 	such that $\varphi$ is intuitionistically equivalid to
-	$$\left(\bigwedge\mathcal R\wedge\bigwedge \mathcal X\wedge\bigwedge\mathcal Q\right)\to P$$where $A_i, B_i, A, B, C$ are atomic. This size of $\mathcal R, \mathcal X, \mathcal Q$ is linear in the size of $\varphi$. In general this formula will contain new function and predicate symbols.
+	$$\left(\bigwedge\mathcal R\wedge\bigwedge \mathcal X\wedge\bigwedge\mathcal Q\right)\to P$$where $A_i, B_i, A, B, C$ are atomic. This size of $\mathcal R, \mathcal X, \mathcal Q$ is linear in the size of $\varphi$. In general these formulae will contain new function and predicate symbols.
 \end{lemma}
 
-Since we could not find a proof of this, one is given in the appendix~\ref{proof:first-order-normal-form}.
+Since we could not find a proof for the first-order case, we provide one in the appendix~\ref{proof:first-order-normal-form}.
 
 \section{Overview}
 \label{sec:overview}
 
-We shall now give an overview of our main results and highlight the key arguments. We start with the propositional case. The important insights are the same as in the first-order case, while it is technically simpler and less cluttered.
+We shall now give an overview of our main results and highlight the key arguments. 
+We start with the propositional case, as the important insights are the same as in the first-order case, while it is technically simpler and less cluttered.
 
-The idea is to use the Kripke semantics for intuitionistic logic, expressed in classical logic, to perform an embedding of formulas. That is, for each $\varphi$ we give a $\varphi^\#$ that is classically valid iff $\varphi$ is intuitionistically valid, establishing a dual to the double negation translation.
+The first step is to express the Kripke semantics of intuitionistic logic in classical first-order logic.
+That is, for each $\varphi$ we give a $\varphi^\#$ that is classically valid iff $\varphi$ is intuitionistically valid, establishing a dual to the double negation translation.
 
-The key property that allows us to reduce our encoding to propositional logic, which a priori targets first order logic, is a reduction of counter-models. In particular, given $$\varphi = \left(\bigwedge\mathcal R\wedge\mathcal X\right)\to P$$ as in Lemma~\ref{lemma:propositional-normal-form} we establish:
+Then, the key to reducing the first-order logic encoding to a propositional logic encoding, is a small model property that supports the reduction of counter-models.
+In particular, given $$\varphi = \left(\bigwedge\mathcal R\wedge\mathcal X\right)\to P$$ as in Lemma~\ref{lemma:propositional-normal-form} we establish:
 
 \begin{lemma}
 	If $\varphi$ is intuitionistically invalid then there exists a Kripke counter-model which is a rooted tree with height and degree bounded by $|\mathcal X|$.
 \end{lemma}
 
-This allows us to embed intuitionistic propositional logic into classical propositional logic by replacing quantification over worlds by their enumeration.
+This allows us to embed intuitionistic propositional logic into classical propositional logic by replacing the quantification over all possible worlds by an explicit enumeration:
 
 \begin{lemma}
 	For each propositional formula $\varphi$ there is effectively a formula $\varphi^\#$ with $\mathcal |\varphi^\#|\in\mathcal O(|\mathcal R|\cdot 2^{|\mathcal X|\log|\mathcal X|})$ such that $\varphi$ is intuitionistically valid if and only if $\varphi^\#$ is classically valid.
 \end{lemma}
 
-The exact details can be found in Theorem~\ref{thm:prop-translation}. Instead of expressing correctness at each world of the model, we can express that the worlds along some path in the tree are correct. The branching of paths can be expressed through quantification in a quantified boolean formula (QBF) which gives us the following:
+The details can be found in Section~\ref{sec:ipc-to-cpc}.
+Building on the same idea, we can also give a quantified boolean formula (QBF) of polynomial size, where the branches of the tree-model can be enumerated implicitly using (alternating) quantifiers. We obtain the following result:
+
 
 \begin{lemma}
-	For each propositional formula $\varphi$ there is effectively a QBF $\varphi^Q$ with $\mathcal |\varphi^Q|\in\mathcal O(|\mathcal R|\cdot|\mathcal X| + |\mathcal X|^3)$ such that $\varphi$ is intuitionistically invalid if and only if $\varphi^Q$ is a satisfiable QBF.
+	For each propositional formula $\varphi$ there is effectively a QBF $\varphi^Q$ \todo{Ich würde die Formeln $\varphi^Q$ hier und in Section 6 aus Symmetriegründen auch $\varphi^\#$ nennen.} with $\mathcal |\varphi^Q|\in\mathcal O(|\mathcal R|\cdot|\mathcal X| + |\mathcal X|^3)$ such that $\varphi$ is intuitionistically invalid if and only if $\varphi^Q$ is a satisfiable QBF.
 \end{lemma}
 
-Again, the details can be found in Section~\ref{sec:qbf}. Next we attempt to transport these results to the first order case. However, there are formulas for which only counter-examples with an infinite Kripke frame exist. Therefore, there is no hope of completely eliminating terms representing worlds from the final embedding. This also means that our language necessarily becomes more complex. Still, a number of reductions is possible.
+Again, the details can be found in Section~\ref{sec:qbf}. 
+Next we attempt to transport these results to the first order case. However, there are formulas for which only counter-examples with an infinite Kripke frame exist. Therefore, there is no hope of completely eliminating terms representing worlds from the final embedding. This also means that our language necessarily becomes more complex. Still, a number of reductions are possible.
 
 \begin{theorem}
 	\label{thm:reduction-first-order-short}
@@ -287,7 +295,8 @@ A detailed account of the translation can be found in Definition~\ref{def:fo-tra
 The most obvious approach to embedding intuitionistic into classical logic is to examine intuitionistic semantics, e.g. Kripke frames, as a classical first order theory. For every propositional variable $A$ consider a unary predicate $A$ of the same name where $A(u)$ expresses that $A$ is true at some world $u$. We can then consider the following naïve encoding:
 
 \begin{definition}
-	Let $\varphi$ be a propositional formula. Define $\varphi^{\nu}$ inductively:
+	Let $\varphi$ be a propositional formula.\todo{genau genommen müsstest du noch sagen, dass $\nu$ eine freie Variable ist. Im letzten Fall der Definition benützen wir dann aber w gleichzeitig als freie und gebundene Variable}
+ Define $\varphi^{\nu}$ inductively:
 	\vspace*{-.1cm}
 	\begin{itemize}
 		\item $\bot^\nu = \bot$.
@@ -386,6 +395,7 @@ Essentially what this tells us is that for every $m$ at which $\psi$ is fulfille
 \end{corollary}
 
 \section{IPC to CPC}
+\label{sec:ipc-to-cpc}
 
 We can apply the previous results to give a direct embedding from intuitionistic into classical propositional logic. We know that $\varphi^{CH}$ is valid if and only if it is valid for structures that have as a domain the sequences without repetition over $\mathcal X$, ordered by the prefix-relation and $$s^I = \epsilon, f_\psi^I(x) = \begin{cases}
 	x, &\text{ if $\psi$ occurs in $x$,}\\
@@ -396,7 +406,7 @@ Now we can replace every $\forall$-quantifier in $\varphi^{CH}$ by enumerating a
 \begin{theorem}\label{thm:prop-translation}
 	Suppose we are given a formula as in Lemma~\ref{lemma:propositional-normal-form}, i.e. of the form
 	$$\left(\bigwedge\mathcal R\wedge\bigwedge\mathcal S\right)\to P$$
-	with flat $\mathcal R$ and implication $\mathcal S$. Let $\Lambda$ denote the set of sequences without repetition over $\mathcal X$. For every propositional variable $A$ and $\lambda\in\Lambda$ consider a new propositional Variable $A^\lambda$. Define $R^\#$ as the union over all sets
+	with flat $\mathcal R$ and implication $\mathcal S$. Let $\Lambda$ denote the set of sequences without repetition over $\mathcal X$. For every propositional variable $A$ and $\lambda\in\Lambda$ consider a new propositional Variable $A^\lambda$. Define $\mathcal R^\#$ as the union over all sets
 	$$
 		\left\{\bigwedge_iA_i^\lambda\to\bigvee_jB_j^\lambda\:|\:\lambda\in\Lambda\right\}
 	$$
@@ -404,7 +414,7 @@ Now we can replace every $\forall$-quantifier in $\varphi^{CH}$ by enumerating a
 	$$
 		\left\{\left(A^{\lambda\psi} \to A^{\lambda\psi}\right)\to C^\lambda\:|\:\lambda\in\Lambda, \psi\text{ does not occur in }\lambda\right\}
 	$$
-	for $\psi = (A\to B)\to C\in\mathcal X$ as well as $P^\#$ as the union over all sets
+	for $\psi = (A\to B)\to C\in\mathcal X$ as well as $P^\#$ \todo{Hier ist nur P statt mathcal P, was aus Symmetriegründen vielleicht hilfreich wäre, aber P wird auch schon für die finale Präposition verwendet, also wäre ein anderer Buchstabe wohl besser} as the union over all sets
 	$$
 		\left\{A^\lambda\to A^{\lambda\psi}\:|\:\lambda\in\Lambda, \psi\text{ does not occur in }\lambda\right\}
 	$$
@@ -428,15 +438,20 @@ Now we can replace every $\forall$-quantifier in $\varphi^{CH}$ by enumerating a
 \section{IPC to QBF}\label{sec:qbf}
 
 It is known that a polynomial time translation between QBF and IPC must exist, since both problems are PSPACE complete~\cite{garey1979computers,statman1979intuitionistic}.
-The translation from the last section will serve as starting point for developing the translation in this section.
-For lack of space, we do not define the semantics of QBF in this paper and refer the reader to standard sources e.g.~\cite{series/faia/2009-185}.
+\todo{Wollen wir noch etwas sagen wie ``However the previous PSPACE result does not support the transfer of countermodels that we develop in this section''?}
+For lack of space, we do not give the semantics of QBF in this paper and instead refer the reader to standard sources e.g.~\cite{series/faia/2009-185}.
+The translation from the last section will serve as starting point for this section.
 
-Suppose we are given a formula $\varphi$ in normal form $$\left(\bigwedge\mathcal R\wedge\bigwedge\mathcal X\right)\to P$$ as in Lemma~\ref{lemma:propositional-normal-form}. We will now formulate a QBF that expresses that $\varphi$ has an intuitionistic counter-model. The idea how to get a polynomially-sized formula is: Instead of expressing validity at every node of $\mathcal M_T$ --- which was done in the CPC translation --- we express that on each path in $\mathcal M_T$ the nodes satisfy all conditions for $\mathcal M_T$ being a counter-model. The universally quantified variables $X_\psi$ in the next definition handle the branching, i.e. express which path is considered.
+Suppose we are given a formula $\varphi$ in normal form $$\left(\bigwedge\mathcal R\wedge\bigwedge\mathcal X\right)\to P$$ as in Lemma~\ref{lemma:propositional-normal-form}. We now given an intuition on how to obtain a QBF of polynomial size that expresses that $\varphi$ has an intuitionistic counter-model: 
+Instead of expressing validity at every node of $\mathcal M_T$ --- which was done in the CPC translation --- we express that on each path in $\mathcal M_T$ the nodes satisfy all conditions for $\mathcal M_T$ being a counter-model. 
+The universally quantified variables $X_\psi$ in the next definition handle the branching, i.e. express which path is considered.
 
 \begin{definition}
-	For every propositional variable $A$ occurring in $\varphi$ and non-negative integer $n$ consider a new propositional variable $A^n$ and for every formula $\psi\in\mathcal X$ consider a new propositional variable $X_\psi^n$. Let $\vec A^n$ range over all propositional variables $A^n$ and $\vec X^n$ range over all $X_\psi^n$. Define
+For every propositional variable $A$ occurring in $\varphi$ and non-negative integer $n$ (representing the distance of a node from the root on a path) consider a new propositional variable $A^n$ and for every formula $\psi\in\mathcal X$ consider a new propositional variable $X_\psi^n$.
+Let $\vec A^n$ range over all propositional variables $A^n$ and $\vec X^n$ range over all $X_\psi^n$. 
+Define
 	\begin{itemize}
-		\item {\normalfont Valid}$(n)$ which encodes that $\vec X^n_\psi$ represents a valid next element of a sequence without repetition, i.e. if we interpret the $\vec X^i$ as bit-vectors, then $\vec X^n$ has exactly one bit set to $1$, indicating the formula at the $n$-th position of the sequence, and it is at a position that is $0$ in $\sum\{\vec X^i\:|\:i < n\}$.
+		\item {\normalfont Valid}$(n)$ which encodes that $\vec X^n_\psi$ represents a valid next element of a sequence without repetition, i.e. if we interpret the $\vec X^i$ as bit-vectors, then $\vec X^n$ has exactly one bit set to $1$, indicating the formula $\psi$ at the $n$-th position of the sequence, and it is at a position that is $0$ in all $\vec X^i$ with $i < n$ (i.e., it did not occur in the sequence previously).
 		\item {\normalfont Persistent}$(n)$ which encodes that the persistency condition holds.
 		\item {\normalfont Sat}$_{\mathcal R}(n)$ encoding that the formulas in $\mathcal R$ hold at the $n$-th world of the path.
 		\item {\normalfont Sat}$_{\mathcal X}(n)$ encoding that the formula in $\mathcal X$ that is represented by $\vec X^{n-1}$ holds.
@@ -486,6 +501,7 @@ We now give an analogous transformation for first order logic. Our trick of lift
 
 \begin{definition}\label{def:fo-translation}
 	Let $\varphi$ be a predicate formula. Define $\varphi^{\nu}$ inductively:
+\todo{genau genommen müsstest du noch sagen, dass $\nu$ eine freie Variable ist. Im letzten Fall der Definition benützen wir dann aber w gleichzeitig als freie und gebundene Variable}
 	\begin{itemize}
 		\item $\bot^\nu = \bot$.
 		\item $A(\vec t)^{\nu} = A(\vec t, \nu)$ for every predicate symbol $A$.
@@ -614,7 +630,7 @@ It is not possible to completely eliminate worlds from the domain by enumerating
 	\label{fig:a}
 \end{wrapfigure}
 
-We have benchmarked our first-order translation on version 1.1.2 of the ILTP problem set~\cite{iltp} by performing our translation and then examining the generated classical problem using Vampire~\cite{kovacs2013first}. 
+We have benchmarked our first-order translation on version 1.1.2 of the ILTP problem set~\cite{iltp} by performing our translation and then examining the generated classical problem using Vampire~\cite{kovacs2013first}.
 For comparison the state-of-the-art intuitionistic provers ileanCoP 1.2~\cite{otten2008leancop} and nanoCoP-i 2.0~\cite{otten2021nanocop} were used. All benchmarks were conducted on an Intel Core i5-8400 2.80GHz machine running Linux with a time limit of 10s per problem. The problem \textsc{SYN007+1} was removed as our normal form procedure would explode the size of instance.
 
 \begin{wrapfigure}[14]{r}{0.4\textwidth}
@@ -647,8 +663,8 @@ For comparison the state-of-the-art intuitionistic provers ileanCoP 1.2~\cite{ot
 \end{wrapfigure}
 
 \vspace*{-.5cm}
-Two versions of the translation were tested, one with and one without the additional axioms encoding idempotence. The results are stated in Figure \ref{fig:a}. 
-In general, our approach falls short of the state of the art. 
+Two versions of the translation were tested, one with and one without the additional axioms encoding idempotence. The results are stated in Figure \ref{fig:a}.
+In general, our approach falls short of the state of the art.
 However when grouping the benchmarks by $|\mathcal Q|$ and $|\mathcal X|$, see Figure~\ref{fig:b},
 we observe good performance of our approach for $|\mathcal Q| = 0$ and $|\mathcal X| \leq 2$ resp. $|\mathcal X| \geq 6$.
 Figure~\ref{fig:c} shows that our approach solved 52 problems not solved by the state-of-the-art provers. Notably, while there is big overlap in solved instances, ileanCoP and nanoCoP also have a significant symmetric difference.
@@ -667,7 +683,7 @@ Figure~\ref{fig:c} shows that our approach solved 52 problems not solved by the 
 	\label{fig:b}
 \end{figure}
 
-We conclude that our approach already has merits when $|\mathcal Q| = 0$ and $|\mathcal X|$ is small. 
+We conclude that our approach already has merits when $|\mathcal Q| = 0$ and $|\mathcal X|$ is small.
 We see that encoding idempotence does help to solve some additional benchmarks, but in general does not improve performance.
 However, idempotence is a quite powerful concept from a model-theoretic perspective. We suspect that a more clever encoding of this property could improve results. There are other restrictions on models we could consider, based on structural properties of the formula, e.g. the relation between occurrences of different atoms.
 
@@ -697,7 +713,7 @@ We will target the particular calculi used by state-of-the-art provers, e.g. sup
 	called \emph{implication} clauses as well as $\mathcal Q$ of the form
 	$$\forall\vec x\left((\forall y A)\to B\right)$$
 	called \emph{quantification} clauses such that $\varphi$ is intuitionistically equivalid to
-	$$\left(\bigwedge\mathcal R\wedge\bigwedge \mathcal X\wedge\bigwedge\mathcal Q\right)\to P$$where $A_i, B_i, A, B, C$ are atomic. This size of $\mathcal R, \mathcal X, \mathcal Q$ is linear in the size of $\varphi$. In general this formula will contain new function symbols and predicate symbols.
+	$$\left(\bigwedge\mathcal R\wedge\bigwedge \mathcal X\wedge\bigwedge\mathcal Q\right)\to P$$where $A_i, B_i, A, B, C$ are atomic. This size of $\mathcal R, \mathcal X, \mathcal Q$ is linear in the size of $\varphi$. In general these formulae will contain new function symbols and predicate symbols.
 \end{lemma}
 
 \begin{proof}
@@ -764,7 +780,7 @@ Again we proceed iteratively. Interpret $A^\epsilon$ such as $A^0$ is interprete
 	For the induction step consider e.g. the case where $\psi$ is of the form $\forall x \psi'$.
 	Suppose first that $w_k, v_i\not\models \forall x\psi'$, i.e. there exists $w_l\geq w_k$ and $m_l\in w_l$ such that $w_l, v_i[m_l/a]\not\models \psi'[a/x]$. Then by the induction hypothesis $M, I, v_c[[v_i(a), w_l],w_l/c]\not\models \psi'[a/x]^c$. Furthermore by definition $M, I, v_c[w_l/c, w_k/b]\models b\preceq c$ and $M, I, v_c[v_c[[v_i(a), w_l],w_l/c]\models E(a, c)$. Hence $M, I, v_c[w_k/b]\not\models \psi^b$. Suppose on the other hand that $w_k, v_i\not\models\forall x\psi'$, i.e. for all $w_l\geq w_k$ and $m_l\in w_l$ it holds that $w_l, v_i[m_l/a]\models \psi'[a/x]$. Then by the induction hypothesis $M, I, v_c[[m_l, w_l]/A,w_l/c]\models \psi'[a/x]^c$ for all $w_l\geq w_k$ and $m_l\in w_l$. It can be shown that for every other assignment of $c$ and $a$ either $b\preceq c$ or $E(a, c)$ is violated. Hence $M, I, v_c[w_k/b]\models \psi^b$. For other forms of $\psi$ one proceeds in similar fashion. This completes the proof of the claim.
 
-	Recall that $w_0, v\not\models\varphi$. From the claim it follows that \[M, I, v'[[v(a_0), w_0]/a_0\dots[v(a_n), w_0]/a_0, w_0/b]\not\models \varphi^b\]where $a_0\dots a_n$ are the free variables occurring in $\varphi$ and $v'$ is any variable assignment. Furthermore a straightforward check of definitions yields \[M, I, v'[[v(a_0), w_0]/a_0\dots[v(a_n), w_0]/a_0, w_0/b]\models K(\varphi)\wedge \text{World}(b)\wedge\vec E(\vec a, b).\]Therefore $M, I\not\models \varphi^C$ and we are done. 
+	Recall that $w_0, v\not\models\varphi$. From the claim it follows that \[M, I, v'[[v(a_0), w_0]/a_0\dots[v(a_n), w_0]/a_0, w_0/b]\not\models \varphi^b\]where $a_0\dots a_n$ are the free variables occurring in $\varphi$ and $v'$ is any variable assignment. Furthermore a straightforward check of definitions yields \[M, I, v'[[v(a_0), w_0]/a_0\dots[v(a_n), w_0]/a_0, w_0/b]\models K(\varphi)\wedge \text{World}(b)\wedge\vec E(\vec a, b).\]Therefore $M, I\not\models \varphi^C$ and we are done.
 
 \end{proof}
 
