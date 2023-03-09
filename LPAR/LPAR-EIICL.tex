@@ -119,7 +119,7 @@ In this section we fix notation and recall the semantics for classical and intui
 
 For propositional logic we assume an ambient set of propositional variables. As usual a formula is either $\bot$, a propositional variable or, given formulas $\varphi$ and $\psi$ and $\circ\in\{\wedge, \vee,\to\}$, $\varphi\circ\psi$.
 
-For predicate logic we assume an ambient signature $\Sigma$, i.e., a set of function and predicate symbols with their respective arities, and a set of variables. As usual we can inductively define terms and formuas. A term is either a variable or, given an $n$-ary function symbol $f$ and terms $t_1, \ldots, t_n$, $f(t_1, \ldots, t_n)$. A formula is either $\bot$, or, given a $n$-ary predicate symbol $P$ and terms $t_1, \ldots, t_n$, $P(t_1, \ldots, t_n)$, or, given formulas $\varphi$ and $\psi$ and $\circ\in\{\wedge, \vee,\to\}$, $\varphi\circ\psi$, or, given a formula $\varphi$ and a variable $x$, $\exists x\varphi$ or $\forall x\varphi$. Free and bound variables are defined as usual and we assume that they comprise distinct sets, such that bound variables are not affected by substitutions of free variables. Generally we will denote free variables with letters at the beginning of the alphabet and bound variables with letters at the end of the alphabet.
+For predicate logic we assume an ambient signature $\Sigma$, i.e., a set of function and predicate symbols with their respective arities, and a set of variables. A term is either a variable or, given an $n$-ary function symbol $f$ and terms $t_1, \ldots, t_n$, $f(t_1, \ldots, t_n)$. A formula is either $\bot$, or, given a $n$-ary predicate symbol $P$ and terms $t_1, \ldots, t_n$, $P(t_1, \ldots, t_n)$, or, given formulas $\varphi$ and $\psi$ and $\circ\in\{\wedge, \vee,\to\}$, $\varphi\circ\psi$, or, given a formula $\varphi$ and a variable $x$, $\exists x\varphi$ or $\forall x\varphi$. Free and bound variables are defined as usual and we assume that they comprise distinct sets, such that bound variables are not affected by substitutions of free variables. Generally letters at the beginning of the alphabet will denote free variables and letters at the end of the alphabet bound variables.
 
 
 \subsection{Propositional Semantics}
@@ -196,8 +196,8 @@ In addition to propositional tautologies there are now quantified formulas which
 
 An important step in the embedding will be the elimination of quantifiers via Herbrandization.
 In this process we introduce fresh variables and add additional function symbols to the signature.
-A fresh variable is any variable that does not occur in any of the considered formulas.
-Whenever we add a function symbol we implicitly extend the signature by some not previously contained symbol.
+A fresh variable is any variable that does not occur in any considered formula.
+Whenever we add a function symbol we implicitly extend the signature by a not previously contained symbol.
 
 \begin{definition}\label{definition:skolemization}
 	For formulas $\varphi$ we define the Skolemization $\varphi^S_Z$ and Herbrandization $\varphi^H_Z$ with respect to a set of free variables $Z$ by simultaneous induction:
@@ -208,7 +208,7 @@ Whenever we add a function symbol we implicitly extend the signature by some not
 		\item $(\forall x\varphi)^S_Z = \forall x(\varphi[a/x]^S_{Z\cup\{a\}}[x/a])$ where $a$ is a new free variable.\\$(\forall x\varphi)^H_Z = \varphi[s(z_1,\dots,z_n)/x]^H_Z$ where $s$ is a new function, $\{z_1\dots z_n\} = Z$.
 		\item $(\exists x\varphi)^S_Z = \varphi[s(z_1,\dots,z_n)/x]^S_Z$ where $s$ is a new function, $\{z_1\dots z_n\} = Z$.\\$(\exists x\varphi)^H_Z = \exists x(\varphi[a/x]^H_{Z\cup\{a\}}[x/a])$ where $a$ is a new free variable.
 	\end{itemize}
-	Let $$\varphi^S = (\exists x_1\dots\exists x_n \varphi[x_1/a_1\dots x_n/a_n])^S_\emptyset$$ and $$\varphi^H = (\forall x_1\dots\forall x_n \varphi[x_1/a_1\dots x_n/a_n])^H_\emptyset$$ where $a_1,\dots,a_n$ are the free variables occurring in $\varphi$.
+	Let $\varphi^S = (\exists x_1\dots\exists x_n \varphi[x_1/a_1\dots x_n/a_n])^S_\emptyset$ and $\varphi^H = (\forall x_1\dots\forall x_n \varphi[x_1/a_1\dots x_n/a_n])^H_\emptyset$ where $a_1,\dots,a_n$ are the free variables occurring in $\varphi$.
 \end{definition}
 
 \begin{theorem}
@@ -234,8 +234,6 @@ Finally we note the results from~\cite{otten2005clausal} which are of importance
 	$$\left(\bigwedge\mathcal R\wedge\bigwedge\mathcal X\right)\to P$$where $A_i, B_i, A, B, C$ are atomic. The size of $\mathcal R$ and $\mathcal X$ is linear in the size of $\varphi$. In general they will contain additional propositional variables.
 \end{lemma}
 
-A similar result holds in the first order case.
-
 \begin{lemma}\label{lemma:first-order-normal-form}
 	For every predicate formula $\varphi$ there exists a nullary predicate symbol $P$ as well as sets of clauses $\mathcal R,\mathcal X, \mathcal Q$, with $\mathcal R$ containing \emph{flat clauses} of the form
 	$$\forall \vec x\left(\bigwedge_i A_i\to \bigvee_jB_j\right),$$
@@ -247,14 +245,14 @@ A similar result holds in the first order case.
 	$$\left(\bigwedge\mathcal R\wedge\bigwedge \mathcal X\wedge\bigwedge\mathcal Q\right)\to P$$where $A_i, B_i, A, B, C$ are atomic. This size of $\mathcal R, \mathcal X, \mathcal Q$ is linear in the size of $\varphi$. In general this formula will contain new function and predicate symbols.
 \end{lemma}
 
-Since we could not find a proof of this, one is given in the appendix.
+Since we could not find a proof of this, one is given in the appendix~\ref{proof:first-order-normal-form}.
 
 \section{Overview}
 \label{sec:overview}
 
 We shall now give an overview of our main results and highlight the key arguments. We start with the propositional case. The important insights are the same as in the first-order case, while it is technically simpler and less cluttered.
 
-The general idea is to use the Kripke semantics for intuitionistic logic, which are expressed in classical logic, to perform an embedding of formulas. That is, for each formula $\varphi$ we give a formula $\varphi^\#$ that is classically valid if and only if $\varphi$ is intuitionistically valid, establishing a dual to the double negation translation.
+The idea is to use the Kripke semantics for intuitionistic logic, expressed in classical logic, to perform an embedding of formulas. That is, for each $\varphi$ we give a $\varphi^\#$ that is classically valid iff $\varphi$ is intuitionistically valid, establishing a dual to the double negation translation.
 
 The key property that allows us to reduce our encoding to propositional logic, which a priori targets first order logic, is a reduction of counter-models. In particular, given $$\varphi = \left(\bigwedge\mathcal R\wedge\mathcal X\right)\to P$$ as in Lemma~\ref{lemma:propositional-normal-form} we establish:
 
@@ -321,7 +319,7 @@ The most obvious approach to embedding intuitionistic into classical logic is to
 This is somewhat unsatisfying as we end up in a much more complex logic. However using the normal form from Lemma~\ref{lemma:propositional-normal-form}, i.e. assuming that $\varphi$ is of the form $$\left(\bigwedge\mathcal R\wedge\bigwedge\mathcal X\right)\to P$$ for some flat clauses $\mathcal R$ and implicational clauses $\mathcal X$, further simplification is possible:
 \begin{itemize}
 	\item For flat clauses $(\bigwedge A_i\to\bigvee B_j)^\nu$ is
-	$$\forall w\left(\nu\preceq w\to\bigwedge_i A_i(w)\to\bigvee_jB_j(w)\right).$$
+	$\forall w\left(\nu\preceq w\to\bigwedge_i A_i(w)\to\bigvee_jB_j(w)\right).$
 	\item For implication clauses $((A\to B)\to C)^\nu$ is
 	$$\forall w(\nu\preceq w\to(\forall k(w\preceq k\to A(k)\to B(k)))\to C(w))$$
 \end{itemize}
@@ -331,7 +329,6 @@ $$\forall w\left(s\preceq w\to\bigwedge_iA_i(w)\to\bigvee_jB_j(w)\right)$$
 and each formula $\psi\in\mathcal X^{b S}$ is of the form
 $$\forall w(s\preceq w\to(w\preceq f_\psi(w)\to A(f_\psi(w))\to B(f_\psi(w)))\to C(w))$$
 with $f_\psi$ being a new function symbol.
-
 We now argue that if a counter-model for $\varphi^{CH}$ exists then a small counter-model exists. This is ultimately what enables our translations.
 
 \begin{definition}
@@ -385,7 +382,7 @@ Essentially what this tells us is that for every $m$ at which $\psi$ is fulfille
 \end{remark}
 
 \begin{corollary}
-	If a formula in normal form as in Lemma~\ref{lemma:propositional-normal-form} is intuitionistically invalid then there exists a Kripke counter-model which is a rooted tree with height and degree bounded by $|\mathcal X|$.
+	If a formula in normal form as in Lemma~\ref{lemma:propositional-normal-form} is intuitionistically invalid then there exists a Kripke counter-model that is a rooted tree of height and degree bounded by $|\mathcal X|$.
 \end{corollary}
 
 \section{IPC to CPC}
@@ -485,7 +482,7 @@ Note that the last set of universally quantified variables can be avoided becaus
 
 \section{CQC to IQC}
 
-We now give an analogous transformation for first order logic. Our trick of lifting the sentence to first-order logic to encode the Kripke semantics no longer works in such a straightforward manner, since we already are in first-order logic. However we do it nonetheless! The domain of our classical model will feature on the one hand elements representing worlds in a Kripke frame and on the other hand the domain-elements from the Kripke model. We reconcile these notions by introducing a special binary predicate $E$, first considered in~\cite{baaz2006skolemization} and expanded onto in~\cite{iemhoff2010eskolemization}, where $E(x, u)$ encodes that $x$ is an element of the domain of the world $u$. To encode that some $n$-ary predicate $A$ holds at a world $u$ we extend each $n$-ary predicate symbol to a $n+1$-ary predicate symbol of the same name, interpreting $A(\vec x, u)$ as "$A(\vec x)$ holds at u". Furthermore we write $\vec E(\vec x, u)$ for $\bigwedge\{E(x_i, u)\:|\:x_i\in \vec x\}$. With this we obtain the following encoding of Kripke Semantics:
+We now give an analogous transformation for first order logic. Our trick of lifting the sentence to first-order logic to encode the Kripke semantics no longer works in such a straightforward manner, since we already are in first-order logic. However we do it nonetheless! The domain of our classical model will feature on the one hand elements representing worlds in a Kripke frame and on the other hand the domain-elements from the Kripke model. We reconcile these notions by introducing a special binary predicate $E$, first considered in~\cite{baaz2006skolemization} and expanded onto in~\cite{iemhoff2010eskolemization}, where $E(x, u)$ encodes that $x$ is an element of the domain of the world $u$. To encode that some $n$-ary predicate $A$ holds at a world $u$ we extend each $n$-ary predicate symbol to a $n+1$-ary predicate symbol of the same name, interpreting $A(\vec x, u)$ as "$A(\vec x)$ holds at u". Write $\vec E(\vec x, u)$ for $\bigwedge\{E(x_i, u)\:|\:x_i\in \vec x\}$. With this we obtain the following encoding of Kripke Semantics:
 
 \begin{definition}\label{def:fo-translation}
 	Let $\varphi$ be a predicate formula. Define $\varphi^{\nu}$ inductively:
@@ -502,7 +499,7 @@ We now give an analogous transformation for first order logic. Our trick of lift
 		K(\varphi) = \:& \text{PartialOrder}(\preceq) \wedge \forall u \forall w (u\preceq w\to \text{DomainSubset}(u, w)) \wedge\\
 		& \forall u(\text{World(u)}\to \text{DomainClosed}(u))\wedge \forall u\forall w (u\preceq w\to \text{Persistent}(u, w)).
 	\end{align*}
-	with e.g.:
+	with e.g.:\vspace*{-.76cm}
 	\begin{align*}
 		\text{PartialOrder}(\preceq) = &\:\forall u(u\preceq u)\wedge\forall u\forall w(u\preceq w\to w\preceq u\to u = w)\wedge\\&\:\forall u\forall v\forall w(u\preceq v\to v\preceq w\to u\preceq w)\\
 		\text{DomainSubset}(u, w) = &\:\forall x(E(x, u)\to E(x, w))\\
@@ -511,7 +508,7 @@ We now give an analogous transformation for first order logic. Our trick of lift
 		\text{Persistent}(u, w) = &\:\bigwedge\left\{\forall\vec x(\vec A(\vec x, u)\to A(\vec x, w))\:|\:\text{$A$ a predicate in $\varphi$}\right\}
 	\end{align*}
 	Then define
-	$$\varphi^C = K(\varphi)\to\text{World}(b)\to \vec E(\vec a, b)\to \varphi^b$$where $\vec a$ contains all free variables occurring in $\varphi$ and $b$ is a new free variable.
+	$\varphi^C = K(\varphi)\to\text{World}(b)\to \vec E(\vec a, b)\to \varphi^b$ where $\vec a$ contains all free variables occurring in $\varphi$ and $b$ is a new free variable.
 \end{definition}
 
 \begin{lemma}\label{lemma:fo-simplification}
@@ -539,7 +536,7 @@ As in the previous section we can define a tree counter-model for this.
 		\item $M_T$ are the sequences on $\{(\vec m, \psi)\:|\:\psi\in \mathcal F, \vec m\in M^n\}$.
 		\item $r^{I_T} = s^{I_T} = \epsilon$.
 		\item We interpret $\preceq$ as the prefix-order.
-		\item We set $$f_\psi^{I_T}(\vec m, (\vec m_1, \psi_1)\dots (\vec m_n, \psi_n)) = (\vec m_1, \psi_1)\dots (\vec m_n, \psi_n)(\vec m, \psi).$$
+		\item We set $f_\psi^{I_T}(\vec m, (\vec m_1, \psi_1)\dots (\vec m_n, \psi_n)) = (\vec m_1, \psi_1)\dots (\vec m_n, \psi_n)(\vec m, \psi).$
 		\item For predicate symbols $R$, we set $${R}^{I_T}(\vec m, (\vec m_1, \psi_1)\dots (\vec m_n, \psi_n)) = {R}^I(\vec m, f_{\psi_n}(\vec m_n, \dots(f_{\psi_1}(\vec m_1, s^I))\dots)).$$
 	\end{itemize}
 \end{definition}
@@ -564,25 +561,25 @@ $$Putting all of this together yields the following translation:
 		\forall u\forall \vec x\left(\vec E(\vec x, u)\to\bigwedge_i A_i(\vec a_i, u)\to\bigvee_j B_j(\vec b_j, u)\right)
 	$$
  	for each flat clause
- 	$$
+ 	$
  		\forall \vec x\left(\bigwedge_i A_i(\vec a_i)\to\bigvee_j B_j(\vec b_j)\right)\in\mathcal R,
- 	$$
+ 	$
  	$\mathcal X^\#$ by including
  	$$
  		\forall u\forall \vec x\left(A(\vec a, f_\psi(\vec x, u))\to B(\vec b, f_\psi(\vec x, u))\to C(\vec c, u)\right)
  	$$
  	for each implication clause
-	$$
+	$
 		\psi = \forall \vec x\left(\left(A(\vec a)\to B(\vec b)\right)\to C(\vec c)\right)\in\mathcal X,
-	$$
+	$
 	and $\mathcal Q^\#$ by including
 	$$
 		\forall u\forall \vec x\left(\forall y\left(A(\vec a, f_\psi(\vec x, u))\right)\to B(\vec b, u)\right)
 	$$
 	for each implication clause
-	$$
+	$
 		\psi = \forall \vec x\left(\forall y\left(A(\vec a)\right)\to B(\vec b)\right)\in\mathcal X.
-	$$
+	$
 	Then $\varphi$ is intuitionistically valid if and only if
 	$$
 		\varphi^\# := \exists xE(x, s)\to K(\varphi)\to \left(\bigwedge\mathcal R^\#\wedge\bigwedge\mathcal X^\#\wedge\bigwedge\mathcal Q^\#\right)\to P^\#(s)
@@ -596,7 +593,7 @@ $$Putting all of this together yields the following translation:
 	The size of the obtained formula is linear in the input. However $|\mathcal X| + |\mathcal Q| + 1$ new function symbols and the new binary predicate $E$ were introduced and each $n$-ary predicate has been extended to a $n+1$-ary predicate.
 \end{theorem}
 
-It is not possible to completely eliminate worlds from the domain by enumerating them since there are formulas with no finite counter-examples. An analogous procedure to the propositional case fails, however we can still retrieve additional axioms that restrict the interpretation of functions. That is, we may assume that $f_\psi(\vec t, w) = w$, if $\exists u(w = f_\psi(\vec t, u))$ for all $\psi\in\mathcal X\cup\mathcal Q$ (i.e. that $f_\psi$ parametrized by $\vec t$ is idempotent), and $f_\psi(\vec t, w) = w$, if $\exists u(w \geq f_\psi(\vec t, u))$ for all $\psi\in\mathcal X$ (which is even stronger than idempotence).
+It is not possible to completely eliminate worlds from the domain by enumerating them since there are formulas with no finite counter-examples. An analogous procedure to the propositional case fails, however we can still retrieve additional axioms that restrict the interpretation of functions. That is, we may assume that $f_\psi(\vec t, w) = w$, if $\exists u(w = f_\psi(\vec t, u))$ for all $\psi\in\mathcal X\cup\mathcal Q$ (i.e. that $f_\psi$ parametrized by $\vec t$ is idempotent), and $f_\psi(\vec t, w) = w$, if $\exists u(w \geq f_\psi(\vec t, u))$ for all $\psi\in\mathcal X$.
 
 \section{Experimental Evaluation}
 \label{sec:evaluation}
@@ -604,8 +601,8 @@ It is not possible to completely eliminate worlds from the domain by enumerating
 
 
 
-\begin{wrapfigure}[4]{r}{0.4\textwidth}
-	\vspace*{-2cm}
+\begin{wrapfigure}[5]{r}{0.4\textwidth}
+	\vspace*{-1.6cm}
 	\begin{tabular}{l|c|c}
 		Embedding&571&21.4\%\\
 		Embedding (idem.)&557&20.9\%\\
@@ -620,9 +617,8 @@ It is not possible to completely eliminate worlds from the domain by enumerating
 We have benchmarked our first-order translation on version 1.1.2 of the ILTP problem set~\cite{iltp} by performing our translation and then examining the generated classical problem using Vampire~\cite{kovacs2013first}. 
 For comparison the state-of-the-art intuitionistic provers ileanCoP 1.2~\cite{otten2008leancop} and nanoCoP-i 2.0~\cite{otten2021nanocop} were used. All benchmarks were conducted on an Intel Core i5-8400 2.80GHz machine running Linux with a time limit of 10s per problem. The problem \textsc{SYN007+1} was removed as our normal form procedure would explode the size of instance.
 
-
-\begin{wrapfigure}[16]{r}{0.4\textwidth}
-	\vspace{6cm}
+\begin{wrapfigure}[14]{r}{0.4\textwidth}
+	\vspace{6.4cm}
 	\hspace*{1.5cm}
 	\begin{tikzpicture}
 		\begin{scope}[opacity=0.1, blend mode=multiply]
@@ -645,11 +641,12 @@ For comparison the state-of-the-art intuitionistic provers ileanCoP 1.2~\cite{ot
 			\end{tikzpicture}
 		\end{scope}
 	\end{tikzpicture}
-	\vspace*{-7.5cm}
+	\vspace*{-7.6cm}
 	\caption{Instances proven by combinations of Embedding (red), Embedding (idem.) (green), ileanCoP or nanoCoP (blue)}
 	\label{fig:c}
 \end{wrapfigure}
 
+\vspace*{-.5cm}
 Two versions of the translation were tested, one with and one without the additional axioms encoding idempotence. The results are stated in Figure \ref{fig:a}. 
 In general, our approach falls short of the state of the art. 
 However when grouping the benchmarks by $|\mathcal Q|$ and $|\mathcal X|$, see Figure~\ref{fig:b},
@@ -661,14 +658,10 @@ Figure~\ref{fig:c} shows that our approach solved 52 problems not solved by the 
 		$|\mathcal Q|$&$|\mathcal X|$&\multicolumn{2}{c}{Embedding}&\multicolumn{2}{c}{Embedding (idem.)}&\multicolumn{2}{c}{ileanCoP}&\multicolumn{2}{c}{nanoCoP-i 2.0}&Total\\\hline
 		0&0		&157&88.2\%	&157&88.2\%		&128&71.9\%		&61&38.1\%	&178\\
 		0&1-2	&119&29.8\%&130&32.5\%		&108&27.0\%		&96&24.0\%	&400\\
-		0&3-5	&16&15.2\%	&17&16.2\%		&50&47.6\%		&40&28.1\%	&105\\
-		0&6+	&27&38.6\%	&11&15.7\%		&20&28.6\%		&11&15.7\%	&70\\
+		0&3+	&33&18.9\%	&38&21.7\%		&70&40.0\%		&51&29.1\%	&175\\
 		1-2&0-2	&84&29.3\%	&81&28.2\%		&227&79.1\%		&221&77.0\%	&287\\
-		1-2&3-5	&80&25.6\%	&77&24.7\%		&141&45.2\%		&122&39.1\%	&312\\
-		1-2&6+	&22&21.8\%	&21&20.8\%		&39&38.6\%		&37&36.6\%	&101\\
-		3-5&0-5	&38&17.0\%	&40&17.9\%		&125&55.8\%		&110&49.1\%	&224\\
-		3-5&6+  &20&8.4\%	&18&7.6\%		&64&27.0\%		&86&36.3\%	&237\\
-		6+&0+	&8&1.1\%	&5&0.7\%		&73&9.7\%		&74&9.8\%	&755
+		1-2&3+	&102&24.7\%	&98&27.3\%		&180&43.6\%		&157&39.1\%	&413\\
+		3+&0+	&66&5.4\%	&63&5.2\%		&262&20.7\%		&270&22.2\%	&1216\\
 	\end{tabular}
 	\caption{Solved problems grouped by $|\mathcal Q|$ and $|\mathcal X|$.}
 	\label{fig:b}
@@ -676,14 +669,14 @@ Figure~\ref{fig:c} shows that our approach solved 52 problems not solved by the 
 
 We conclude that our approach already has merits when $|\mathcal Q| = 0$ and $|\mathcal X|$ is small. 
 We see that encoding idempotence does help to solve some additional benchmarks, but in general does not improve performance.
-However, idempotence is a quite powerful concept from a model-theoretic perspective. We suspect that a more clever encoding of this property could improve our results. There are other restrictions on models we could consider, based on structural properties of the formula, e.g. the relation between occurrences of different atoms.
+However, idempotence is a quite powerful concept from a model-theoretic perspective. We suspect that a more clever encoding of this property could improve results. There are other restrictions on models we could consider, based on structural properties of the formula, e.g. the relation between occurrences of different atoms.
 
 \section{Conclusion}
 
-We have presented embeddings of intuitionistic into classical logic for the propositional and the predicate case. Using Kripke semantics and model reduction we have established that the complexity overhead of intuitionistic logic over classical logic can be parametrized by $|\mathcal X|$ and $|\mathcal Q|$. This is directly reflected in the exponential blow-up parametrized by $|\mathcal X|$ in the propositional case and more indirectly in our benchmarks in the predicate case.
+We have presented embeddings of intuitionistic into classical. Using Kripke semantics and model reduction we have established a complexity overhead of intuitionistic logic over classical logic parametrized by $|\mathcal X|$ and $|\mathcal Q|$. This is directly reflected in the exponential blow-up parametrized by $|\mathcal X|$ in the propositional case and more indirectly in our benchmarks in the predicate case.
 
 A key motivation for our work has been the potential of using classical provers for intuitionistic proofs. Our tests have shown that there are cases where this is already reasonable.
-However, the current complexity considerations are direct consequences of our straightforward constructions. We plan to establish better bounds in future work by utilizing structural properties of the input formula, in particular relations between different atoms. We hope that this will allow the construction of smaller counter-examples $\mathcal M_T$ and the use of redundant axioms to limit search in a more clever way.
+However, the current complexity considerations are direct consequences of our straightforward constructions. We plan to establish better bounds in future work by utilizing structural properties of the input formula. We hope that this will allow the construction of smaller counter-examples $\mathcal M_T$ and the use of redundant axioms to limit search in a more clever way.
 
 On the theoretical side, we also hope to give a new translation from QBF to IPC that improves our understanding of the relationship between intuitionistic propositional logic and the polynomial hierarchy.
 Finally, we plan to complement the counter-model translation presented in this paper by a proof translation.
