@@ -610,6 +610,28 @@ It is not possible to completely eliminate worlds from the domain by enumerating
 We have benchmarked our first-order translation on version 1.1.2 of the ILTP problem set~\cite{iltp} by performing our translation and then examining the generated classical problem using Vampire~\cite{kovacs2013first}.
 For comparison the state-of-the-art intuitionistic provers ileanCoP 1.2~\cite{otten2008leancop} and nanoCoP-i 2.0~\cite{otten2021nanocop} were used. All benchmarks were conducted on an Intel Core i5-8400 2.80GHz machine running Linux with a time limit of 10s per problem. The problem \textsc{SYN007+1} was removed as our normal form procedure would explode the size of instance.
 
+Two versions of the translation were tested, one with and one without the additional axioms encoding idempotence. The results are stated in Figure \ref{fig:a}.
+
+In general, our approach falls short of the state of the art. 
+However when grouping the benchmarks by $|\mathcal Q|$ and $|\mathcal X|$, see Figure~\ref{fig:b},
+we observe good performance of our approach for $|\mathcal Q| = 0$ and $|\mathcal X| \leq 2$ resp. $|\mathcal X| \geq 6$.
+
+\begin{figure}
+	\centering
+	\begin{tabular}{c|c|lr|lr|lr|lr|c}
+		$|\mathcal Q|$&$|\mathcal X|$&\multicolumn{2}{c}{Embedding}&\multicolumn{2}{c}{Embedding (idem.)}&\multicolumn{2}{c}{ileanCoP}&\multicolumn{2}{c}{nanoCoP-i 2.0}&Total\\\hline
+		0&0		&157&88.2\%	&157&88.2\%		&128&71.9\%		&61&38.1\%	&178\\
+		0&1-2	&119&29.8\%&130&32.5\%		&108&27.0\%		&96&24.0\%	&400\\
+		0&3+	&33&18.9\%	&38&21.7\%		&70&40.0\%		&51&29.1\%	&175\\
+		1-2&0-2	&84&29.3\%	&81&28.2\%		&227&79.1\%		&221&77.0\%	&287\\
+		1-2&3+	&102&24.7\%	&98&27.3\%		&180&43.6\%		&157&39.1\%	&413\\
+		3+&0+	&66&5.4\%	&63&5.2\%		&262&20.7\%		&270&22.2\%	&1216\\
+	\end{tabular}
+	\caption{Solved problems grouped by $|\mathcal Q|$ and $|\mathcal X|$.}
+	\label{fig:b}
+\end{figure}
+
+
 \begin{wrapfigure}[15]{r}{0.4\textwidth}
 	\vspace{6.6cm}
 	\hspace*{1.5cm}
@@ -639,25 +661,8 @@ For comparison the state-of-the-art intuitionistic provers ileanCoP 1.2~\cite{ot
 	\label{fig:c}
 \end{wrapfigure}
 
-Two versions of the translation were tested, one with and one without the additional axioms encoding idempotence. The results are stated in Figure \ref{fig:a}. 
-In general, our approach falls short of the state of the art. 
-However when grouping the benchmarks by $|\mathcal Q|$ and $|\mathcal X|$, see Figure~\ref{fig:b},
-we observe good performance of our approach for $|\mathcal Q| = 0$ and $|\mathcal X| \leq 2$ resp. $|\mathcal X| \geq 6$.
+
 Figure~\ref{fig:c} shows that our approach solved 52 problems not solved by the state-of-the-art provers. Notably, while there is big overlap in solved instances, ileanCoP and nanoCoP also have a significant symmetric difference.
-\begin{figure}
-	\centering
-	\begin{tabular}{c|c|lr|lr|lr|lr|c}
-		$|\mathcal Q|$&$|\mathcal X|$&\multicolumn{2}{c}{Embedding}&\multicolumn{2}{c}{Embedding (idem.)}&\multicolumn{2}{c}{ileanCoP}&\multicolumn{2}{c}{nanoCoP-i 2.0}&Total\\\hline
-		0&0		&157&88.2\%	&157&88.2\%		&128&71.9\%		&61&38.1\%	&178\\
-		0&1-2	&119&29.8\%&130&32.5\%		&108&27.0\%		&96&24.0\%	&400\\
-		0&3+	&33&18.9\%	&38&21.7\%		&70&40.0\%		&51&29.1\%	&175\\
-		1-2&0-2	&84&29.3\%	&81&28.2\%		&227&79.1\%		&221&77.0\%	&287\\
-		1-2&3+	&102&24.7\%	&98&27.3\%		&180&43.6\%		&157&39.1\%	&413\\
-		3+&0+	&66&5.4\%	&63&5.2\%		&262&20.7\%		&270&22.2\%	&1216\\
-	\end{tabular}
-	\caption{Solved problems grouped by $|\mathcal Q|$ and $|\mathcal X|$.}
-	\label{fig:b}
-\end{figure}
 
 We conclude that our approach already has merits when $|\mathcal Q| = 0$ and $|\mathcal X|$ is small.
 We see that encoding idempotence does help to solve some additional benchmarks, but in general does not improve performance.
