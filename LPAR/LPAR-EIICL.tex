@@ -207,11 +207,6 @@ Whenever we add a function symbol we implicitly extend the signature by a not pr
 		\item $(\varphi\to\psi)^S_Z = \varphi^H_Z\to \psi^S_Z$ and $(\varphi\to\psi)^H_Z = \varphi^S_Z\to\psi^H_Z$.
 		\item $(\forall x\varphi)^S_Z = \forall x(\varphi^S_{Z\cup\{x\}})$.\\$(\forall x\varphi)^H_Z = \varphi[s(z_1,\dots,z_n)/x]^H_Z$ where $s$ is a new function, $\{z_1\dots z_n\} = Z$.
 		\item $(\exists x\varphi)^S_Z = \varphi[s(z_1,\dots,z_n)/x]^S_Z$ where $s$ is a new function, $\{z_1\dots z_n\} = Z$.\\$(\exists x\varphi)^H_Z = \exists x(\varphi^H_{Z\cup\{x\}})$.
-=======
-		\item $(\forall x\varphi)^S_Z = \forall x(\varphi[a/x]^S_{Z\cup\{a\}}[x/a])$ where $a$ is a new free variable.\\$(\forall x\varphi)^H_Z = \varphi[s(z_1,\dots,z_n)/x]^H_Z$ where $s$ is a new function, $\{z_1\dots z_n\} = Z$.
-		\item $(\exists x\varphi)^S_Z = \varphi[s(z_1,\dots,z_n)/x]^S_Z$ where $s$ is a new function, $\{z_1\dots z_n\} = Z$.\\$(\exists x\varphi)^H_Z = \exists x(\varphi[a/x]^H_{Z\cup\{a\}}[x/a])$
- where $a$ is a new free variable.
->>>>>>> c8d6f4a7fa194cc08089d36f91f2f60b706bd539
 	\end{itemize}
 	Let $\varphi^S = (\exists x_1\dots\exists x_n \varphi[x_1/a_1\dots x_n/a_n])^S_\emptyset$ and $\varphi^H = (\forall x_1\dots\forall x_n \varphi[x_1/a_1\dots x_n/a_n])^H_\emptyset$ where $a_1,\dots,a_n$ are the free variables occurring in $\varphi$.
 \end{definition}
@@ -279,7 +274,7 @@ Building on the same idea, we can also give a quantified boolean formula (QBF) o
 
 
 \begin{lemma}
-	For each propositional formula $\varphi$ there is effectively a QBF $\varphi^Q$ \todo{Ich würde die Formeln $\varphi^Q$ hier und in Section 6 aus Symmetriegründen auch $\varphi^\#$ nennen.} with $\mathcal |\varphi^Q|\in\mathcal O(|\mathcal R|\cdot|\mathcal X| + |\mathcal X|^3)$ such that $\varphi$ is intuitionistically invalid if and only if $\varphi^Q$ is a satisfiable QBF.
+	For each propositional formula $\varphi$ there is effectively a QBF $\varphi^Q$ with $\mathcal |\varphi^Q|\in\mathcal O(|\mathcal R|\cdot|\mathcal X| + |\mathcal X|^3)$ such that $\varphi$ is intuitionistically invalid if and only if $\varphi^Q$ is a satisfiable QBF.
 \end{lemma}
 
 Again, the details can be found in Section~\ref{sec:qbf}.
@@ -361,23 +356,10 @@ We say $(A\to B)\to C\in\mathcal X$ is \emph{fulfilled} at $m\in M$ iff $A^I(m)\
 \end{definition}
 
 \begin{lemma}
-	Suppose $(M, T)$ is a counter-model to $\varphi^{CH}$, then so is $(M_T, I_T)$.
+	Suppose $\mathcal M = (M, T)$ is a counter-model to $\varphi^{CH}$, then so is $\mathcal M_T = (M_T, I_T)$.
 \end{lemma}
 \begin{proof}
-	It follows directly from the definitions that $M_T, I_T\not\models P(s)$ and $M_T, I_T\models K(\varphi)$. It is easy to show that $M_T, I_T\models \psi$ for $\psi\in\mathcal R^{bS}$ from persistency. Let $\psi\in\mathcal X^{bS}$, we show $M_T, I_T[\psi_1\dots\psi_n/w] \models s\preceq w\to (w\preceq f_\psi(w)\to A(f_\psi(w)\to B(f_\psi(w)))\to C(w))$ for all $\psi_1\dots\psi_n\in M_T$. Let $\psi_1\dots\psi_n\in M_T$ and $m = g_{\psi_n}(\dots(g_{\psi_1}(s^I))$. If $M, I[m/w]\models C(w)$ we are done. Otherwise $M, I[m/w]\not\models s\preceq w$ or $M, I[m/w]\not\models w\preceq f_\psi(w)\to A(f_\psi(w)) \to B(f_\psi(w))$. The former is impossible since $g_\psi$ is increasing for all $\psi$. For the latter to hold we must have $M, I[m/w]\models w\preceq f_\psi(w)$, $M, I[m/w]\models A(f_\psi(w))$ and $M, I[m/w]\not\models B(f_\psi(w))$. If $\psi$ is fulfilled at $m$ we have $g_\psi(m) = m$, otherwise $g_\psi(m) = f_{[\psi]}^I(m)$. In any case $M, I'[\psi_1\dots\psi_n/w]\models A(f_\psi(w))$ and $M_T, I_T[\psi_1\dots\psi_n/w]\not\models B(f_\psi(w))$. It follows that $M_T, I_T[\psi_1\dots\psi_n/w]\not\models w\preceq f_\psi(w)\to A(f_\psi(w))\to B(f_\psi(w))$ and therefore $M_T, I_T\models \psi$.
-=======
-	1. If $C^I(m)$ is true then we are done due to persistency. Otherwise $C^I(m)$ is false.
-	Because $(A^I(f_{[\psi]}^I(m))\to B^I(f_{[\psi]}^I(m)))\to C^I(m)$ holds, then $A^I(f_{[\psi]}^I(m))\to B^I(f_{[\psi]}^I(m))$ must be false.
-	
-	
-	2. Let $n\succeq^I m$.
-	If $C^I(n)$ is true, we are done.
-	Otherwise $C^I(n)$ is false.
-	Due to persistency $C^I(m)$ is also false.
-	Because $\psi$ is fulfilled at $m$, $A^I(m)\to B^I(m)$ must be false, i.e. $A^I(m)$ is true and $B^I(m)$ is false. Then $A^I(n)$ and $A^I(f^I_{[\psi]}(n))$ are also true due to persistency.
-	Because $(A^I(f^I_{[\psi]}(n))\to B^I(f^I_{[\psi]}(n)))\to C^I(n)$ holds, we now get that  $B^I(f^I_{[\psi]}(n))$ must be false.
-	But then due to persistency so is $B^I(n)$ and we have that $\psi$ is fulfilled at $n$.
->>>>>>> c8d6f4a7fa194cc08089d36f91f2f60b706bd539
+	Let $v$ be a variable assignment. It follows directly from the definitions that $\mathcal M_T, v\not\models P(s)$ and $\mathcal M_T, v\models K(\varphi)$. It is easy to show that $\mathcal M_T, v\models \psi$ for $\psi\in\mathcal R^{bS}$ from persistency. Let $\psi\in\mathcal X^{bS}$, we show $\mathcal M_T, v[\psi_1\dots\psi_n/w] \models s\preceq w\to (w\preceq f_\psi(w)\to A(f_\psi(w)\to B(f_\psi(w)))\to C(w))$ for all $\psi_1\dots\psi_n\in M_T$. Let $\psi_1\dots\psi_n\in M_T$ and $m = g_{\psi_n}(\dots(g_{\psi_1}(s^I))$. If $\mathcal M, v[m/w]\models C(w)$ we are done. Otherwise $\mathcal M, v[m/w]\not\models s\preceq w$ or $\mathcal M, v[m/w]\not\models w\preceq f_\psi(w)\to A(f_\psi(w)) \to B(f_\psi(w))$. The former is impossible since $g_\psi$ is increasing for all $\psi$. For the latter to hold we must have $\mathcal M, v[m/w]\models w\preceq f_\psi(w)$, $\mathcal M, v[m/w]\models A(f_\psi(w))$ and $\mathcal M, v[m/w]\not\models B(f_\psi(w))$. If $\psi$ is fulfilled at $m$ we have $g_\psi(m) = m$, otherwise $g_\psi(m) = f_{[\psi]}^I(m)$. In any case $\mathcal M_T, v[\psi_1\dots\psi_n/w]\models A(f_\psi(w))$ and $\mathcal M_T, v[\psi_1\dots\psi_n/w]\not\models B(f_\psi(w))$. It follows that $\mathcal M_T, v[\psi_1\dots\psi_n/w]\not\models w\preceq f_\psi(w)\to A(f_\psi(w))\to B(f_\psi(w))$ and therefore $\mathcal M_T, v\models \psi$.
 \end{proof}
 
 \begin{corollary}\label{cor:prop-tree-model}
@@ -404,7 +386,7 @@ Now we can replace every $\forall$-quantifier in $\varphi^{CH}$ by enumerating a
 \begin{theorem}\label{thm:prop-translation}
 	Suppose we are given a formula as in Lemma~\ref{lemma:propositional-normal-form}, i.e. of the form
 	$$\left(\bigwedge\mathcal R\wedge\bigwedge\mathcal S\right)\to P$$
-	with flat $\mathcal R$ and implication $\mathcal S$. Let $\Lambda$ denote the set of sequences without repetition over $\mathcal X$. For every propositional variable $A$ and $\lambda\in\Lambda$ consider a new propositional Variable $A^\lambda$. Define $\mathcal R^\#$ as the union over all sets
+	with flat $\mathcal R$ and implicational $\mathcal S$. Let $\Lambda$ denote the set of sequences without repetition over $\mathcal X$. For every propositional variable $A$ and $\lambda\in\Lambda$ consider a new propositional Variable $A^\lambda$. Define $\mathcal R^\#$ as the union over all sets
 	$$
 		\left\{\bigwedge_iA_i^\lambda\to\bigvee_jB_j^\lambda\:|\:\lambda\in\Lambda\right\}
 	$$
@@ -412,13 +394,13 @@ Now we can replace every $\forall$-quantifier in $\varphi^{CH}$ by enumerating a
 	$$
 		\left\{\left(A^{\lambda\psi} \to A^{\lambda\psi}\right)\to C^\lambda\:|\:\lambda\in\Lambda, \psi\text{ does not occur in }\lambda\right\}
 	$$
-	for $\psi = (A\to B)\to C\in\mathcal X$ as well as $P^\#$ \todo{Hier ist nur P statt mathcal P, was aus Symmetriegründen vielleicht hilfreich wäre, aber P wird auch schon für die finale Präposition verwendet, also wäre ein anderer Buchstabe wohl besser} as the union over all sets
+	for $\psi = (A\to B)\to C\in\mathcal X$ as well as $\mathcal P^\#$ as the union over all sets
 	$$
 		\left\{A^\lambda\to A^{\lambda\psi}\:|\:\lambda\in\Lambda, \psi\text{ does not occur in }\lambda\right\}
 	$$
 	 for each propositional variable $A$ occurring in $\varphi$, encoding persistency. Then
 	$$
-		\varphi^\# := \left(\bigwedge P^\#\wedge\bigwedge \mathcal R^\#\wedge\bigwedge\mathcal X^\#\right)\to P^\epsilon
+		\varphi^\# := \left(\bigwedge \mathcal P^\#\wedge\bigwedge \mathcal R^\#\wedge\bigwedge\mathcal X^\#\right)\to P^\epsilon
 	$$
 	is classically valid if and only if $\varphi$ is intuitionistically valid.
 \end{theorem}
@@ -659,11 +641,6 @@ For comparison the state-of-the-art intuitionistic provers ileanCoP 1.2~\cite{ot
 
 Two versions of the translation were tested, one with and one without the additional axioms encoding idempotence. The results are stated in Figure \ref{fig:a}. 
 In general, our approach falls short of the state of the art. 
-=======
-\vspace*{-.5cm}
-Two versions of the translation were tested, one with and one without the additional axioms encoding idempotence. The results are stated in Figure \ref{fig:a}.
-In general, our approach falls short of the state of the art.
->>>>>>> c8d6f4a7fa194cc08089d36f91f2f60b706bd539
 However when grouping the benchmarks by $|\mathcal Q|$ and $|\mathcal X|$, see Figure~\ref{fig:b},
 we observe good performance of our approach for $|\mathcal Q| = 0$ and $|\mathcal X| \leq 2$ resp. $|\mathcal X| \geq 6$.
 Figure~\ref{fig:c} shows that our approach solved 52 problems not solved by the state-of-the-art provers. Notably, while there is big overlap in solved instances, ileanCoP and nanoCoP also have a significant symmetric difference.
@@ -733,7 +710,7 @@ We will target the particular calculi used by state-of-the-art provers, e.g. sup
 \end{lemma}
 \begin{proof}
 Suppose $\varphi$ is not intuitionistically valid.
-Then, $(\bigwedge\mathcal R\wedge\bigwedge\mathcal X)\to P$ has an intuitionistic counter-model. By the previous section\todo{unklar was mit "previous section" gemeint ist, und was für ein model du genau meinst.} there exists a classical counter-model $\mathcal M$ for $(\bigwedge\mathcal R^\#\wedge\bigwedge\mathcal X^\#)\to P^\epsilon$.
+Then, $(\bigwedge\mathcal R\wedge\bigwedge\mathcal X)\to P$ has an intuitionistic counter-model. By theorem~\ref{thm:prop-translation} there exists a classical counter-model $\mathcal M$ for $(\bigwedge\mathcal R^\#\wedge\bigwedge\mathcal X^\#)\to P^\epsilon$.
 We now define a QBF model iteratively.
 For each atom $A$ interpret $A^0$ such as $\mathcal M$ interprets $A^\epsilon$. Suppose we are given interpretations of all atoms $A^i$ for $i < n$ and a sequence with no repetitions $\psi_1\dots\psi_{n-1}$ over $\mathcal X$ such that $\psi_i$ is exactly the $\psi\in\mathcal X$ for which $X_{\psi}^i$ is true and $A^i$ is interpreted as $A^{\psi_1\dots\psi_i}$  in $\mathcal M$.
 Let the $X^{n}_\psi$ be arbitrarily interpreted (since they are $\forall$-quantified). If not exactly one of the $X^{n}_\psi$ is interpreted as true, then valid$(n)$ fails and the remaining propositions can be chosen arbitrarily. If $X^i_{\psi_n} = 1$ for some $i < n$, then valid$(n)$ also fails and the remaining propositions can be chosen arbitrarily.
