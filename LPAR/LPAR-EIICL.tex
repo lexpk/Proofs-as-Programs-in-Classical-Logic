@@ -48,7 +48,7 @@
 The famous double negation translation~\cite{glivenko1929quelques,godel1933intuitionistischen} establishes an embedding of classical into intuitionistic logic.
 Curiously, the reverse direction has not been covered in literature.
 Utilizing a normal form for intuitionistic logic~\cite{claessen2015sat}, we establish a small model property for intuitionistic propositional logic.
-We use this property for a direct encoding of the Kripke semantics into classical propositional logic and quantified boolean formulas.
+We use this property for a direct encoding of the Kripke semantics into classical propositional logic and quantified boolean formulae.
 Next, we transfer the developed techniques to the first order case and provide an embedding of intuitionistic first-order logic into classical first-order-logic.
 Our goal here is an encoding that facilitates the use of state-of-the-art provers for classical first-order logic for determining intuitionistic validity.
 In an experimental evaluation, we show that our approach can compete with state-of-the-art provers for certain classes of benchmarks, in particular when the intuitionistic content is low.
@@ -84,7 +84,7 @@ To this end, we study embeddings of intuitionistic into classical logic and prop
 The following main contributions will be discussed in more detail in Sections~\ref{sec:overview} and~\ref{sec:evaluation}:
 \begin{itemize}
 	\item We establish a small model property for counter-models to validity in intuitionistic propositional logic.
-	\item Based on the small model property, we provide an embedding of intuitionistic propositional logic into classical propositional logic and into quantified boolean formulas.
+	\item Based on the small model property, we provide an embedding of intuitionistic propositional logic into classical propositional logic and into quantified boolean formulae.
 	\item We discuss the reduction of counter-models in intuitionistic first-order logic and, based on this reduction, present an embedding of intuitionistic into classical first-order logic.
 	\item We provide an experimental evaluation on the use of first-order provers for classical logic for determining intuitionistic validity.
  We show that our approach can compete with state-of-the-art provers for certain classes of benchmarks, in particular when the intuitionistic content is low.
@@ -106,7 +106,7 @@ Of special relevance are the normalization procedures for intuitionistic proposi
 and examined from a proof-theoretic perspective in~\cite{fiorentini2019proof}, which we further expand upon in this paper.
 
 We finally mention a long-standing line of research that has investigated when classical validity implies intuitionistic validity.
-This most famously holds for $\Pi_2$-formulas in Peano Arithmetic~\cite{friedman1978classically}, but also other conditions are known~\cite{schwichtenberg}.
+This most famously holds for $\Pi_2$-formulae in Peano Arithmetic~\cite{friedman1978classically}, but also other conditions are known~\cite{schwichtenberg}.
 In contrast, we propose a translation of an intuitionistic formula to an equi-valid classical formula.
 
 %Finally, of course dedicated theorem provers for intuitionistic logic exists, generally using the inverse method~\cite{mclaughlin2008imogen,pavlov2017whaleprover}, but more recently also based on connection-based calculi~\cite{otten2008leancop,otten2021nanocop}, which also work well for classical logic.
@@ -117,15 +117,15 @@ In this section we fix notation and recall the semantics for classical and intui
 
 \subsection{Syntax}
 
-For propositional logic we assume an ambient set of propositional variables. As usual a formula is either $\bot$, a propositional variable or, given formulas $\varphi$ and $\psi$ and $\circ\in\{\wedge, \vee,\to\}$, $\varphi\circ\psi$.
+For propositional logic we assume an ambient set of propositional variables. As usual a formula is either $\bot$, a propositional variable or, given formulae $\varphi$ and $\psi$ and $\circ\in\{\wedge, \vee,\to\}$, $\varphi\circ\psi$.
 
-For predicate logic we assume an ambient signature $\Sigma$, i.e., a set of function and predicate symbols with their respective arities, and a set of variables. A term is either a variable or, given an $n$-ary function symbol $f$ and terms $t_1, \ldots, t_n$, $f(t_1, \ldots, t_n)$. A formula is either $\bot$, or, given a $n$-ary predicate symbol $P$ and terms $t_1, \ldots, t_n$, $P(t_1, \ldots, t_n)$, or, given formulas $\varphi$ and $\psi$ and $\circ\in\{\wedge, \vee,\to\}$, $\varphi\circ\psi$, or, given a formula $\varphi$ and a variable $x$, $\exists x\varphi$ or $\forall x\varphi$. Free and bound variables are defined as usual and there is a Barendregt's convention in place, i.e. we implicitly assume that they comprise distinct sets, such that bound variables are not affected by substitutions of free variables.
+For predicate logic we assume an ambient signature $\Sigma$, i.e., a set of function and predicate symbols with their respective arities, and a set of variables. A term is either a variable or, given an $n$-ary function symbol $f$ and terms $t_1, \ldots, t_n$, $f(t_1, \ldots, t_n)$. A formula is either $\bot$, or, given a $n$-ary predicate symbol $P$ and terms $t_1, \ldots, t_n$, $P(t_1, \ldots, t_n)$, or, given formulae $\varphi$ and $\psi$ and $\circ\in\{\wedge, \vee,\to\}$, $\varphi\circ\psi$, or, given a formula $\varphi$ and a variable $x$, $\exists x\varphi$ or $\forall x\varphi$. Free and bound variables are defined as usual and there is a Barendregt's convention in place, i.e. we implicitly assume that they comprise distinct sets, such that bound variables are not affected by substitutions of free variables.
 
 
 \subsection{Propositional Semantics}
 
 \begin{definition}
-	A \emph{valuation} $v$ maps each propositional variable $A$ to a \emph{truth value} $v(A)\in\{0, 1\}$. We inductively define the model relation $\models$ between $v$ and formulas:
+	A \emph{valuation} $v$ maps each propositional variable $A$ to a \emph{truth value} $v(A)\in\{0, 1\}$. We inductively define the model relation $\models$ between $v$ and formulae:
 	\begin{itemize}
 		\item $v\not\models \bot$
 		\item $v\models A$ iff $v(A) = 1$ for each propositional variable $A$.
@@ -133,18 +133,18 @@ For predicate logic we assume an ambient signature $\Sigma$, i.e., a set of func
 		\item $v\models\varphi\vee\psi$ iff $v\models\varphi$ or $v\models\psi$.
 		\item $v\models\varphi\to \psi$ iff $v\not\models\varphi$ or $v\models\psi$.
 	\end{itemize}
-	A valuation $v$ is a \emph{model} for $\varphi$ if $v\models\varphi$. If every valuation is a model for $\varphi$ then we say $\varphi$ is \emph{valid}. We denote the set of valid formulas with \emph{CPC} (Classical Propositional Calculus).
+	A valuation $v$ is a \emph{model} for $\varphi$ if $v\models\varphi$. If every valuation is a model for $\varphi$ then we say $\varphi$ is \emph{valid}. We denote the set of valid formulae with \emph{CPC} (Classical Propositional Calculus).
 \end{definition}
 
 One notable property of classical logic is that a formula $\varphi$ is valid if and only if its negation $\neg\varphi := \varphi\to\bot$ is not satisfiable, i.e. there does not exist a model for it. The same does not hold true for intuitionistic logic as we shall see.
 
 \begin{definition}
 	A \emph{Kripke structure} $\mathcal K = (W, (v_w)_{w\in W})$ consists of a partially ordered set $W$ of \emph{worlds}, called the Kripke \emph{frame}, and an indexed family of valuations $(v_w)_{w\in W}$ such that $v_u(A)\leq v_w(A)$ for all $u\leq w$ and propositional variables $A$ (this is called the \emph{persistency condition}).
-	The model relation between the $v_u$ and formulas $\varphi$ is defined as before, except in the case of implications, where we set
+	The model relation between the $v_u$ and formulae $\varphi$ is defined as before, except in the case of implications, where we set
 	\begin{itemize}
 		\item $v_u\models\varphi\to \psi$ iff for all $w\geq u$ we have $w\not\models\varphi$ or $w\models\psi$.
 	\end{itemize}
-	We say that $\varphi$ is satisfied at a world $u$ if $v_u\models\varphi$ and write $u\models\varphi$. If a formula is satisfied at every world then $\mathcal K$ is a \emph{model} for $\varphi$. A formula is valid if every Kripke structure is a model of it. We denote the set of valid formulas with \emph{IPC} (Intuitionistic Propositional Calculus).
+	We say that $\varphi$ is satisfied at a world $u$ if $v_u\models\varphi$ and write $u\models\varphi$. If a formula is satisfied at every world then $\mathcal K$ is a \emph{model} for $\varphi$. A formula is valid if every Kripke structure is a model of it. We denote the set of valid formulae with \emph{IPC} (Intuitionistic Propositional Calculus).
 \end{definition}
 There are many classical tautologies which are not intuitionistically valid, e.g. the law of excluded middle $A\vee\neg A$. On the other hand any intuitionistic theorem is a classical one.
 
@@ -167,7 +167,7 @@ We now recall the semantics of first-order logic:
 		\item $a^{I, v} = v(a)$ for each free variable $a$.
 		\item $f(t_1,\dots,t_n)^{I, v} = f^I(t_1^{I, v},\dots, t_n^{I, v})$ for each $n$-ary function symbol $f\in\Sigma$.
 	\end{itemize}
-	We define a model relation between pairs $\mathcal M, v$ and formulas $\varphi$ as follows
+	We define a model relation between pairs $\mathcal M, v$ and formulae $\varphi$ as follows
 	\begin{itemize}
 		\item $\mathcal M, v\not\models\bot$
 		\item $\mathcal M, v\models R(t_1,\dots,t_n)$ iff $(t_1^{I, v},\dots,t_n^{I, v})\in R^I$, $\mathcal M, v\models s = t$ iff $s^{I, v} = t^{I, v}$.
@@ -177,20 +177,20 @@ We now recall the semantics of first-order logic:
 		\item $\mathcal M, v\models\exists x\varphi$ iff there exists $m\in M$ such that $\mathcal M, v[m/a]\models\varphi[a/x]$.
 		\item $\mathcal M, v\models\forall x\varphi$ iff for all $m\in M$ we have $\mathcal M, v[m/a]\models\varphi[a/x]$.
 	\end{itemize}
-	 Here $a$ is a free variable that does not occur in $\varphi$. $\varphi$ is satisfiable if $\mathcal M, v\models\varphi$ for some $\mathcal M, v$. It is valid if $\mathcal M, v\models\varphi$ for every $\mathcal M, v$. We denote the set of valid formulas with \emph{CQC} (Classical Quantified Calculus).
+	 Here $a$ is a free variable that does not occur in $\varphi$. $\varphi$ is satisfiable if $\mathcal M, v\models\varphi$ for some $\mathcal M, v$. It is valid if $\mathcal M, v\models\varphi$ for every $\mathcal M, v$. We denote the set of valid formulae with \emph{CQC} (Classical Quantified Calculus).
 \end{definition}
 
 \begin{definition}
 	A $\Sigma$-\emph{Kripke structure} $\mathcal{K}$ is a partially ordered set $W$, called the Kripke \emph{frame}, and an indexed family of $\Sigma$-structures $(\mathcal{M}_w)_{w\in W}$ such that for $u\leq w$ we have $M_u\subseteq M_w$, $f^{I_w}|_{M_u} = f^{I_u}$ and $R^{I_w}|_{M_u} = R^{I_u}$.\footnote{Here $f|_M$ denotes the restriction of $f$ to $M$}
-	The model relation between $\mathcal M_u$, $v$ (mapping into $M_u$) and formulas $\varphi$ is defined as before, except in the cases of implication and $\forall$-quantification, where we set
+	The model relation between $\mathcal M_u$, $v$ (mapping into $M_u$) and formulae $\varphi$ is defined as before, except in the cases of implication and $\forall$-quantification, where we set
 	\begin{itemize}
 		\item $\mathcal M_u, v\models \varphi\to\psi$ iff for every $w\geq u$ we have $\mathcal M_w, v\not\models\varphi$ or $\mathcal M_w, v\models\psi$.
 		\item $\mathcal M_u, v\models\forall x\varphi$ iff for every $w\geq u$ and $m\in M_w$ we have $\mathcal M_w, v[m/a]\models\varphi[a/x]$.
 	\end{itemize}
 	We write $u, v\models\varphi$ if $\mathcal M_u, v\models \varphi$. $\mathcal{K}$ satisfies $\varphi$ if $u, v\models\varphi$ holds for every world $u$ and variable assignment $v$. $\varphi$ is valid if it is satisfied by every Kripke structure.
-	We denote the set of valid formulas with \emph{IQC} (Intuitionistic Quantified Calculus).
+	We denote the set of valid formulae with \emph{IQC} (Intuitionistic Quantified Calculus).
 \end{definition}
-In addition to propositional tautologies there are now quantified formulas which are classically valid but not intuitionistically, e.g., $\neg\forall x A(x)\to \exists x \neg A(x)$.
+In addition to propositional tautologies there are now quantified formulae which are classically valid but not intuitionistically, e.g., $\neg\forall x A(x)\to \exists x \neg A(x)$.
 
 \subsection{Skolemization and Herbrandization}\label{section:herbrandiaztion}
 
@@ -200,7 +200,7 @@ A fresh variable is any variable that does not occur in any considered formula.
 Whenever we add a function symbol we implicitly extend the signature by a not previously contained symbol.
 
 \begin{definition}\label{definition:skolemization}
-	For formulas $\varphi$ we define the Skolemization $\varphi^S_Z$ and Herbrandization $\varphi^H_Z$ with respect to a set of free variables $Z$ by simultaneous induction:
+	For formulae $\varphi$ we define the Skolemization $\varphi^S_Z$ and Herbrandization $\varphi^H_Z$ with respect to a set of free variables $Z$ by simultaneous induction:
 	\begin{itemize}
 		\item $A^S_Z = A^H_Z = A$ for each atomic $A$.
 		\item $(\varphi\circ\psi)^X_Z = \varphi^X_Z\circ\psi^X_Z$ for $\circ\in\{\wedge, \vee\}$, $X\in\{S, H\}$.
@@ -278,7 +278,7 @@ Building on the same idea, we can also give a quantified boolean formula (QBF) o
 \end{lemma}
 
 Again, the details can be found in Section~\ref{sec:qbf}.
-Next we attempt to transport these results to the first order case. However, there are formulas for which only counter-examples with an infinite Kripke frame exist. Therefore, there is no hope of completely eliminating terms representing worlds from the final embedding. This also means that our language necessarily becomes more complex. Still, a number of reductions are possible.
+Next we attempt to transport these results to the first order case. However, there are formulae for which only counter-examples with an infinite Kripke frame exist. Therefore, there is no hope of completely eliminating terms representing worlds from the final embedding. This also means that our language necessarily becomes more complex. Still, a number of reductions are possible.
 
 \begin{theorem}
 	\label{thm:reduction-first-order-short}
@@ -433,14 +433,14 @@ Define
 	\begin{itemize}
 		\item {\normalfont Valid}$(n)$ which encodes that $\vec X^n_\psi$ represents a valid next element of a sequence without repetition, i.e. if we interpret the $\vec X^i$ as bit-vectors, then $\vec X^n$ has exactly one bit set to $1$, indicating the formula $\psi$ at the $n$-th position of the sequence, and it is at a position that is $0$ in all $\vec X^i$ with $i < n$ (i.e., it did not occur in the sequence previously).
 		\item {\normalfont Persistent}$(n)$ which encodes that the persistency condition holds.
-		\item {\normalfont Sat}$_{\mathcal R}(n)$ encoding that the formulas in $\mathcal R$ hold at the $n$-th world of the path.
+		\item {\normalfont Sat}$_{\mathcal R}(n)$ encoding that the formulae in $\mathcal R$ hold at the $n$-th world of the path.
 		\item {\normalfont Sat}$_{\mathcal X}(n)$ encoding that the formula in $\mathcal X$ that is represented by $\vec X^{n-1}$ holds.
 	\end{itemize}
 	Define$$\varphi^Q_{i} = \exists \vec A^i\forall \vec X^i\left(\text{\normalfont Persistent}(i)\wedge \text{\normalfont Sat}_{\mathcal R}(i)\wedge \text{\normalfont Sat}_{\mathcal X}(i)\wedge\left(\text{\normalfont Valid}(i)\to \varphi^Q_{i+1}\right)\right)$$
 	for $0 < i < |\mathcal{X}|$, as well as the special cases
 	$$\varphi^Q_{|\mathcal{X}|} = \exists \vec A^{|\mathcal{X}|}\left(\text{\normalfont Persistent}(|\mathcal{X}|)\wedge \text{\normalfont Sat}_{\mathcal R}(|\mathcal{X}|)\wedge \text{\normalfont Sat}_{\mathcal X}(|\mathcal{X}|)\right)$$
 	for leaves, and $$\varphi^Q = \varphi_0^Q = \exists \vec A^0\forall \vec X^0\left(\neg P^0\wedge \text{\normalfont Sat}_{\mathcal R}(0)\wedge(\text{\normalfont Valid}(0)\to \varphi_1^Q)\right)$$for the root.
-	Example encodings of the above formulas are:
+	Example encodings of the above formulae are:
 	\begin{align*}
 		\text{\normalfont Valid}(n) = &\left(\bigvee\left\{X^n_\psi\:|\:\psi\in\mathcal X\right\}\right)\wedge\left(\bigwedge \left\{\neg(X^n_{\psi_1}\wedge X^n_{\psi_2})\:|\:\psi_1\neq\psi_2\in\mathcal X\right\}\right)\wedge\\&\left(\bigwedge\left\{\bigwedge\{X^i_\psi\to\neg X^n_\psi\:|\:i < n\}\:|\:\psi\in\mathcal X\right\}\right)\\
 		\text{\normalfont Persistent}(n) = & \bigwedge\left\{A^{n-1}\to A^n\:|\: A \text{ prop. variable with }A^{n-1}\in\vec A^{n-1}, A^n \in\vec A^{n}\right\}\\
@@ -513,7 +513,7 @@ We now give an analogous transformation for first order logic. Our trick of lift
 
 A proof can be found in the appendix~\ref*{proof:fo-simplification}.
 
-Now again due to Lemma~\ref{lemma:first-order-normal-form} it is sufficient to consider formulas $\varphi$ of the form $$\left(\bigwedge\mathcal R\wedge\bigwedge\mathcal X\wedge\bigwedge\mathcal Q\right)\to P$$ with flat clauses $\mathcal R$, implication clauses $\mathcal X$ and quantification clauses $\mathcal Q$, which after Herbrandization leaves us with $$\varphi^{CH} = K(\varphi)\to\text{World}(s)\to\vec E(\vec r, s) \to \left(\bigwedge R^{bS}\wedge \bigwedge X^{bS}\wedge\bigwedge Q^{bS}\right)\to P(s)$$
+Now again due to Lemma~\ref{lemma:first-order-normal-form} it is sufficient to consider formulae $\varphi$ of the form $$\left(\bigwedge\mathcal R\wedge\bigwedge\mathcal X\wedge\bigwedge\mathcal Q\right)\to P$$ with flat clauses $\mathcal R$, implication clauses $\mathcal X$ and quantification clauses $\mathcal Q$, which after Herbrandization leaves us with $$\varphi^{CH} = K(\varphi)\to\text{World}(s)\to\vec E(\vec r, s) \to \left(\bigwedge R^{bS}\wedge \bigwedge X^{bS}\wedge\bigwedge Q^{bS}\right)\to P(s)$$
 where $\vec r, s$ are new constant symbols, each formula in $\mathcal R^{bS}$ is of the form
 $$\forall w \forall \vec x(s\preceq w\to\vec E(x, w)\to\bigwedge_i A_i(\vec a_i, u)\to\bigvee_j B_j(\vec b_j, u)),$$
 each formula $\psi\in\mathcal X^{bS}$ is of the form
@@ -589,7 +589,7 @@ $$Putting all of this together yields the following translation:
 	The size of the obtained formula is linear in the input. However $|\mathcal X| + |\mathcal Q| + 1$ new function symbols and the new binary predicate $E$ were introduced and each $n$-ary predicate has been extended to a $n+1$-ary predicate.
 \end{theorem}
 
-It is not possible to completely eliminate worlds from the domain by enumerating them since there are formulas with no finite counter-examples. An analogous procedure to the propositional case fails, however we can still retrieve additional axioms that restrict the interpretation of functions. That is, we may assume that $f_\psi(\vec t, w) = w$, if $\exists u(w = f_\psi(\vec t, u))$ for all $\psi\in\mathcal X\cup\mathcal Q$ (i.e. that $f_\psi$ parametrized by $\vec t$ is idempotent), and $f_\psi(\vec t, w) = w$, if $\exists u(w \geq f_\psi(\vec t, u))$ for all $\psi\in\mathcal X$.
+It is not possible to completely eliminate worlds from the domain by enumerating them since there are formulae with no finite counter-examples. An analogous procedure to the propositional case fails, however we can still retrieve additional axioms that restrict the interpretation of functions. That is, we may assume that $f_\psi(\vec t, w) = w$, if $\exists u(w = f_\psi(\vec t, u))$ for all $\psi\in\mathcal X\cup\mathcal Q$ (i.e. that $f_\psi$ parametrized by $\vec t$ is idempotent), and $f_\psi(\vec t, w) = w$, if $\exists u(w \geq f_\psi(\vec t, u))$ for all $\psi\in\mathcal X$.
 
 \section{Experimental Evaluation}
 \label{sec:evaluation}
