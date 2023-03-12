@@ -738,12 +738,12 @@ Again we proceed iteratively. Interpret $A^\epsilon$ such as $A^0$ is interprete
 	
 	Suppose first we have a counter-model $\mathcal M = (M, I)$ to $\varphi^C$. As a Kripke frame $(W, \leq)$ take $ W = \{m\in M\:|\:\text{ World}^I(m)\}$ and let $\leq$ be $\preceq^I$ restricted to $W$. Then let $M_u = \{m\in M\:|\: E(m, u)\}$ and let $f^{I_u}$ be $f^I$ restricted to $M_u$ and $A^{I_u}(\vec x): \Leftrightarrow A(\vec x, u)$. It is then a straightforward check of definitions that this defines a Kripke counter-model to $\varphi$.
 	
-	The other direction is a bit more involved. Suppose we have a Kripke counter-model to $\varphi$ with frame $(W, \preceq)$ and family of $\Sigma$-structures $(M_w, I_w)_{w\in W}$. 
+	The other direction is a bit more involved. Suppose we have a Kripke counter-model to $\varphi$ with frame $(W, \preceq)$ and family of $\Sigma$-structures $(M_w, I_w)_{w\in W}$.
 In particular, since it is a counter-model there exists $w_0\in W$ and a variable assignment $v$ with $w_0, v\not\models\varphi$.
 Let $W_0 = \{w\in W\:|\: w_0\preceq w\}$ and define an equivalence relation $\sim$ on $\{(x, u)\:|\:u\in W_0, x\in M_u\}$ via $(x, u)\sim (y, w)$ iff $x = y$ and there exists $v\in W_0$ comparable with both $u, w$ such that $x\in v$ and denote the equivalence class of $(x, u)$ with $[x, u]$. Let $M = W_0\cup \{[x, u]\:|\:u\in W_0, x\in M_u\}$.
 	Now have
 	\begin{itemize}
-		\item $\preceq^I = \leq\cup \{(m, m): m\in M\setminus W_0\}$ as a set, i.e. $\preceq$ corresponds to $\leq$ on $W_0$ and is trivial elsewhere.
+		\item $\preceq^I = \leq\cup \{(m, m): m\in M\setminus W_0\}$, i.e. $\preceq$ corresponds to $\leq$ on $W_0$ and is trivial elsewhere.
 		\item $E^I(m, w)$ iff $w\in W_0$ and $m = [x, w]$ for some $x\in M_w$.
 		\item $f^I(m_1\dots m_n) =\begin{cases}
 			f^{I_u}(x_1\dots x_n), &\substack{\text{if there are $ u\in W_0, x_i\in M_u$}\\ \text{with $m_i= [x_i, u]$ for all $i$,}}\\
@@ -751,22 +751,31 @@ Let $W_0 = \{w\in W\:|\: w_0\preceq w\}$ and define an equivalence relation $\si
 		\end{cases}$
 		\item ${A}^I(m_1\dots m_n, u) \Leftrightarrow\begin{cases}
 			A^{I_u}(x_1\dots x_n), &\substack{\text{if $u\in W_0$ and $\exists x_i\in M_u$}\\\text{with $m_i= [x_i, u]$ for all $i$,}}\\
-			\bot, & \text{otherwise.}
+			\bot, & \text{otherwise}
 		\end{cases}$
 	\end{itemize}
-	One easily verifies that these are well-defined. We now show by induction on the height of the formula the following:
+	and $\mathcal M = (M, I)$. One easily verifies that these are well-defined. We now show by induction on the height of the formula the following:
 	
-	\emph{Claim.} For any formula $\psi$ in which the free variable $b$ doesn't occur, world $w_k\in W_0$ and variable assignments $v_c, v_i$ such that $v_c(a) = [v_k(a), w_k]$ \todo{das sollte $v_i$ statt $v_k$ sein, oder} for all free variables $a$ occurring in $\psi$ it holds that
-\todo{Hier und weiter und sind immer M,I genannt, aber eigentlich haben wir Notation für $\mathcal M,v \models$ definiert}
-\[M, I, v_c[w_k/b]\models \psi^b\text{ if and only if $w_k, v_i\models \psi$.}\]
+	\emph{Claim.} For any formula $\psi$ in which the free variable $b$ doesn't occur, world $w_k\in W_0$ and variable assignments $v_c, v_i$ such that $v_c(a) = [v_i(a), w_k]$ for all free variables $a$ occurring in $\psi$ it holds that
+\[\mathcal M, v_c[w_k/b]\models \psi^b\text{ if and only if $w_k, v_i\models \psi$.}\]
 	
-	For the base case, i.e. if $\psi = P(t_1,\dots, t_n)$ for some $n$-ary predicate symbol $P$, the claim follows directly from the definitions.
+	For the base case, i.e. if $\psi = \bot$ or $\psi = P(t_1,\dots, t_n)$ for some $n$-ary predicate symbol $P$, the claim follows directly from the definitions.
 	
-	For the induction step consider e.g. the case where $\psi$ is of the form $\forall x \psi'$.
-	Suppose first that $w_k, v_i\not\models \forall x\psi'$, i.e. there exists $w_l\geq w_k$ and $m_l\in w_l$ such that $w_l, v_i[m_l/a]\not\models \psi'[a/x]$. Then by the induction hypothesis $M, I, v_c[[v_i(a), w_l],w_l/c]\not\models \psi'[a/x]^c$\todo{hier fehlt die Ersetzung für $[v_i(a), w_l]$. Fehlt außerdem nicht irgendein Bezug zu $m_l$?}. Furthermore by definition $M, I, v_c[w_l/c, w_k/b]\models b\preceq c$ and $M, I, v_c[v_c[[v_i(a), w_l],w_l/c]\models E(a, c)$\todo{hier fehlt die Ersetzung für $[v_i(a), w_l]$. Außerdem ist hier wirklich $v_c[v_c$ gemeint?}. Hence $M, I, v_c[w_k/b]\not\models \psi^b$. Suppose on the other hand that $w_k, v_i\not\models\forall x\psi'$, i.e. for all $w_l\geq w_k$ and $m_l\in w_l$ it holds that $w_l, v_i[m_l/a]\models \psi'[a/x]$. Then by the induction hypothesis $M, I, v_c[[m_l, w_l]/A,w_l/c]\models \psi'[a/x]^c$\todo{Hier wohl a statt A} for all $w_l\geq w_k$ and $m_l\in w_l$. It can be shown that for every other assignment of $c$ and $a$ either $b\preceq c$ or $E(a, c)$ is violated. Hence $M, I, v_c[w_k/b]\models \psi^b$. For other forms of $\psi$ one proceeds in similar fashion. This completes the proof of the claim.
+	For the induction step we must consider the cases where $\psi$ is of the form $\psi_0\wedge \psi$, $\psi_0\vee \psi$, $\psi_0\to \psi$, $\exists x\psi'$, $\forall x \psi'$, there former two are straightforward and are left out.
 
-	Recall that $w_0, v\not\models\varphi$. From the claim it follows that \[M, I, v'[[v(a_0), w_0]/a_0\dots[v(a_n), w_0]/a_0, w_0/b]\not\models \varphi^b\]where $a_0\dots a_n$ are the free variables occurring in $\varphi$ and $v'$ is any variable assignment. Furthermore a straightforward check of definitions yields \[M, I, v'[[v(a_0), w_0]/a_0\dots[v(a_n), w_0]/a_0, w_0/b]\models K(\varphi)\wedge \text{World}(b)\wedge\vec E(\vec a, b).\]Therefore $M, I\not\models \varphi^C$ and we are done.
-\todo{Da ich hier nicht durchgekommen bin, kannst du den ganzen Beweis nochmal checken :p ?}
+	\emph{Case 1:} $\psi = \psi_0\to \psi_1$.\\
+	Suppose first that $w_k, v_i\not\models \psi_0\to\psi_1$. Then there exists $w_l\geq w_k$ such that $w_l, v_i\models \psi_0$ and $w_l, v_i\not\models\psi_1$. Then by induction hypothesis $\mathcal M, v_c[w_l/b]\models \psi_0^b$ and $\mathcal M, v_c[w_l/b]\models \psi_1^b$, i.e. $\mathcal M, v_c[w_l/b]\models \psi$. Suppose on the other hand that $w_l, v_i\models \psi_0\to\psi_1$. Then for all $w_k\geq w_l$ we have $w_k\models \psi_0\to \psi_1$, i.e. $w_k, v_i\not\models\psi_0$ or $w_k, v_i\models\psi_1$. Then by induction hypothesis $\mathcal M, v_c[w_k/b]\not\models\psi_0$ or $\mathcal M, v_c[w_k/b]\models\psi_1$, i.e. $\mathcal M, v_c[w_k/b]\models \psi_0\to\psi_1$.
+
+	\emph{Case 2:} $\psi = \exists x\psi'$.\\
+	Suppose first that $w_k, v_i\not\models\exists x\psi'$, i.e. for all $m_k\in M_{w_k}$ we have $w_k, v_i[m_k/x]\not\models \psi'$ and by induction hypothesis $\mathcal M, v_i[[m_k, w_k]/x, w_k/b]\not\models \psi'^b$. Every other substitution for $x$ violates $E(x, b)$. Therefore $\mathcal M, v_i[w_k/b]\models \forall x(\neg E(x, b)\vee \neg \psi')$, i.e. $\mathcal M, v_i[w_k/b]\not\models \psi^b$. Suppose on the other hand that $w_k, v_i\models \exists x\psi'$ then there exists $m_k\in M_{w_k}$ such that $w_k, v_i[m_k/x]\models\psi'$. Then by induction hypothesis $\mathcal M, v_i[[m_k, w_k]/x, w_k/b]\models \psi'^b$. By definition $\mathcal M, v_i[[m_k, w_k]/x, w_k/b]\models E(x, b)$ holds. Therefore $\mathcal M, v_i[w_k/b]\models \exists x(E(x, b)\wedge \psi')$, i.e. $\mathcal M, v_i[w_k/b]\models \psi^b$.
+
+	\emph{Case 3:} $\psi = \forall x\psi'$.\\
+	Suppose first that $w_k, v_i\not\models \forall x\psi'$, i.e. there exists $w_l\geq w_k$ and $m_l\in M_{w_l}$ such that $w_l, v_i[m_l/x]\not\models \psi'$. Then by the induction hypothesis $\mathcal M, v_c[[m_l, w_l]/x,w_l/c]\not\models \psi'^c$. Furthermore by definition $\mathcal M, v_c[w_l/c, w_k/b]\models b\preceq c$ and $\mathcal M, v_c[[m_l, w_l]/x,w_l/c]\models E(x, c)$. Hence $\mathcal M, v_c[w_k/b]\not\models \psi^b$. Suppose on the other hand that $w_k, v_i\models\forall x\psi'$, i.e. for all $w_l\geq w_k$ and $m_l\in M_{w_l}$ it holds that $w_l, v_i[m_l/x]\models \psi'$. Then by the induction hypothesis $\mathcal M, v_c[[m_l, w_l]/x,w_l/c]\models \psi'^c$ for all $w_l\geq w_k$ and $m_l\in w_l$. On the other hand for every other assignment of $c$ and $x$ either $b\preceq c$ or $E(x, c)$ is violated. Hence $\mathcal M, v_c[w_k/b]\models \psi^b$.
+
+	This concludes our proof of the claim.
+
+	Now to show that $\mathcal M$ is a counter-model to $\varphi^C$:
+	Recall that $w_0, v\not\models\varphi$. From the claim it follows that \[\mathcal M, v'[[v(a_0), w_0]/a_0\dots[v(a_n), w_0]/a_0, w_0/b]\not\models \varphi^b\]where $a_0\dots a_n$ are the free variables occurring in $\varphi$ and $v'$ is any variable assignment. Furthermore a straightforward check of definitions yields \[\mathcal M, v'[[v(a_0), w_0]/a_0\dots[v(a_n), w_0]/a_0, w_0/b]\models K(\varphi)\wedge \text{World}(b)\wedge\vec E(\vec a, b).\]Therefore $\mathcal M, v'\not\models \varphi^C$ and we are done.
 \end{proof}
 
 
