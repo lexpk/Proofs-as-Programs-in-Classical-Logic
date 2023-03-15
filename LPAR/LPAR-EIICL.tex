@@ -119,7 +119,7 @@ In this section we fix notation and recall the semantics for classical and intui
 
 For propositional logic we assume an ambient set of propositional variables. As usual a formula is either $\bot$, a propositional variable or, given formulae $\varphi$ and $\psi$ and $\circ\in\{\wedge, \vee,\to\}$, $\varphi\circ\psi$.
 
-For predicate logic we assume an ambient signature $\Sigma$, i.e., a set of function and predicate symbols with their respective arities, and a set of variables. A term is either a variable or, given an $n$-ary function symbol $f$ and terms $t_1, \ldots, t_n$, $f(t_1, \ldots, t_n)$. A formula is either $\bot$, or, given a $n$-ary predicate symbol $P$ and terms $t_1, \ldots, t_n$, $P(t_1, \ldots, t_n)$, or, given formulae $\varphi$ and $\psi$ and $\circ\in\{\wedge, \vee,\to\}$, $\varphi\circ\psi$, or, given a formula $\varphi$ and a variable $x$, $\exists x\varphi$ or $\forall x\varphi$. Free and bound variables are defined as usual and there is a Barendregt's convention in place, i.e. we implicitly assume that they comprise distinct sets, such that bound variables are not affected by substitutions of free variables.
+For predicate logic we assume an ambient signature $\Sigma$, i.e., a set of function and predicate symbols with their respective arities, and a set of variables. A term is either a variable or, given an $n$-ary function symbol $f$ and terms $t_1, \ldots, t_n$, $f(t_1, \ldots, t_n)$. A formula is either $\bot$, or, given a $n$-ary predicate symbol $P$ and terms $t_1, \ldots, t_n$, $P(t_1, \ldots, t_n)$, or, given formulae $\varphi$ and $\psi$ and $\circ\in\{\wedge, \vee,\to\}$, $\varphi\circ\psi$, or, given a formula $\varphi$ and a variable $x$, $\exists x\varphi$ or $\forall x\varphi$. Free and bound variables are defined as usual and there is a Barendregt's convention in place, i.e. we implicitly assume that they comprise distinct sets, such that bound variables are not affected by substitutions of free variables in any formula.
 
 
 \subsection{Propositional Semantics}
@@ -174,10 +174,10 @@ We now recall the semantics of first-order logic:
 		\item $\mathcal M, v\models \varphi\wedge \psi$ iff $\mathcal M, v\models\varphi$ and $\mathcal M, v\models\psi$
 		\item $\mathcal M, v\models \varphi\vee\psi$ iff $\mathcal M, v\models\varphi$ or $\mathcal M, v\models\psi$.
 		\item $\mathcal M, v\models \varphi\to\psi$ iff $\mathcal M, v\not\models\varphi$ or $\mathcal M, v\models\psi$.
-		\item $\mathcal M, v\models\exists x\varphi$ iff there exists $m\in M$ such that $\mathcal M, v[m/a]\models\varphi[a/x]$.
-		\item $\mathcal M, v\models\forall x\varphi$ iff for all $m\in M$ we have $\mathcal M, v[m/a]\models\varphi[a/x]$.
+		\item $\mathcal M, v\models\exists x\varphi$ iff there exists $m\in M$ such that $\mathcal M, v[m/x]\models\varphi$.
+		\item $\mathcal M, v\models\forall x\varphi$ iff for all $m\in M$ we have $\mathcal M, v[m/x]\models\varphi$.
 	\end{itemize}
-	 Here $a$ is a free variable that does not occur in $\varphi$. $\varphi$ is satisfiable if $\mathcal M, v\models\varphi$ for some $\mathcal M, v$. It is valid if $\mathcal M, v\models\varphi$ for every $\mathcal M, v$. We denote the set of valid formulae with \emph{CQC} (Classical Quantified Calculus).
+	$\varphi$ is satisfiable if $\mathcal M, v\models\varphi$ for some $\mathcal M, v$. It is valid if $\mathcal M, v\models\varphi$ for every $\mathcal M, v$. We denote the set of valid formulae with \emph{CQC} (Classical Quantified Calculus).
 \end{definition}
 
 \begin{definition}
@@ -338,7 +338,7 @@ $$\forall w(s\preceq w\to(w\preceq f_\psi(w)\to A(f_\psi(w))\to B(f_\psi(w)))\to
 with $f_\psi$ being a new function symbol.
 
 \begin{definition}
-For $\psi\in\mathcal X$ let $[\psi]$ denote the corresponding clause in $\mathcal X^{b S}$. Suppose we are given a counter-model $\mathcal M = (M, I)$ for $\varphi^{CH}$ such that $m\preceq f_\psi^I(m)$ for each $m\in M$, $\psi\in \mathcal X$.
+For $\psi\in\mathcal X$ let $[\psi]$ denote the corresponding clause in $\mathcal X^{b S}$. Suppose we are given a counter-model $\mathcal M = (M, I)$ for $\varphi^{CH}$.
 We say $(A\to B)\to C\in\mathcal X$ is \emph{fulfilled} at $m\in M$ iff $A^I(m)\to B^I(m)$ is false or $C^I(m)$ is true. For $\psi\in\mathcal X$ define $$g_\psi : M\to M, m\mapsto\begin{cases}
 		m,&\text{ if $\psi$ is fulfilled at $m$ or $m\not\preceq f^I_{[\psi]}(m)$,}\\
 		f^I_{\lbrack\psi\rbrack}(m),&\text{ else.}		
@@ -361,10 +361,6 @@ We say $(A\to B)\to C\in\mathcal X$ is \emph{fulfilled} at $m\in M$ iff $A^I(m)\
 \begin{proof}
 	Let $v$ be a variable assignment. It follows directly from the definitions that $\mathcal M_T, v\not\models P(s)$ and $\mathcal M_T, v\models K(\varphi)$. It is easy to show that $\mathcal M_T, v\models \psi$ for $\psi\in\mathcal R^{bS}$ from persistency. Let $\psi\in\mathcal X^{bS}$, we show $\mathcal M_T, v[\psi_1\dots\psi_n/w] \models s\preceq w\to (w\preceq f_\psi(w)\to A(f_\psi(w)\to B(f_\psi(w)))\to C(w))$ for all $\psi_1\dots\psi_n\in M_T$. Let $\psi_1\dots\psi_n\in M_T$ and $m = g_{\psi_n}(\dots(g_{\psi_1}(s^I))$. If $\mathcal M, v[m/w]\models C(w)$ we are done. Otherwise $\mathcal M, v[m/w]\not\models s\preceq w$ or $\mathcal M, v[m/w]\not\models w\preceq f_\psi(w)\to A(f_\psi(w)) \to B(f_\psi(w))$. The former is impossible since $g_\psi$ is increasing for all $\psi$. For the latter to hold we must have $\mathcal M, v[m/w]\models w\preceq f_\psi(w)$, $\mathcal M, v[m/w]\models A(f_\psi(w))$ and $\mathcal M, v[m/w]\not\models B(f_\psi(w))$. If $\psi$ is fulfilled at $m$ we have $g_\psi(m) = m$, otherwise $g_\psi(m) = f_{[\psi]}^I(m)$. In any case $\mathcal M_T, v[\psi_1\dots\psi_n/w]\models A(f_\psi(w))$ and $\mathcal M_T, v[\psi_1\dots\psi_n/w]\not\models B(f_\psi(w))$. It follows that $\mathcal M_T, v[\psi_1\dots\psi_n/w]\not\models w\preceq f_\psi(w)\to A(f_\psi(w))\to B(f_\psi(w))$ and therefore $\mathcal M_T, v\models \psi$.
 \end{proof}
-
-\begin{corollary}\label{cor:prop-tree-model}
-	If $\mathcal M$ is a counter-model to $\varphi^{CH}$ then so is $\mathcal M_T$.
-\end{corollary}
 
 \begin{remark}
 	It is well known that Kripke frames which are trees are complete with regard to intuitionistic logic. Our contribution is giving an explicit bound to height and degree that depends only on a simple property of the considered formula.
