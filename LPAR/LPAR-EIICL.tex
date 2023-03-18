@@ -48,7 +48,7 @@
 The famous double negation translation~\cite{glivenko1929quelques,godel1933intuitionistischen} establishes an embedding of classical into intuitionistic logic.
 Curiously, the reverse direction has not been covered in literature.
 Utilizing a normal form for intuitionistic logic~\cite{claessen2015sat}, we establish a small model property for intuitionistic propositional logic.
-We use this property for a direct encoding of the Kripke semantics into classical propositional logic and quantified boolean formulae.
+We use this property for a direct encoding of the Kripke semantics into classical propositional logic and quantified Boolean formulae.
 Next, we transfer the developed techniques to the first order case and provide an embedding of intuitionistic first-order logic into classical first-order-logic.
 Our goal here is an encoding that facilitates the use of state-of-the-art provers for classical first-order logic for determining intuitionistic validity.
 In an experimental evaluation, we show that our approach can compete with state-of-the-art provers for certain classes of benchmarks, in particular when the intuitionistic content is low.
@@ -84,7 +84,7 @@ To this end, we study embeddings of intuitionistic into classical logic and prop
 The following main contributions will be discussed in more detail in Sections~\ref{sec:overview} and~\ref{sec:evaluation}:
 \begin{itemize}
 	\item We establish a small model property for counter-models to validity in intuitionistic propositional logic.
-	\item Based on the small model property, we provide an embedding of intuitionistic propositional logic into classical propositional logic and into quantified boolean formulae.
+	\item Based on the small model property, we provide an embedding of intuitionistic propositional logic into classical propositional logic and into quantified Boolean formulae.
 	\item We discuss the reduction of counter-models in intuitionistic first-order logic and, based on this reduction, present an embedding of intuitionistic into classical first-order logic.
 	\item We provide an experimental evaluation on the use of first-order provers for classical logic for determining intuitionistic validity.
  We show that our approach can compete with state-of-the-art provers for certain classes of benchmarks, in particular when the intuitionistic content is low.
@@ -92,7 +92,7 @@ The following main contributions will be discussed in more detail in Sections~\r
 
 \subsection*{Related work}
 The famous double-negation translation establishes
-an embedding of classical into intuitionistic logic, going back to Glivenko~\cite{glivenko1929quelques} in the propositional case, and to G\"odel~\cite{godel1933intuitionistischen} and Gentzen~\cite{gentzen1936widerspruchsfreiheit} in the first-order case.
+an embedding of classical into intuitionistic logic, going back to Glivenko~\cite{glivenko1929quelques} in the propositional case, and to Gödel~\cite{godel1933intuitionistischen} and Gentzen~\cite{gentzen1936widerspruchsfreiheit} in the first-order case.
 In the propositional case the embedding is particularly simple:
 A formula $\varphi$ is classically valid if and only if $\neg\neg\varphi$ is intuitionistically valid.
 Intuitively, the translation collapses for each subformula $\psi$ of $\varphi$ the truth values of $\psi$ and $\neg\neg\psi$, which are classically but not intuitionistically equivalent.
@@ -107,7 +107,7 @@ and examined from a proof-theoretic perspective in~\cite{fiorentini2019proof}, w
 
 We finally mention a long-standing line of research that has investigated when classical validity implies intuitionistic validity.
 This most famously holds for $\Pi_2$-formulae in Peano Arithmetic~\cite{friedman1978classically}, but also other conditions are known~\cite{schwichtenberg}.
-In contrast, we propose a translation of an intuitionistic formula to an equi-valid classical formula.
+In contrast, we propose a translation of an intuitionistic formula to an equivalid classical formula.
 
 %Finally, of course dedicated theorem provers for intuitionistic logic exists, generally using the inverse method~\cite{mclaughlin2008imogen,pavlov2017whaleprover}, but more recently also based on connection-based calculi~\cite{otten2008leancop,otten2021nanocop}, which also work well for classical logic.
 
@@ -265,13 +265,8 @@ In particular, given $$\varphi = \left(\bigwedge\mathcal R\wedge\mathcal X\right
 
 This allows us to embed intuitionistic propositional logic into classical propositional logic by replacing the quantification over all possible worlds by an explicit enumeration:
 
-
-
-
-
-
 The details can be found in Section~\ref{sec:ipc-to-cpc}.
-Building on the same idea, we can also give a quantified boolean formula (QBF) of polynomial size, where the branches of the tree-model can be enumerated implicitly using (alternating) quantifiers. We obtain the following result:
+Building on the same idea, we can also give a quantified Boolean formula (QBF) of polynomial size, where the branches of the tree-model can be enumerated implicitly using (alternating) quantifiers. We obtain the following result:
 
 
 \begin{lemma}
@@ -296,7 +291,6 @@ The most obvious approach to embedding intuitionistic into classical logic is to
 \begin{definition}
 	Let $\varphi$ be a propositional formula.
  Define $\varphi^{b}$ inductively:
-	\vspace*{-.1cm}
 	\begin{itemize}
 		\item $\bot^b = \bot$.
 		\item $A^{b} = A(b)$ for every propositional variable $A$.
@@ -304,17 +298,14 @@ The most obvious approach to embedding intuitionistic into classical logic is to
 		\item $(\varphi\to \psi)^b = \forall w(b\preceq w\to\varphi^{w}\to\psi^{w})$ where $w$ is some new bound variable.
 	\end{itemize}
 	Let $K(\varphi)$ encode the theory of Kripke structures, i.e.
-	\vspace*{-.1cm}
-	\[K(\varphi) = \text{\normalfont PartialOrder}(\preceq)\wedge\forall u\forall w(u\preceq w\to \text{\normalfont Persistent}(u, w))\]
-	\vspace*{-.4cm}
+	\[K(\varphi) := \text{\normalfont PartialOrder}(\preceq)\wedge\forall u\forall w(u\preceq w\to \text{\normalfont Persistent}(u, w))\]
 	with e.g.
-	\vspace*{-.2cm}
 	\begin{align*}
-		\text{\normalfont PartialOrder}(\preceq) =&\:\forall u(u\preceq u)\wedge\forall u\forall w(u\preceq w\to w\preceq u\to u = w)\wedge\\&\:\forall u\forall v\forall w(u\preceq v\to v\preceq w\to u\preceq w)\\
-		\text{\normalfont Persistent}(u, w)=&\:\bigwedge \{A(u)\to A(w)\:|\: \text{ $A$ occurs in $\varphi$}\}
+		\text{\normalfont PartialOrder}(\preceq) :=&\:\forall u(u\preceq u)\wedge\forall u\forall w(u\preceq w\to w\preceq u\to u = w)\wedge\\&\:\forall u\forall v\forall w(u\preceq v\to v\preceq w\to u\preceq w)\\
+		\text{\normalfont Persistent}(u, w):=&\:\bigwedge \{A(u)\to A(w)\:|\: \text{ $A$ occurs in $\varphi$}\}
 	\end{align*}
 	Then define
-	$\varphi^{C} = K(\varphi)\to \varphi^{b}$
+	\[\varphi^{C} := K(\varphi)\to \varphi^{b}\]
 	where $b$ is a new free variable.
 \end{definition}
 
@@ -411,11 +402,11 @@ Now we can replace every $\forall$-quantifier in $\varphi^{CH}$ by enumerating a
 	We note that $A^\epsilon  = P^\epsilon = 0$, $A^\psi = P^{\psi}  = 1$ indeed defines a counter-model.
 \end{example}
 
-Since $|\Lambda|\in O(2^{|\mathcal X|\log |\mathcal X|})$ a simple counting argument shows that $|\mathcal P^\#|\in\mathcal O(|\varphi|\cdot 2^{|\mathcal X|\log |\mathcal X|})$, $|\mathcal R^\#|\in\mathcal O(|\mathcal R|\cdot2^{|\mathcal X|\log |\mathcal X|})$ and $|\mathcal X|\in \mathcal O(|\mathcal X|\cdot 2^{|\mathcal X|\log|\mathcal X|})$. This gives us a bound on the size of $\varphi^#$.
+Since $|\Lambda|\in O(2^{|\mathcal X|\log |\mathcal X|})$ a simple counting argument shows that $|\mathcal P^\#|\in\mathcal O(|\varphi|\cdot 2^{|\mathcal X|\log |\mathcal X|})$, $|\mathcal R^\#|\in\mathcal O(|\mathcal R|\cdot2^{|\mathcal X|\log |\mathcal X|})$ and $|\mathcal X|\in \mathcal O(|\mathcal X|\cdot 2^{|\mathcal X|\log|\mathcal X|})$. This gives us a bound on the size of $\varphi^\#$.
 
 \begin{lemma}
 	The size of $\varphi^\#$ is in $\mathcal O(|\varphi|\cdot 2^{|\mathcal X|\log|\mathcal X|})$.
-\end{corollary}
+\end{lemma}
 
 \section{IPC to QBF}\label{sec:qbf}
 
@@ -436,16 +427,16 @@ Define
 		\item {\normalfont Sat}$_{\mathcal R}(n)$ encoding that the formulae in $\mathcal R$ hold at the $n$-th world of the path.
 		\item {\normalfont Sat}$_{\mathcal X}(n)$ encoding that the formula in $\mathcal X$ that is represented by $\vec X^{n-1}$ holds.
 	\end{itemize}
-	Define$$\varphi^Q_{i} = \exists \vec A^i\forall \vec X^i\left(\text{\normalfont Persistent}(i)\wedge \text{\normalfont Sat}_{\mathcal R}(i)\wedge \text{\normalfont Sat}_{\mathcal X}(i)\wedge\left(\text{\normalfont Valid}(i)\to \varphi^Q_{i+1}\right)\right)$$
+	Define$$\varphi^Q_{i} := \exists \vec A^i\forall \vec X^i\left(\text{\normalfont Persistent}(i)\wedge \text{\normalfont Sat}_{\mathcal R}(i)\wedge \text{\normalfont Sat}_{\mathcal X}(i)\wedge\left(\text{\normalfont Valid}(i)\to \varphi^Q_{i+1}\right)\right)$$
 	for $0 < i < |\mathcal{X}|$, as well as the special cases
-	$$\varphi^Q_{|\mathcal{X}|} = \exists \vec A^{|\mathcal{X}|}\left(\text{\normalfont Persistent}(|\mathcal{X}|)\wedge \text{\normalfont Sat}_{\mathcal R}(|\mathcal{X}|)\wedge \text{\normalfont Sat}_{\mathcal X}(|\mathcal{X}|)\right)$$
-	for leaves, and $$\varphi^Q = \varphi_0^Q = \exists \vec A^0\forall \vec X^0\left(\neg P^0\wedge \text{\normalfont Sat}_{\mathcal R}(0)\wedge(\text{\normalfont Valid}(0)\to \varphi_1^Q)\right)$$for the root.
+	$$\varphi^Q_{|\mathcal{X}|} := \exists \vec A^{|\mathcal{X}|}\left(\text{\normalfont Persistent}(|\mathcal{X}|)\wedge \text{\normalfont Sat}_{\mathcal R}(|\mathcal{X}|)\wedge \text{\normalfont Sat}_{\mathcal X}(|\mathcal{X}|)\right)$$
+	for leaves, and $$\varphi^Q = \varphi_0^Q := \exists \vec A^0\forall \vec X^0\left(\neg P^0\wedge \text{\normalfont Sat}_{\mathcal R}(0)\wedge(\text{\normalfont Valid}(0)\to \varphi_1^Q)\right)$$for the root.
 	Example encodings of the above formulae are:
 	\begin{align*}
-		\text{\normalfont Valid}(n) = &\left(\bigvee\left\{X^n_\psi\:|\:\psi\in\mathcal X\right\}\right)\wedge\left(\bigwedge \left\{\neg(X^n_{\psi_1}\wedge X^n_{\psi_2})\:|\:\psi_1\neq\psi_2\in\mathcal X\right\}\right)\wedge\\&\left(\bigwedge\left\{\bigwedge\{X^i_\psi\to\neg X^n_\psi\:|\:i < n\}\:|\:\psi\in\mathcal X\right\}\right)\\
-		\text{\normalfont Persistent}(n) = & \bigwedge\left\{A^{n-1}\to A^n\:|\: A \text{ prop. variable with }A^{n-1}\in\vec A^{n-1}, A^n \in\vec A^{n}\right\}\\
-		\text{\normalfont Sat}_{\mathcal R}(n) = &\bigwedge\left\{\bigwedge A^n_i\to\bigvee B^n_j\:|\:\bigwedge A_i\to\bigvee B_j \in \mathcal R\right\}\\
-		\text{\normalfont Sat}_{\mathcal X}(n) = & \bigwedge\left\{X^{n-1}_\psi\to (A^n\to B^n)\to C^{n-1}\:|\:\psi = (A\to B)\to C\in\mathcal X\right\}
+		\text{\normalfont Valid}(n) := &\left(\bigvee\left\{X^n_\psi\:|\:\psi\in\mathcal X\right\}\right)\wedge\left(\bigwedge \left\{\neg(X^n_{\psi_1}\wedge X^n_{\psi_2})\:|\:\psi_1\neq\psi_2\in\mathcal X\right\}\right)\wedge\\&\left(\bigwedge\left\{\bigwedge\{X^i_\psi\to\neg X^n_\psi\:|\:i < n\}\:|\:\psi\in\mathcal X\right\}\right)\\
+		\text{\normalfont Persistent}(n) := & \bigwedge\left\{A^{n-1}\to A^n\:|\: A \text{ prop. variable with }A^{n-1}\in\vec A^{n-1}, A^n \in\vec A^{n}\right\}\\
+		\text{\normalfont Sat}_{\mathcal R}(n) := &\bigwedge\left\{\bigwedge A^n_i\to\bigvee B^n_j\:|\:\bigwedge A_i\to\bigvee B_j \in \mathcal R\right\}\\
+		\text{\normalfont Sat}_{\mathcal X}(n) := & \bigwedge\left\{X^{n-1}_\psi\to (A^n\to B^n)\to C^{n-1}\:|\:\psi = (A\to B)\to C\in\mathcal X\right\}
 	\end{align*}
 \end{definition}
 
@@ -481,7 +472,6 @@ We now give an analogous transformation for first order logic. Our trick of lift
 
 \begin{definition}\label{def:fo-translation}
 	Let $\varphi$ be a predicate formula. Define $\varphi^{b}$ inductively:
-\todo{genau genommen müsstest du noch sagen, dass $b$ eine freie Variable ist. Im letzten Fall der Definition benützen wir dann aber w gleichzeitig als freie und gebundene Variable}
 	\begin{itemize}
 		\item $\bot^b = \bot$.
 		\item $A(\vec t)^{b} = A(\vec t, b)$ for every predicate symbol $A$.
@@ -492,19 +482,19 @@ We now give an analogous transformation for first order logic. Our trick of lift
 	\end{itemize}
 	where $w$ is some new bound variable. Let $K(\varphi)$ encode the theory of Kripke structures as well as the predicate $E$, i.e.
 	\begin{align*}
-		K(\varphi) = \:& \text{PartialOrder}(\preceq) \wedge \forall u \forall w (u\preceq w\to \text{DomainSubset}(u, w)) \wedge\\
+		K(\varphi) := \:& \text{PartialOrder}(\preceq) \wedge \forall u \forall w (u\preceq w\to \text{DomainSubset}(u, w)) \wedge\\
 		& \forall u(\text{World(u)}\to \text{DomainClosed}(u))\wedge \forall u\forall w (u\preceq w\to \text{Persistent}(u, w)).
 	\end{align*}
-	with e.g.:\vspace*{-.76cm}
+	with e.g.:
 	\begin{align*}
-		\text{PartialOrder}(\preceq) = &\:\forall u(u\preceq u)\wedge\forall u\forall w(u\preceq w\to w\preceq u\to u = w)\wedge\\&\:\forall u\forall v\forall w(u\preceq v\to v\preceq w\to u\preceq w)\\
-		\text{DomainSubset}(u, w) = &\:\forall x(E(x, u)\to E(x, w))\\
-		\text{World}(u) = &\:\exists xE(x, u)\\
-		\text{DomainClosed}(u) = &\:\bigwedge\left\{\forall\vec x(\vec E(\vec x, u)\to E(f(\vec x), u))\:|\:\text{$f$ a function in $\varphi$}\right\}\\
-		\text{Persistent}(u, w) = &\:\bigwedge\left\{\forall\vec x(\vec A(\vec x, u)\to A(\vec x, w))\:|\:\text{$A$ a predicate in $\varphi$}\right\}
+		\text{PartialOrder}(\preceq) := &\:\forall u(u\preceq u)\wedge\forall u\forall w(u\preceq w\to w\preceq u\to u = w)\wedge\\&\:\forall u\forall v\forall w(u\preceq v\to v\preceq w\to u\preceq w)\\
+		\text{DomainSubset}(u, w) := &\:\forall x(E(x, u)\to E(x, w))\\
+		\text{World}(u) := &\:\exists xE(x, u)\\
+		\text{DomainClosed}(u) := &\:\bigwedge\left\{\forall\vec x(\vec E(\vec x, u)\to E(f(\vec x), u))\:|\:\text{$f$ a function in $\varphi$}\right\}\\
+		\text{Persistent}(u, w) := &\:\bigwedge\left\{\forall\vec x(\vec A(\vec x, u)\to A(\vec x, w))\:|\:\text{$A$ a predicate in $\varphi$}\right\}
 	\end{align*}
 	Then define
-	$\varphi^C = K(\varphi)\to\text{World}(b)\to \vec E(\vec a, b)\to \varphi^b$ where $\vec a$ contains all free variables occurring in $\varphi$ and $b$ is a new free variable.
+	\[\varphi^C:= K(\varphi)\to\text{World}(b)\to \vec E(\vec a, b)\to \varphi^b\] where $\vec a$ contains all free variables occurring in $\varphi$ and $b$ is a new free variable.
 \end{definition}
 
 \begin{lemma}\label{lemma:fo-simplification}
@@ -526,14 +516,19 @@ with $f_\psi$ being a new function symbol.
 
 As in the previous section we can define a tree counter-model for this.
 \begin{definition}
-	Suppose we are given a counter-model $\mathcal M = (M, I)$ for $\varphi^{CH}$. W.l.o.g. suppose $\{m\in M\:|\:\text{World}(m)\}$ has a minimal element, say $w_0$. Define $\mathcal M_T = (M_T, I_T)$ as follows:
+	Suppose we are given a counter-model $\mathcal M = (M, I)$ for $\varphi^{CH}$. Similarly to the propositional case for $\psi\in\mathcal X$ define \[g_\psi :M^n\to M, (\vec z, m) \mapsto
+	\begin{cases} 
+	m,&\text{if }m\not\preceq f_\psi(\vec z, m)\\
+	f_{[\psi]}^I(\vec z, m)&\text{otherwise}
+	\end{cases}
+	\]where $[\psi]$ denotes the corresponding element of $\mathcal X^{bS}$. Define $\mathcal M_T = (M_T, I_T)$ as follows:
 	\begin{itemize}
-		\item $M_T$ is the union of $M$ and sequences $(\vec m_1, \psi_1)\dots (\vec m_n, \psi_n)$ such that $\vec E^I(\vec m_1, w_0)$ and $\vec E^I(\vec m_i, f_{\psi_i}(\vec m_i, f_{\psi_{i-1}}^I(\vec m_{i-1}, \dots f_{\psi_1}^I(\vec m_1, w_0)\dots)))$ for $i > 0$ hold.
-		\item $s^{I_T} = w_0$, $\vec r^{I_T} = \vec r^I$.
+		\item $M_T$ is the union of $\{m\in M\:|\:\text{World}^I(m)\wedge s^I\preceq^I m\}$ and sequences $(\vec m_1, \psi_1)\dots (\vec m_n, \psi_n)$ such that $\vec E^I(\vec m_1, w_0)$ and $\vec E^I(\vec m_i, g_{\psi_i}(\vec m_i, g_{\psi_{i-1}}(\vec m_{i-1}, \dots g_{\psi_1}(\vec m_1, w_0)\dots)))$ for $i > 0$ hold.
+		\item $s^{I_T} = s^I$, $\vec r^{I_T} = \vec r^I$.
 		\item We interpret $\preceq$ trivially on $M$ and as the prefix-order elsewhere.
-		\item Have $E^{I_T}(m, (\vec m_1, \psi_1)\dots (\vec m_n, \psi_n))$ iff $E^I(m, f_{\psi_n}^I(\vec m_n, \dots f_{\psi_1}^I(\vec m_1, w_0)\dots))$.
+		\item Have $E^{I_T}(m, (\vec m_1, \psi_1)\dots (\vec m_n, \psi_n))$ iff $E^I(m, g_{\psi_n}(\vec m_n, \dots g_{\psi_1}(\vec m_1, w_0)\dots))$.
 		\item We set $f_\psi^{I_T}(\vec m, (\vec m_1, \psi_1)\dots (\vec m_n, \psi_n)) = (\vec m_1, \psi_1)\dots (\vec m_n, \psi_n)(\vec m, \psi)$ and arbitrary else.
-		\item For predicate symbols $R$, we set $${R}^{I_T}(\vec m, (\vec m_1, \psi_1)\dots (\vec m_n, \psi_n)) = {R}^I(\vec m, f_{\psi_n}^I(\vec m_n, \dots(f_{\psi_1}^I(\vec m_1, s^I))\dots))$$ and arbitrary otherwise, for function symbols $f^{I_T}(\vec m) = f^I(\vec m)$ and arbitrary else.
+		\item For predicate symbols $R$, we set $${R}^{I_T}(\vec m, (\vec m_1, \psi_1)\dots (\vec m_n, \psi_n)) = {R}^I(\vec m, g_{\psi_n}(\vec m_n, \dots(g_{\psi_1}(\vec m_1, s^I))\dots))$$ and arbitrary otherwise, for function symbols $f^{I_T}(\vec m) = f^I(\vec m)$ and arbitrary else.
 	\end{itemize}
 \end{definition}
 
@@ -541,7 +536,7 @@ As in the previous section we can define a tree counter-model for this.
 	If $\mathcal M$ is a counter-model to $\varphi^{CH}$ then so is $\mathcal M_T$.
 \end{lemma}
 
-Even if we don't have the finiteness property of the propositional case, we have still managed to reduce the complexity of possible counter-models because we know that considering worlds of the form $$f_{\psi_1}(\vec m_1, f_{\psi_2}(\vec m_2, \dots f_{\psi_n}(\vec m_n, s)\dots))$$ is sufficient.
+Even if we don't have the finiteness property of the propositional case, we have still managed to reduce the complexity of possible counter-models because we know that considering worlds of the form $$g_{\psi_1}(\vec m_1, g_{\psi_2}(\vec m_2, \dots g_{\psi_n}(\vec m_n, s)\dots))$$ is sufficient.
 In particular, this allows us to completely eliminate $\preceq$, that is we remove the PartialOrder$(\preceq)$
 from $K(\varphi)$ and adjust DomainSubset$(u, w)$ and Persistent$(u, w)$, e.g. remove quantification over $w$ and the precondition $u\preceq w$ from $K(\varphi)$ and replace DomainSubset$(u, w)$ with
 $$
@@ -552,7 +547,7 @@ $$
 	\bigwedge\{\forall\vec x\forall\vec y\forall u(A(\vec x, u)\to A(\vec x, f_\psi(\vec y, u)))\:|\:\psi\in\mathcal X\cup\mathcal Q, \text{$A$ a predicate in $\varphi$}\}.
 $$Putting all of this together yields the following translation:
 \begin{theorem}\label{thm:fo-translation}
-	Let $\mathcal R,\mathcal X,\mathcal Q$ be as above. For every $n$-ary predicate $A$ define a new $n+1$-ary predicate of the same name. For every $\psi\in\mathcal \mathcal X\cup\mathcal Q$ define a new function symbol $f_\psi$. Consider a new binary predicate symbol $E$ and define $\vec E(\vec x, u) := \bigwedge\{E(x, u)\:|\:x\in\vec x\}$. Obtain $\mathcal R^\#$ by including
+	Let $\mathcal R,\mathcal X,\mathcal Q$ be as above. For each $n$-ary predicate $A$ define a new $n+1$-ary predicate of the same name. For every $\psi\in\mathcal \mathcal X\cup\mathcal Q$ define a new function symbol $f_\psi$. Consider a new binary predicate $E$ and define $\vec E(\vec x, u) := \bigwedge\{E(x, u)\:|\:x\in\vec x\}$. Obtain $\mathcal R^\#$ by including
 	$$
 		\forall u\forall \vec x\left(\vec E(\vec x, u)\to\bigwedge_i A_i(\vec a_i, u)\to\bigvee_j B_j(\vec b_j, u)\right)
 	$$
@@ -616,7 +611,7 @@ In general, our approach falls short of the state of the art.
 However when grouping the benchmarks by $|\mathcal Q|$ and $|\mathcal X|$, see Figure~\ref{fig:b},
 we observe good performance of our approach for $|\mathcal Q| = 0$ and $|\mathcal X| \leq 2$ resp. $|\mathcal X| \geq 6$.
 
-\begin{figure}
+\begin{figure}[h]
 	\centering
 	\begin{tabular}{c|c|lr|lr|lr|lr|c}
 		$|\mathcal Q|$&$|\mathcal X|$&\multicolumn{2}{c}{Embedding}&\multicolumn{2}{c}{Embedding (idem.)}&\multicolumn{2}{c}{ileanCoP}&\multicolumn{2}{c}{nanoCoP-i 2.0}&Total\\\hline
@@ -684,6 +679,8 @@ We will target the particular calculi used by state-of-the-art provers, e.g. sup
 
 \appendix
 
+\newpage
+
 \section{Omitted proofs}
 
 \begin{lemma}\label{proof:first-order-normal-form}
@@ -713,7 +710,17 @@ We will target the particular calculi used by state-of-the-art provers, e.g. sup
 	Suppose $\mathcal M=(M, T)$ is a counter-model to $\varphi^{CH}$, then so is $\mathcal M_T = (M_T, I_T)$.
 \end{lemma}
 \begin{proof}
-	Let $v$ be a variable assignment. It follows directly from the definitions that $\mathcal M_T, v\not\models P(s)$ and $\mathcal M_T, v\models K(\varphi)$. It is easy to show that $\mathcal M_T, v\models \psi$ for $\psi\in\mathcal R^{bS}$ from persistency. Let $\psi\in\mathcal X^{bS}$, we show $\mathcal M_T, v[\psi_1\dots\psi_n/w] \models s\preceq w\to (w\preceq f_\psi(w)\to A(f_\psi(w)\to B(f_\psi(w)))\to C(w))$ for all $\psi_1\dots\psi_n\in M_T$. Let $\psi_1\dots\psi_n\in M_T$ and $m = g_{\psi_n}(\dots(g_{\psi_1}(s^I))$. If $\mathcal M, v[m/w]\models C(w)$ we are done. Otherwise $\mathcal M, v[m/w]\not\models s\preceq w$ or $\mathcal M, v[m/w]\not\models w\preceq f_\psi(w)\to A(f_\psi(w)) \to B(f_\psi(w))$. The former is impossible since $g_\psi$ is increasing for all $\psi$. For the latter to hold we must have $\mathcal M, v[m/w]\models w\preceq f_\psi(w)$, $\mathcal M, v[m/w]\models A(f_\psi(w))$ and $\mathcal M, v[m/w]\not\models B(f_\psi(w))$. If $\psi$ is fulfilled at $m$ we have $g_\psi(m) = m$, otherwise $g_\psi(m) = f_{[\psi]}^I(m)$. In any case $\mathcal M_T, v[\psi_1\dots\psi_n/w]\models A(f_\psi(w))$ and $\mathcal M_T, v[\psi_1\dots\psi_n/w]\not\models B(f_\psi(w))$. It follows that $\mathcal M_T, v[\psi_1\dots\psi_n/w]\not\models w\preceq f_\psi(w)\to A(f_\psi(w))\to B(f_\psi(w))$ and therefore $\mathcal M_T, v\models \psi$.
+	Let $v$ be any variable assignment. We show that $\mathcal M_T, v\not\models \varphi$. It follows directly from the definitions and the same facts for $\mathcal M$ that $\mathcal M_T, v\not\models P(s)$ and $\mathcal M_T, v\models K(\varphi)$. It remains to show that $\mathcal M_T, v\models\bigwedge \mathcal R^{bS}$ and $\mathcal M_T, v\models \bigwedge\mathcal X^{bS}$.
+	
+	Let \[\forall w\phi = \forall w\left(s\preceq w\to\bigwedge_i A_i(w)\to \bigvee_j B_j(w)\right)\in\mathcal R^{bS}\] and $\psi_1\dots\psi_n\in M_T$. Since $\mathcal M$ is a counter-model to $\varphi$ we know that $\mathcal M, v\models\forall w\phi$ and thus $\mathcal M, v[g_{\psi_n}(\dots(g_{\psi_1}(s^I))\dots)/w]\models \phi$. Then by definition $\mathcal M_T, v[\psi_1\dots\psi_n/w]\models\phi$. This shows that $\mathcal M_T, v\models\forall w\phi$.
+
+	On the other hand consider \[\forall w\phi = \forall w(s\preceq w\to(w\preceq f_\psi(w)\to A(f_\psi(w))\to B(f_\psi(w)))\to C(w))\in\mathcal X^{bS}\] and $\psi_1\dots\psi_n\in M_T$. Let $m = g_{\psi_n}(\dots(g_{\psi_1}(s^I))\dots)$. If $\mathcal M, v[m/w]\models C(w)$ it follows that $\mathcal M_T, v[\psi_1\dots\psi_m]\models C(w)$ and we are done. Otherwise $\mathcal M, v[m/w]\not\models s\preceq w$ or $\mathcal M, v[m/w]\not\models w\preceq f_\psi(w)\to A(f_\psi(w)) \to B(f_\psi(w))$. The former is impossible since $g_\psi$ is increasing for all $\psi$. For the latter to hold we must have $\mathcal M, v[m/w]\models w\preceq f_\psi(w)$, $\mathcal M, v[m/w]\models A(f_\psi(w))$ and $\mathcal M, v[m/w]\not\models B(f_\psi(w))$.
+	
+	There are now 2 cases. Suppose $\psi$ is fulfilled at $m$. Then we have $\mathcal M, v[m/w]\not\models A(w)\to B(w)$ and $g_\psi(m) = m$ and therefore $\mathcal M, v[\psi_1\dots\psi_n/w]\not\models A(f_\psi(w))\to B(f\psi(w))$, i.e. $\mathcal M, v[\psi_1\dots\psi_n/w]\models \phi$. 
+	
+	On the other hand suppose $\psi$ is not fulfilled at $m$. Then $\mathcal M, v[m/w]\not\models A(f_\psi(w))\to B(f_\psi(w))$ and $g_\psi(m) = f^I_\psi(m)$. In this case it directly follows that $\mathcal M_T, v[\psi_1\dots\psi_n/w]\not\models A(f_\psi(w))\to B(f_\psi(w))$ and thus $\mathcal M_T, v[\psi_1\dots\psi_n/w]\not\models A(f_\psi(w))\to B(f_\psi(w))$, i.e. $\mathcal M_T, v[\psi_1\dots\psi_n/w]\models\phi$.
+
+	In any case $\mathcal M_T, v\models\forall w\phi$.
 \end{proof}
 
 
