@@ -265,9 +265,10 @@ In particular, given $$\varphi = \left(\bigwedge\mathcal R\wedge\mathcal X\right
 
 This allows us to embed intuitionistic propositional logic into classical propositional logic by replacing the quantification over all possible worlds by an explicit enumeration:
 
-\begin{lemma}
-	For each propositional formula $\varphi$ there is effectively a formula $\varphi^\#$ with $\mathcal |\varphi^\#|\in\mathcal O(|\mathcal R|\cdot 2^{|\mathcal X|\log|\mathcal X|})$ such that $\varphi$ is intuitionistically valid if and only if $\varphi^\#$ is classically valid.
-\end{lemma}
+
+
+
+
 
 The details can be found in Section~\ref{sec:ipc-to-cpc}.
 Building on the same idea, we can also give a quantified boolean formula (QBF) of polynomial size, where the branches of the tree-model can be enumerated implicitly using (alternating) quantifiers. We obtain the following result:
@@ -387,15 +388,15 @@ Now we can replace every $\forall$-quantifier in $\varphi^{CH}$ by enumerating a
 	$$
 	for $\bigwedge_iA_i\to\bigvee_jB_j\in\mathcal R$ and $\mathcal X^\#$ as the union over all sets
 	$$
-		\left\{\left(A^{\lambda\psi} \to A^{\lambda\psi}\right)\to C^\lambda\:|\:\lambda\in\Lambda, \psi\text{ does not occur in }\lambda\right\}
+		\left\{\left(A^{\lambda\psi} \to B^{\lambda\psi}\right)\to C^\lambda\:|\:\lambda\in\Lambda, \psi\text{ does not occur in }\lambda\right\}
 	$$
 	for $\psi = (A\to B)\to C\in\mathcal X$ as well as $\mathcal P^\#$ as the union over all sets
 	$$
-		\left\{A^\lambda\to A^{\lambda\psi}\:|\:\lambda\in\Lambda, \psi\text{ does not occur in }\lambda\right\}
+		\left\{A^\lambda\to B^{\lambda\psi}\:|\:\lambda\in\Lambda, \psi\text{ does not occur in }\lambda\right\}
 	$$
 	 for each propositional variable $A$ occurring in $\varphi$, encoding persistency. Then
 	$$
-		\varphi^\# := \left(\bigwedge \mathcal P^\#\wedge\bigwedge \mathcal R^\#\wedge\bigwedge\mathcal X^\#\right)\to P^\epsilon
+		\varphi^\# := \left(\bigwedge \mathcal R^\#\wedge\bigwedge\mathcal X^\#\wedge\bigwedge \mathcal P^\#\right)\to P^\epsilon
 	$$
 	is classically valid if and only if $\varphi$ is intuitionistically valid.
 \end{theorem}
@@ -408,7 +409,13 @@ Now we can replace every $\forall$-quantifier in $\varphi^{CH}$ by enumerating a
 	$$((A\to P)\wedge ((A\to \bot)\to P))\to P.$$
 	Applying the above lemma this is intuitionistically valid if and only if $$((A^\epsilon\to A^\psi)\wedge(P^\epsilon\to P^\psi)\wedge(A^\epsilon\to P^\epsilon)\wedge(A^\psi\to P^\psi)\wedge ((A^\psi\to \bot)\to P^\epsilon))\to P^\epsilon$$ is classically valid where $\psi := (A\to \bot)\to P$.
 	We note that $A^\epsilon  = P^\epsilon = 0$, $A^\psi = P^{\psi}  = 1$ indeed defines a counter-model.
-\end{example}	
+\end{example}
+
+Since $|\Lambda|\in O(2^{|\mathcal X|\log |\mathcal X|})$ a simple counting argument shows that $|\mathcal P^\#|\in\mathcal O(|\varphi|\cdot 2^{|\mathcal X|\log |\mathcal X|})$, $|\mathcal R^\#|\in\mathcal O(|\mathcal R|\cdot2^{|\mathcal X|\log |\mathcal X|})$ and $|\mathcal X|\in \mathcal O(|\mathcal X|\cdot 2^{|\mathcal X|\log|\mathcal X|})$. This gives us a bound on the size of $\varphi^#$.
+
+\begin{lemma}
+	The size of $\varphi^\#$ is in $\mathcal O(|\varphi|\cdot 2^{|\mathcal X|\log|\mathcal X|})$.
+\end{corollary}
 
 \section{IPC to QBF}\label{sec:qbf}
 
