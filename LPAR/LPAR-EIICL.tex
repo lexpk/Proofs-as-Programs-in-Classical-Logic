@@ -119,7 +119,7 @@ In this section we fix notation and recall the semantics for classical and intui
 
 For propositional logic we assume an ambient set of propositional variables. As usual a formula is either $\bot$, a propositional variable or, given formulae $\varphi$ and $\psi$ and $\circ\in\{\wedge, \vee,\to\}$, $\varphi\circ\psi$.
 
-For predicate logic we assume an ambient signature $\Sigma$, i.e., a set of function and predicate symbols with their respective arities, and a set of variables. A term is either a variable or, given an $n$-ary function symbol $f$ and terms $t_1, \ldots, t_n$, $f(t_1, \ldots, t_n)$. A formula is either $\bot$, or, given a $n$-ary predicate symbol $P$ and terms $t_1, \ldots, t_n$, $P(t_1, \ldots, t_n)$, or, given formulae $\varphi$ and $\psi$ and $\circ\in\{\wedge, \vee,\to\}$, $\varphi\circ\psi$, or, given a formula $\varphi$ and a variable $x$, $\exists x\varphi$ or $\forall x\varphi$. Free and bound variables are defined as usual and there is a Barendregt's convention in place, i.e. we implicitly assume that they comprise distinct sets, such that bound variables are not affected by substitutions of free variables in any formula.
+For predicate logic we assume an ambient signature $\Sigma$, i.e., a set of function and predicate symbols with their respective arities, and a set of variables. A term is either a variable or, given an $n$-ary function symbol $f$ and terms $t_1, \ldots, t_n$, $f(t_1, \ldots, t_n)$. A formula is either $\bot$ or, given a $n$-ary predicate symbol $P$ and terms $t_1, \ldots, t_n$, $P(t_1, \ldots, t_n)$ or, given formulae $\varphi$ and $\psi$ and $\circ\in\{\wedge, \vee,\to\}$, $\varphi\circ\psi$ or, given a formula $\varphi$ and a variable $x$, $\exists x\varphi$ or $\forall x\varphi$. Free and bound variables are defined as usual and there is a Barendregt's convention in place, i.e. we implicitly assume that they comprise distinct sets, such that bound variables are not affected by substitutions of free variables in any formula.
 
 
 \subsection{Propositional Semantics}
@@ -182,7 +182,7 @@ We now recall the semantics of first-order logic:
 
 \begin{definition}
 	A $\Sigma$-\emph{Kripke structure} $\mathcal{K}$ is a partially ordered set $W$, called the Kripke \emph{frame}, and an indexed family of $\Sigma$-structures $(\mathcal{M}_w)_{w\in W}$ such that for $u\leq w$ we have $M_u\subseteq M_w$, $f^{I_w}|_{M_u} = f^{I_u}$ and $R^{I_w}|_{M_u} = R^{I_u}$.\footnote{Here $f|_M$ denotes the restriction of $f$ to $M$}
-	The model relation between $\mathcal M_u$, $v$ (mapping into $M_u$) and formulae $\varphi$ is defined as before, except in the cases of implication and $\forall$-quantification, where we set
+	The model relation between $\mathcal M_u$, $v$ (mapping into $M_u$) and formulae $\varphi$ is defined as before, except in the cases of implication and $\forall$-quantification, where
 	\begin{itemize}
 		\item $\mathcal M_u, v\models \varphi\to\psi$ iff for every $w\geq u$ we have $\mathcal M_w, v\not\models\varphi$ or $\mathcal M_w, v\models\psi$.
 		\item $\mathcal M_u, v\models\forall x\varphi$ iff for every $w\geq u$ and $m\in M_w$ we have $\mathcal M_w, v[m/x]\models\varphi$.
@@ -256,7 +256,7 @@ We start with the propositional case, as the important insights are the same as 
 The first step is to express the Kripke semantics of intuitionistic logic in classical first-order logic.
 That is, for each $\varphi$ we give a $\varphi^\#$ that is classically valid iff $\varphi$ is intuitionistically valid, establishing a dual to the double negation translation.
 
-Then, the key to reducing the first-order logic encoding to a propositional logic encoding, is a small model property that supports the reduction of counter-models.
+Then, the key to reducing the first-order logic encoding to a propositional logic encoding is a small model property that supports the reduction of counter-models.
 In particular, given $$\varphi = \left(\bigwedge\mathcal R\wedge\mathcal X\right)\to P$$ as in Lemma~\ref{lemma:propositional-normal-form} we establish:
 
 \begin{lemma}
@@ -402,7 +402,7 @@ Now we can replace every $\forall$-quantifier in $\varphi^{CH}$ by enumerating a
 	We note that $A^\epsilon  = P^\epsilon = 0$, $A^\psi = P^{\psi}  = 1$ indeed defines a counter-model.
 \end{example}
 
-Since $|\Lambda|\in O(2^{|\mathcal X|\log |\mathcal X|})$ a simple counting argument shows that $|\mathcal P^\#|\in\mathcal O(|\varphi|\cdot 2^{|\mathcal X|\log |\mathcal X|})$, $|\mathcal R^\#|\in\mathcal O(|\mathcal R|\cdot2^{|\mathcal X|\log |\mathcal X|})$ and $|\mathcal X|\in \mathcal O(|\mathcal X|\cdot 2^{|\mathcal X|\log|\mathcal X|})$. This gives us a bound on the size of $\varphi^\#$.
+Since $|\Lambda|\in O(2^{|\mathcal X|\log |\mathcal X|})$ a simple counting argument shows that $|\mathcal P^\#|\in\mathcal O(|\varphi|\cdot 2^{|\mathcal X|\log |\mathcal X|})$, $|\mathcal R^\#|\in\mathcal O(|\mathcal R|\cdot2^{|\mathcal X|\log |\mathcal X|})$ and $|\mathcal X|\in \mathcal O(|\mathcal X|\cdot 2^{|\mathcal X|\log|\mathcal X|})$. This gives a bound on the size of $\varphi^\#$.
 
 \begin{lemma}
 	The size of $\varphi^\#$ is in $\mathcal O(|\varphi|\cdot 2^{|\mathcal X|\log|\mathcal X|})$.
@@ -476,11 +476,11 @@ We now give an analogous transformation for first order logic. Our trick of lift
 		\item $\bot^b = \bot$.
 		\item $A(\vec t)^{b} = A(\vec t, b)$ for every predicate symbol $A$.
 		\item $(\varphi\circ\psi)^b = \varphi^b\circ\psi^u$ for $\circ\in\{\wedge, \vee\}$.
-		\item $(\varphi\to \psi)^b = \forall w(b\preceq w\to\varphi^{w}\to\psi^{w})$.
+		\item $(\varphi\to \psi)^b = \forall w(b\preceq w\to\varphi^{w}\to\psi^{w})$ where $w$ is a new bound variable.
 		\item $(\exists x\varphi)^b = \exists x(E(x,b)\wedge\varphi^b)$.
 		\item $(\forall x\varphi)^b = \forall w(i\preceq w\to \forall x(E(x, w)\to \varphi^w))$ where $w$ is a new bound variable.
 	\end{itemize}
-	where $w$ is some new bound variable. Let $K(\varphi)$ encode the theory of Kripke structures as well as the predicate $E$, i.e.
+	Let $K(\varphi)$ encode the theory of Kripke structures as well as the predicate $E$, i.e.
 	\begin{align*}
 		K(\varphi) := \:& \text{PartialOrder}(\preceq) \wedge \forall u \forall w (u\preceq w\to \text{DomainSubset}(u, w)) \wedge\\
 		& \forall u(\text{World(u)}\to \text{DomainClosed}(u))\wedge \forall u\forall w (u\preceq w\to \text{Persistent}(u, w)).
@@ -518,17 +518,17 @@ As in the previous section we can define a tree counter-model for this.
 \begin{definition}
 	Suppose we are given a counter-model $\mathcal M = (M, I)$ for $\varphi^{CH}$. Similarly to the propositional case for $\psi\in\mathcal X$ define \[g_\psi :M^n\to M, (\vec z, m) \mapsto
 	\begin{cases} 
-	m,&\text{if }m\not\preceq f_\psi(\vec z, m)\\
+	m,&\text{if }m\not\preceq f_{[\psi]}^I(\vec z, m)\\
 	f_{[\psi]}^I(\vec z, m)&\text{otherwise}
 	\end{cases}
 	\]where $[\psi]$ denotes the corresponding element of $\mathcal X^{bS}$. Define $\mathcal M_T = (M_T, I_T)$ as follows:
 	\begin{itemize}
-		\item $M_T$ is the union of $\{m\in M\:|\:\text{World}^I(m)\wedge s^I\preceq^I m\}$ and sequences $(\vec m_1, \psi_1)\dots (\vec m_n, \psi_n)$ such that $\vec E^I(\vec m_1, w_0)$ and $\vec E^I(\vec m_i, g_{\psi_i}(\vec m_i, g_{\psi_{i-1}}(\vec m_{i-1}, \dots g_{\psi_1}(\vec m_1, w_0)\dots)))$ for $i > 0$ hold.
+		\item $M_T$ is the union of $\{m\in M\:|\:\neg\text{World}^I(m)\}$ and sequences $(\vec m_1, \psi_1)\dots (\vec m_n, \psi_n)$ such that $\vec E^I(\vec m_1, s^I)$ and $\vec E^I(\vec m_i, g_{\psi_{i-1}}(\vec m_{i-1}, g_{\psi_{i-2}}(\dots g_{\psi_1}(\vec m_1, s^I)\dots)))$ for $i > 0$ hold.
 		\item $s^{I_T} = s^I$, $\vec r^{I_T} = \vec r^I$.
-		\item We interpret $\preceq$ trivially on $M$ and as the prefix-order elsewhere.
-		\item Have $E^{I_T}(m, (\vec m_1, \psi_1)\dots (\vec m_n, \psi_n))$ iff $E^I(m, g_{\psi_n}(\vec m_n, \dots g_{\psi_1}(\vec m_1, w_0)\dots))$.
+		\item We interpret $\preceq$ as the prefix-order on the set of sequences and trivially elsewhere.
+		\item Have $E^{I_T}(m, (\vec m_1, \psi_1)\dots (\vec m_n, \psi_n))$ iff $E^I(m, g_{\psi_n}(\vec m_n, \dots g_{\psi_1}(\vec m_1, s^I)\dots))$.
 		\item We set $f_\psi^{I_T}(\vec m, (\vec m_1, \psi_1)\dots (\vec m_n, \psi_n)) = (\vec m_1, \psi_1)\dots (\vec m_n, \psi_n)(\vec m, \psi)$ and arbitrary else.
-		\item For predicate symbols $R$, we set $${R}^{I_T}(\vec m, (\vec m_1, \psi_1)\dots (\vec m_n, \psi_n)) = {R}^I(\vec m, g_{\psi_n}(\vec m_n, \dots(g_{\psi_1}(\vec m_1, s^I))\dots))$$ and arbitrary otherwise, for function symbols $f^{I_T}(\vec m) = f^I(\vec m)$ and arbitrary else.
+		\item For predicate symbols $R$, we set $${R}^{I_T}(\vec m, (\vec m_1, \psi_1)\dots (\vec m_n, \psi_n)) = {R}^I(\vec m, g_{\psi_n}(\vec m_n, \dots(g_{\psi_1}(\vec m_1, s^I))\dots))$$ and arbitrarily elsewhere, for function symbols $f$ we set $f^{I_T}(\vec m) = f^I(\vec m)$ so long as $\vec m\in \{m\in M\:|\:\neg\text{World}^I(m)\}^n$ and arbitrarily elsewhere.
 	\end{itemize}
 \end{definition}
 
