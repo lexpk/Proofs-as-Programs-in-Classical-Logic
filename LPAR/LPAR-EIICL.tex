@@ -6,12 +6,6 @@
 \usepackage{tikz}
 \usetikzlibrary{shapes,backgrounds}
 
-%used for d
-\usepackage{todonotes}
-\usepackage{xcolor}
-\usepackage[normalem]{ulem}
-\newcommand{\red}[1]{{\color{red} #1}}
-
 \theoremstyle{definition}
 \newtheorem{theorem}{Theorem}[section]
 \theoremstyle{definition}
@@ -144,7 +138,7 @@ For predicate logic we assume an ambient signature $\Sigma$, i.e., a set of func
 One notable property of classical logic is that a formula $\varphi$ is valid if and only if its negation $\neg\varphi := \varphi\to\bot$ is not satisfiable, i.e. there does not exist a model for it. The same does not hold true for intuitionistic logic as we shall see.
 
 \begin{definition}
-	A \emph{Kripke structure}  \sout{$\mathcal K = (W, (v_w)_{w\in W})$} \red{$\mathcal K = (\mathbf W, (v_w)_{w\in W})$} consists of a partially ordered set $\mathbf W = (W, \leq)$ of \emph{worlds}, called the Kripke \emph{frame}, and an indexed family of valuations $(v_w)_{w\in W}$ such that \sout{$v_u(A)\leq v_w(A)$} \red{$v_u(A) = 1$ entails $v_w(A) = 1$} for all worlds $u\leq w$ and propositional variables $A$ (this is called the \emph{persistency condition}).
+	A \emph{Kripke structure}  $\mathcal K = (\mathbf W, (v_w)_{w\in W})$ consists of a partially ordered set $\mathbf W = (W, \leq)$ of \emph{worlds}, called the Kripke \emph{frame}, and an indexed family of valuations $(v_w)_{w\in W}$ such that $v_u(A) = 1$ entails $v_w(A) = 1$ for all worlds $u\leq w$ and propositional variables $A$ (this is called the \emph{persistency condition}).
 	The model relation between the $v_u$ and formulae $\varphi$ is defined as before, except in the case of implications, where we set
 	\begin{itemize}
 		\item $v_u\models\varphi\to \psi$ iff for all $w\geq u$ we have $w\not\models\varphi$ or $w\models\psi$.
@@ -186,7 +180,7 @@ We now recall the semantics of first-order logic:
 \end{definition}
 
 \begin{definition}
-	A $\Sigma$-\emph{Kripke structure} $\mathcal{K}$ is a partially ordered set \sout{$W$} \red{$(W, \leq)$}, called the Kripke \emph{frame}, and an indexed family of $\Sigma$-structures $(\mathcal{M}_w)_{w\in W}$ such that for $u\leq w$ we have $M_u\subseteq M_w$, $f^{I_w}|_{M_u} = f^{I_u}$ and $R^{I_w}|_{M_u} = R^{I_u}$.\footnote{Here $f|_M$ denotes the restriction of $f$ to $M$}
+	A $\Sigma$-\emph{Kripke structure} $\mathcal{K}$ is a partially ordered set $(W, \leq)$, called the Kripke \emph{frame}, and an indexed family of $\Sigma$-structures $(\mathcal{M}_w)_{w\in W}$ such that for $u\leq w$ we have $M_u\subseteq M_w$, $f^{I_w}|_{M_u} = f^{I_u}$ and $R^{I_w}|_{M_u} = R^{I_u}$.\footnote{Here $f|_M$ denotes the restriction of $f$ to $M$}
 	The model relation between $\mathcal M_u$, $v$ (mapping into $M_u$) and formulae $\varphi$ is defined as before, except in the cases of implication and $\forall$-quantification, where
 	\begin{itemize}
 		\item $\mathcal M_u, v\models \varphi\to\psi$ iff for every $w\geq u$ we have $\mathcal M_w, v\not\models\varphi$ or $\mathcal M_w, v\models\psi$.
@@ -283,7 +277,7 @@ Next we attempt to transport these results to the first order case. However, the
 
 \begin{theorem}
 	\label{thm:reduction-first-order-short}
-	There exists a linear-time procedure that gives for every first-order formula $\varphi$ a formula $\varphi^\#$ such that $\varphi$ is intuitionistically valid if and only if $\varphi^\#$ is classically valid. The size of $\varphi^\#$ is in linear in the size of $\varphi$, however, for each $n$-ary predicate symbol in $\varphi$ there is a corresponding $n+1$-ary predicate symbol in $\varphi^\#$, and \sout{$\varphi$}\red{$\varphi^\#$} contains a new binary predicate $E$ as well as a number of new function symbols. Furthermore, there is an effective translation between intuitionistic counter-models of $\varphi$ and classical counter-models of $\varphi^\#$.
+	There exists a linear-time procedure that gives for every first-order formula $\varphi$ a formula $\varphi^\#$ such that $\varphi$ is intuitionistically valid if and only if $\varphi^\#$ is classically valid. The size of $\varphi^\#$ is in linear in the size of $\varphi$, however, for each $n$-ary predicate symbol in $\varphi$ there is a corresponding $n+1$-ary predicate symbol in $\varphi^\#$, and $\varphi^\#$ contains a new binary predicate $E$ as well as a number of new function symbols. Furthermore, there is an effective translation between intuitionistic counter-models of $\varphi$ and classical counter-models of $\varphi^\#$.
 \end{theorem}
 
 A detailed account of the translation can be found in Definition~\ref{def:fo-translation}. Finally, we benchmark our translation by translating all problems in the ILTP problem set~\cite{iltp} and applying the Vampire theorem prover~\cite{kovacs2013first} to the translated instances. While this method falls short of the absolute state-of-the-art in general, for certain subsets of benchmarks it beats existing provers, in particular when the intuitionistic content is low. Since there is still a lot of room for improvement this is a hopeful first sign.
@@ -357,7 +351,6 @@ We say $(A\to B)\to C\in\mathcal X$ is \emph{fulfilled} at $m\in M$ iff $A^I(m)\
 \end{lemma}
 
 A proof can be found in Appendix~\ref{proof:prop-simplification}.
-
 \begin{remark}
 	It is well known that Kripke frames which are trees are complete with regard to intuitionistic logic. Our contribution is giving an explicit bound to height and degree that depends only on a simple property of the considered formula.
 \end{remark}
@@ -378,7 +371,7 @@ Now we can replace every $\forall$-quantifier in $\varphi^{CH}$ by enumerating a
 \begin{theorem}\label{thm:prop-translation}
 	Suppose we are given a formula as in Lemma~\ref{lemma:propositional-normal-form}, i.e. of the form
 	$$\left(\bigwedge\mathcal R\wedge\bigwedge\mathcal S\right)\to P$$
-	with flat $\mathcal R$ and implicational $\mathcal S$. Let $\Lambda$ denote the set of sequences without repetition over $\mathcal X$. For every propositional variable $A$ and $\lambda\in\Lambda$ consider a new propositional \sout{Variable}\red{variable} $A^\lambda$. Define $\mathcal R^\#$ as the union over all sets
+	with flat $\mathcal R$ and implicational $\mathcal S$. Let $\Lambda$ denote the set of sequences without repetition over $\mathcal X$. For every propositional variable $A$ and $\lambda\in\Lambda$ consider a new propositional variable $A^\lambda$. Define $\mathcal R^\#$ as the union over all sets
 	$$
 		\left\{\bigwedge_iA_i^\lambda\to\bigvee_jB_j^\lambda\:|\:\lambda\in\Lambda\right\}
 	$$
@@ -407,6 +400,8 @@ Now we can replace every $\forall$-quantifier in $\varphi^{CH}$ by enumerating a
 	We note that $A^\epsilon  = P^\epsilon = 0$, $A^\psi = P^{\psi}  = 1$ indeed defines a counter-model.
 \end{example}
 
+Note that it is straightforward to obtain an intuitionistic counter-model to $\varphi$ with frame $\Lambda$ from a classical counter-model to $\varphi^\#$.
+
 Since $|\Lambda|\in O(2^{|\mathcal X|\log |\mathcal X|})$ a simple counting argument shows that $|\mathcal P^\#|\in\mathcal O(|\varphi|\cdot 2^{|\mathcal X|\log |\mathcal X|})$, $|\mathcal R^\#|\in\mathcal O(|\mathcal R|\cdot2^{|\mathcal X|\log |\mathcal X|})$ and $|\mathcal X|\in \mathcal O(|\mathcal X|\cdot 2^{|\mathcal X|\log|\mathcal X|})$. This gives a bound on the size of $\varphi^\#$.
 
 \begin{lemma}
@@ -416,7 +411,7 @@ Since $|\Lambda|\in O(2^{|\mathcal X|\log |\mathcal X|})$ a simple counting argu
 \section{IPC to QBF}\label{sec:qbf}
 
 It is known that a polynomial time translation between QBF and IPC must exist, since both problems are PSPACE complete~\cite{garey1979computers,statman1979intuitionistic}, but we make it explicit. In particular, our translation enables a direct translation of counter-models. For lack of space, we do not give the semantics of QBF in this paper and instead refer the reader to standard sources e.g.~\cite{series/faia/2009-185}.
-The translation from the last section will serve as \red{a} starting point for this section.
+The translation from the last section will serve as a starting point for this section.
 
 Suppose we are given a formula $\varphi$ in normal form $$\left(\bigwedge\mathcal R\wedge\bigwedge\mathcal X\right)\to P$$ as in Lemma~\ref{lemma:propositional-normal-form}. We now give an intuition on how to obtain a QBF of polynomial size that expresses that $\varphi$ has an intuitionistic counter-model:
 Instead of expressing validity at every node of $\mathcal M_T$ --- which was done in the CPC translation --- we express that on each path in $\mathcal M_T$ the nodes satisfy all conditions for $\mathcal M_T$ being a counter-model.
@@ -480,10 +475,10 @@ We now give an analogous transformation for first order logic. Our trick of lift
 	\begin{itemize}
 		\item $\bot^b = \bot$.
 		\item $A(\vec t)^{b} = A(\vec t, b)$ for every predicate symbol $A$.
-		\item $(\varphi\circ\psi)^b = \varphi^b\circ\sout{\psi^u}\red{\psi^b}$ for $\circ\in\{\wedge, \vee\}$.
+		\item $(\varphi\circ\psi)^b = \varphi^b\circ\psi^b$ for $\circ\in\{\wedge, \vee\}$.
 		\item $(\varphi\to \psi)^b = \forall w(b\preceq w\to\varphi^{w}\to\psi^{w})$ where $w$ is a new bound variable.
 		\item $(\exists x\varphi)^b = \exists x(E(x,b)\wedge\varphi^b)$.
-		\item $(\forall x\varphi)^b = \forall w(\sout{i}\red{b}\preceq w\to \forall x(E(x, w)\to \varphi^w))$ where $w$ is a new bound variable.
+		\item $(\forall x\varphi)^b = \forall w(b\preceq w\to \forall x(E(x, w)\to \varphi^w))$ where $w$ is a new bound variable.
 	\end{itemize}
 	Let $K(\varphi)$ encode the theory of Kripke structures as well as the predicate $E$, i.e.
 	\begin{align*}
@@ -516,7 +511,7 @@ $$
 	\resizebox{\hsize}{!}{$\forall w\forall\vec x(s\preceq w\to\vec E(\vec x, w)\to (w\preceq f_\psi(\vec x, w)\to A(\vec a, f_\psi(\vec x, w))\to B(\vec b, f_\psi(\vec x, w)))\to C(\vec c, w))$}
 $$
 and each formula $\psi\in\mathcal Q^{bS}$ is of the form
-$$\forall w\forall\vec x(s\preceq w\to\vec E(\vec x, w)\to \forall y(E(y, f_\psi(\vec x, w))\to A(\vec a, f_\psi(\vec x, w)))\to B(\vec{\red{b}}, w))$$
+$$\forall w\forall\vec x(s\preceq w\to\vec E(\vec x, w)\to \forall y(E(y, f_\psi(\vec x, w))\to A(\vec a, f_\psi(\vec x, w)))\to B(\vec{b}, w))$$
 with $f_\psi$ being a new function symbol.
 
 As in the previous section we can define a tree counter-model for this.
@@ -541,7 +536,7 @@ As in the previous section we can define a tree counter-model for this.
 	If $\mathcal M$ is a counter-model to $\varphi^{CH}$ then so is $\mathcal M_T$.
 \end{lemma}
 
-Even if we \sout{don't}\red{don't} have the finiteness property of the propositional case, we have still managed to reduce the complexity of possible counter-models because we know that considering worlds of the form $$g_{\psi_1}(\vec m_1, g_{\psi_2}(\vec m_2, \dots g_{\psi_n}(\vec m_n, s)\dots))$$ is sufficient.
+Even if we do not have the finiteness property of the propositional case, we have still managed to reduce the complexity of possible counter-models because we know that considering worlds of the form $$g_{\psi_1}(\vec m_1, g_{\psi_2}(\vec m_2, \dots g_{\psi_n}(\vec m_n, s)\dots))$$ is sufficient.
 In particular, this allows us to completely eliminate $\preceq$, that is we remove the PartialOrder$(\preceq)$
 from $K(\varphi)$ and adjust DomainSubset$(u, w)$ and Persistent$(u, w)$, e.g. remove quantification over $w$ and the precondition $u\preceq w$ from $K(\varphi)$ and replace DomainSubset$(u, w)$ with
 $$
@@ -608,13 +603,13 @@ It is not possible to completely eliminate worlds from the domain by enumerating
 \end{wrapfigure}
 
 We have benchmarked our first-order translation on version 1.1.2 of the ILTP problem set~\cite{iltp} by performing our translation and then examining the generated classical problem using Vampire~\cite{kovacs2013first}.
-For comparison the state-of-the-art intuitionistic provers ileanCoP 1.2~\cite{otten2008leancop} and nanoCoP-i 2.0~\cite{otten2021nanocop} were used. All benchmarks were conducted on an Intel Core i5-8400 2.80GHz machine running Linux with a time limit of 10s per problem. The problem \textsc{SYN007+1} was removed as our normal form procedure would explode the size of \red{the} instance.
+For comparison the state-of-the-art intuitionistic provers ileanCoP 1.2~\cite{otten2008leancop} and nanoCoP-i 2.0~\cite{otten2021nanocop} were used. All benchmarks were conducted on an Intel Core i5-8400 2.80GHz machine running Linux with a time limit of 10s per problem. The problem \textsc{SYN007+1} was removed as our normal form procedure would explode the size of the instance.
 
 Two versions of the translation were tested, one with and one without the additional axioms encoding idempotence. The results are stated in Figure \ref{fig:a}.
 
 In general, our approach falls short of the state of the art. 
 However when grouping the benchmarks by $|\mathcal Q|$ and $|\mathcal X|$, see Figure~\ref{fig:b},
-we observe good performance of our approach for $|\mathcal Q| = 0$ and $|\mathcal X| \leq 2$\sout{resp. $|\mathcal X| \geq 6$}.
+we observe good performance of our approach for $|\mathcal Q| = 0$ and $|\mathcal X| \leq 2$. Also, there were some instances with high $|\mathcal Q|$ and low $|\mathcal X|$ that were solved by our approach but not the previous solvers.
 
 \begin{figure}[h]
 	\centering
@@ -662,11 +657,11 @@ we observe good performance of our approach for $|\mathcal Q| = 0$ and $|\mathca
 \end{wrapfigure}
 
 
-Figure~\ref{fig:c} shows that our approach solved 52 problems not solved by the state-of-the-art provers. Notably, while there is big overlap in solved instances, ileanCoP and nanoCoP also have a significant symmetric difference.
+Figure~\ref{fig:c} shows that our approach solved 52 problems not solved by the state-of-the-art provers. Note that ileanCoP and nanoCop were combined for presentation purposes but they also have a significant symmetric difference, e.g. of the 417 problem not solved by our approach there were 68 solved only by ileanCoP and 55 solved only by nanoCoP.
 
 We conclude that our approach already has merits when $|\mathcal Q| = 0$ and $|\mathcal X|$ is small.
 We see that encoding idempotence does help to solve some additional benchmarks, but in general does not improve performance.
-However, idempotence is a quite powerful concept from a model-theoretic perspective. We suspect that a more clever encoding of this property could improve results. There are other restrictions on models we could consider, based on structural properties of the formula, e.g. the relation between occurrences of different atoms.
+However, idempotence is a quite powerful concept from a model-theoretic perspective. A more clever encoding of this property could improve results. There are other restrictions on models we could consider, based on structural properties of the formula, e.g. the relation between occurrences of different atoms.
 
 \section{Conclusion}
 
