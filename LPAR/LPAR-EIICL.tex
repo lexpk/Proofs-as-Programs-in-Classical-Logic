@@ -21,8 +21,6 @@
 \theoremstyle{definition}
 \newtheorem{remark}[theorem]{Remark}
 
-\newcommand\slimitemize{\itemize\addtolength{\itemsep}{-5pt}}
-
 \begin{document}
 	%
 	\title{Embedding Intuitionistic into Classical Logic}
@@ -72,20 +70,20 @@ We finally add that, in contrast to intuitionistic provers, a tremendous amount 
 
 With this work we want to leverage the progress in classical reasoning for intuitionistic logic.
 To this end, we study embeddings of intuitionistic into classical logic and propose the following methodology:
-\begin{slimitemize}
+\begin{itemize}\addtolength{\itemsep}{-5pt}
 	\item Give for each $\varphi$ a formula $\varphi^\#$, which is classically valid iff $\varphi$ is intuitionistically valid.
 	\item Determine the classical validity of $\varphi^\#$ using a prover for classical logic.
 	\item Translate the classical proof (resp. counter-model) of $\varphi^\#$ given by the prover to a corresponding intuitionistic proof (resp. counter-model) of $\varphi$.
-\end{slimitemize}
+\end{itemize}
 \subsection*{Contributions}
 The following main contributions will be discussed in more detail in Sections~\ref{sec:overview} and~\ref{sec:evaluation}:
-\begin{slimitemize}
+\begin{itemize}\addtolength{\itemsep}{-5pt}
 	\item We establish a small model property for counter-models to validity in intuitionistic propositional logic.
 	\item Based on the small model property, we provide an embedding of intuitionistic propositional logic into classical propositional logic and into quantified Boolean formulae.
 	\item We discuss the reduction of counter-models in intuitionistic first-order logic and, based on this reduction, present an embedding of intuitionistic into classical first-order logic.
 	\item We provide an experimental evaluation on the use of first-order provers for classical logic for determining intuitionistic validity.
  We show that our approach can compete with state-of-the-art provers for certain classes of benchmarks, in particular when the intuitionistic content is low.
-\end{slimitemize}
+\end{itemize}
 
 \subsection*{Related work}
 The famous double-negation translation establishes
@@ -123,13 +121,13 @@ For predicate logic we assume an ambient signature $\Sigma$, i.e., a set of func
 
 \begin{definition}
 	A \emph{valuation} $v$ maps each propositional variable $A$ to a \emph{truth value} $v(A)\in\{0, 1\}$. We inductively define the model relation $\models$ between $v$ and formulae:
-	\begin{slimitemize}
+	\begin{itemize}\addtolength{\itemsep}{-5pt}
 		\item $v\not\models \bot$
 		\item $v\models A$ iff $v(A) = 1$ for each propositional variable $A$.
 		\item $v\models \varphi\wedge\psi$ iff $v\models\varphi$ and $v\models\psi$.
 		\item $v\models\varphi\vee\psi$ iff $v\models\varphi$ or $v\models\psi$.
 		\item $v\models\varphi\to \psi$ iff $v\not\models\varphi$ or $v\models\psi$.
-	\end{slimitemize}
+	\end{itemize}
 	A valuation $v$ is a \emph{model} for $\varphi$ if $v\models\varphi$. If every valuation is a model for $\varphi$ then we say $\varphi$ is \emph{valid}. We denote the set of valid formulae with \emph{CPC} (Classical Propositional Calculus).
 \end{definition}
 
@@ -138,9 +136,9 @@ One notable property of classical logic is that a formula $\varphi$ is valid if 
 \begin{definition}
 	A \emph{Kripke structure}  $\mathcal K = (\mathbf W, (v_w)_{w\in W})$ consists of a partially ordered set $\mathbf W = (W, \leq)$ of \emph{worlds}, called the Kripke \emph{frame}, and an indexed family of valuations $(v_w)_{w\in W}$ such that $v_u(A) = 1$ entails $v_w(A) = 1$ for all worlds $u\leq w$ and propositional variables $A$ (this is called the \emph{persistency condition}).
 	The model relation between the $v_u$ and formulae $\varphi$ is defined as before, except in the case of implications, where we set
-	\begin{slimitemize}
+	\begin{itemize}\addtolength{\itemsep}{-5pt}
 		\item $v_u\models\varphi\to \psi$ iff for all $w\geq u$ we have $w\not\models\varphi$ or $w\models\psi$.
-	\end{slimitemize}
+	\end{itemize}
 	We say that $\varphi$ is satisfied at a world $u$ if $v_u\models\varphi$ and write $u\models\varphi$. If a formula is satisfied at every world then $\mathcal K$ is a \emph{model} for $\varphi$. A formula is valid if every Kripke structure is a model of it. We denote the set of valid formulae with \emph{IPC} (Intuitionistic Propositional Calculus).
 \end{definition}
 There are many classical tautologies which are not intuitionistically valid, e.g. the law of excluded middle $A\vee\neg A$. On the other hand any intuitionistic theorem is a classical one.
@@ -151,21 +149,21 @@ We now recall the semantics of first-order logic:
 
 \begin{definition}
 	Let $\Sigma$ be a signature. A $\Sigma$-structure $\mathcal{M}$ consists of a non-empty set $M$, the \emph{domain} of $\mathcal{M}$, and an \emph{interpretation} $I$ that assigns
-	\begin{slimitemize}
+	\begin{itemize}\addtolength{\itemsep}{-5pt}
 		\item to each $n$-ary function symbol $f\in\Sigma$ a $n$-ary function $f^I: M^n\to M$.
 		\item to each $n$-ary predicate symbol $R\in\Sigma$ a $n$-ary predicate $R^I\subseteq M^n$.
-	\end{slimitemize}
+	\end{itemize}
 	A variable assignment $v$ is a function that assigns to each free variable an element $m\in M$. For each free variable $a$ and $m\in M$ we define $$v[m/a](b) = \begin{cases}
 	m, &\text{if $b=a$,}\\
 	v(b), &\text{otherwise.}
 	\end{cases}$$
 	Then terms are interpreted as follows:
-	\begin{slimitemize}
+	\begin{itemize}\addtolength{\itemsep}{-5pt}
 		\item $a^{I, v} = v(a)$ for each free variable $a$.
 		\item $f(t_1,\dots,t_n)^{I, v} = f^I(t_1^{I, v},\dots, t_n^{I, v})$ for each $n$-ary function symbol $f\in\Sigma$.
-	\end{slimitemize}
+	\end{itemize}
 	We define a model relation between pairs $\mathcal M, v$ and formulae $\varphi$ as follows
-	\begin{slimitemize}
+	\begin{itemize}\addtolength{\itemsep}{-5pt}
 		\item $\mathcal M, v\not\models\bot$
 		\item $\mathcal M, v\models R(t_1,\dots,t_n)$ iff $(t_1^{I, v},\dots,t_n^{I, v})\in R^I$, $\mathcal M, v\models s = t$ iff $s^{I, v} = t^{I, v}$.
 		\item $\mathcal M, v\models \varphi\wedge \psi$ iff $\mathcal M, v\models\varphi$ and $\mathcal M, v\models\psi$
@@ -173,17 +171,17 @@ We now recall the semantics of first-order logic:
 		\item $\mathcal M, v\models \varphi\to\psi$ iff $\mathcal M, v\not\models\varphi$ or $\mathcal M, v\models\psi$.
 		\item $\mathcal M, v\models\exists x\varphi$ iff there exists $m\in M$ such that $\mathcal M, v[m/x]\models\varphi$.
 		\item $\mathcal M, v\models\forall x\varphi$ iff for all $m\in M$ we have $\mathcal M, v[m/x]\models\varphi$.
-	\end{slimitemize}
+	\end{itemize}
 	$\varphi$ is satisfiable if $\mathcal M, v\models\varphi$ for some $\mathcal M, v$. It is valid if $\mathcal M, v\models\varphi$ for every $\mathcal M, v$. We denote the set of valid formulae with \emph{CQC} (Classical Quantified Calculus).
 \end{definition}
 
 \begin{definition}
 	A $\Sigma$-\emph{Kripke structure} $\mathcal{K}$ is a partially ordered set $(W, \leq)$, called the Kripke \emph{frame}, and an indexed family of $\Sigma$-structures $(\mathcal{M}_w)_{w\in W}$ such that for $u\leq w$ we have $M_u\subseteq M_w$, $f^{I_w}|_{M_u} = f^{I_u}$ and $R^{I_w}|_{M_u} = R^{I_u}$.\footnote{Here $f|_M$ denotes the restriction of $f$ to $M$}
 	The model relation between $\mathcal M_u$, $v$ (mapping into $M_u$) and formulae $\varphi$ is defined as before, except in the cases of implication and $\forall$-quantification, where
-	\begin{slimitemize}
+	\begin{itemize}\addtolength{\itemsep}{-5pt}
 		\item $\mathcal M_u, v\models \varphi\to\psi$ iff for every $w\geq u$ we have $\mathcal M_w, v\not\models\varphi$ or $\mathcal M_w, v\models\psi$.
 		\item $\mathcal M_u, v\models\forall x\varphi$ iff for every $w\geq u$ and $m\in M_w$ we have $\mathcal M_w, v[m/x]\models\varphi$.
-	\end{slimitemize}
+	\end{itemize}
 	We write $u, v\models\varphi$ if $\mathcal M_u, v\models \varphi$. $\mathcal{K}$ satisfies $\varphi$ if $u, v\models\varphi$ holds for every world $u\in W$ and variable assignment $v$. $\varphi$ is valid if it is satisfied by every Kripke structure.
 	We denote the set of valid formulae with \emph{IQC} (Intuitionistic Quantified Calculus).
 \end{definition}
@@ -198,23 +196,23 @@ Whenever we add a function symbol we implicitly extend the signature by a not pr
 
 \begin{definition}\label{definition:skolemization}
 	For formulae $\varphi$ we define the Skolemization $\varphi^S_Z$ and Herbrandization $\varphi^H_Z$ with respect to a set of free variables $Z$ by simultaneous induction:
-	\begin{slimitemize}
+	\begin{itemize}\addtolength{\itemsep}{-5pt}
 		\item $A^S_Z = A^H_Z = A$ for each atomic $A$.
 		\item $(\varphi\circ\psi)^X_Z = \varphi^X_Z\circ\psi^X_Z$ for $\circ\in\{\wedge, \vee\}$, $X\in\{S, H\}$.
 		\item $(\varphi\to\psi)^S_Z = \varphi^H_Z\to \psi^S_Z$ and $(\varphi\to\psi)^H_Z = \varphi^S_Z\to\psi^H_Z$.
 		\item $(\forall x\varphi)^S_Z = \forall x(\varphi^S_{Z\cup\{x\}})$.\\$(\forall x\varphi)^H_Z = \varphi[s(z_1,\dots,z_n)/x]^H_Z$ where $s$ is a new function, $\{z_1\dots z_n\} = Z$.
 		\item $(\exists x\varphi)^S_Z = \varphi[s(z_1,\dots,z_n)/x]^S_Z$ where $s$ is a new function, $\{z_1\dots z_n\} = Z$.\\$(\exists x\varphi)^H_Z = \exists x(\varphi^H_{Z\cup\{x\}})$.
-	\end{slimitemize}
+	\end{itemize}
 	Let $\varphi^S = (\exists x_1\dots\exists x_n \varphi[x_1/a_1\dots x_n/a_n])^S_\emptyset$ and $\varphi^H = (\forall x_1\dots\forall x_n \varphi[x_1/a_1\dots x_n/a_n])^H_\emptyset$ where $a_1,\dots,a_n$ are the free variables occurring in $\varphi$.
 \end{definition}
 
 \begin{theorem}
 	\label{thm:herbrand-skolem}
 	For every formula $\varphi$
-	\begin{slimitemize}
+	\begin{itemize}\addtolength{\itemsep}{-5pt}
 		\item $\varphi$ and $\varphi^S$ are classically equisatisfiable.
 		\item $\varphi$ and $\varphi^H$ are classically equivalid.
-	\end{slimitemize}
+	\end{itemize}
 \end{theorem}
 
 
@@ -288,12 +286,12 @@ The most obvious approach to embedding intuitionistic into classical logic is to
 \begin{definition}
 	Let $\varphi$ be a propositional formula.
  Define $\varphi^{b}$ inductively:
-	\begin{slimitemize}
+	\begin{itemize}\addtolength{\itemsep}{-5pt}
 		\item $\bot^b = \bot$.
 		\item $A^{b} = A(b)$ for every propositional variable $A$.
 		\item $(\varphi\circ\psi)^b = \varphi^b\circ\psi^b$ for $\circ\in\{\wedge, \vee\}$.
 		\item $(\varphi\to \psi)^b = \forall w(b\preceq w\to\varphi^{w}\to\psi^{w})$ where $w$ is some new bound variable.
-	\end{slimitemize}
+	\end{itemize}
 	Let $K(\varphi)$ encode the theory of Kripke structures, i.e.
 	\[K(\varphi) := \text{\normalfont PartialOrder}(\preceq)\wedge\forall u\forall w(u\preceq w\to \text{\normalfont Persistent}(u, w))\]
 	with e.g.
@@ -313,12 +311,12 @@ The most obvious approach to embedding intuitionistic into classical logic is to
 \end{lemma}
 
 This is somewhat unsatisfying as we end up in a much more complex logic. However using the normal form from Lemma~\ref{lemma:propositional-normal-form}, i.e. assuming that $\varphi$ is of the form $$\left(\bigwedge\mathcal R\wedge\bigwedge\mathcal X\right)\to P$$ for some flat clauses $\mathcal R$ and implicational clauses $\mathcal X$, further simplification is possible:
-\begin{slimitemize}
+\begin{itemize}\addtolength{\itemsep}{-5pt}
 	\item For flat clauses $(\bigwedge A_i\to\bigvee B_j)^b$ is
 	$$\forall w\left(b\preceq w\to\bigwedge_i A_i(w)\to\bigvee_jB_j(w)\right).$$
 	\item For implication clauses $((A\to B)\to C)^b$ is
 	$$\forall w(b\preceq w\to(\forall k(w\preceq k\to A(k)\to B(k)))\to C(w))$$
-\end{slimitemize}
+\end{itemize}
 
 and after applying Herbrandization we end up with a formula $$\varphi^{CH} = K(\varphi)\to\left(\bigwedge\mathcal R^{b S}\wedge \bigwedge\mathcal X^{b S}\right)\to P(s)$$ where $s$ is a new constant symbol, each formula in $\mathcal R^{b S}$ is of the form
 $$\forall w\left(s\preceq w\to\bigwedge_iA_i(w)\to\bigvee_jB_j(w)\right)$$
@@ -332,7 +330,7 @@ We say $(A\to B)\to C\in\mathcal X$ is \emph{fulfilled} at $m\in M$ iff $A^I(m)\
 		m,&\text{ if $\psi$ is fulfilled at $m$ or $m\not\preceq f^I_{[\psi]}(m)$,}\\
 		f^I_{\lbrack\psi\rbrack}(m),&\text{ else.}		
 	\end{cases}$$Define a model $\mathcal M_T = (M_T, I_T)$ as follows:
-	\begin{slimitemize}
+	\begin{itemize}\addtolength{\itemsep}{-5pt}
 		\item $M_T$ is the set of sequences without repetition on $\mathcal X$.
 		\item $s^{I_T} = \epsilon$.
 		\item Interpret $\preceq$ as the prefix-order.
@@ -341,7 +339,7 @@ We say $(A\to B)\to C\in\mathcal X$ is \emph{fulfilled} at $m\in M$ iff $A^I(m)\
 			\psi_1\dots\psi_n\psi, &\text{else.}			
 		\end{cases}$$
 		\item For propositional variables $P$, we set $$P^{I_T}\left(\psi_1\dots \psi_n\right) = P^I\left(g_{\psi_n}\left(\dots\left(g_{\psi_1}\left(s^I\right)\right)\dots\right)\right).$$
-	\end{slimitemize}
+	\end{itemize}
 \end{definition}
 
 \begin{lemma}
@@ -419,12 +417,12 @@ The universally quantified variables $X_\psi$ in the next definition handle the 
 For every propositional variable $A$ occurring in $\varphi$ and non-negative integer $n$ (representing the $n$-th position of a node on a path) consider a new propositional variable $A^n$ and for every formula $\psi\in\mathcal X$ consider a new propositional variable $X_\psi^n$.
 Let $\vec A^n$ range over all propositional variables $A^n$ and $\vec X^n$ range over all $X_\psi^n$.
 Define
-	\begin{slimitemize}
+	\begin{itemize}\addtolength{\itemsep}{-5pt}
 		\item {\normalfont Valid}$(n)$ which encodes that $\vec X^n_\psi$ represents a valid next element of a sequence without repetition, i.e. if we interpret the $\vec X^i$ as bit-vectors, then $\vec X^n$ has exactly one bit set to $1$, indicating the formula $\psi$ at the $n$-th position of the sequence, and it is at a position that is $0$ in all $\vec X^i$ with $i < n$ (i.e., it did not occur in the sequence previously).
 		\item {\normalfont Persistent}$(n)$ which encodes that the persistency condition holds.
 		\item {\normalfont Sat}$_{\mathcal R}(n)$ encoding that the formulae in $\mathcal R$ hold at the $n$-th world of the path.
 		\item {\normalfont Sat}$_{\mathcal X}(n)$ encoding that the formula in $\mathcal X$ that is represented by $\vec X^{n-1}$ holds.
-	\end{slimitemize}
+	\end{itemize}
 	Define$$\varphi^Q_{i} := \exists \vec A^i\forall \vec X^i\left(\text{\normalfont Persistent}(i)\wedge \text{\normalfont Sat}_{\mathcal R}(i)\wedge \text{\normalfont Sat}_{\mathcal X}(i)\wedge\left(\text{\normalfont Valid}(i)\to \varphi^Q_{i+1}\right)\right)$$
 	for $0 < i < |\mathcal{X}|$, as well as the special cases
 	$$\varphi^Q_{|\mathcal{X}|} := \exists \vec A^{|\mathcal{X}|}\left(\text{\normalfont Persistent}(|\mathcal{X}|)\wedge \text{\normalfont Sat}_{\mathcal R}(|\mathcal{X}|)\wedge \text{\normalfont Sat}_{\mathcal X}(|\mathcal{X}|)\right)$$
@@ -470,14 +468,14 @@ We now give an analogous transformation for first order logic. Our trick of lift
 
 \begin{definition}\label{def:fo-translation}
 	Let $\varphi$ be a predicate formula. Define $\varphi^{b}$ inductively:
-	\begin{slimitemize}
+	\begin{itemize}\addtolength{\itemsep}{-5pt}
 		\item $\bot^b = \bot$.
 		\item $A(\vec t)^{b} = A(\vec t, b)$ for every predicate symbol $A$.
 		\item $(\varphi\circ\psi)^b = \varphi^b\circ\psi^b$ for $\circ\in\{\wedge, \vee\}$.
 		\item $(\varphi\to \psi)^b = \forall w(b\preceq w\to\varphi^{w}\to\psi^{w})$ where $w$ is a new bound variable.
 		\item $(\exists x\varphi)^b = \exists x(E(x,b)\wedge\varphi^b)$.
 		\item $(\forall x\varphi)^b = \forall w(b\preceq w\to \forall x(E(x, w)\to \varphi^w))$ where $w$ is a new bound variable.
-	\end{slimitemize}
+	\end{itemize}
 	Let $K(\varphi)$ encode the theory of Kripke structures as well as the predicate $E$, i.e.
 	\begin{align*}
 		K(\varphi) := \:& \text{PartialOrder}(\preceq) \wedge \forall u \forall w (u\preceq w\to \text{DomainSubset}(u, w)) \wedge\\
@@ -520,14 +518,14 @@ As in the previous section we can define a tree counter-model for this.
 	f_{[\psi]}^I(\vec z, m)&\text{otherwise}
 	\end{cases}
 	\]where $[\psi]$ denotes the corresponding element of $\mathcal X^{bS}$. Define $\mathcal M_T = (M_T, I_T)$ as follows:
-	\begin{slimitemize}
+	\begin{itemize}\addtolength{\itemsep}{-5pt}
 		\item $M_T$ is the union of $\{m\in M\:|\:\neg\text{World}^I(m)\}$ and sequences $(\vec m_1, \psi_1)\dots (\vec m_n, \psi_n)$ such that $\vec E^I(\vec m_1, s^I)$ and $\vec E^I(\vec m_i, g_{\psi_{i-1}}(\vec m_{i-1}, g_{\psi_{i-2}}(\dots g_{\psi_1}(\vec m_1, s^I)\dots)))$ for $i > 0$ hold.
 		\item $s^{I_T} = s^I$, $\vec r^{I_T} = \vec r^I$.
 		\item We interpret $\preceq$ as the prefix-order on the set of sequences and trivially elsewhere.
 		\item Have $E^{I_T}(m, (\vec m_1, \psi_1)\dots (\vec m_n, \psi_n))$ iff $E^I(m, g_{\psi_n}(\vec m_n, \dots g_{\psi_1}(\vec m_1, s^I)\dots))$.
 		\item We set $f_\psi^{I_T}(\vec m, (\vec m_1, \psi_1)\dots (\vec m_n, \psi_n)) = (\vec m_1, \psi_1)\dots (\vec m_n, \psi_n)(\vec m, \psi)$ and arbitrary else.
 		\item For predicate symbols $R$, we set $${R}^{I_T}(\vec m, (\vec m_1, \psi_1)\dots (\vec m_n, \psi_n)) = {R}^I(\vec m, g_{\psi_n}(\vec m_n, \dots(g_{\psi_1}(\vec m_1, s^I))\dots))$$ and arbitrarily elsewhere, for function symbols $f$ we set $f^{I_T}(\vec m) = f^I(\vec m)$ so long as $\vec m\in \{m\in M\:|\:\neg\text{World}^I(m)\}^n$ and arbitrarily elsewhere.
-	\end{slimitemize}
+	\end{itemize}
 \end{definition}
 
 \begin{lemma}
@@ -587,7 +585,7 @@ It is not possible to completely eliminate worlds from the domain by enumerating
 \section{Experimental Evaluation}
 \label{sec:evaluation}
 
-\begin{wrapfigure}[5]{r}{0.4\textwidth}
+\begin{wrapfigure}[5]{r}{0.41\textwidth}
 	\vspace*{-1.6cm}
 	\begin{tabular}{l|c|c}
 		Embedding&571&21.4\%\\
@@ -625,7 +623,7 @@ we observe good performance of our approach for $|\mathcal Q| = 0$ and $|\mathca
 \end{figure}
 
 
-\begin{wrapfigure}[15]{r}{0.4\textwidth}
+\begin{wrapfigure}[15]{r}{0.41\textwidth}
 	\vspace{6.6cm}
 	\hspace*{1.5cm}
 	\begin{tikzpicture}
@@ -757,7 +755,7 @@ Again we proceed iteratively. Interpret $A^\epsilon$ such as $A^0$ is interprete
 In particular, since it is a counter-model there exists $w_0\in W$ and a variable assignment $v$ with $w_0, v\not\models\varphi$.
 Let $W_0 = \{w\in W\:|\: w_0\preceq w\}$ and define an equivalence relation $\sim$ on $\{(x, u)\:|\:u\in W_0, x\in M_u\}$ via $(x, u)\sim (y, w)$ iff $x = y$ and there exists $v\in W_0$ comparable with both $u, w$ such that $x\in v$ and denote the equivalence class of $(x, u)$ with $[x, u]$. Let $M = W_0\cup \{[x, u]\:|\:u\in W_0, x\in M_u\}$.
 	Now have
-	\begin{slimitemize}
+	\begin{itemize}\addtolength{\itemsep}{-5pt}
 		\item $\preceq^I = \leq\cup \{(m, m): m\in M\setminus W_0\}$, i.e. $\preceq$ corresponds to $\leq$ on $W_0$ and is trivial elsewhere.
 		\item $E^I(m, w)$ iff $w\in W_0$ and $m = [x, w]$ for some $x\in M_w$.
 		\item $f^I(m_1\dots m_n) =\begin{cases}
@@ -768,7 +766,7 @@ Let $W_0 = \{w\in W\:|\: w_0\preceq w\}$ and define an equivalence relation $\si
 			A^{I_u}(x_1\dots x_n), &\substack{\text{if $u\in W_0$ and $\exists x_i\in M_u$}\\\text{with $m_i= [x_i, u]$ for all $i$,}}\\
 			\bot, & \text{otherwise}
 		\end{cases}$
-	\end{slimitemize}
+	\end{itemize}
 	and $\mathcal M = (M, I)$. One easily verifies that these are well-defined. We now show by induction on the height of the formula the following:
 	
 	\emph{Claim.} For any formula $\psi$ in which the free variable $b$ doesn't occur, world $w_k\in W_0$ and variable assignments $v_c, v_i$ such that $v_c(a) = [v_i(a), w_k]$ for all free variables $a$ occurring in $\psi$ it holds that
