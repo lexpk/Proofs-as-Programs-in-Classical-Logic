@@ -165,7 +165,7 @@ We now recall the semantics of first-order logic:
 		\item $f(t_1,\dots,t_n)^{I, v} = f^I(t_1^{I, v},\dots, t_n^{I, v})$ for each $n$-ary function symbol $f\in\Sigma$.
 	\end{itemize}
 	We define a model relation between pairs $\mathcal M, v$ and formulae $\varphi$ as follows
-	\begin{itemize}\addtolength{\itemsep}{-5pt}
+	\begin{itemize}
 		\item $\mathcal M, v\not\models\bot$
 		\item $\mathcal M, v\models R(t_1,\dots,t_n)$ iff $(t_1^{I, v},\dots,t_n^{I, v})\in R^I$, $\mathcal M, v\models s = t$ iff $s^{I, v} = t^{I, v}$.
 		\item $\mathcal M, v\models \varphi\wedge \psi$ iff $\mathcal M, v\models\varphi$ and $\mathcal M, v\models\psi$
@@ -180,7 +180,7 @@ We now recall the semantics of first-order logic:
 \begin{definition}
 	A $\Sigma$-\emph{Kripke structure} $\mathcal{K}$ is a partially ordered set $(W, \leq)$, called the Kripke \emph{frame}, and an indexed family of $\Sigma$-structures $(\mathcal{M}_w)_{w\in W}$ such that for $u\leq w$ we have $M_u\subseteq M_w$, $f^{I_w}|_{M_u} = f^{I_u}$ and $R^{I_w}|_{M_u} = R^{I_u}$.\footnote{Here $f|_M$ denotes the restriction of $f$ to $M$}
 	The model relation between $\mathcal M_u$, $v$ (mapping into $M_u$) and formulae $\varphi$ is defined as before, except in the cases of implication and $\forall$-quantification, where
-	\begin{itemize}\addtolength{\itemsep}{-5pt}
+	\begin{itemize}
 		\item $\mathcal M_u, v\models \varphi\to\psi$ iff for every $w\geq u$ we have $\mathcal M_w, v\not\models\varphi$ or $\mathcal M_w, v\models\psi$.
 		\item $\mathcal M_u, v\models\forall x\varphi$ iff for every $w\geq u$ and $m\in M_w$ we have $\mathcal M_w, v[m/x]\models\varphi$.
 	\end{itemize}
@@ -198,12 +198,16 @@ Whenever we add a function symbol we implicitly extend the signature by a not pr
 
 \begin{definition}\label{definition:skolemization}
 	For formulae $\varphi$ we define the Skolemization $\varphi^S_Z$ and Herbrandization $\varphi^H_Z$ with respect to a set of free variables $Z$ by simultaneous induction:
-	\begin{itemize}\addtolength{\itemsep}{-5pt}
+	\begin{itemize}
 		\item $A^S_Z = A^H_Z = A$ for each atomic $A$.
 		\item $(\varphi\circ\psi)^X_Z = \varphi^X_Z\circ\psi^X_Z$ for $\circ\in\{\wedge, \vee\}$, $X\in\{S, H\}$.
-		\item $(\varphi\to\psi)^S_Z = \varphi^H_Z\to \psi^S_Z$ and $(\varphi\to\psi)^H_Z = \varphi^S_Z\to\psi^H_Z$.
-		\item $(\forall x\varphi)^S_Z = \forall x(\varphi^S_{Z\cup\{x\}})$.\\$(\forall x\varphi)^H_Z = \varphi[s(z_1,\dots,z_n)/x]^H_Z$ where $s$ is a new function, $\{z_1\dots z_n\} = Z$.
-		\item $(\exists x\varphi)^S_Z = \varphi[s(z_1,\dots,z_n)/x]^S_Z$ where $s$ is a new function, $\{z_1\dots z_n\} = Z$.\\$(\exists x\varphi)^H_Z = \exists x(\varphi^H_{Z\cup\{x\}})$.
+		\item $(\varphi\to\psi)^S_Z = \varphi^H_Z\to \psi^S_Z$
+		\item $(\varphi\to\psi)^H_Z = \varphi^S_Z\to\psi^H_Z$.
+		\item $\left(\forall x\varphi\right)^S_Z = \forall x(\varphi^S_{Z\cup\{x\}})$.
+		\item
+		$\left(\forall x\varphi\right)^H_Z = \varphi[s(z_1,\dots,z_n)/x]^H_Z$ where $s$ is a new function, $\{z_1\dots z_n\} = Z$.
+		\item $\left(\exists x\varphi\right)^S_Z = \varphi[s(z_1,\dots,z_n)/x]^S_Z$ where $s$ is a new function, $\{z_1\dots z_n\} = Z$.
+		\item $\left(\exists x\varphi\right)^H_Z = \exists x(\varphi^H_{Z\cup\{x\}})$.
 	\end{itemize}
 	Let $\varphi^S = (\exists x_1\dots\exists x_n \varphi[x_1/a_1\dots x_n/a_n])^S_\emptyset$ and $\varphi^H = (\forall x_1\dots\forall x_n \varphi[x_1/a_1\dots x_n/a_n])^H_\emptyset$ where $a_1,\dots,a_n$ are the free variables occurring in $\varphi$.
 \end{definition}
@@ -211,7 +215,7 @@ Whenever we add a function symbol we implicitly extend the signature by a not pr
 \begin{theorem}
 	\label{thm:herbrand-skolem}
 	For every formula $\varphi$
-	\begin{itemize}\addtolength{\itemsep}{-5pt}
+	\begin{itemize}
 		\item $\varphi$ and $\varphi^S$ are classically equisatisfiable.
 		\item $\varphi$ and $\varphi^H$ are classically equivalid.
 	\end{itemize}
@@ -279,7 +283,6 @@ Next we attempt to transport these results to the first order case. However, the
 \end{theorem}
 
 A detailed account of the translation can be found in Definition~\ref{def:fo-translation}. Finally, we benchmark our translation by translating all problems in the ILTP problem set~\cite{iltp} and applying the Vampire theorem prover~\cite{kovacs2013first} to the translated instances. While this method falls short of the absolute state-of-the-art in general, for certain subsets of benchmarks it beats existing provers, in particular when the intuitionistic content is low. Since there is still a lot of room for improvement this is a hopeful first sign.
-
 
 \section{Bounded Intuitionistic Counter-models}
 
