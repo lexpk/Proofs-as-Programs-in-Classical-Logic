@@ -132,6 +132,8 @@ For predicate logic we assume an ambient signature $\Sigma$, i.e., a set of func
 \end{definition}
 
 One notable property of classical logic is that a formula $\varphi$ is valid if and only if its negation $\neg\varphi := \varphi\to\bot$ is not satisfiable, i.e. there does not exist a model for it. The same does not hold true for intuitionistic logic as we shall see.
+\pagebreak
+
 
 \begin{definition}
 	A \emph{Kripke structure}  $\mathcal K = (\mathbf W, (v_w)_{w\in W})$ consists of a partially ordered set $\mathbf W = (W, \leq)$ of \emph{worlds}, called the Kripke \emph{frame}, and an indexed family of valuations $(v_w)_{w\in W}$ such that $v_u(A) = 1$ entails $v_w(A) = 1$ for all worlds $u\leq w$ and propositional variables $A$ (this is called the \emph{persistency condition}).
@@ -226,7 +228,7 @@ Finally we recall a result from~\cite{claessen2015sat}, on which we build in thi
 	and $\mathcal X$ containing \emph{implication clauses} of the form
 	$$(A\to B)\to C,$$
 	such that $\varphi$ is intuitionistically equivalid to
-	$$\left(\bigwedge\mathcal R\wedge\bigwedge\mathcal X\right)\to P$$where $A_i, B_i, A, B, C$ are atomic. The size of $\mathcal R$ and $\mathcal X$ is linear in the size of $\varphi$. In general these formulae will contain additional propositional variables.
+	$$\left(\bigwedge\mathcal R\wedge\bigwedge\mathcal X\right)\to P$$where $A_i, B_i, A, B, C$ are atomic. In general these formulae will contain additional propositional variables. There is a constructive algorithm to obtain such a normal form with linear time complexity in the size of $\varphi$.
 \end{lemma}
 
 \begin{lemma}\label{lemma:first-order-normal-form}
@@ -237,7 +239,7 @@ Finally we recall a result from~\cite{claessen2015sat}, on which we build in thi
 	and $\mathcal Q$ containing \emph{quantification clauses} of the form
 	$$\forall\vec x\left((\forall y A)\to B\right),$$
 	such that $\varphi$ is intuitionistically equivalid to
-	$$\left(\bigwedge\mathcal R\wedge\bigwedge \mathcal X\wedge\bigwedge\mathcal Q\right)\to P$$where $A_i, B_i, A, B, C$ are atomic. This size of $\mathcal R, \mathcal X, \mathcal Q$ is linear in the size of $\varphi$. In general these formulae will contain new function and predicate symbols.
+	$$\left(\bigwedge\mathcal R\wedge\bigwedge \mathcal X\wedge\bigwedge\mathcal Q\right)\to P$$where $A_i, B_i, A, B, C$ are atomic. In general these formulae will contain new function and predicate symbols. There is a constructive algorithm to obtain such a normal form with linear time complexity in the size of $\varphi$.
 \end{lemma}
 
 Since we could not find a proof for the first-order case, we provide one in the appendix~\ref{proof:first-order-normal-form}.
@@ -282,7 +284,7 @@ A detailed account of the translation can be found in Definition~\ref{def:fo-tra
 \section{Bounded Intuitionistic Counter-models}
 
 The most obvious approach to embedding intuitionistic into classical logic is to examine intuitionistic semantics, e.g. Kripke frames, as a classical first order theory. For every propositional variable $A$ consider a unary predicate $A$ of the same name where $A(u)$ expresses that $A$ is true at some world $u$. We can then consider the following naïve encoding:
-
+\pagebreak
 \begin{definition}
 	Let $\varphi$ be a propositional formula.
  Define $\varphi^{b}$ inductively:
