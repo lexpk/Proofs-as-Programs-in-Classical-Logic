@@ -203,11 +203,11 @@ Whenever we add a function symbol we implicitly extend the signature by a not pr
 		\item $(\varphi\circ\psi)^X_Z = \varphi^X_Z\circ\psi^X_Z$ for $\circ\in\{\wedge, \vee\}$, $X\in\{S, H\}$.
 		\item $(\varphi\to\psi)^S_Z = \varphi^H_Z\to \psi^S_Z$
 		\item $(\varphi\to\psi)^H_Z = \varphi^S_Z\to\psi^H_Z$.
-		\item $\left(\forall x\varphi\right)^S_Z = \forall x(\varphi^S_{Z\cup\{x\}})$.
+		\item $\left(\forall x\varphi\right)^S_Z = \forall x\left(\varphi^S_{Z\cup\{x\}}\right)$.
 		\item
 		$\left(\forall x\varphi\right)^H_Z = \varphi[s(z_1,\dots,z_n)/x]^H_Z$ where $s$ is a new function, $\{z_1\dots z_n\} = Z$.
 		\item $\left(\exists x\varphi\right)^S_Z = \varphi[s(z_1,\dots,z_n)/x]^S_Z$ where $s$ is a new function, $\{z_1\dots z_n\} = Z$.
-		\item $\left(\exists x\varphi\right)^H_Z = \exists x(\varphi^H_{Z\cup\{x\}})$.
+		\item $\left(\exists x\varphi\right)^H_Z = \exists x\left(\varphi^H_{Z\cup\{x\}}\right)$.
 	\end{itemize}
 	Let $\varphi^S = (\exists x_1\dots\exists x_n \varphi[x_1/a_1\dots x_n/a_n])^S_\emptyset$ and $\varphi^H = (\forall x_1\dots\forall x_n \varphi[x_1/a_1\dots x_n/a_n])^H_\emptyset$ where $a_1,\dots,a_n$ are the free variables occurring in $\varphi$.
 \end{definition}
